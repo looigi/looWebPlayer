@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/casa"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/libreria"
+            android:icon="@drawable/vinile"
+            android:title="@string/libreria" />
+    </group>
+
+    <item android:title="@string/operazioni">
+        <menu>
+            <item
+                android:id="@+id/equalizer"
+                android:icon="@drawable/equalizer"
+                android:title="@string/equalizer" />
+            <item
+                android:id="@+id/utenza"
+                android:icon="@drawable/utenza"
+                android:title="@string/utenza" />
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/about"
+                android:title="@string/about" />
+            <item
+                android:id="@+id/uscita"
+                android:icon="@drawable/uscita"
+                android:title="@string/uscita" />
+        </menu>
+    </item>
+
+</menu>

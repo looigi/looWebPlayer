@@ -1,0 +1,394 @@
+/* package looigi.loowebplayer.soap;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.widget.LinearLayout;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+
+import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.thread.NetThread;
+import looigi.loowebplayer.utilities.GestioneImpostazioneBrani;
+import looigi.loowebplayer.utilities.GestioneListaBrani;
+import looigi.loowebplayer.utilities.GestioneOggettiVideo;
+import looigi.loowebplayer.utilities.PronunciaFrasi;
+import looigi.loowebplayer.utilities.Traffico;
+import looigi.loowebplayer.utilities.Utility;
+
+public class DownloadMP3 {
+    // private static ProgressDialog progressDialog;
+    private String Path;
+    private String NomeBrano;
+    private String messErrore="";
+    private Boolean Compresso=false;
+    private Boolean Automatico=false;
+    private int sizeMP3=0;
+    private DownloadFileMP3 downloadFile;
+    private EsecuzioneChiamateWEB ecw;
+    private int NumeroBrano;
+    private Runnable runRiga;
+    private Handler hSelezionaRiga;
+    private String Url;
+
+    public void setContext(Context context) {
+        VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
+    }
+
+    public void setNumeroBrano(int numeroBrano) {
+        NumeroBrano = numeroBrano;
+    }
+
+    public void setPath(String path) {
+        Path = path;
+    }
+
+    public void setNomeBrano(String nb) {
+        NomeBrano = nb;
+    }
+
+    public void setCompresso(Boolean i) {
+        Compresso = i;
+    }
+
+    public void setAutomatico(Boolean i) {
+        Automatico = i;
+    }
+
+    public void startDownload(String sUrl, EsecuzioneChiamateWEB e) {
+        Url=sUrl;
+        ecw = e;
+
+        // PronunciaFrasi pf = new PronunciaFrasi();
+        // pf.PronunciaFrase("Inizio scarico brano", "ITALIANO");
+
+        // ecw.EsegueErrore();
+
+        VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
+        VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
+        VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
+
+        ApriDialog();
+
+        downloadFile = new DownloadFileMP3();
+        downloadFile.execute(Url);
+    }
+
+    private static void ChiudeDialog() {
+        // try {
+        //     progressDialog.dismiss();
+        // } catch (Exception ignored) {
+        // }
+
+        VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
+    }
+
+    private void ApriDialog() {
+    }
+
+    public void StoppaEsecuzione() {
+        downloadFile.cancel(true);
+
+        ChiudeDialog();
+
+        messErrore="ERROR: Auto Timeout";
+
+        // downloadFile.ControllaFineCiclo(true);
+    }
+
+    private class DownloadFileMP3 extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... sUrl) {
+            RoutineDiDownload(sUrl[0]);
+
+            return null;
+        }
+
+        private void RoutineDiDownload(String surl) {
+            messErrore="";
+
+            /* hSelezionaRiga = new Handler(Looper.getMainLooper());
+            hSelezionaRiga.postDelayed(runRiga=new Runnable() {
+                @Override
+                public void run() {
+                    VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
+                    VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
+                    VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
+                    hSelezionaRiga.removeCallbacks(runRiga);
+                }
+            }, 50); */
+
+            /* VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3: "+surl);
+
+            try {
+                URL url = new URL(surl);
+                HttpURLConnection c = (HttpURLConnection) url.openConnection();
+                c.setRequestMethod("GET");
+                c.setConnectTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3());
+                c.setReadTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3());
+                c.connect();
+
+                if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    messErrore="Server returned HTTP " + c.getResponseCode()
+                            + " " + c.getResponseMessage();
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3: Errore: "+messErrore);
+                } else {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. File esistente");
+                    List values = c.getHeaderFields().get("content-Length");
+                    if (values != null && !values.isEmpty()) {
+                        String sLength = (String) values.get(0);
+
+                        if (sLength != null) {
+                            sizeMP3 = Integer.parseInt(sLength);
+                        }
+                    }
+
+                    if (sizeMP3>0) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Dimensioni: " + Integer.toString(sizeMP3));
+                        Path = Path.replace("#", "_");
+                        File file;
+                        file = new File(Path);
+                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
+                            if (!file.exists()) {
+                                file.mkdirs();
+                            }
+                        }
+                        if (Compresso) {
+                            NomeBrano = VariabiliStaticheGlobali.EstensioneCompressione + NomeBrano;
+                        }
+                        if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
+                            Path = VariabiliStaticheGlobali.getInstance().PercorsoDIR;
+                            NomeBrano = "Appo.mp3";
+                            file = new File(Path + "/" + NomeBrano);
+                            if (!file.exists()) {
+                                file.delete();
+                            }
+                            file = new File(Path);
+                        }
+                        File outputFile = new File(file, NomeBrano);
+                        FileOutputStream fos = new FileOutputStream(outputFile);
+                        InputStream is = c.getInputStream();
+                        byte[] buffer = new byte[1024];
+                        int len1 = 0;
+                        int lenF = 0;
+                        while ((len1 = is.read(buffer)) != -1) {
+                            fos.write(buffer, 0, len1);
+                            if (len1 > 0) {
+                                lenF += len1;
+                            }
+                            publishProgress((int) (lenF * 100 / sizeMP3));
+                            if (isCancelled() || NumeroBrano!=VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()
+                                || ecw.getFerma()) {
+                                break;
+                            }
+                        }
+                        fos.flush();
+                        fos.close();
+                        is.close();
+
+                        if (isCancelled() || NumeroBrano!=VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()
+                            || ecw.getFerma()) {
+                            try {
+                                if (outputFile.exists()) {
+                                    outputFile.delete();
+                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "File eliminato");
+                                }
+                            } catch (Exception e) {
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                            }
+                        }
+
+                        // if (!isCancelled()) {
+                            // Traffico
+                            long bs = VariabiliStaticheGlobali.getInstance().getBytesScaricati();
+                            bs += sizeMP3;
+                            VariabiliStaticheGlobali.getInstance().setBytesScaricati(bs);
+                            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaTraffico()) {
+                                Traffico.getInstance().ScriveTrafficoAVideo(VariabiliStaticheGlobali.getInstance().getBytesScaricati());
+                            }
+                            // Traffico
+                        // } else {
+                        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3: isCancelled");
+                        // }
+
+                        if (isCancelled() || NumeroBrano!=VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()
+                                || ecw.getFerma()) {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Brano NON scaricato");
+                        } else {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Brano scaricato");
+                        }
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Brano 0 bytes");
+                        messErrore="ERROR: 0 length";
+                    }
+                }
+            } catch (Exception e) {
+                messErrore = Utility.getInstance().PrendeErroreDaException(e);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Errore: "+messErrore);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(final Integer... progress) {
+            super.onProgressUpdate(progress);
+
+            hSelezionaRiga = new Handler();
+            hSelezionaRiga.postDelayed(runRiga=new Runnable() {
+                @Override
+                public void run() {
+                    VariabiliStaticheHome.getInstance().getpMP3().setProgress(progress[0]);
+
+                    hSelezionaRiga.removeCallbacks(runRiga);
+                }
+            }, 50);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            ControllaFineCiclo(false);
+        }
+
+        public void ControllaFineCiclo(boolean DaFuori) {
+            ecw.setMessErrore(messErrore);
+
+            ChiudeDialog();
+
+            if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebugMP3().isEmpty()) {
+                messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebugMP3();
+            }
+
+            if (VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
+                VariabiliStaticheGlobali.getInstance().setStaScaricandoBrano(false);
+            }
+
+            VariabiliStaticheGlobali.getInstance().setEcw(null);
+            if (messErrore.isEmpty()) {
+                if (!ecw.getFerma()) {
+                    ecw.setEsecuzioneRoutineWeb(1);
+                    // if (!DaFuori) {
+                    ecw.StoppaElaborazioneWEB();
+                    // }
+
+                    if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
+                            if (!NomeBrano.contains(VariabiliStaticheGlobali.EstensioneCompressione)) {
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Prende immagine da brano non compresso");
+                                PrendeImmagineDaMP3(Path + "/" + NomeBrano);
+                            }
+                        }
+
+                        if (!Automatico) {
+                            if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                                NetThread.getInstance().setCaroselloBloccato(false);
+                                // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+                            }
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3. ImpostaBrano in Home");
+                            GestioneImpostazioneBrani.getInstance().ImpostaBrano(Path + "/" + NomeBrano);
+                        } else {
+                            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
+
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3 in background effettuato");
+                            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                            NetThread.getInstance().setCaroselloBloccato(false);
+                            // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+                        }
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico dell'mp3 bloccato per numero canzone diversa");
+                        if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                            NetThread.getInstance().setCaroselloBloccato(false);
+                            // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+                        }
+                    }
+                } else {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3 bloccato da remoto");
+                    if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                        NetThread.getInstance().setCaroselloBloccato(false);
+                        // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+                    }
+                }
+            } else {
+                if (Automatico) {
+                    GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ko);
+
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3 in background fallito");
+                    VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                    NetThread.getInstance().setCaroselloBloccato(false);
+                    // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato");
+                    int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
+                    if (brano>-1) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato. OK: " + Integer.toString(brano));
+                        GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
+                    } else {
+                        VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText("Nessun brano caricato");
+                    }
+                }
+
+                // if (NumeroBrano==VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                PronunciaFrasi pf = new PronunciaFrasi();
+                pf.PronunciaFrase("Errore", "ITALIANO");
+
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Esecuzione routine di errore da download MP3. DaFuori = " + DaFuori);
+                ecw.EsegueErrore(DaFuori);
+                // }
+            }
+
+            VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.GONE);
+            VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
+
+            // hSelezionaRiga = new Handler();
+            // hSelezionaRiga.postDelayed(runRiga=new Runnable() {
+            //     @Override
+            //     public void run() {
+            //         VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.GONE);
+            //         VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
+            //         hSelezionaRiga.removeCallbacks(runRiga);
+            //     }
+            // }, 50);
+        }
+    }
+
+    private void PrendeImmagineDaMP3(String mPath) {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(mPath);
+        InputStream inputStream = null;
+        if (mmr.getEmbeddedPicture() != null) {
+            inputStream = new ByteArrayInputStream(mmr.getEmbeddedPicture());
+        }
+        mmr.release();
+
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        int a1 = NomeBrano.indexOf(".");
+        String sNome = NomeBrano.substring(0,a1) +".jpg";
+
+        try {
+            FileOutputStream out = new FileOutputStream(Path+"/"+sNome);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } catch (IOException e) {
+            // e.printStackTrace();
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
+        }
+    }
+}
+*/

@@ -1,0 +1,667 @@
+package looigi.loowebplayer.VariabiliStatiche;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
+
+import java.util.Date;
+
+import looigi.loowebplayer.R;
+import looigi.loowebplayer.cuffie.GestoreCuffie;
+import looigi.loowebplayer.dati.DatiGenerali;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
+import looigi.loowebplayer.utilities.Log;
+
+public class VariabiliStaticheGlobali {
+    //-------- Singleton ----------//
+    private static VariabiliStaticheGlobali instance = null;
+
+    private VariabiliStaticheGlobali() {
+    }
+
+    public static VariabiliStaticheGlobali getInstance() {
+        if (instance == null) {
+            instance = new VariabiliStaticheGlobali();
+        }
+
+        return instance;
+    }
+
+    public String PercorsoDIR=Environment.getExternalStorageDirectory().getPath()+"/LooigiSoft/looWebPlayer";
+    public String PercorsoURL="http://looigi.no-ip.biz:12345/looWebPlayer";
+    private Context context;
+    private AppCompatActivity contextPrincipale;
+    private FragmentActivity FragmentActivityPrincipale;
+    private View ViewActivity;
+    private String OperazioneInCorso;
+    public static String MascheraAttuale;
+    public static String RadiceWS = "http://looigi.no-ip.biz:12345/looWebPlayer/";
+    // public static String RadiceUpload = "http://looigi.no-ip.biz:12345/CvCalcioUploadPic/default.aspx";
+    final public static String ValoreAmministratore = "1";
+    final public static String EstensioneCompressione = "_cmp_";
+    final public static String NomeApplicazione="Looigi's Web Player";
+    final public static int TempoImmagineVisibile=15000;
+    final public static int TempoSfumatura=3000;
+
+    private int TimeOutDownloadMP3=125000;
+    private int TimeOutListaBrani=15000;
+    private int AttesaControlloEsistenzaMP3=5000;
+    private int TimeOutImmagini=15000;
+    private int TipoSegnale=1;
+
+    private MenuItem itemNuovo;
+    private MenuItem itemMultimedia;
+    private FloatingActionButton actButtonNew;
+    private AppBarLayout appBar;
+    private Window windowBackground;
+    private StrutturaUtenti Utente;
+    private DatiGenerali DatiGenerali=new DatiGenerali();
+    // private Boolean bloccaCarosello=false;
+    private Boolean StaSuonando=false;
+    private Boolean MusicaTerminata=false;
+    // private Boolean StaSuonandoAttesa=false;
+    private Log log = new Log();
+    private Long bytesScaricati=0L;
+    // private ImageView ivPassaggio;
+    private Context ctxPassaggio;
+    private GestoreCuffie myReceiverCuffie;
+    // private GestioneTastoCuffie myReceiverGTC;
+    private Boolean CuffieInserite;
+    private Boolean GiaEntrato=false;
+    private TextView txtBraniInLista;
+    private Boolean HaCaricatoTuttiIDettagliDelBrano=false;
+    private Date UltimaDataCaricamento=null;
+    private String UltimaCosaPronunciata="";
+    private int UltimaCanzoneSuonata=-2;
+    private Boolean HaScaricatoAutomaticamente;
+    private Boolean StaScaricandoAutomaticamente =false;
+    // private Boolean StaAttendendoConMusichetta=false;
+    // private Boolean NonFermareDownload;
+    private int BranoAutomatico;
+    private String UltimaImmagineVisualizzata="";
+    // private Boolean MessaImmagineVuota;
+    private Boolean DisegnaMascheraHomeCompleta;
+    private String sUltimaCanzoneSuonata="";
+    private TextView txtTraffico;
+    private String RitornoCheckFileURL="";
+    private boolean EsciDaCheckFile=false;
+    private boolean StaScaricandoBrano;
+    // private EsecuzioneChiamateWEB ecw;
+    private final String messErrorePerDebug = "";
+    private final String messErrorePerDebugMP3 = "";
+    // private boolean CaroselloBloccatoDaAutomatico;
+    private boolean EseguiHandlerConMainLooper = false;
+    private Integer nOperazioneATOW = -1;
+    // private boolean StaGiaAttendendo = false;
+    private boolean OrientationPortrait = false;
+    private String ImmagineMostrata;
+
+    // private GestioneWEBServiceSOAP gWSoap = null;
+    // private DownloadImmagine gImmC = null;
+    // private DownloadImmagine gImmI = null;
+    // private DownloadMP3 gMP3 = null;
+    // private DownloadTextFile gText = null;
+
+    private Drawable play;
+    private Drawable play_dis;
+    private Drawable stop;
+    private Drawable stop_dis;
+    private Drawable avanti;
+    private Drawable avanti_dis;
+    private Drawable indietro;
+    private Drawable indietro_dis;
+    private Drawable refresh;
+    private Drawable refresh_dis;
+
+    public void SettaIcone(Context context) {
+        play = ContextCompat.getDrawable(context, R.drawable.play);
+        play_dis = ContextCompat.getDrawable(context, R.drawable.play_dis);
+        stop = ContextCompat.getDrawable(context, R.drawable.stop);
+        stop_dis = ContextCompat.getDrawable(context, R.drawable.stop_dis);
+        avanti = ContextCompat.getDrawable(context, R.drawable.avanti);
+        avanti_dis = ContextCompat.getDrawable(context, R.drawable.avanti_dis);
+        indietro = ContextCompat.getDrawable(context, R.drawable.indietro);
+        indietro_dis = ContextCompat.getDrawable(context, R.drawable.indietro_dis);
+        refresh = ContextCompat.getDrawable(context, R.drawable.refresh);
+        refresh_dis = ContextCompat.getDrawable(context, R.drawable.refresh_dis);
+    }
+
+    public Context getCtxPassaggio() {
+        return ctxPassaggio;
+    }
+
+    public void setCtxPassaggio(Context ctxPassaggio) {
+        this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public String getImmagineMostrata() {
+        return ImmagineMostrata;
+    }
+
+    public void setImmagineMostrata(String immagineMostrata) {
+        ImmagineMostrata = immagineMostrata;
+    }
+
+    public boolean isOrientationPortrait() {
+        return OrientationPortrait;
+    }
+
+    public void setOrientationPortrait(boolean orientationPortrait) {
+        OrientationPortrait = orientationPortrait;
+    }
+
+    public Integer getnOperazioneATOW() {
+        return nOperazioneATOW;
+    }
+
+    /* public boolean isStaGiaAttendendo() {
+        return StaGiaAttendendo;
+    }
+
+    public void setStaGiaAttendendo(boolean staGiaAttendendo) {
+        StaGiaAttendendo = staGiaAttendendo;
+    } */
+
+    public void setnOperazioneATOW(Integer nOperazioneATOW) {
+        this.nOperazioneATOW = nOperazioneATOW;
+    }
+/* public DownloadImmagine getgImmI() {
+        return gImmI;
+    }
+
+    public void setgImmI(DownloadImmagine gImmI) {
+        this.gImmI = gImmI;
+    }
+
+    public GestioneWEBServiceSOAP getgWSoap() {
+        return gWSoap;
+    }
+
+    public void setgWSoap(GestioneWEBServiceSOAP gWSoap) {
+        this.gWSoap = gWSoap;
+    }
+
+    public DownloadImmagine getgImmC() {
+        return gImmC;
+    }
+
+    public void setgImmC(DownloadImmagine gImmC) {
+        this.gImmC = gImmC;
+    }
+
+    public DownloadMP3 getgMP3() {
+        return gMP3;
+    }
+
+    public void setgMP3(DownloadMP3 gMP3) {
+        this.gMP3 = gMP3;
+    }
+
+    public DownloadTextFile getgText() {
+        return gText;
+    }
+
+    public void setgText(DownloadTextFile gText) {
+        this.gText = gText;
+    } */
+
+    public boolean isEseguiHandlerConMainLooper() {
+        return EseguiHandlerConMainLooper;
+    }
+
+    public Drawable getRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(Drawable refresh) {
+        this.refresh = refresh;
+    }
+
+    public Drawable getRefresh_dis() {
+        return refresh_dis;
+    }
+
+    public void setRefresh_dis(Drawable refresh_dis) {
+        this.refresh_dis = refresh_dis;
+    }
+
+    public Drawable getPlay() {
+        return play;
+    }
+
+    public Drawable getPlay_dis() {
+        return play_dis;
+    }
+
+    public Drawable getStop() {
+        return stop;
+    }
+
+    public Drawable getStop_dis() {
+        return stop_dis;
+    }
+
+    public Drawable getAvanti() {
+        return avanti;
+    }
+
+    public Drawable getAvanti_dis() {
+        return avanti_dis;
+    }
+
+    public Drawable getIndietro() {
+        return indietro;
+    }
+
+    public Drawable getIndietro_dis() {
+        return indietro_dis;
+    }
+
+    public String getMessErrorePerDebugMP3() {
+        return messErrorePerDebugMP3;
+    }
+
+    public String getMessErrorePerDebug() {
+        return messErrorePerDebug;
+    }
+
+    /* public EsecuzioneChiamateWEB getEcw() {
+        return ecw;
+    }
+
+    public void setEcw(EsecuzioneChiamateWEB ecw) {
+        this.ecw = ecw;
+    } */
+
+    public boolean isStaScaricandoBrano() {
+        return StaScaricandoBrano;
+    }
+
+    public void setStaScaricandoBrano(boolean staScaricandoBrano) {
+        StaScaricandoBrano = staScaricandoBrano;
+    }
+
+    public boolean isEsciDaCheckFile() {
+        return EsciDaCheckFile;
+    }
+
+    public void setEsciDaCheckFile(boolean esciDaCheckFile) {
+        EsciDaCheckFile = esciDaCheckFile;
+    }
+
+    /* public Boolean getStaAttendendoConMusichetta() {
+        return StaAttendendoConMusichetta;
+    }
+
+    public void setStaAttendendoConMusichetta(Boolean staAttendendoConMusichetta) {
+        StaAttendendoConMusichetta = staAttendendoConMusichetta;
+    } */
+
+    public Boolean getMusicaTerminata() {
+        return MusicaTerminata;
+    }
+
+    public void setMusicaTerminata(Boolean musicaTerminata) {
+        MusicaTerminata = musicaTerminata;
+    }
+
+    public int getAttesaControlloEsistenzaMP3() {
+        return AttesaControlloEsistenzaMP3;
+    }
+
+    public void setAttesaControlloEsistenzaMP3(int attesaControlloEsistenzaMP3) {
+        AttesaControlloEsistenzaMP3 = attesaControlloEsistenzaMP3;
+    }
+
+    public int getTimeOutDownloadMP3() {
+        return TimeOutDownloadMP3;
+    }
+
+    public void setTimeOutDownloadMP3(int timeOutDownloadMP3) {
+        TimeOutDownloadMP3 = timeOutDownloadMP3;
+    }
+
+    public int getTimeOutListaBrani() {
+        return TimeOutListaBrani;
+    }
+
+    public void setTimeOutListaBrani(int timeOutListaBrani) {
+        TimeOutListaBrani = timeOutListaBrani;
+    }
+
+    public int getTimeOutImmagini() {
+        return TimeOutImmagini;
+    }
+
+    public void setTimeOutImmagini(int timeOutImmagini) {
+        TimeOutImmagini = timeOutImmagini;
+    }
+
+    public int getTipoSegnale() {
+        return TipoSegnale;
+    }
+
+    public void setTipoSegnale(int tipoSegnale) {
+        TipoSegnale = tipoSegnale;
+    }
+
+    /* public Boolean getStaSuonandoAttesa() {
+        return StaSuonandoAttesa;
+    }
+
+    public void setStaSuonandoAttesa(Boolean staSuonandoAttesa) {
+        StaSuonandoAttesa = staSuonandoAttesa;
+    } */
+
+    public Boolean getStaScaricandoAutomaticamente() {
+        return StaScaricandoAutomaticamente;
+    }
+
+    public void setStaScaricandoAutomaticamente(Boolean staScaricandoAutomaticamente) {
+        StaScaricandoAutomaticamente = staScaricandoAutomaticamente;
+    }
+
+    public String getRitornoCheckFileURL() {
+        return RitornoCheckFileURL;
+    }
+
+    public void setRitornoCheckFileURL(String ritornoCheckFileURL) {
+        RitornoCheckFileURL = ritornoCheckFileURL;
+    }
+
+    public String getsUltimaCanzoneSuonata() {
+        return sUltimaCanzoneSuonata;
+    }
+
+    public void setsUltimaCanzoneSuonata(String sUltimaCanzoneSuonata) {
+        this.sUltimaCanzoneSuonata = sUltimaCanzoneSuonata;
+    }
+
+    public Boolean getDisegnaMascheraHomeCompleta() {
+        return DisegnaMascheraHomeCompleta;
+    }
+
+    public void setDisegnaMascheraHomeCompleta(Boolean disegnaMascheraHomeCompleta) {
+        DisegnaMascheraHomeCompleta = disegnaMascheraHomeCompleta;
+    }
+
+    // public Boolean getMessaImmagineVuota() {
+    //     return MessaImmagineVuota;
+    // }
+//
+    // public void setMessaImmagineVuota(Boolean messaImmagineVuota) {
+    //     MessaImmagineVuota = messaImmagineVuota;
+    // }
+
+    public String getUltimaImmagineVisualizzata() {
+        return UltimaImmagineVisualizzata;
+    }
+
+    public void setUltimaImmagineVisualizzata(String ultimaImmagineVisualizzata) {
+        UltimaImmagineVisualizzata = ultimaImmagineVisualizzata;
+    }
+
+    public int getBranoAutomatico() {
+        return BranoAutomatico;
+    }
+
+    public void setBranoAutomatico(int branoAutomatico) {
+        BranoAutomatico = branoAutomatico;
+    }
+
+    // public Boolean getNonFermareDownload() {
+    //     return NonFermareDownload;
+    // }
+
+    // public void setNonFermareDownload(Boolean nonFermareDownload) {
+    //     NonFermareDownload = nonFermareDownload;
+    // }
+
+    public Boolean getHaScaricatoAutomaticamente() {
+        return HaScaricatoAutomaticamente;
+    }
+
+    public void setHaScaricatoAutomaticamente(Boolean haScaricatoAutomaticamente) {
+        HaScaricatoAutomaticamente = haScaricatoAutomaticamente;
+    }
+
+    public int getUltimaCanzoneSuonata() {
+        return UltimaCanzoneSuonata;
+    }
+
+    public void setUltimaCanzoneSuonata(int ultimaCanzoneSuonata) {
+        UltimaCanzoneSuonata = ultimaCanzoneSuonata;
+    }
+
+    public String getUltimaCosaPronunciata() {
+        return UltimaCosaPronunciata;
+    }
+
+    public void setUltimaCosaPronunciata(String ultimaCosaPronunciata) {
+        UltimaCosaPronunciata = ultimaCosaPronunciata;
+    }
+
+    public Date getUltimaDataCaricamento() {
+        return UltimaDataCaricamento;
+    }
+
+    public void setUltimaDataCaricamento(Date ultimaDataCaricamento) {
+        UltimaDataCaricamento = ultimaDataCaricamento;
+    }
+
+    public Boolean getHaCaricatoTuttiIDettagliDelBrano() {
+        return HaCaricatoTuttiIDettagliDelBrano;
+    }
+
+    public void setHaCaricatoTuttiIDettagliDelBrano(Boolean haCaricatoTuttiIDettagliDelBrano) {
+        HaCaricatoTuttiIDettagliDelBrano = haCaricatoTuttiIDettagliDelBrano;
+    }
+
+    public TextView getTxtBraniInLista() {
+        return txtBraniInLista;
+    }
+
+    public void setTxtBraniInLista(TextView txtBraniInLista) {
+        this.txtBraniInLista = txtBraniInLista;
+    }
+
+    public TextView getTxtTraffico() {
+        return txtTraffico;
+    }
+
+    public void setTxtTraffico(TextView txtTraffico) {
+        this.txtTraffico = txtTraffico;
+    }
+
+    public Boolean getGiaEntrato() {
+        return GiaEntrato;
+    }
+
+    public void setGiaEntrato(Boolean giaEntrato) {
+        GiaEntrato = giaEntrato;
+    }
+
+    public Boolean getCuffieInserite() {
+        return CuffieInserite;
+    }
+
+    public void setCuffieInserite(Boolean cuffieInserite) {
+        CuffieInserite = cuffieInserite;
+    }
+
+    public GestoreCuffie getMyReceiverCuffie() {
+        return myReceiverCuffie;
+    }
+
+    public void setMyReceiverCuffie(GestoreCuffie myReceiverCuffie) {
+        this.myReceiverCuffie = myReceiverCuffie;
+    }
+
+    // public GestioneTastoCuffie getMyReceiverGTC() {
+    //     return myReceiverGTC;
+    // }
+//
+    // public void setMyReceiverGTC(GestioneTastoCuffie myReceiverGTC) {
+    //     this.myReceiverGTC = myReceiverGTC;
+    // }
+
+    // public ImageView getIvPassaggio() {
+    //     return ivPassaggio;
+    // }
+//
+    // public void setIvPassaggio(ImageView ivPassaggio) {
+    //     this.ivPassaggio = ivPassaggio;
+    // }
+
+    public Long getBytesScaricati() {
+        return bytesScaricati;
+    }
+
+    public void setBytesScaricati(Long bytesScaricati) {
+        this.bytesScaricati = bytesScaricati;
+    }
+
+    public Log getLog() {
+        return log;
+    }
+
+    public void setL(Log l) {
+        this.log = l;
+    }
+
+    public Boolean getStaSuonando() {
+        return StaSuonando;
+    }
+
+    public void setStaSuonando(Boolean staSuonando) {
+        StaSuonando = staSuonando;
+    }
+
+    /* public boolean isCaroselloBloccatoDaAutomatico() {
+        return CaroselloBloccatoDaAutomatico;
+    }
+
+    public void setCaroselloBloccatoDaAutomatico(boolean caroselloBloccatoDaAutomatico) {
+        CaroselloBloccatoDaAutomatico = caroselloBloccatoDaAutomatico;
+    }
+
+    public Boolean getBloccaCarosello() {
+        return bloccaCarosello;
+    } */
+
+    /* public void setBloccaCarosello(Boolean bloccaCarosello) {
+        this.bloccaCarosello = bloccaCarosello;
+        NetThread.getInstance().setCaroselloBloccato(bloccaCarosello);
+
+        if (NetThread.getInstance().isScreenOn()) {
+            this.CaroselloBloccatoDaAutomatico=bloccaCarosello;
+        }
+
+        if (!bloccaCarosello) {
+            GestioneImmagini.getInstance().CreaCarosello();
+        } else {
+            GestioneImmagini.getInstance().StoppaTimerCarosello();
+        }
+    } */
+
+    public looigi.loowebplayer.dati.DatiGenerali getDatiGenerali() {
+        return DatiGenerali;
+    }
+
+    public StrutturaUtenti getUtente() {
+        return Utente;
+    }
+
+    public void setUtente(StrutturaUtenti utente) {
+        Utente = utente;
+    }
+
+    public Window getWindowBackground() {
+        return windowBackground;
+    }
+
+    public void setWindowBackground(Window windowBackground) {
+        this.windowBackground = windowBackground;
+    }
+
+    public AppBarLayout getAppBar() {
+        return appBar;
+    }
+
+    public void setAppBar(AppBarLayout appBar) {
+        this.appBar = appBar;
+    }
+
+    public FloatingActionButton getActButtonNew() {
+        return actButtonNew;
+    }
+
+    public void setActButtonNew(FloatingActionButton actButtonNew) {
+        this.actButtonNew = actButtonNew;
+    }
+
+    public MenuItem getItemNuovo() {
+        return itemNuovo;
+    }
+
+    public void setItemNuovo(MenuItem itemNuovo) {
+        this.itemNuovo = itemNuovo;
+    }
+
+    public MenuItem getItemMultimedia() {
+        return itemMultimedia;
+    }
+
+    public void setItemMultimedia(MenuItem itemMultimedia) {
+        this.itemMultimedia = itemMultimedia;
+    }
+
+    public AppCompatActivity getContextPrincipale() {
+        return contextPrincipale;
+    }
+
+    public void setContextPrincipale(AppCompatActivity contextPrincipale) {
+        this.contextPrincipale = contextPrincipale;
+    }
+
+    public String getOperazioneInCorso() {
+        return OperazioneInCorso;
+    }
+
+    public void setOperazioneInCorso(String operazioneInCorso) {
+        OperazioneInCorso = operazioneInCorso;
+    }
+
+    public View getViewActivity() {
+        return ViewActivity;
+    }
+
+    public void setViewActivity(View viewActivity) {
+        ViewActivity = viewActivity;
+    }
+
+    public FragmentActivity getFragmentActivityPrincipale() {
+        return FragmentActivityPrincipale;
+    }
+
+    public void setFragmentActivityPrincipale(FragmentActivity fragmentActivityPrincipale) {
+        FragmentActivityPrincipale = fragmentActivityPrincipale;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+}

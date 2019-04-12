@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#dd0000</color>
+    <color name="colorPrimaryDark">#880000</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="verde">#99CC99</color>
+    <color name="rosso">#ff5555</color>
+    <color name="rosso_scuro">#aa5555</color>
+    <color name="blu">#5555ff</color>
+    <color name="bluetto">#aaaaee</color>
+    <color name="nero">#000000</color>
+    <color name="bianco">#FFFFFF</color>
+    <color name="grigio">#888888</color>
+    <color name="bianco_trasparente">#bbFFFFFF</color>
+    <color name="giallo">#aaaa00</color>
+</resources>
