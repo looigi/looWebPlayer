@@ -66,6 +66,8 @@ public class GestioneImmagini {
     private String ImmagineDaCambiare="";
     private Handler hAttesaDownload;
     private Runnable rAttesaDownload;
+    private Handler hCambioImmagine2;
+    private Runnable rCambioImmagine2;
 
     public ImageView getImgBrano() {
         return imgBrano;
@@ -552,32 +554,43 @@ public class GestioneImmagini {
         return resizedBitmap;
     }
 
-    public void SettaImmagineSuIntestazione(String PathFile) {
-        Bitmap bIniziale = null;
+    public void SettaImmagineSuIntestazione(final String PathFile) {
         if (PathFile != null) {
-            if (PathFile.equals("***")) {
-                bIniziale = BitmapFactory.decodeResource(VariabiliStaticheGlobali.getInstance().getContextPrincipale().getResources(),
-                        R.drawable.ic_launcher);
-            } else {
-                bIniziale = BitmapFactory.decodeFile(PathFile);
-            }
-            if (bIniziale != null) {
-                Bitmap b = getResizedBitmap(bIniziale, bIniziale.getWidth(), 150);
-                Bitmap bmpMonochrome = Bitmap.createBitmap(b.getWidth(), 150, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bmpMonochrome);
-                ColorMatrix ma = new ColorMatrix();
-                ma.setSaturation(0);
-                Paint paint = new Paint();
-                paint.setColorFilter(new ColorMatrixColorFilter(ma));
-                canvas.drawBitmap(b, 0, 0, paint);
-                BlurBuilder bb = new BlurBuilder();
-                Bitmap bmpFinale = bb.blur(VariabiliStaticheGlobali.getInstance().getContextPrincipale(), bmpMonochrome);
-                bmpFinale = addWhiteBorder(bmpFinale, 2);
-                Drawable d = new BitmapDrawable(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().getResources(), bmpFinale);
-                VariabiliStaticheHome.getInstance().getLayIntestazione().setBackground(d);
-            }
+            hAttesaDownload = new Handler(Looper.getMainLooper());
+            rAttesaDownload =(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bIniziale = null;
+                    if (PathFile.equals("***")) {
+                        bIniziale = BitmapFactory.decodeResource(VariabiliStaticheGlobali.getInstance().getContextPrincipale().getResources(),
+                                R.drawable.ic_launcher);
+                    } else {
+                        bIniziale = BitmapFactory.decodeFile(PathFile);
+                    }
+                    if (bIniziale != null) {
+                        Bitmap b = getResizedBitmap(bIniziale, bIniziale.getWidth(), 150);
+                        Bitmap bmpMonochrome = Bitmap.createBitmap(b.getWidth(), 150, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bmpMonochrome);
+                        ColorMatrix ma = new ColorMatrix();
+                        ma.setSaturation(0);
+                        Paint paint = new Paint();
+                        paint.setColorFilter(new ColorMatrixColorFilter(ma));
+                        canvas.drawBitmap(b, 0, 0, paint);
+                        BlurBuilder bb = new BlurBuilder();
+                        Bitmap bmpFinale = bb.blur(VariabiliStaticheGlobali.getInstance().getContextPrincipale(), bmpMonochrome);
+                        bmpFinale = addWhiteBorder(bmpFinale, 2);
+
+                        Drawable d = new BitmapDrawable(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().getResources(), bmpFinale);
+                        VariabiliStaticheHome.getInstance().getLayIntestazione().setBackground(d);
+                    }
+                    hAttesaDownload.removeCallbacksAndMessages(null);
+                    hAttesaDownload.removeCallbacks(rAttesaDownload);
+                    hAttesaDownload = null;
+                }
+            });
+            hAttesaDownload.postDelayed(rAttesaDownload, 50);
         }
-    }
+     }
 
     private Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
@@ -617,8 +630,8 @@ public class GestioneImmagini {
 
     public void ImpostaImmagineDiSfondo(final String Immagine, final String Tipo, final int Icona, final Bitmap bitmap) {
         if (Immagine != null) {
-            hAttesaDownload = new Handler(Looper.getMainLooper());
-            rAttesaDownload =(new Runnable() {
+            hCambioImmagine2 = new Handler(Looper.getMainLooper());
+            rCambioImmagine2 =(new Runnable() {
                 @Override
                 public void run() {
                     if (Tipo.equals("ICONA")) {
@@ -637,13 +650,14 @@ public class GestioneImmagini {
                         }
                     }
 
-                    hAttesaDownload.removeCallbacks(rAttesaDownload);
-                    hAttesaDownload = null;
+                    hCambioImmagine2.removeCallbacksAndMessages(null);
+                    hCambioImmagine2.removeCallbacks(rCambioImmagine2);
+                    hCambioImmagine2 = null;
 
                     // hAttesaDownload.postDelayed(rAttesaDownload, 100);
                 }
             });
-            hAttesaDownload.postDelayed(rAttesaDownload, 100);
+            hCambioImmagine2.postDelayed(rCambioImmagine2, 100);
         }
     }
 

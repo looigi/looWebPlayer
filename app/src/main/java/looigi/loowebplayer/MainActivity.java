@@ -65,12 +65,20 @@ public class MainActivity extends AppCompatActivity
         mReceiverComponent = new ComponentName(this, GestioneTastoCuffie.class);
         mAudioManager.registerMediaButtonEventReceiver(mReceiverComponent);
 
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
         receiver = new PhoneUnlockedReceiver();
         IntentFilter fRecv = new IntentFilter();
         fRecv.addAction(Intent.ACTION_USER_PRESENT);
         fRecv.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(receiver, fRecv);
 
+        if (VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie() != null) {
+            unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
+            VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie(null);
+        }
         VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie (new GestoreCuffie());
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie(), filter);
@@ -234,8 +242,14 @@ public class MainActivity extends AppCompatActivity
             case R.id.libreria:
             case R.id.equalizer:
             case R.id.uscita:
-                unregisterReceiver(receiver);
-                unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
+                if (receiver != null) {
+                    unregisterReceiver(receiver);
+                    receiver = null;
+                }
+                if (VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie() != null) {
+                    unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
+                    VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie(null);
+                }
 
                 Notifica.getInstance().RimuoviNotifica();
 
