@@ -362,11 +362,22 @@ public class Home extends android.support.v4.app.Fragment {
 
                 String Mp3 = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBrano();
                 String Durata = GestioneImpostazioneBrani.getInstance().setDurata(Mp3);
-                String d[] = Durata.split(";", -1);
-                String minutes=d[0];
-                String seconds=d[1];
+                if (!Durata.isEmpty()) {
+                    String d[] = Durata.split(";", -1);
+                    String minutes = "";
+                    String seconds = "";
 
-                vh.getTxtMax().setText(minutes + ":" + seconds);
+                    try {
+                        minutes = d[0];
+                        seconds = d[1];
+                    } catch (Exception ignored) {
+                        minutes = "";
+                        seconds = "";
+                    }
+                    vh.getTxtMax().setText(minutes + ":" + seconds);
+                } else {
+                    vh.getTxtMax().setText("");
+                }
                 vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
 
                 StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
