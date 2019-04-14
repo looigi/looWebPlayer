@@ -637,7 +637,10 @@ public class GestioneImmagini {
                         }
                     }
 
-                    hAttesaDownload.postDelayed(rAttesaDownload, 100);
+                    hAttesaDownload.removeCallbacks(rAttesaDownload);
+                    hAttesaDownload = null;
+
+                    // hAttesaDownload.postDelayed(rAttesaDownload, 100);
                 }
             });
             hAttesaDownload.postDelayed(rAttesaDownload, 100);
