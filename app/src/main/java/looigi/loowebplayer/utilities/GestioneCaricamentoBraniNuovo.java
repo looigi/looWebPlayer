@@ -87,9 +87,12 @@ public class GestioneCaricamentoBraniNuovo {
                 if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                     hAttesaProssimo.removeCallbacks(rAttesaProssimo);
                     hAttesaProssimo = null;
+
+                    CaricaBrano2();
                 } else {
                     secondi++;
-                    numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true,"Attesa brano successivo. Secondi: "+Integer.toString(secondi));
+                    numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(numOperazione, true,
+                            "Attesa brano successivo. Secondi: "+Integer.toString(secondi));
                     if (secondi>3) {
                         // Non c'è skip... Proseguo
                         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(numOperazione, true);
@@ -261,7 +264,8 @@ public class GestioneCaricamentoBraniNuovo {
 
     public void CaricaBranoParteFinale() {
         GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Inizio Carica Brano.");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Inizio Carica Brano.");
 
         final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
