@@ -3,6 +3,7 @@ package looigi.loowebplayer.soap;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +29,11 @@ public class DownloadTextFileNuovo {
     private ProgressDialog progressDialog;
     private String tOperazione;
 
+    private int QuantiTentativi;
+    private int Tentativo;
+    private Handler hAttesaNuovoTentativo;
+    private Runnable rAttesaNuovoTentativo;
+
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
     }
@@ -48,6 +54,9 @@ public class DownloadTextFileNuovo {
         Url=sUrl;
         this.ApriDialog=ApriDialog;
         NumeroOperazione=NOperazione;
+
+        this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+        this.Tentativo = 0;
 
         ApriDialog();
 
@@ -104,7 +113,7 @@ public class DownloadTextFileNuovo {
                 c.connect();
 
                 if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    messErrore = "Server returned HTTP " + c.getResponseCode()
+                    messErrore = "ERROR: Server returned HTTP " + c.getResponseCode()
                             + " " + c.getResponseMessage();
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo: Errore: " + messErrore);
@@ -181,11 +190,37 @@ public class DownloadTextFileNuovo {
             ChiudeDialog();
 
             if (messErrore.isEmpty()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Richiamo RiempieStrutture in Home");
-                RiempieListaInBackground r = new RiempieListaInBackground();
-                r.RiempieStrutture();
-                MainActivity.ScriveBraniInLista();
+                // Errore... Riprovo ad eseguire la funzione
+                if (Tentativo<=QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                    Tentativo++;
+                    NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                            "Errore Dl Text File. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "DL TExt File: Errore. Attendo 3 secondi e riprovo: " +
+                            Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+
+                    hAttesaNuovoTentativo = new Handler();
+                    rAttesaNuovoTentativo = (new Runnable() {
+                        @Override
+                        public void run() {
+                            ApriDialog();
+
+                            downloadFile = new DownloadTxtFile();
+                            downloadFile.execute(Url);
+
+                            hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+                            hAttesaNuovoTentativo = null;
+                        }
+                    });
+                    hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
+                    // Errore... Riprovo ad eseguire la funzione
+                } else {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Richiamo RiempieStrutture in Home");
+                    RiempieListaInBackground r = new RiempieListaInBackground();
+                    r.RiempieStrutture();
+                    MainActivity.ScriveBraniInLista();
+                }
             } else {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Scarico testo. Blocco da remoto");

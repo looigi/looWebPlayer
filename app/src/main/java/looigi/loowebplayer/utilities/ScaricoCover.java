@@ -11,9 +11,14 @@ public class ScaricoCover {
     private DownloadImmagineNuovo d;
 
     public int RitornaImmagineBrano(String Artista, String Album, String Brano, int nScarico) {
+        if (VariabiliStaticheGlobali.getInstance().getUtente() == null) {
+            return -1;
+        }
+
         int Ritorno=0;
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Artista: "+Artista+ " Album: "+Album+" Brano: "+Brano);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna immagine brano. Artista: "+Artista+ " Album: "+Album+" Brano: "+Brano);
         String NomeBrano = Brano;
         if (NomeBrano.contains(".")) {
             NomeBrano=NomeBrano.substring(0,NomeBrano.indexOf("."));
@@ -26,11 +31,13 @@ public class ScaricoCover {
         } else {
             PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/"+NomeBrano+".jpg";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. PathFile: "+PathFile);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna immagine brano. PathFile: "+PathFile);
         PathFile = PathFile.replace("#","_");
         File f = new File(PathFile);
         if (f.exists()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Già esiste. La imposto");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Ritorna immagine brano. Già esiste. La imposto");
             GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
 
             GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
@@ -54,11 +61,14 @@ public class ScaricoCover {
             int TimeOut = VariabiliStaticheGlobali.getInstance().getTimeOutImmagini();
 
             if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/Cover_" + Artista + ".jpg");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/Cover_" + Artista + ".jpg");
                 d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/Cover_" + Artista + ".jpg", "Download immagine brano", TimeOut);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg");
-                d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg", "Download immagine brano", TimeOut);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg");
+                d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg",
+                        "Download immagine brano", TimeOut);
             }
             Ritorno=0;
         }
