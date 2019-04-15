@@ -28,6 +28,7 @@ public class DownloadTextFileNuovo {
     private boolean ApriDialog;
     private ProgressDialog progressDialog;
     private String tOperazione;
+    private int NumeroBrano;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -57,6 +58,8 @@ public class DownloadTextFileNuovo {
 
         this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
         this.Tentativo = 0;
+
+        this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
         ApriDialog();
 
@@ -135,6 +138,10 @@ public class DownloadTextFileNuovo {
                     byte[] buffer = new byte[1024];
                     int len1 = 0;
                     while ((len1 = is.read(buffer)) != -1) {
+                        if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                            messErrore = "ESCI";
+                            break;
+                        }
                         fos.write(buffer, 0, len1);
                         if (isCancelled()) {
                             break;
@@ -146,7 +153,7 @@ public class DownloadTextFileNuovo {
                     dirFile = null;
                     outputFile = null;
 
-                    if (isCancelled()) {
+                    if (isCancelled() || messErrore.equals("ESCI")) {
                         try {
                             if (outputFile.exists()) {
                                 outputFile.delete();
@@ -172,7 +179,7 @@ public class DownloadTextFileNuovo {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Effettuato");
                 }
             } catch (Exception e) {
-                messErrore = Utility.getInstance().PrendeErroreDaException(e);
+                messErrore = "ERROR:" + Utility.getInstance().PrendeErroreDaException(e);
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             }
 
@@ -189,41 +196,54 @@ public class DownloadTextFileNuovo {
         public void ControllaFineCiclo() {
             ChiudeDialog();
 
-            if (messErrore.isEmpty()) {
-                // Errore... Riprovo ad eseguire la funzione
-                if (Tentativo<=QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
-                    Tentativo++;
-                    NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-                            "Errore Dl Text File. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(), "DL TExt File: Errore. Attendo 3 secondi e riprovo: " +
-                            Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-
-                    hAttesaNuovoTentativo = new Handler();
-                    rAttesaNuovoTentativo = (new Runnable() {
-                        @Override
-                        public void run() {
-                            ApriDialog();
-
-                            downloadFile = new DownloadTxtFile();
-                            downloadFile.execute(Url);
-
-                            hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-                            hAttesaNuovoTentativo = null;
-                        }
-                    });
-                    hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
-                    // Errore... Riprovo ad eseguire la funzione
-                } else {
+            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                }.getClass().getEnclosingMethod().getName(), "Scarico testo. Cambio brano");
+            } else {
+                if (messErrore.isEmpty()) {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Richiamo RiempieStrutture in Home");
                     RiempieListaInBackground r = new RiempieListaInBackground();
                     r.RiempieStrutture();
                     MainActivity.ScriveBraniInLista();
+                } else {
+                    if (messErrore.equals("ESCI")) {
+                        // Errore... Riprovo ad eseguire la funzione
+                        if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                            Tentativo++;
+                            NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                                    "Errore Dl Text File. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            }.getClass().getEnclosingMethod().getName(), "DL TExt File: Errore. Attendo 3 secondi e riprovo: " +
+                                    Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+
+                            hAttesaNuovoTentativo = new Handler();
+                            rAttesaNuovoTentativo = (new Runnable() {
+                                @Override
+                                public void run() {
+                                    ApriDialog();
+
+                                    downloadFile = new DownloadTxtFile();
+                                    downloadFile.execute(Url);
+
+                                    hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+                                    hAttesaNuovoTentativo = null;
+                                }
+                            });
+                            hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
+                            // Errore... Riprovo ad eseguire la funzione
+                        } else {
+                            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            }.getClass().getEnclosingMethod().getName(), "Scarico testo. Tentativi DL esauriti");
+                        }
+                    } else {
+                        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(), "Scarico testo. Blocco da remoto");
+                    }
                 }
-            } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Scarico testo. Blocco da remoto");
             }
         }
     }

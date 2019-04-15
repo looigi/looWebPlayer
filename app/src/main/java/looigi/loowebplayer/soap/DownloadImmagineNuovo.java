@@ -167,155 +167,170 @@ public class DownloadImmagineNuovo {
 
             ChiudeDialog();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Scarico dell'immagine. Post execute. Errore: "+messErrore);
-            if (messErrore.equals("ESCI")) {
-                // sVariabiliStaticheNuove.getInstance().setSc(null);
-            } else {
-                if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
-                    // Errore... Riprovo ad eseguire la funzione
-                    if (Tentativo<=QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
-                        Tentativo++;
-                        NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-                                "Errore Dl Immagine. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                        }.getClass().getEnclosingMethod().getName(), "DL Immagine: Errore. Attendo 3 secondi e riprovo: " +
-                                Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-
-                        hAttesaNuovoTentativo = new Handler();
-                        rAttesaNuovoTentativo = (new Runnable() {
-                            @Override
-                            public void run() {
-                                ApriDialog();
-
-                                downloadFile = new DownloadImageFile();
-                                downloadFile.execute(Url);
-
-                                hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-                                hAttesaNuovoTentativo = null;
-                            }
-                        });
-                        hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
-                        // Errore... Riprovo ad eseguire la funzione
-                    } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                        }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Tentativi di DL esauriti");
-                        if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
-                                VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
-                            GestioneImmagini.getInstance().ImpostaImmagineVuota();
-                        } else {
-                            GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
-                            GestioneImmagini.getInstance().CreaCarosello();
-                        }
-                    }
+            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                        VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                    GestioneImmagini.getInstance().ImpostaImmagineVuota();
                 } else {
-                    if (messErrore.isEmpty() || messErrore.contains("java.io.FileNotFoundException")) {
-                        if (bitmap != null || messErrore.contains("java.io.FileNotFoundException")) {
-                            if (!inSfuma) {
-                                if (!messErrore.contains("java.io.FileNotFoundException")) {
-                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                    }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Non inSfuma. Riduco immagine");
-                                    DisplayMetrics displaymetrics = new DisplayMetrics();
-                                    VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
-                                            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-                                    int height = displaymetrics.heightPixels;
-                                    int width = displaymetrics.widthPixels;
+                    GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                    GestioneImmagini.getInstance().CreaCarosello();
+                }
 
-                                    int bmWidth = bitmap.getWidth();
-                                    int bmHeight = bitmap.getHeight();
+                NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                        "DL Immagine: Cambio brano");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                }.getClass().getEnclosingMethod().getName(), "DL Immagine: Cambio brano");
+            } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Scarico dell'immagine. Post execute. Errore: " + messErrore);
+                if (messErrore.equals("ESCI")) {
+                    // sVariabiliStaticheNuove.getInstance().setSc(null);
+                } else {
+                    if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
+                        // Errore... Riprovo ad eseguire la funzione
+                        if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                            Tentativo++;
+                            NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                                    "Errore Dl Immagine. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            }.getClass().getEnclosingMethod().getName(), "DL Immagine: Errore. Attendo 3 secondi e riprovo: " +
+                                    Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
-                                    if (bmWidth > width || bmHeight > height) {
-                                        float p1 = (float) bmWidth / ((float) width);
-                                        float p2 = (float) bmHeight / ((float) height);
-                                        float p;
-                                        if (p1 > p2) {
-                                            p = p1;
-                                            p2 = height / p;
-                                            bitmap = Bitmap.createScaledBitmap(bitmap, (int) width, (int) p2, true);
-                                        } else {
-                                            p = p2;
-                                            p1 = width / p;
-                                            bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) height, true);
-                                        }
-                                    } else {
-                                        float p1 = (float) width / ((float) bmWidth);
-                                        float p2 = (float) height / ((float) bmHeight);
-                                        float p;
-                                        if (p1 < p2) {
-                                            p = p1;
-                                            p1 = bmWidth * p;
-                                            p2 = bmHeight * p;
-                                            bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) p2, true);
-                                        } else {
-                                            p = p2;
-                                            p1 = bmWidth * p;
-                                            p2 = bmHeight * p;
-                                            bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) p2, true);
-                                        }
-                                    }
+                            hAttesaNuovoTentativo = new Handler();
+                            rAttesaNuovoTentativo = (new Runnable() {
+                                @Override
+                                public void run() {
+                                    ApriDialog();
 
-                                    // VariabiliStaticheGlobali.getInstance().getIvPassaggio().setImageBitmap(bitmap);
-                                    GestioneImmagini.getInstance().ImpostaImmagineDiSfondo("", "BITMAP", -1, bitmap);
+                                    downloadFile = new DownloadImageFile();
+                                    downloadFile.execute(Url);
+
+                                    hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+                                    hAttesaNuovoTentativo = null;
                                 }
+                            });
+                            hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
+                            // Errore... Riprovo ad eseguire la funzione
+                        } else {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Tentativi di DL esauriti");
+                            if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                                    VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                            } else {
+                                GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                                GestioneImmagini.getInstance().CreaCarosello();
                             }
+                        }
+                    } else {
+                        if (messErrore.isEmpty() || messErrore.contains("java.io.FileNotFoundException")) {
+                            if (bitmap != null || messErrore.contains("java.io.FileNotFoundException")) {
+                                if (!inSfuma) {
+                                    if (!messErrore.contains("java.io.FileNotFoundException")) {
+                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                        }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Non inSfuma. Riduco immagine");
+                                        DisplayMetrics displaymetrics = new DisplayMetrics();
+                                        VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
+                                                getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                                        int height = displaymetrics.heightPixels;
+                                        int width = displaymetrics.widthPixels;
 
-                            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
-                                if (!messErrore.contains("java.io.FileNotFoundException")) {
-                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                    }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Salvo immagine su disco: " + Path);
-                                    Path = Path.replace("#", "_");
+                                        int bmWidth = bitmap.getWidth();
+                                        int bmHeight = bitmap.getHeight();
 
-                                    String Cartelle[] = Path.split("/", -1);
-                                    String Path2 = "";
-                                    for (int i = 0; i < Cartelle.length - 1; i++) {
-                                        Path2 += Cartelle[i] + "/";
-                                    }
-                                    GestioneFiles.getInstance().CreaCartelle(Path2);
-                                    Utility.getInstance().saveImageFile(bitmap, Path);
+                                        if (bmWidth > width || bmHeight > height) {
+                                            float p1 = (float) bmWidth / ((float) width);
+                                            float p2 = (float) bmHeight / ((float) height);
+                                            float p;
+                                            if (p1 > p2) {
+                                                p = p1;
+                                                p2 = height / p;
+                                                bitmap = Bitmap.createScaledBitmap(bitmap, (int) width, (int) p2, true);
+                                            } else {
+                                                p = p2;
+                                                p1 = width / p;
+                                                bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) height, true);
+                                            }
+                                        } else {
+                                            float p1 = (float) width / ((float) bmWidth);
+                                            float p2 = (float) height / ((float) bmHeight);
+                                            float p;
+                                            if (p1 < p2) {
+                                                p = p1;
+                                                p1 = bmWidth * p;
+                                                p2 = bmHeight * p;
+                                                bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) p2, true);
+                                            } else {
+                                                p = p2;
+                                                p1 = bmWidth * p;
+                                                p2 = bmHeight * p;
+                                                bitmap = Bitmap.createScaledBitmap(bitmap, (int) p1, (int) p2, true);
+                                            }
+                                        }
 
-                                    // Traffico
-                                    File file = new File(Path);
-                                    long len = file.length();
-                                    long bs = VariabiliStaticheGlobali.getInstance().getBytesScaricati();
-                                    bs += len;
-                                    VariabiliStaticheGlobali.getInstance().setBytesScaricati(bs);
-                                    if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaTraffico()) {
-                                        Traffico.getInstance().ScriveTrafficoAVideo(VariabiliStaticheGlobali.getInstance().getBytesScaricati());
-                                    }
-                                    // Traffico
-
-                                    // if (NumeroBrano==VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
-                                    GestioneImmagini.getInstance().SettaImmagineSuIntestazione(Path);
-                                    VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata(Path);
-
-                                    StrutturaImmagini ss = new StrutturaImmagini();
-                                    ss.setNomeImmagine(Path);
-                                    ss.setLunghezza(0);
-                                    if (VariabiliStaticheHome.getInstance().getImms() == null) {
-                                        VariabiliStaticheHome.getInstance().setImms(new ArrayList<StrutturaImmagini>());
-                                    }
-                                    VariabiliStaticheHome.getInstance().getImms().add(ss);
-
-                                    GestioneImmagini.getInstance().setImmagineDaCambiare(Path);
-                                    // }
-                                } else {
-                                    // VariabiliStaticheHome.getInstance().getImgBrano().setImageResource(R.drawable.nessuna);
-                                    //VariabiliStaticheHome.getInstance().ImpostaImmagineDiSfondo("", "ICONA", R.drawable.nessuna, null);
-                                    if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
-                                            VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
-                                        GestioneImmagini.getInstance().ImpostaImmagineVuota();
-                                    } else {
-                                        GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
-                                        // ToglieAlpha();
-
-                                        GestioneImmagini.getInstance().SettaImmagineSuIntestazione("***");
+                                        // VariabiliStaticheGlobali.getInstance().getIvPassaggio().setImageBitmap(bitmap);
+                                        GestioneImmagini.getInstance().ImpostaImmagineDiSfondo("", "BITMAP", -1, bitmap);
                                     }
                                 }
-                            }
 
-                            if (inSfuma) {
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. inSfuma. Proseguo carosello");
+                                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
+                                    if (!messErrore.contains("java.io.FileNotFoundException")) {
+                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                        }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Salvo immagine su disco: " + Path);
+                                        Path = Path.replace("#", "_");
+
+                                        String Cartelle[] = Path.split("/", -1);
+                                        String Path2 = "";
+                                        for (int i = 0; i < Cartelle.length - 1; i++) {
+                                            Path2 += Cartelle[i] + "/";
+                                        }
+                                        GestioneFiles.getInstance().CreaCartelle(Path2);
+                                        Utility.getInstance().saveImageFile(bitmap, Path);
+
+                                        // Traffico
+                                        File file = new File(Path);
+                                        long len = file.length();
+                                        long bs = VariabiliStaticheGlobali.getInstance().getBytesScaricati();
+                                        bs += len;
+                                        VariabiliStaticheGlobali.getInstance().setBytesScaricati(bs);
+                                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaTraffico()) {
+                                            Traffico.getInstance().ScriveTrafficoAVideo(VariabiliStaticheGlobali.getInstance().getBytesScaricati());
+                                        }
+                                        // Traffico
+
+                                        // if (NumeroBrano==VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                                        GestioneImmagini.getInstance().SettaImmagineSuIntestazione(Path);
+                                        VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata(Path);
+
+                                        StrutturaImmagini ss = new StrutturaImmagini();
+                                        ss.setNomeImmagine(Path);
+                                        ss.setLunghezza(0);
+                                        if (VariabiliStaticheHome.getInstance().getImms() == null) {
+                                            VariabiliStaticheHome.getInstance().setImms(new ArrayList<StrutturaImmagini>());
+                                        }
+                                        VariabiliStaticheHome.getInstance().getImms().add(ss);
+
+                                        GestioneImmagini.getInstance().setImmagineDaCambiare(Path);
+                                        // }
+                                    } else {
+                                        // VariabiliStaticheHome.getInstance().getImgBrano().setImageResource(R.drawable.nessuna);
+                                        //VariabiliStaticheHome.getInstance().ImpostaImmagineDiSfondo("", "ICONA", R.drawable.nessuna, null);
+                                        if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                                                VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                                            GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                                        } else {
+                                            GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                                            // ToglieAlpha();
+
+                                            GestioneImmagini.getInstance().SettaImmagineSuIntestazione("***");
+                                        }
+                                    }
+                                }
+
+                                if (inSfuma) {
+                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                    }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. inSfuma. Proseguo carosello");
                         /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
                             // if (NumeroBrano==VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                                 //  VariabiliStaticheHome.getInstance().getImgBrano()
@@ -329,28 +344,29 @@ public class DownloadImmagineNuovo {
                             GestioneImmagini.getInstance().ImpostaImmagineDiSfondo("","BITMAP", -1, bitmap);
                         } */
 
-                                hAttendeSfumatura = new Handler(Looper.getMainLooper());
-                                hAttendeSfumatura.postDelayed(runAttendeSfumatura = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!GestioneImmagini.getInstance().isAttendeSfumatura()) {
-                                            GestioneImmagini.getInstance().RimetteImmagine();
+                                    hAttendeSfumatura = new Handler(Looper.getMainLooper());
+                                    hAttendeSfumatura.postDelayed(runAttendeSfumatura = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (!GestioneImmagini.getInstance().isAttendeSfumatura()) {
+                                                GestioneImmagini.getInstance().RimetteImmagine();
 
-                                            hAttendeSfumatura.removeCallbacks(runAttendeSfumatura);
-                                            hAttendeSfumatura = null;
-                                        } else {
-                                            hAttendeSfumatura.postDelayed(runAttendeSfumatura, 500);
+                                                hAttendeSfumatura.removeCallbacks(runAttendeSfumatura);
+                                                hAttendeSfumatura = null;
+                                            } else {
+                                                hAttendeSfumatura.postDelayed(runAttendeSfumatura, 500);
+                                            }
                                         }
-                                    }
-                                }, 500);
-                            }
-                        } else {
-                            if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
-                                    VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
-                                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                                    }, 500);
+                                }
                             } else {
-                                GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
-                                GestioneImmagini.getInstance().CreaCarosello();
+                                if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                                        VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                                    GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                                } else {
+                                    GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                                    GestioneImmagini.getInstance().CreaCarosello();
+                                }
                             }
                         }
                     }

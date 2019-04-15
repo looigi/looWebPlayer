@@ -41,6 +41,7 @@ public class GestioneWEBServiceSOAPNuovo {
     private String result="";
     private int NumeroOperazione;
     private boolean ApriDialog;
+	private int NumeroBrano;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -61,6 +62,8 @@ public class GestioneWEBServiceSOAPNuovo {
 
 		this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
 		this.Tentativo = 0;
+
+		this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
 		ApriDialog();
 
@@ -328,90 +331,97 @@ public class GestioneWEBServiceSOAPNuovo {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			}
 
-			if (!messErrore.equals("ESCI")) {
-				String Ritorno = result;
+			if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+						"SOAP: Cambio brano");
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+				}.getClass().getEnclosingMethod().getName(), "SOAP: Cambio brano");
+			} else {
+				if (!messErrore.equals("ESCI")) {
+					String Ritorno = result;
 
-				if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug().isEmpty()) {
-					messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug();
-					Ritorno = messErrore;
-				}
+					if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug().isEmpty()) {
+						messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug();
+						Ritorno = messErrore;
+					}
 
-				if (Ritorno.contains("ERROR:")) {
-					messErrore = Ritorno;
-					Errore = true;
-				}
+					if (Ritorno.contains("ERROR:")) {
+						messErrore = Ritorno;
+						Errore = true;
+					}
 
-				ChiudeDialog();
+					ChiudeDialog();
 
-				wsRitornoNuovo rRit = new wsRitornoNuovo();
-				Boolean Ancora = true;
+					wsRitornoNuovo rRit = new wsRitornoNuovo();
+					Boolean Ancora = true;
 
-				if (!Errore) {
-					while (Ancora) {
-						switch (tOperazione) {
-							case "RitornaListaBrani":
-								rRit.RitornaListaBrani(Ritorno);
-								Ancora = false;
-								break;
-							case "RitornaDatiUtente":
-								rRit.RitornaDatiUtente(Ritorno, NumeroOperazione);
-								Ancora = false;
-								break;
-							case "RitornaDettaglioBrano":
-								rRit.RitornaDettaglioBrano(Ritorno, NumeroOperazione);
-								Ancora = false;
-								break;
-							case "RitornaBrano":
-								rRit.RitornaBrano(Ritorno, NumeroOperazione);
-								Ancora = false;
-								break;
-							case "RitornaMultimediaArtista":
-								GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
-								rRit.RitornaMultimediaArtista(Ritorno);
-								Ancora = false;
-								break;
-							case "RitornaBranoBackground":
+					if (!Errore) {
+						while (Ancora) {
+							switch (tOperazione) {
+								case "RitornaListaBrani":
+									rRit.RitornaListaBrani(Ritorno);
+									Ancora = false;
+									break;
+								case "RitornaDatiUtente":
+									rRit.RitornaDatiUtente(Ritorno, NumeroOperazione);
+									Ancora = false;
+									break;
+								case "RitornaDettaglioBrano":
+									rRit.RitornaDettaglioBrano(Ritorno, NumeroOperazione);
+									Ancora = false;
+									break;
+								case "RitornaBrano":
+									rRit.RitornaBrano(Ritorno, NumeroOperazione);
+									Ancora = false;
+									break;
+								case "RitornaMultimediaArtista":
+									GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
+									rRit.RitornaMultimediaArtista(Ritorno);
+									Ancora = false;
+									break;
+								case "RitornaBranoBackground":
 									GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ricerca);
 
 									rRit.RitornaBranoBackground(Ritorno, NumeroOperazione);
 									Ancora = false;
 									break;
+							}
+						}
+					} else {
+						// Errore... Riprovo ad eseguire la funzione
+						if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+							Tentativo++;
+							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+									"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							}.getClass().getEnclosingMethod().getName(), "SOAP: Errore. Attendo 3 secondi e riprovo: " +
+									Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+
+							hAttesaNuovoTentativo = new Handler();
+							rAttesaNuovoTentativo = (new Runnable() {
+								@Override
+								public void run() {
+									ApriDialog();
+									Esegue(context);
+
+									hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+									hAttesaNuovoTentativo = null;
+								}
+							});
+							hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
+							// Errore... Riprovo ad eseguire la funzione
+						} else {
+							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
 						}
 					}
 				} else {
-					// Errore... Riprovo ad eseguire la funzione
-					if (Tentativo<=QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()){
-						Tentativo++;
-						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-								"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-						}.getClass().getEnclosingMethod().getName(), "SOAP: Errore. Attendo 3 secondi e riprovo: " +
-								Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-
-						hAttesaNuovoTentativo = new Handler();
-						rAttesaNuovoTentativo = (new Runnable() {
-							@Override
-							public void run() {
-								ApriDialog();
-								Esegue(context);
-
-								hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-								hAttesaNuovoTentativo = null;
-							}
-						});
-						hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
-						// Errore... Riprovo ad eseguire la funzione
-					} else {
-						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-						}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
-					}
+					NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+							"Stoppata esecuzione da remoto");
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+					}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione da remoto");
 				}
-			} else {
-				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-						"Stoppata esecuzione da remoto");
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-				}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione da remoto");
 			}
 		}
 
