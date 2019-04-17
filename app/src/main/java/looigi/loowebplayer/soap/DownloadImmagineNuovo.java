@@ -43,6 +43,7 @@ public class DownloadImmagineNuovo {
     private int Tentativo;
     private Handler hAttesaNuovoTentativo;
     private Runnable rAttesaNuovoTentativo;
+    private int SecondiAttesa;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -189,28 +190,42 @@ public class DownloadImmagineNuovo {
                 } else {
                     if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
+
+                            final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;
+
                             NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                                     "Errore Dl Immagine. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(), "DL Immagine: Errore. Attendo 3 secondi e riprovo: " +
+                            }.getClass().getEnclosingMethod().getName(), "DL Immagine: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
                                     Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
+                            SecondiAttesa = 0;
                             hAttesaNuovoTentativo = new Handler();
                             rAttesaNuovoTentativo = (new Runnable() {
                                 @Override
                                 public void run() {
-                                    ApriDialog();
+                                    SecondiAttesa++;
+                                    NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                                            "Errore Dl Immagine. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
+                                            " Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
+                                    if (SecondiAttesa>=TempoAttesa) {
+                                        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-                                    downloadFile = new DownloadImageFile();
-                                    downloadFile.execute(Url);
+                                        ApriDialog();
 
-                                    hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-                                    hAttesaNuovoTentativo = null;
+                                        downloadFile = new DownloadImageFile();
+                                        downloadFile.execute(Url);
+
+                                        hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+                                        hAttesaNuovoTentativo = null;
+                                    } else {
+                                        hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
+                                    }
                                 }
                             });
-                            hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 3000);
+                            hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
                             // Errore... Riprovo ad eseguire la funzione
                         } else {
                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

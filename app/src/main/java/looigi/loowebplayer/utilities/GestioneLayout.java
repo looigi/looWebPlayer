@@ -64,12 +64,12 @@ public class GestioneLayout {
         SpegneLayout();
     }
 
-    public void VisualizzaLayout() {
+    public void VisualizzaLayout(int tempo) {
         if (!StaGiaFacendo) {
             StaGiaFacendo = true;
 
-            fadeIn.setDuration(500);
-            fadeIn.setStartOffset(500);
+            fadeIn.setDuration(tempo);
+            fadeIn.setStartOffset(tempo);
 
             fadeIn.setAnimationListener(new Animation.AnimationListener() {
                 @Override

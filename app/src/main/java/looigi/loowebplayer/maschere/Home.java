@@ -280,7 +280,7 @@ public class Home extends android.support.v4.app.Fragment {
 
             GestioneImmagini.getInstance().getImgBrano().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    GestioneLayout.getInstance().VisualizzaLayout();
+                    GestioneLayout.getInstance().VisualizzaLayout(500);
                 }
             });
 
@@ -381,60 +381,62 @@ public class Home extends android.support.v4.app.Fragment {
                 vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
 
                 StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-                String sNomeBrano = s.getNomeBrano();
-                String Traccia = "";
-                if (sNomeBrano.contains("-")) {
-                    String A[] = sNomeBrano.split("-");
-                    if (!A[0].isEmpty() && !A[0].equals("00")) {
-                        Traccia = "\nTraccia " + A[0].trim();
-                    }
-                    sNomeBrano = A[1].trim();
-                }
-                if (sNomeBrano.contains(".")) {
-                    sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
-                }
-                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-                String sAlbum = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
-                if (sAlbum.contains("-")) {
-                    String A[] = sAlbum.split("-");
-                    if (A.length > 1) {
-                        if (!A[0].isEmpty() && !A[0].equals("0000")) {
-                            sAlbum = A[1] + " (Anno " + A[0] + ")";
-                        } else {
-                            sAlbum = A[1];
+                if (s!=null) {
+                    String sNomeBrano = s.getNomeBrano();
+                    String Traccia = "";
+                    if (sNomeBrano.contains("-")) {
+                        String A[] = sNomeBrano.split("-");
+                        if (!A[0].isEmpty() && !A[0].equals("00")) {
+                            Traccia = "\nTraccia " + A[0].trim();
                         }
-                    } else {
-                        sAlbum = "";
+                        sNomeBrano = A[1].trim();
                     }
+                    if (sNomeBrano.contains(".")) {
+                        sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
+                    }
+                    String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                    String sAlbum = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+                    if (sAlbum.contains("-")) {
+                        String A[] = sAlbum.split("-");
+                        if (A.length > 1) {
+                            if (!A[0].isEmpty() && !A[0].equals("0000")) {
+                                sAlbum = A[1] + " (Anno " + A[0] + ")";
+                            } else {
+                                sAlbum = A[1];
+                            }
+                        } else {
+                            sAlbum = "";
+                        }
+                    }
+                    sAlbum = Traccia + "\nAlbum: " + sAlbum;
+                    vh.getTxtBrano().setText(sNomeBrano);
+                    vh.getTxtArtista().setText(Artista);
+                    vh.getTxtAlbum().setText(sAlbum);
+                    vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
+                    vh.getTxtMembri().setText("");
+
+                    GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                    GestioneImmagini.getInstance().CreaCarosello();
+
+                    String PathFile = VariabiliStaticheGlobali.getInstance().getImmagineMostrata();
+                    GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+                    GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+
+                    GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
+                    GestioneTesti gt = new GestioneTesti();
+                    gt.SettaTesto(false);
+
+                    if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMembri()) {
+                        vh.getTxtMembriTitolo().setVisibility(LinearLayout.VISIBLE);
+                        vh.getTxtMembri().setVisibility(LinearLayout.VISIBLE);
+
+                        int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getIdArtista();
+                        vh.getGm().setMembri(VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri());
+                        vh.getGm().setTxtCasellaTesto(vh.getTxtMembri());
+                        vh.getGm().CominciaAGirare();
+                    }
+                    // Rientrato nella maschera o cambiato orientamento
                 }
-                sAlbum = Traccia + "\nAlbum: " + sAlbum;
-                vh.getTxtBrano().setText(sNomeBrano);
-                vh.getTxtArtista().setText(Artista);
-                vh.getTxtAlbum().setText(sAlbum);
-                vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
-                vh.getTxtMembri().setText("");
-
-                GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
-                GestioneImmagini.getInstance().CreaCarosello();
-
-                String PathFile = VariabiliStaticheGlobali.getInstance().getImmagineMostrata();
-                GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
-                GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
-
-                GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
-                GestioneTesti gt = new GestioneTesti();
-                gt.SettaTesto(false);
-
-                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMembri()) {
-                    vh.getTxtMembriTitolo().setVisibility(LinearLayout.VISIBLE);
-                    vh.getTxtMembri().setVisibility(LinearLayout.VISIBLE);
-
-                    int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getIdArtista();
-                    vh.getGm().setMembri(VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri());
-                    vh.getGm().setTxtCasellaTesto(vh.getTxtMembri());
-                    vh.getGm().CominciaAGirare();
-                }
-                // Rientrato nella maschera o cambiato orientamento
             }
 
             GestioneOggettiVideo.getInstance().SchermoAccesoSpento();

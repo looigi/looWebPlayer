@@ -75,6 +75,8 @@ public class GestioneCaricamentoBraniNuovo {
             VariabiliStaticheHome.getInstance().setHandlerSeekBar(null);
         }
 
+        CaricaBranoParteFinale();
+
         // Attesa fra un brano ed un altro per permettere lo skip senza effettuare caricamenti multipli
         final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
         secondi=0;
@@ -230,13 +232,13 @@ public class GestioneCaricamentoBraniNuovo {
                         hAttesaDownload.get(hAttesaDownload.size()-1).removeCallbacks(rAttesaDownload.get(rAttesaDownload.size()-1));
                         hAttesaDownload.set(hAttesaDownload.size()-1, null);
 
-                        CaricaBranoParteFinale();
+                        CaricaBranoParteFinale2();
                     }
                 }
             });
             hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
         } else {
-            CaricaBranoParteFinale();
+            CaricaBranoParteFinale2();
         }
 
         /* if (VariabiliStaticheNuove.getInstance().getD()!=null ||
@@ -262,8 +264,21 @@ public class GestioneCaricamentoBraniNuovo {
 
     }
 
-    public void CaricaBranoParteFinale() {
-        GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
+    private void CaricaBranoParteFinale2() {
+        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+            this.HaCaricatoBrano = true;
+
+            PronunciaFrasi pf = new PronunciaFrasi();
+            pf.PronunciaFrase(nb2 + ", " + Artista, "INGLESE");
+
+            CaricaBrano3();
+        } else {
+            this.HaCaricatoBrano = false;
+        }
+    }
+
+    private void CaricaBranoParteFinale() {
+        // GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Inizio Carica Brano.");
 
@@ -271,7 +286,7 @@ public class GestioneCaricamentoBraniNuovo {
 
         GestioneLayout.getInstance().AzzeraFade();
         GestioneImmagini.getInstance().SettaImmagineSuIntestazione("***");
-        GestioneLayout.getInstance().VisualizzaLayout();
+        GestioneLayout.getInstance().VisualizzaLayout(10);
 
         try {
             if (vh.getHandlerSeekBar() != null) {
@@ -425,17 +440,6 @@ public class GestioneCaricamentoBraniNuovo {
             this.Artista = Artista;
             this.Album = Album;
             this.NomeBrano = NomeBrano;
-
-            if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                this.HaCaricatoBrano = true;
-
-                PronunciaFrasi pf = new PronunciaFrasi();
-                pf.PronunciaFrase(nb2 + ", " + Artista, "INGLESE");
-
-                CaricaBrano3();
-            } else {
-                this.HaCaricatoBrano = false;
-            }
         }
     }
 

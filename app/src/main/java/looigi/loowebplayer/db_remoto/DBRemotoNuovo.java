@@ -15,10 +15,14 @@ public class DBRemotoNuovo {
 	private String SA="http://looWebPlayer.org/";
 
 	private String ToglieCaratteriStrani(String Cosa) {
-		String sCosa = Cosa.replace("?", "***PI***");
-		sCosa = sCosa.replace("&", "***AND***");
+		if (Cosa!=null) {
+			String sCosa = Cosa.replace("?", "***PI***");
+			sCosa = sCosa.replace("&", "***AND***");
 
-		return sCosa;
+			return sCosa;
+		} else {
+			return "";
+		}
 	}
 
 	public void RitornaListaBrani(Context context, String Artista, String Album, String Brano,
