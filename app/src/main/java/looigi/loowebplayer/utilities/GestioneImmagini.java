@@ -479,7 +479,8 @@ public class GestioneImmagini {
     } */
 
     public void ImpostaImmagineVuota() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Pulisco Immagine");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Pulisco Immagine");
 
         // String t[] = VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().split(";", -1);
 //
@@ -568,20 +569,26 @@ public class GestioneImmagini {
                         bIniziale = BitmapFactory.decodeFile(PathFile);
                     }
                     if (bIniziale != null) {
-                        Bitmap b = getResizedBitmap(bIniziale, bIniziale.getWidth(), 150);
-                        Bitmap bmpMonochrome = Bitmap.createBitmap(b.getWidth(), 150, Bitmap.Config.ARGB_8888);
-                        Canvas canvas = new Canvas(bmpMonochrome);
-                        ColorMatrix ma = new ColorMatrix();
-                        ma.setSaturation(0);
-                        Paint paint = new Paint();
-                        paint.setColorFilter(new ColorMatrixColorFilter(ma));
-                        canvas.drawBitmap(b, 0, 0, paint);
-                        BlurBuilder bb = new BlurBuilder();
-                        Bitmap bmpFinale = bb.blur(VariabiliStaticheGlobali.getInstance().getContextPrincipale(), bmpMonochrome);
-                        bmpFinale = addWhiteBorder(bmpFinale, 2);
+                        try {
+                            Bitmap b = getResizedBitmap(bIniziale, bIniziale.getWidth(), 150);
+                            Bitmap bmpMonochrome = Bitmap.createBitmap(b.getWidth(), 150, Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(bmpMonochrome);
+                            ColorMatrix ma = new ColorMatrix();
+                            ma.setSaturation(0);
+                            Paint paint = new Paint();
+                            paint.setColorFilter(new ColorMatrixColorFilter(ma));
+                            canvas.drawBitmap(b, 0, 0, paint);
+                            BlurBuilder bb = new BlurBuilder();
+                            Bitmap bmpFinale = bb.blur(VariabiliStaticheGlobali.getInstance().getContextPrincipale(), bmpMonochrome);
+                            bmpFinale = addWhiteBorder(bmpFinale, 2);
 
-                        Drawable d = new BitmapDrawable(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().getResources(), bmpFinale);
-                        VariabiliStaticheHome.getInstance().getLayIntestazione().setBackground(d);
+                            Drawable d = new BitmapDrawable(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().getResources(), bmpFinale);
+                            VariabiliStaticheHome.getInstance().getLayIntestazione().setBackground(d);
+                        } catch (Exception ignored) {
+                            String error = Utility.getInstance().PrendeErroreDaException(ignored);
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                    "Errore su SettaImmagineSuIntestazione: " + error);
+                        }
                     }
                     hAttesaDownload.removeCallbacksAndMessages(null);
                     hAttesaDownload.removeCallbacks(rAttesaDownload);
@@ -650,10 +657,11 @@ public class GestioneImmagini {
                         }
                     }
 
-                    hCambioImmagine2.removeCallbacksAndMessages(null);
-                    hCambioImmagine2.removeCallbacks(rCambioImmagine2);
-                    hCambioImmagine2 = null;
-
+                    if (hCambioImmagine2!=null && rCambioImmagine2!=null) {
+                        hCambioImmagine2.removeCallbacksAndMessages(null);
+                        hCambioImmagine2.removeCallbacks(rCambioImmagine2);
+                        hCambioImmagine2 = null;
+                    }
                     // hAttesaDownload.postDelayed(rAttesaDownload, 100);
                 }
             });

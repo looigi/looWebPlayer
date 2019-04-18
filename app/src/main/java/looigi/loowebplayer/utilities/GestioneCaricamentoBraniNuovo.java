@@ -93,13 +93,14 @@ public class GestioneCaricamentoBraniNuovo {
                     CaricaBrano2();
                 } else {
                     secondi++;
+                    int ss = VariabiliStaticheGlobali.getInstance().getAttesaSecondiBranoSuccessivo();
                     numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(numOperazione, true,
-                            "Attesa brano successivo. Secondi: "+Integer.toString(secondi));
-                    if (secondi>3) {
+                            "Attesa brano successivo. Secondi: "+Integer.toString(ss-secondi));
+                    if (secondi>ss) {
                         // Non c'è skip... Proseguo
                         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(numOperazione, true);
                         if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
-                            GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
+                            // GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
                             // VariabiliStaticheGlobali.getInstance().setStaGiaAttendendo(true);
                             secondi = 0;
                             VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Attesa termine download automatico"));

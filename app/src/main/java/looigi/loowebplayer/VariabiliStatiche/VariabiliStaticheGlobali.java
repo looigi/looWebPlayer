@@ -57,6 +57,7 @@ public class VariabiliStaticheGlobali {
     private int AttesaControlloEsistenzaMP3=5000;
     private int TimeOutImmagini=15000;
     private int TipoSegnale=1;
+    private int AttesaSecondiBranoSuccessivo=3;
 
     private MenuItem itemNuovo;
     private MenuItem itemMultimedia;
@@ -105,6 +106,11 @@ public class VariabiliStaticheGlobali {
     private boolean OrientationPortrait = false;
     private String ImmagineMostrata;
 
+    private String ChiaveDLSoap = "";
+    private String ChiaveDLImmagine = "";
+    private String ChiaveDLText = "";
+    private String ChiaveDLMP3 = "";
+
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
     // private DownloadImmagine gImmI = null;
@@ -141,6 +147,42 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public int getAttesaSecondiBranoSuccessivo() {
+        return AttesaSecondiBranoSuccessivo;
+    }
+
+    public String getChiaveDLMP3() {
+        return ChiaveDLMP3;
+    }
+
+    public void setChiaveDLMP3(String chiaveDLMP3) {
+        ChiaveDLMP3 = chiaveDLMP3;
+    }
+
+    public String getChiaveDLText() {
+        return ChiaveDLText;
+    }
+
+    public void setChiaveDLText(String chiaveDLText) {
+        ChiaveDLText = chiaveDLText;
+    }
+
+    public String getChiaveDLImmagine() {
+        return ChiaveDLImmagine;
+    }
+
+    public void setChiaveDLImmagine(String chiaveDLImmagine) {
+        ChiaveDLImmagine = chiaveDLImmagine;
+    }
+
+    public String getChiaveDLSoap() {
+        return ChiaveDLSoap;
+    }
+
+    public void setChiaveDLSoap(String chiaveDLSoap) {
+        ChiaveDLSoap = chiaveDLSoap;
     }
 
     public String getImmagineMostrata() {

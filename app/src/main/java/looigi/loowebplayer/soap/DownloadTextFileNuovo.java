@@ -53,19 +53,27 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        Url=sUrl;
+        this.Url=sUrl;
         this.ApriDialog=ApriDialog;
-        NumeroOperazione=NOperazione;
+        this.NumeroOperazione=NOperazione;
 
         this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
         this.Tentativo = 0;
 
         this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-        ApriDialog();
+        String Chiave = this.Url;
+        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave)) {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
-        downloadFile = new DownloadTxtFile();
-        downloadFile.execute(Url);
+            ApriDialog();
+
+            downloadFile = new DownloadTxtFile();
+            downloadFile.execute(Url);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Skippata operazione DL Text uguale: "+Chiave);
+        }
     }
 
     private void ChiudeDialog() {
@@ -211,7 +219,7 @@ public class DownloadTextFileNuovo {
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

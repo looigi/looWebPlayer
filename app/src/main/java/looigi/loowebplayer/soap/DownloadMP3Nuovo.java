@@ -69,8 +69,8 @@ public class DownloadMP3Nuovo {
     }
 
     public void startDownload(String sUrl, int NO) {
-        Url=sUrl;
-        NumeroOperazione = NO;
+        this.Url=sUrl;
+        this.NumeroOperazione = NO;
 
         VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
         VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
@@ -79,10 +79,18 @@ public class DownloadMP3Nuovo {
         this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
         this.Tentativo = 0;
 
-        ApriDialog();
+        String Chiave = this.Url;
+        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave)) {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
-        downloadFile = new DownloadFileMP3();
-        downloadFile.execute(Url);
+            ApriDialog();
+
+            downloadFile = new DownloadFileMP3();
+            downloadFile.execute(Url);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Skippata operazione DL Brano uguale: "+Chiave);
+        }
     }
 
     private void ChiudeDialog() {
@@ -337,7 +345,7 @@ public class DownloadMP3Nuovo {
                         }
                     } else {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo <= QuantiTentativi && messErrore.contains("ERROR:") && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        if (Tentativo < QuantiTentativi && messErrore.contains("ERROR:") && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

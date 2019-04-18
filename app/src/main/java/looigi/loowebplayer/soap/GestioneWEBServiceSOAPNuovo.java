@@ -54,25 +54,32 @@ public class GestioneWEBServiceSOAPNuovo {
 	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
                                        String NS, String SA, int Timeout, int NumeroOperazione,
 									   boolean ApriDialog) {
-		tOperazione=TipoOperazione;
+		this.tOperazione=TipoOperazione;
 		this.ApriDialog=ApriDialog;
 		this.NAMESPACE=NS;
 		this.SOAP_ACTION=SA;
 		this.Timeout=Timeout;
 		this.NumeroOperazione = NumeroOperazione;
+		this.Urletto=urletto;
 
 		this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
 		this.Tentativo = 0;
 
 		this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-		ApriDialog();
+		String Chiave = this.Urletto+";"+this.tOperazione;
+		if (!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave)) {
+			VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
 
-		Urletto=urletto;
-		
-		SplittaCampiUrletto(Urletto);
-		
-		Errore=false;
+			ApriDialog();
+
+			SplittaCampiUrletto(Urletto);
+
+			Errore=false;
+		} else {
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					"Skippata operazione SOAP uguale: "+Chiave);
+		}
 	}
 
 	private void SplittaCampiUrletto(String Cosa) {
@@ -390,7 +397,7 @@ public class GestioneWEBServiceSOAPNuovo {
 						}
 					} else {
 						// Errore... Riprovo ad eseguire la funzione
-						if (Tentativo <= QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+						if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
 							Tentativo++;
 
 							final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

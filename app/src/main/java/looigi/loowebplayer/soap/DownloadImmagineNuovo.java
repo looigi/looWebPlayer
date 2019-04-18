@@ -70,21 +70,29 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        Url=sUrl;
-        TIMEOUT = TO;
+        this.Url=sUrl;
+        this.TIMEOUT = TO;
 
         this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
         this.Tentativo = 0;
 
-        ApriDialog();
+        String Chiave = this.Url+";"+sOperazione;
+        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave)) {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
-        String sUrl2 = Url.substring(9, Url.length());
-        Url=Url.substring(0,9);
-        sUrl2=sUrl2.replace("//","/");
-        Url+=sUrl2;
+            ApriDialog();
 
-        downloadFile = new DownloadImageFile();
-        downloadFile.execute(Url);
+            String sUrl2 = Url.substring(9, Url.length());
+            Url = Url.substring(0, 9);
+            sUrl2 = sUrl2.replace("//", "/");
+            Url += sUrl2;
+
+            downloadFile = new DownloadImageFile();
+            downloadFile.execute(Url);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Skippata operazione DL Immagine uguale: "+Chiave);
+        }
     }
 
     private void ChiudeDialog() {
