@@ -103,7 +103,9 @@ public class DownloadTextFileNuovo {
     }
 
     public void StoppaEsecuzione() {
-        downloadFile.cancel(true);
+        if (downloadFile != null) {
+            downloadFile.cancel(true);
+        }
 
         ChiudeDialog();
     }

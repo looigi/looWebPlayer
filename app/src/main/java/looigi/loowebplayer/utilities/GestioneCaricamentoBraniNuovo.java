@@ -87,8 +87,10 @@ public class GestioneCaricamentoBraniNuovo {
             @Override
             public void run() {
                 if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
-                    hAttesaProssimo.removeCallbacks(rAttesaProssimo);
-                    hAttesaProssimo = null;
+                    if (hAttesaProssimo != null && rAttesaProssimo != null) {
+                        hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+                        hAttesaProssimo = null;
+                    }
 
                     CaricaBrano2();
                 } else {

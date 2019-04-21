@@ -110,11 +110,13 @@ public class DownloadImmagineNuovo {
     }
 
     public void StoppaEsecuzione() {
-        downloadFile.cancel(true);
-
         ChiudeDialog();
 
-        downloadFile.ControllaFineCiclo();
+        if (downloadFile != null) {
+            downloadFile.cancel(true);
+
+            downloadFile.ControllaFineCiclo();
+        }
     }
 
     public class DownloadImageFile extends AsyncTask<String, Integer, String> {

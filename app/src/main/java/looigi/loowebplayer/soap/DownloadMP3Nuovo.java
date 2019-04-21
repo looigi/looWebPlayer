@@ -108,12 +108,14 @@ public class DownloadMP3Nuovo {
     }
 
     public void StoppaEsecuzione() {
-        downloadFile.cancel(true);
-
         ChiudeDialog();
 
-        messErrore="ESCI";
-        downloadFile.ControllaFineCiclo();
+        if (downloadFile != null) {
+            downloadFile.cancel(true);
+
+            messErrore = "ESCI";
+            downloadFile.ControllaFineCiclo();
+        }
     }
 
     private class DownloadFileMP3 extends AsyncTask<String, Integer, String> {

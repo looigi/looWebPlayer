@@ -77,7 +77,13 @@ public class GestioneWEBServiceSOAPNuovo {
 
 			Errore=false;
 		} else {
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+			String funzione = "";
+			if (new Object(){}.getClass().getEnclosingMethod() != null) {
+				funzione = new Object() {
+				}.getClass().getEnclosingMethod().getName();
+			}
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+					funzione,
 					"Skippata operazione SOAP uguale: "+Chiave);
 		}
 	}
