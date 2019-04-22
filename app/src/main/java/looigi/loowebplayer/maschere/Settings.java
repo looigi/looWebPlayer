@@ -31,6 +31,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaConfig;
 // import looigi.loowebplayer.db_remoto.DBRemoto;
+import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
@@ -221,7 +222,7 @@ public class Settings extends Fragment {
                         vg.setValoreBellezza(Stelle.get(position));
 
                         RiempieListaInBackground r = new RiempieListaInBackground();
-                        r.RiempieStrutture();
+                        r.RiempieStrutture(true);
                     }
                 }
 
@@ -268,7 +269,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                 }
             });
             if (bStelle) {
@@ -293,7 +294,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                 }
             });
             if (bStelle) {
@@ -323,7 +324,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                 }
             });
 
@@ -360,7 +361,7 @@ public class Settings extends Fragment {
                     vg.setUsaScaricati(isChecked);
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                 }
             });
 
@@ -596,21 +597,27 @@ public class Settings extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato refresh brani");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                            new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato refresh brani");
 
                     String path=VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/Lista.dat";
                     File f = new File(path);
                     if (f.exists()) {
                         f.delete();
                     }
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Interpello il ws per la lista brani");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                            new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Interpello il ws per la lista brani");
 
-                    // int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download lista brani");
-                    // DBRemoto dbr = new DBRemoto();
-                    // dbr.RitornaListaBrani(context, "", "", "", "", "S", "N", NumeroOperazione);
+                    int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download Lista Brani");
+                    DBRemotoNuovo dbr = new DBRemotoNuovo();
+                    dbr.RitornaListaBrani(VariabiliStaticheGlobali.getInstance().getContext(),
+                            "", "", "", "", "S", "N",
+                            NumeroOperazione);
 
-                    DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Brani NON ricaricati.\nSISTEMARE LA ROUTINE in Settings", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                    //         "Brani NON ricaricati.\nSISTEMARE LA ROUTINE in Settings", true, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
 
@@ -635,7 +642,7 @@ public class Settings extends Fragment {
                     vg.setFiltro("");
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                     GestioneOggettiVideo.getInstance().ScriveFiltro();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
@@ -668,7 +675,7 @@ public class Settings extends Fragment {
                     vg.setCrescente(isChecked);
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
+                    r.RiempieStrutture(true);
                 }
             });
 
@@ -911,7 +918,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(0);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture();
+            r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);
@@ -927,7 +934,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(1);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture();
+            r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);
@@ -943,7 +950,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(2);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture();
+            r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);

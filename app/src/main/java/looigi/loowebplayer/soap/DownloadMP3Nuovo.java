@@ -1,12 +1,17 @@
 package looigi.loowebplayer.soap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.widget.LinearLayout;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +21,9 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.utilities.GestioneFiles;
+import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneImpostazioneBrani;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
@@ -37,6 +45,7 @@ public class DownloadMP3Nuovo {
     private Runnable runRiga;
     private Handler hSelezionaRiga;
     private String Url;
+    private long lastTimePressed = 0;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -69,6 +78,13 @@ public class DownloadMP3Nuovo {
     }
 
     public void startDownload(String sUrl, int NO) {
+        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "DL Mp3 troppo veloce");
+            return;
+        }
+        lastTimePressed = System.currentTimeMillis();
+
         this.Url=sUrl;
         this.NumeroOperazione = NO;
 
@@ -135,7 +151,9 @@ public class DownloadMP3Nuovo {
                 }
             }, 50); */
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico del MP3: "+sUrl[0]);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Scarico del MP3: "+sUrl[0]);
 
             try {
                 URL url = new URL(sUrl[0]);
@@ -165,7 +183,8 @@ public class DownloadMP3Nuovo {
 
                         if (sizeMP3 > 0 && !isCancelled()) {
                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Dimensioni: " + Integer.toString(sizeMP3));
+                            }.getClass().getEnclosingMethod().getName(),
+                                    "Scarico del MP3. Dimensioni: " + Integer.toString(sizeMP3));
                             Path = Path.replace("#", "_");
                             File file;
                             file = new File(Path);
@@ -428,7 +447,7 @@ public class DownloadMP3Nuovo {
     }
 
     private void PrendeImmagineDaMP3(String mPath) {
-        /* VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(mPath);
         InputStream inputStream = null;
@@ -438,16 +457,66 @@ public class DownloadMP3Nuovo {
         mmr.release();
 
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        int a1 = NomeBrano.indexOf(".");
-        String sNome = NomeBrano.substring(0,a1) +".jpg";
+        // int a1 = NomeBrano.indexOf(".");
+        // String sNome = NomeBrano.substring(0,a1) +".jpg";
 
-        try {
-            FileOutputStream out = new FileOutputStream(Path+"/"+sNome);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } catch (IOException e) {
-            // e.printStackTrace();
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
-        } */
+        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+        String NomeBrano = s.getNomeBrano();
+        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+        String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+        // String NomeBrano = NomeBrano;
+        if (NomeBrano.contains(".")) {
+            NomeBrano=NomeBrano.substring(0,NomeBrano.indexOf("."));
+        }
+
+        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+        String PathFile = "";
+        Boolean MP3Organizzati = false;
+        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+            PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/" + Album + ".jpg";
+            GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/");
+            MP3Organizzati = true;
+        } else {
+            PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/"+NomeBrano+".jpg";
+            GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/");
+            MP3Organizzati = false;
+        }
+
+        File f = new File(PathFile);
+        if (f.exists()) {
+            if (!MP3Organizzati) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Ritorna immagine brano presa da mp3. La imposto");
+                GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+
+                GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+                VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+            }
+        } else {
+            try {
+                FileOutputStream out = new FileOutputStream(PathFile);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+                if (!MP3Organizzati) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            }.getClass().getEnclosingMethod().getName(),
+                            "Ritorna immagine brano presa da mp3. La imposto");
+                    GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+
+                    GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+                    VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+                }
+            } catch (IOException e) {
+                // e.printStackTrace();
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
+                GestioneImmagini.getInstance().StoppaTimerCarosello();
+                GestioneImmagini.getInstance().setImmagineDaCambiare("");
+                GestioneImmagini.getInstance().setImmNumber(-1);
+                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
+            }
+        }
     }
 }

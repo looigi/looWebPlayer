@@ -59,16 +59,20 @@ public class wsRitornoNuovo {
                 d.setPathNomeFile("Lista.dat");
                 d.setOperazione("Lettura lista brani");
                 d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna lista brani. Scarico lista mp3: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/" + Ritorno.replace("\\", "/"));
-                d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/" + Ritorno.replace("\\", "/"), true, n);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Ritorna lista brani. Scarico lista mp3: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/" + Ritorno.replace("\\", "/"));
+                d.startDownload(
+                        VariabiliStaticheGlobali.getInstance().PercorsoURL + "/" + Ritorno.replace("\\", "/"),
+                        true, n);
             }
         }, 50);
     }
 
     public void RitornaDatiUtente(final String Ritorno, int NumeroOperazione) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dati utente.");
-
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dati utente. OK");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna dati utente. OK");
         Utenza.RitornaUtente(Ritorno);
     }
 
@@ -292,10 +296,16 @@ public class wsRitornoNuovo {
                     }
                 }
 
-                final String Appoggio2 = Brano[5] + " (" + Brano[3] + ")";
+                String sAppoggio2 = Brano[5];
+                if (Brano.length > 7) {
+                    sAppoggio2 += " (" + Brano[7] + ")";
+                }
+                final String Appoggio2 = sAppoggio2;
                 Secondi++;
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Download Brano '" + Appoggio2 + "'. Attesa esistenza file. Tentativi: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
-                nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false, "Download brano\n" + Appoggio2 + ".\nControlli: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Download Brano '" + Appoggio2 +
+                        "'. Attesa esistenza file. Tentativi: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
+                nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
+                        "Download brano\n" + Appoggio2 + ".\nControlli: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
 
                 String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
                 if (Brano[1].toUpperCase().contains("COMPRESSI")) {
@@ -395,7 +405,17 @@ public class wsRitornoNuovo {
                                     //         new Date(System.currentTimeMillis()), false, nn);
                                     VariabiliStaticheNuove.getInstance().setD(new DownloadMP3Nuovo());
                                     String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-                                    VariabiliStaticheNuove.getInstance().getD().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+
+                                    StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                    String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                                    String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+
+                                    if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                                        VariabiliStaticheNuove.getInstance().getD().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+                                    } else {
+                                        VariabiliStaticheNuove.getInstance().getD().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" );
+                                    }
+
                                     VariabiliStaticheNuove.getInstance().getD().setNomeBrano(sBrano);
                                     VariabiliStaticheNuove.getInstance().getD().setCompresso(compresso);
                                     VariabiliStaticheNuove.getInstance().getD().setAutomatico(false);
@@ -437,7 +457,8 @@ public class wsRitornoNuovo {
                                             hSelezionaRiga.removeCallbacks(runRiga);
                                             hSelezionaRiga = null;
 
-                                            nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, true, "Download brano\n'" + Appoggio2 + "'. Tentativi esauriti");
+                                            nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, true,
+                                                    "Download brano\n'" + Appoggio2 + "'. Tentativi esauriti");
                                         }
                                     }
                                 }
@@ -462,7 +483,8 @@ public class wsRitornoNuovo {
             PerPronuncia = 0;
             final int MaxTentativi = VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3() / VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3();
 
-            nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false, "Preparazione download brano in background. Tentativi: " + Integer.toString(MaxTentativi));
+            nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
+                    "Preparazione download brano in background. Tentativi: " + Integer.toString(MaxTentativi));
 
             hSelezionaRiga = new Handler(Looper.getMainLooper());
             hSelezionaRiga.postDelayed(runRiga = new Runnable() {
@@ -479,10 +501,15 @@ public class wsRitornoNuovo {
 
                     GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.download2);
 
-                    final String Appoggio2 = Brano[5] + " (" + Brano[3] + ")";
+                    String sAppoggio2 = Brano[5];
+                    if (Brano.length > 7) {
+                        sAppoggio2 += " (" + Brano[7] + ")";
+                    }
+                    final String Appoggio2 = sAppoggio2;
                     Secondi++;
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Download Brano Background '" + Appoggio2 + "'. Attesa esistenza file. Tentativi: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
-                    nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false, "Download brano in background\n" + Appoggio2 + "\nControlli: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
+                    nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
+                            "Download brano in background\n" + Appoggio2 + "\nControlli: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
 
                     boolean bcompresso = true;
                     String surl = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
@@ -566,7 +593,19 @@ public class wsRitornoNuovo {
 
                                         VariabiliStaticheNuove.getInstance().setD2(new DownloadMP3Nuovo());
                                         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-                                        VariabiliStaticheNuove.getInstance().getD2().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+
+
+                                        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                                        String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+
+                                        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                                            VariabiliStaticheNuove.getInstance().getD2().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+                                        } else {
+                                            VariabiliStaticheNuove.getInstance().getD2().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" );
+                                        }
+                                        // VariabiliStaticheNuove.getInstance().getD2().setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+
                                         VariabiliStaticheNuove.getInstance().getD2().setNomeBrano(sBrano);
                                         VariabiliStaticheNuove.getInstance().getD2().setCompresso(compresso);
                                         VariabiliStaticheNuove.getInstance().getD2().setAutomatico(true);

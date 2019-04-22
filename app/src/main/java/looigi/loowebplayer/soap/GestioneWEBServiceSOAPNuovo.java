@@ -42,6 +42,7 @@ public class GestioneWEBServiceSOAPNuovo {
     private int NumeroOperazione;
     private boolean ApriDialog;
 	private int NumeroBrano;
+	private long lastTimePressed = 0;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -54,6 +55,13 @@ public class GestioneWEBServiceSOAPNuovo {
 	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
                                        String NS, String SA, int Timeout, int NumeroOperazione,
 									   boolean ApriDialog) {
+		if (System.currentTimeMillis() - lastTimePressed < 1000) {
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+			}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");
+			return;
+		}
+		lastTimePressed = System.currentTimeMillis();
+
 		this.tOperazione=TipoOperazione;
 		this.ApriDialog=ApriDialog;
 		this.NAMESPACE=NS;
@@ -308,7 +316,9 @@ public class GestioneWEBServiceSOAPNuovo {
 	            	Errore=true;
 					messErrore = Utility.getInstance().PrendeErroreDaException(e);
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: SoapFault: "+messErrore);
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+							new Object(){}.getClass().getEnclosingMethod().getName(),
+							"SOAP: SoapFault: "+messErrore);
 	            	if (messErrore!=null) {
 	            		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
 	            	} else {
@@ -332,7 +342,9 @@ public class GestioneWEBServiceSOAPNuovo {
 	    }
 	 	
 	    public void ControllaFineCiclo() {
-			if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
+			VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
+
+ 			if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
 				VariabiliStaticheNuove.getInstance().setDb(null);
 			}
 			if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
@@ -403,7 +415,9 @@ public class GestioneWEBServiceSOAPNuovo {
 						}
 					} else {
 						// Errore... Riprovo ad eseguire la funzione
-						if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+						if (Tentativo < QuantiTentativi &&
+								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
+								!tOperazione.equals("RitornaDatiUtente")) {
 							Tentativo++;
 
 							final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

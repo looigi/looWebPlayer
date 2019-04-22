@@ -54,10 +54,10 @@ public class GestioneFiles {
     }
 
     public void CreaCartelle(final String Percorso) {
-        hCreaCartelle = new Handler();
-        hCreaCartelle.postDelayed(runCreaCartelle = new Runnable() {
-            @Override
-            public void run() {
+        // hCreaCartelle = new Handler();
+        // hCreaCartelle.postDelayed(runCreaCartelle = new Runnable() {
+        //    @Override
+        //     public void run() {
                 // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartelle "+Percorso);
                 String Campi[]=(Percorso+"/").split("/",-1);
                 String ss="";
@@ -72,8 +72,8 @@ public class GestioneFiles {
                         }
                     }
                 }
-            }
-        }, 50);
+           //  }
+        // }, 50);
     }
 
     private void generateNoteOnSD(String Percorso, String sFileName, String sBody) {

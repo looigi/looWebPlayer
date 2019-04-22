@@ -335,12 +335,13 @@ public class Home extends android.support.v4.app.Fragment {
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
                 GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
-                if (GestioneFiles.getInstance().fileExistsInSD("Lista.dat", VariabiliStaticheGlobali.getInstance().PercorsoDIR)) {
+                if (GestioneFiles.getInstance().fileExistsInSD("Lista.dat",
+                        VariabiliStaticheGlobali.getInstance().PercorsoDIR)) {
                     if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getValoriCaricati()) {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Riempio strutture per valori non caricati");
                         RiempieListaInBackground r = new RiempieListaInBackground();
-                        r.RiempieStrutture();
+                        r.RiempieStrutture(false);
                     } else {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Carica brano");

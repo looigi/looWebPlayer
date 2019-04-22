@@ -59,8 +59,8 @@ public class RiempieListaInBackground {
         NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Riempimento lista brani");
     }
 
-    public void RiempieStrutture() {
-        if (!VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
+    public void RiempieStrutture(boolean ForzaCaricamento) {
+        if (!VariabiliStaticheGlobali.getInstance().getGiaEntrato() || ForzaCaricamento) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Inizio Riempio strutture");
             RiempieListaInBackground r = new RiempieListaInBackground();

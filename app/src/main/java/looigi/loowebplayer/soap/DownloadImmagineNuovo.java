@@ -38,6 +38,7 @@ public class DownloadImmagineNuovo {
     private Integer TIMEOUT;
     private Runnable runAttendeSfumatura;
     private Handler hAttendeSfumatura;
+    private long lastTimePressed = 0;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -70,6 +71,13 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
+        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
+            return;
+        }
+        lastTimePressed = System.currentTimeMillis();
+
         this.Url=sUrl;
         this.TIMEOUT = TO;
 
@@ -178,7 +186,8 @@ public class DownloadImmagineNuovo {
 
             ChiudeDialog();
 
-            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().
+                    getQualeCanzoneStaSuonando() && NumeroBrano != 0) {
                 if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
                         VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
                     GestioneImmagini.getInstance().ImpostaImmagineVuota();

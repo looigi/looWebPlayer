@@ -53,7 +53,7 @@ public class VariabiliStaticheGlobali {
     final public static int TempoSfumatura=3000;
 
     private int TimeOutDownloadMP3=125000;
-    private int TimeOutListaBrani=15000;
+    private int TimeOutListaBrani=200000;
     private int AttesaControlloEsistenzaMP3=5000;
     private int TimeOutImmagini=15000;
     private int TipoSegnale=1;

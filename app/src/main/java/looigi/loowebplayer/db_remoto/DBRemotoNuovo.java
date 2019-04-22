@@ -190,7 +190,7 @@ public class DBRemotoNuovo {
 				SA,
 				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
 				NumeroOperazione,
-				false);
+				true);
 		g.Esegue(context);
 	}
 }

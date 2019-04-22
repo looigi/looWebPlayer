@@ -106,7 +106,7 @@ public class DialogFiltro
 
             GestioneOggettiVideo.getInstance().ScriveFiltro();
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture();
+            r.RiempieStrutture(true);
 
             // Libreria.ReimpostaListe();
             VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);
@@ -158,7 +158,7 @@ public class DialogFiltro
 
                 GestioneOggettiVideo.getInstance().ScriveFiltro();
                 RiempieListaInBackground r = new RiempieListaInBackground();
-                r.RiempieStrutture();
+                r.RiempieStrutture(true);
 
                 // Libreria.ReimpostaListe();
                 VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);

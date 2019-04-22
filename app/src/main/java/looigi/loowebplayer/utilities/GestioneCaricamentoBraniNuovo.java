@@ -470,14 +470,31 @@ public class GestioneCaricamentoBraniNuovo {
         return Ritorno;
     }
 
+    private long lastTimePressed=0;
+
     public void CaricaBrano3() {
+        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "Carica brano troppo veloce");
+            return;
+        }
+        lastTimePressed = System.currentTimeMillis();
+
         String CompattazioneMP3 = VariabiliStaticheGlobali.EstensioneCompressione;
         if (VariabiliStaticheGlobali.getInstance().getUtente() != null && !VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
             CompattazioneMP3 = "";
         }
 
-        String PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
-        String PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
+        String PathMP3 = "";
+        String PathMP3_Compresso = "";
+        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+            PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
+            PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
+        } else {
+            PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + NomeBrano;
+            PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + CompattazioneMP3 + NomeBrano;
+        }
+
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
         }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
         File f = new File(PathMP3);

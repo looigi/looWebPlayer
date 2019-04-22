@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
@@ -147,9 +149,28 @@ public class Utenza extends android.support.v4.app.Fragment {
                     amm = "S";
                 }
                 long id = db.inserisciUtente(s.getUtente(), s.getPassword(), amm, s.getCartellaBase(), "-1", "0");
-                GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(-1);
                 db.close();
+
+                String path=VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/Lista.dat";
+                File f = new File(path);
+                if (f.exists()) {
+                    f.delete();
+                }
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Interpello il ws per la lista brani");
+
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                }.getClass().getEnclosingMethod().getName(), "Interpello il ws per la lista brani");
+                int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download Lista Brani");
+                DBRemotoNuovo dbr = new DBRemotoNuovo();
+                dbr.RitornaListaBrani(VariabiliStaticheGlobali.getInstance().getContext(),
+                        "", "", "", "", "S", "N",
+                        NumeroOperazione);
+
+                // GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
+                // VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(-1);
+                // db.close();
 
                 Utility.getInstance().CambiaMaschera(R.id.home);
             } else {

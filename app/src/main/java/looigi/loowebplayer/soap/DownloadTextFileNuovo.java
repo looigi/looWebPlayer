@@ -29,6 +29,7 @@ public class DownloadTextFileNuovo {
     private ProgressDialog progressDialog;
     private String tOperazione;
     private int NumeroBrano;
+    private long lastTimePressed = 0;
 
     private int QuantiTentativi;
     private int Tentativo;
@@ -53,6 +54,13 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
+        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
+            return;
+        }
+        lastTimePressed = System.currentTimeMillis();
+
         this.Url=sUrl;
         this.ApriDialog=ApriDialog;
         this.NumeroOperazione=NOperazione;
@@ -205,6 +213,7 @@ public class DownloadTextFileNuovo {
         }
 
         public void ControllaFineCiclo() {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
             ChiudeDialog();
 
             if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
@@ -214,10 +223,11 @@ public class DownloadTextFileNuovo {
             } else {
                 if (messErrore.isEmpty()) {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Richiamo RiempieStrutture in Home");
+                    }.getClass().getEnclosingMethod().getName(),
+                            "Scarico del testo. Richiamo RiempieStrutture in Home");
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture();
-                    MainActivity.ScriveBraniInLista();
+                    r.RiempieStrutture(true);
+                    // MainActivity.ScriveBraniInLista();
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione
