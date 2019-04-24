@@ -590,9 +590,11 @@ public class GestioneImmagini {
                                     "Errore su SettaImmagineSuIntestazione: " + error);
                         }
                     }
-                    hAttesaDownload.removeCallbacksAndMessages(null);
-                    hAttesaDownload.removeCallbacks(rAttesaDownload);
-                    hAttesaDownload = null;
+                    if (hAttesaDownload != null && rAttesaDownload != null ) {
+                        hAttesaDownload.removeCallbacksAndMessages(null);
+                        hAttesaDownload.removeCallbacks(rAttesaDownload);
+                        hAttesaDownload = null;
+                    }
                 }
             });
             hAttesaDownload.postDelayed(rAttesaDownload, 50);
