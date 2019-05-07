@@ -50,6 +50,8 @@ public class GestioneCaricamentoBraniNuovo {
     private int qualeWait;
     private int numOperazione;
 
+    private long lastTimePressed=0;
+
     public boolean isHaCaricatoBrano() {
         return HaCaricatoBrano;
     }
@@ -470,8 +472,6 @@ public class GestioneCaricamentoBraniNuovo {
         return Ritorno;
     }
 
-    private long lastTimePressed=0;
-
     public void CaricaBrano3() {
         if (System.currentTimeMillis() - lastTimePressed < 1000) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -519,7 +519,6 @@ public class GestioneCaricamentoBraniNuovo {
                 }.getClass().getEnclosingMethod().getName(), "Elimino brano non compresso. Compresso già esistente");
                 f.delete();
             }
-            VariabiliStaticheNuove.getInstance().setGb(null);
         } else {
             // VariabiliStaticheGlobali.getInstance().setHaCaricatoTuttiIDettagliDelBrano(false);
             // VariabiliStaticheHome.getInstance().setBranoDaCaricare(Artista + ";" + Album + ";" + NomeBrano);

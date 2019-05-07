@@ -85,7 +85,9 @@ public class DownloadImmagineNuovo {
         this.Tentativo = 0;
 
         String Chiave = this.Url+";"+sOperazione;
-        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave)) {
+        if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
+                (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
+                !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
             VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
             ApriDialog();
@@ -98,6 +100,7 @@ public class DownloadImmagineNuovo {
             downloadFile = new DownloadImageFile();
             downloadFile.execute(Url);
         } else {
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Skippata operazione DL Immagine uguale: "+Chiave);
         }
@@ -176,6 +179,8 @@ public class DownloadImmagineNuovo {
         }
 
         public void ControllaFineCiclo() {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine("");
+
             if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
                 VariabiliStaticheNuove.getInstance().setSc(null);
             }
@@ -186,7 +191,7 @@ public class DownloadImmagineNuovo {
 
             ChiudeDialog();
 
-            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().
+            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().
                     getQualeCanzoneStaSuonando() && NumeroBrano != 0) {
                 if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
                         VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {

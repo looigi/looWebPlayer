@@ -277,7 +277,9 @@ public class VariabiliStaticheHome {
             i++;
         }
         if (i==q) {
-            this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+            if (this.layOperazionWEB!=null) {
+                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+            }
         }
 
         ScriveOperazioniWEB();
@@ -318,7 +320,9 @@ public class VariabiliStaticheHome {
             s.setOperazione(Operazione.trim());
             OperazioniWeb.add(s);
 
-            this.layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
+            if (this.layOperazionWEB != null) {
+                this.layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
+            }
         } else {
             int i=0;
             boolean Ok = false;

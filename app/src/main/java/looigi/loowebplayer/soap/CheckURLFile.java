@@ -16,6 +16,7 @@ public class CheckURLFile {
     private CheckFile downloadFile;
     private String Url;
     private int NumeroBrano;
+    private long lastTimePressed = 0;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -26,13 +27,33 @@ public class CheckURLFile {
     }
 
     public void startControl(String sUrl) {
-        Url = sUrl;
-        messErrore="";
+        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce");
+            VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
+            return;
+        }
+        lastTimePressed = System.currentTimeMillis();
 
-        VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
+        String Chiave = this.Url;
+        // if (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
+        //         !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave)) {
+        if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL() == null) {
+            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
+        }
+        if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
+                (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() &&
+                !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave))) {
+            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL(Chiave);
 
-        downloadFile = new CheckFile();
-        downloadFile.execute(Url);
+            Url = sUrl;
+            messErrore = "";
+
+            VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
+
+            downloadFile = new CheckFile();
+            downloadFile.execute(Url);
+        }
     }
 
     public void StoppaEsecuzione() {
@@ -79,6 +100,8 @@ public class CheckURLFile {
         }
 
         public void ControllaFineCiclo() {
+            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
+
             if (VariabiliStaticheNuove.getInstance().getCuf() != null) {
                 VariabiliStaticheNuove.getInstance().setCuf(null);
             }

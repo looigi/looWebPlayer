@@ -71,7 +71,9 @@ public class DownloadTextFileNuovo {
         this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
         String Chiave = this.Url;
-        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave)) {
+        if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
+                (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
+                !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
             VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
             ApriDialog();
@@ -79,6 +81,7 @@ public class DownloadTextFileNuovo {
             downloadFile = new DownloadTxtFile();
             downloadFile.execute(Url);
         } else {
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Skippata operazione DL Text uguale: "+Chiave);
         }
@@ -157,7 +160,7 @@ public class DownloadTextFileNuovo {
                     byte[] buffer = new byte[1024];
                     int len1 = 0;
                     while ((len1 = is.read(buffer)) != -1) {
-                        if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                        if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                             messErrore = "ESCI";
                             break;
                         }
@@ -216,7 +219,7 @@ public class DownloadTextFileNuovo {
             VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
             ChiudeDialog();
 
-            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Scarico testo. Cambio brano");

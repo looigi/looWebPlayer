@@ -110,6 +110,9 @@ public class VariabiliStaticheGlobali {
     private String ChiaveDLImmagine = "";
     private String ChiaveDLText = "";
     private String ChiaveDLMP3 = "";
+    private String ChiaveCheckURL = "";
+
+    private String lastRitorno = "";
 
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -149,8 +152,24 @@ public class VariabiliStaticheGlobali {
         this.ctxPassaggio = ctxPassaggio;
     }
 
+    public String getLastRitorno() {
+        return lastRitorno;
+    }
+
+    public void setLastRitorno(String lastRitorno) {
+        this.lastRitorno = lastRitorno;
+    }
+
     public int getAttesaSecondiBranoSuccessivo() {
         return AttesaSecondiBranoSuccessivo;
+    }
+
+    public String getChiaveCheckURL() {
+        return ChiaveCheckURL;
+    }
+
+    public void setChiaveCheckURL(String chiaveCheckURL) {
+        ChiaveCheckURL = chiaveCheckURL;
     }
 
     public String getChiaveDLMP3() {

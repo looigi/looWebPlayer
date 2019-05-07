@@ -75,24 +75,41 @@ public class GestioneWEBServiceSOAPNuovo {
 
 		this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-		String Chiave = this.Urletto+";"+this.tOperazione;
-		if (!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave)) {
-			VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
+		if (!this.Urletto.isEmpty()) {
+			String Chiave = this.Urletto + ";" + this.tOperazione;
+			if (VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() ||
+					(!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() &&
+					!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave))) {
+				VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
 
-			ApriDialog();
+				ApriDialog();
 
-			SplittaCampiUrletto(Urletto);
+				SplittaCampiUrletto(Urletto);
 
-			Errore=false;
+				Errore = false;
+			} else {
+				VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+				String funzione = "";
+				if (new Object() {
+				}.getClass().getEnclosingMethod() != null) {
+					funzione = new Object() {
+					}.getClass().getEnclosingMethod().getName();
+				}
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+						funzione,
+						"Skippata operazione SOAP uguale: " + Chiave);
+			}
 		} else {
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			String funzione = "";
-			if (new Object(){}.getClass().getEnclosingMethod() != null) {
+			if (new Object() {
+			}.getClass().getEnclosingMethod() != null) {
 				funzione = new Object() {
 				}.getClass().getEnclosingMethod().getName();
 			}
 			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
 					funzione,
-					"Skippata operazione SOAP uguale: "+Chiave);
+					"Skippata operazione. URL Vuoto.");
 		}
 	}
 
@@ -344,20 +361,20 @@ public class GestioneWEBServiceSOAPNuovo {
 	    public void ControllaFineCiclo() {
 			VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
 
- 			if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
+ 			// if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
 				VariabiliStaticheNuove.getInstance().setDb(null);
-			}
-			if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
+			//}
+			// if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
 				VariabiliStaticheNuove.getInstance().setGb(null);
-			}
-			if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
+			// }
+			// if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
 				VariabiliStaticheNuove.getInstance().setGm(null);
-			}
-			if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
+			// }
+			// if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
 				VariabiliStaticheNuove.getInstance().setGt(null);
-			}
+			// }
 
-			if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+			if (NumeroBrano>-1 && (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando())) {
 				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 						"SOAP: Cambio brano");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -381,7 +398,7 @@ public class GestioneWEBServiceSOAPNuovo {
 					wsRitornoNuovo rRit = new wsRitornoNuovo();
 					Boolean Ancora = true;
 
-					if (!Errore) {
+					if (!Errore || NumeroBrano == -1) {
 						while (Ancora) {
 							switch (tOperazione) {
 								case "RitornaListaBrani":
@@ -441,10 +458,10 @@ public class GestioneWEBServiceSOAPNuovo {
 										VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 										ApriDialog();
-									Esegue(context);
+										Esegue(context);
 
-									hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-									hAttesaNuovoTentativo = null;
+										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+										hAttesaNuovoTentativo = null;
 									} else {
 										hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
 									}

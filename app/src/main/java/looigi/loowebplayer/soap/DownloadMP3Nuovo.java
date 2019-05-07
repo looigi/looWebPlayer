@@ -96,16 +96,20 @@ public class DownloadMP3Nuovo {
         this.Tentativo = 0;
 
         String Chiave = this.Url;
-        if (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave)) {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
+        if (VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() ||
+                (!VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() &&
+                !VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().equals(Chiave))) {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLMP3(Chiave);
 
             ApriDialog();
 
             downloadFile = new DownloadFileMP3();
             downloadFile.execute(Url);
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Skippata operazione DL Brano uguale: "+Chiave);
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Skippata operazione DL Brano uguale: " + Chiave);
         }
     }
 
@@ -219,7 +223,7 @@ public class DownloadMP3Nuovo {
                                         lenF += len1;
                                     }
                                     publishProgress((int) (lenF * 100 / sizeMP3));
-                                    if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                                    if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                                         messErrore = "ESCI";
                                         break;
                                     }
@@ -312,6 +316,8 @@ public class DownloadMP3Nuovo {
         }
 
         public void ControllaFineCiclo() {
+            VariabiliStaticheGlobali.getInstance().setChiaveDLMP3("");
+
             if (VariabiliStaticheNuove.getInstance().getD()!=null) {
                 VariabiliStaticheNuove.getInstance().setD(null);
             }
@@ -319,7 +325,7 @@ public class DownloadMP3Nuovo {
                 VariabiliStaticheNuove.getInstance().setD2(null);
             }
 
-            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                 NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                         "DL MP3: Cambio brano");
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

@@ -13,6 +13,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.maschere.Utenza;
 import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
@@ -32,6 +33,7 @@ public class wsRitornoNuovo {
     private Runnable rAttendeRispostaCheckURL;
     private Handler hAttendeRispostaCheckURL;
     private int Secondi;
+    private int Conta;
     private int PerPronuncia;
     private int nn;
 
@@ -40,7 +42,8 @@ public class wsRitornoNuovo {
     }
 
     public void RitornaListaBrani(final String Ritorno) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna lista brani");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna lista brani");
 
         hSelezionaRiga = new Handler(Looper.getMainLooper());
         hSelezionaRiga.postDelayed(runRiga = new Runnable() {
@@ -49,8 +52,11 @@ public class wsRitornoNuovo {
                 hSelezionaRiga.removeCallbacks(runRiga);
                 runRiga = null;
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna lista brani. OK");
-                GestioneFiles.getInstance().EliminaFile(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Lista.dat");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Ritorna lista brani. OK");
+                GestioneFiles.getInstance().EliminaFile(
+                        VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Lista.dat");
 
                 int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download testo");
 
@@ -70,10 +76,18 @@ public class wsRitornoNuovo {
     }
 
     public void RitornaDatiUtente(final String Ritorno, int NumeroOperazione) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
-                new Object(){}.getClass().getEnclosingMethod().getName(),
-                "Ritorna dati utente. OK");
-        Utenza.RitornaUtente(Ritorno);
+        if (Ritorno.contains("ERROR:")) {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    Ritorno,
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Ritorna dati utente. OK");
+            Utenza.RitornaUtente(Ritorno);
+        }
     }
 
     public void RitornaMultimediaArtista(final String Ritorno) {
@@ -268,20 +282,30 @@ public class wsRitornoNuovo {
     }
 
     public void RitornaBrano(final String Ritorno, final int NumeroOperazione) {
+        if (Ritorno.equals(VariabiliStaticheGlobali.getInstance().getLastRitorno())) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Stesso brano. Evito la duplicazione della funzione.");
+            return;
+        }
+        VariabiliStaticheGlobali.getInstance().setLastRitorno(Ritorno);
         final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna brano.");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna brano.");
         String Appoggio = ToglieTag(Ritorno);
 
         final String Brano[] = Appoggio.split("\\\\", -1);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna brano. Ok: " + Appoggio);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna brano. Ok: " + Appoggio);
         nn = NumeroOperazione;
         Secondi = 0;
+        Conta = 0;
         PerPronuncia = 0;
         final int MaxTentativi = VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3() / VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3();
 
-        nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false, "Preparazione download brano in background. Tentativi: " + Integer.toString(MaxTentativi));
+        nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
+                "Preparazione download brano. Tentativi: " + Integer.toString(MaxTentativi));
 
         hSelezionaRiga = new Handler(Looper.getMainLooper());
         hSelezionaRiga.postDelayed(runRiga = new Runnable() {
@@ -356,9 +380,9 @@ public class wsRitornoNuovo {
                             hSelezionaRiga = null;
                             rAttendeRispostaCheckURL = null;
                         } else {
-                            if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().isEmpty()) {
-                                hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 500);
-                            } else {
+                            // if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().isEmpty()) {
+                            //     hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 500);
+                            // } else {
                                 hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
 
                                 if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("OK")) {
@@ -442,6 +466,10 @@ public class wsRitornoNuovo {
                                         hSelezionaRiga = null;
                                     } else {
                                         if (Secondi <= MaxTentativi) {
+                                            Secondi++;
+                                            nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
+                                                    "Download brano\n" + Appoggio2 + ".\nControlli: " + Integer.toString(Secondi) + "/" + Integer.toString(MaxTentativi));
+
                                             hSelezionaRiga.postDelayed(runRiga, VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
                                         } else {
                                             VariabiliStaticheNuove.getInstance().setD(null);
@@ -462,7 +490,7 @@ public class wsRitornoNuovo {
                                         }
                                     }
                                 }
-                            }
+                            // }
                         }
                     }
                 }, 500);
