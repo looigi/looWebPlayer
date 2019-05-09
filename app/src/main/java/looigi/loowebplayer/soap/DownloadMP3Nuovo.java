@@ -502,16 +502,18 @@ public class DownloadMP3Nuovo {
         } else {
             try {
                 FileOutputStream out = new FileOutputStream(PathFile);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                if (out != null && bitmap != null) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
-                if (!MP3Organizzati) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(),
-                            "Ritorna immagine brano presa da mp3. La imposto");
-                    GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+                    if (!MP3Organizzati) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
+                                "Ritorna immagine brano presa da mp3. La imposto");
+                        GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
 
-                    GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
-                    VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+                        GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+                        VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+                    }
                 }
             } catch (IOException e) {
                 // e.printStackTrace();
