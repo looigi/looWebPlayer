@@ -36,7 +36,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaArtisti;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.soap.DownloadImmagineNuovo;
-import looigi.loowebplayer.thread.NetThreadNuovo;
+// import looigi.loowebplayer.thread.NetThreadNuovo;
 
 import static looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali.TempoImmagineVisibile;
 import static looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali.TempoSfumatura;
@@ -408,7 +408,8 @@ public class GestioneImmagini {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Carosello: inizio sfuma immagine. Immagine: "+VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
             SfumaImmagine(true);
         } else {
-            if (NetThreadNuovo.getInstance().isScreenOn()) {
+            // if (NetThreadNuovo.getInstance().isScreenOn()) {
+            if (VariabiliStaticheGlobali.getInstance().getScreenON()) {
                 int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine artista");
 
                 SfumaImmagine(false);

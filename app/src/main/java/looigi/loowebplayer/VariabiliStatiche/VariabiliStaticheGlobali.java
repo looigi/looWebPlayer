@@ -113,6 +113,7 @@ public class VariabiliStaticheGlobali {
     private String ChiaveCheckURL = "";
 
     private String lastRitorno = "";
+    private Boolean ScreenON = true;
 
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -150,6 +151,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public Boolean getScreenON() {
+        return ScreenON;
+    }
+
+    public void setScreenON(Boolean screenON) {
+        ScreenON = screenON;
     }
 
     public String getLastRitorno() {

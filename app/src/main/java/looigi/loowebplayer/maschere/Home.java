@@ -28,7 +28,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.gif.GifImageView;
 import looigi.loowebplayer.notifiche.Notifica;
-import looigi.loowebplayer.thread.NetThreadNuovo;
+// import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
@@ -458,7 +458,7 @@ public class Home extends android.support.v4.app.Fragment {
                 }
             });
 
-            NetThreadNuovo.getInstance().start();
+            // NetThreadNuovo.getInstance().start();
 
             VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);
         }

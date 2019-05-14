@@ -1,4 +1,4 @@
-package looigi.loowebplayer.thread;
+/* package looigi.loowebplayer.thread;
 
 import android.app.Activity;
 import android.content.Context;
@@ -143,40 +143,40 @@ public class NetThreadNuovo {
                                 }
                             } */
 
-                            if (VariabiliStaticheGlobali.getInstance().getTipoSegnale()!=2 && VariabiliStaticheGlobali.getInstance().getTipoSegnale()!=4) {
-                                OkNet = haveConnectedWifi || haveConnectedMobile;
-                            } else {
-                                if (VariabiliStaticheGlobali.getInstance().getTipoSegnale()==4) {
-                                    OkNet = true;
-                                }
-                            }
-
-                            if (!OkNet) {
-                                act.runOnUiThread(new Runnable(){
-                                    @Override
-                                    public void run() {
-                                        if (VariabiliStaticheHome.getInstance().getImgOffline()!=null) {
-                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
-                                        }
-                                    }
-                                });
-                            } else {
-                                act.runOnUiThread(new Runnable(){
-                                    @Override
-                                    public void run() {
-                                        if (VariabiliStaticheHome.getInstance().getImgOffline()!=null) {
-                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
-                                        }
-                                    }
-                                });
-                            }
+                            // if (VariabiliStaticheGlobali.getInstance().getTipoSegnale()!=2 && VariabiliStaticheGlobali.getInstance().getTipoSegnale()!=4) {
+                            //     OkNet = haveConnectedWifi || haveConnectedMobile;
+                            // } else {
+                            //     if (VariabiliStaticheGlobali.getInstance().getTipoSegnale()==4) {
+                            //         OkNet = true;
+                            //     }
+                            // }
+//
+                            // if (!OkNet) {
+                            //     act.runOnUiThread(new Runnable(){
+                            //         @Override
+                            //         public void run() {
+                            //             if (VariabiliStaticheHome.getInstance().getImgOffline()!=null) {
+                            //                 VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                            //             }
+                            //         }
+                            //     });
+                            // } else {
+                            //     act.runOnUiThread(new Runnable(){
+                            //         @Override
+                            //         public void run() {
+                            //             if (VariabiliStaticheHome.getInstance().getImgOffline()!=null) {
+                            //                 VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                            //             }
+                            //         }
+                            //     });
+                            // }
                         // } catch (Exception ignored) {
                         // }
-                    }
-                }
-            }, 0, SecondiDiAttesa);
-        }
-    }
+//                     }
+//                 }
+//             }, 0, SecondiDiAttesa);
+//         }
+//     }
 
     /* private void getGsmLevel() {
         switch (VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
@@ -269,15 +269,15 @@ public class NetThreadNuovo {
         manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     } */
 
-    public boolean isOk() {
-        return OkNet;
-    }
+  //  public boolean isOk() {
+  //      return OkNet;
+  //  }
 
     /* public boolean isScreenOn() {
         return ScreenOn;
     } */
 
-    public void StopNetThread() {
+    /* public void StopNetThread() {
         if (tTmrBattery!=null) {
             stopNet = true;
 
@@ -302,4 +302,4 @@ public class NetThreadNuovo {
             }
         }
     } */
-}
+// }

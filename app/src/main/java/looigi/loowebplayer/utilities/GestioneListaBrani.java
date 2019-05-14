@@ -16,7 +16,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
-import looigi.loowebplayer.thread.NetThreadNuovo;
+// import looigi.loowebplayer.thread.NetThreadNuovo;
 
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
 
@@ -79,9 +79,9 @@ public class GestioneListaBrani {
         } else {
             int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
             Brano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
-            Boolean ceRete = NetThreadNuovo.getInstance().isOk();
+            // Boolean ceRete = NetThreadNuovo.getInstance().isOk();
 
-            if (ceRete) {
+            // if (ceRete) {
                 switch (ModalitaAvanzamento) {
                     case RANDOM:
                         int n = Brano;
@@ -109,10 +109,10 @@ public class GestioneListaBrani {
                         }
                         break;
                 }
-            } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Non c'è rete, avanzo verso il primo brano già scaricato");
-                Brano = CercaBranoGiaScaricato(false);
-            }
+            // } else {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Non c'è rete, avanzo verso il primo brano già scaricato");
+            //     Brano = CercaBranoGiaScaricato(false);
+            // }
 
             if (Brano > -1 && Avanza) {
                 BraniSuonati.add(Brano);
