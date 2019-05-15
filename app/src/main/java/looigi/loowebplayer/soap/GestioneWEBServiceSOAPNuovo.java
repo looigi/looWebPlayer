@@ -344,7 +344,9 @@ public class GestioneWEBServiceSOAPNuovo {
 	            	result="ERROR: "+messErrore;
 					messErrore = result;
 	            }
-            }
+            } else {
+            	int a = 0;
+			}
             if (aht!=null) {
             	aht=null;
             }

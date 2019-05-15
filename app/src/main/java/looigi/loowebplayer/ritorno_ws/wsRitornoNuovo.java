@@ -45,7 +45,7 @@ public class wsRitornoNuovo {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna lista brani");
 
-        hSelezionaRiga = new Handler(Looper.getMainLooper());
+        hSelezionaRiga = new Handler();
         hSelezionaRiga.postDelayed(runRiga = new Runnable() {
             @Override
             public void run() {
@@ -307,7 +307,7 @@ public class wsRitornoNuovo {
         nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
                 "Preparazione download brano. Tentativi: " + Integer.toString(MaxTentativi));
 
-        hSelezionaRiga = new Handler(Looper.getMainLooper());
+        hSelezionaRiga = new Handler();
         hSelezionaRiga.postDelayed(runRiga = new Runnable() {
             @Override
             public void run() {
@@ -514,7 +514,7 @@ public class wsRitornoNuovo {
             nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, false,
                     "Preparazione download brano in background. Tentativi: " + Integer.toString(MaxTentativi));
 
-            hSelezionaRiga = new Handler(Looper.getMainLooper());
+            hSelezionaRiga = new Handler();
             hSelezionaRiga.postDelayed(runRiga = new Runnable() {
                 @Override
                 public void run() {

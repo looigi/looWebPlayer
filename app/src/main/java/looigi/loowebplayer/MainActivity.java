@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -200,16 +201,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        //replaces the default 'Back' button action
+        if(keyCode== KeyEvent.KEYCODE_BACK)   {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                moveTaskToBack(true);
+
+                // super.onBackPressed();
+            }
+        }
+        return true;
+    }
+
+    /* @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            // moveTaskToBack(true);
+            moveTaskToBack(true);
 
             super.onBackPressed();
         }
-    }
+    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,6 +260,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.libreria:
             case R.id.equalizer:
             case R.id.uscita:
+                VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().stopService(
+                        VariabiliStaticheGlobali.getInstance().getiServizio());
+
                 if (receiver != null) {
                     unregisterReceiver(receiver);
                     receiver = null;

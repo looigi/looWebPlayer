@@ -1,6 +1,7 @@
 package looigi.loowebplayer.VariabiliStatiche;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
@@ -114,6 +115,7 @@ public class VariabiliStaticheGlobali {
 
     private String lastRitorno = "";
     private Boolean ScreenON = true;
+    private Intent iServizio;
 
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -151,6 +153,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public Intent getiServizio() {
+        return iServizio;
+    }
+
+    public void setiServizio(Intent iServizio) {
+        this.iServizio = iServizio;
     }
 
     public Boolean getScreenON() {

@@ -1,6 +1,7 @@
 package looigi.loowebplayer.maschere;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.bckService;
 import looigi.loowebplayer.dati.NomiMaschere;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.db_locale.DBLocale;
@@ -97,7 +99,8 @@ public class Splash extends android.support.v4.app.Fragment {
             ImageView img = (ImageView) view.findViewById(R.id.imgSplash);
             img.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Premuta immagine splash");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Premuta immagine splash");
                     TastoPremuto=true;
                     Esce();
                 }
@@ -108,7 +111,8 @@ public class Splash extends android.support.v4.app.Fragment {
                 @Override
                 public void run() {
                     if (!TastoPremuto) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Fine contatore attesa splash");
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Fine contatore attesa splash");
                         Esce();
                     }
                 }
@@ -117,53 +121,10 @@ public class Splash extends android.support.v4.app.Fragment {
     }
 
     private void Esce() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Entro nell'app");
-        Boolean CeUtente=false;
-
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ottiene utente attuale");
-        DBLocale db = new DBLocale(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
-        Cursor c = db.ottieniTuttiUtenti();
-        if (c.moveToFirst()) {
-            do {
-                StrutturaUtenti s = new StrutturaUtenti();
-                s.setIdUtente(c.getInt(0));
-                s.setUtente(c.getString(1));
-                s.setPassword(c.getString(2));
-                if (c.getString(3).toUpperCase().trim().equals("S")) {
-                    s.setAmministratore(true);
-                } else {
-                    s.setAmministratore(false);
-                }
-                s.setCartellaBase(c.getString(4));
-                VariabiliStaticheGlobali.getInstance().setUtente(s);
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(c.getInt(5));
-
-                int modi = c.getInt(6);
-                switch(modi) {
-                    case 0:
-                        GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
-                        break;
-                    case 1:
-                        GestioneListaBrani.getInstance().setModalitaAvanzamento(SEQUENZIALE);
-                        break;
-                }
-
-                CeUtente=true;
-            } while (c.moveToNext());
-        }
-        if (c!=null) {
-            c.close();
-        }
-        db.close();
-
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Vado in Home");
-        VariabiliStaticheGlobali.getInstance().getContextPrincipale().getWindow().getDecorView().setBackgroundColor(Color.BLACK);
-        VariabiliStaticheGlobali.getInstance().getAppBar().setVisibility(LinearLayout.VISIBLE);
-        if (CeUtente) {
-            Utility.getInstance().CambiaMaschera(R.id.home);
-        } else {
-            Utility.getInstance().CambiaMaschera(R.id.utenza);
-        }
+        Intent i= new Intent(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(), bckService.class);
+        VariabiliStaticheGlobali.getInstance().setiServizio(i);
+        // i.putExtra("KEY1", "Value to be used by the service");
+        VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().startService(
+                VariabiliStaticheGlobali.getInstance().getiServizio());
     }
 }
