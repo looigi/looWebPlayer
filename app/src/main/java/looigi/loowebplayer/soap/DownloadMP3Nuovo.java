@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.LinearLayout;
 
 import java.io.ByteArrayInputStream;
@@ -96,21 +97,21 @@ public class DownloadMP3Nuovo {
         this.Tentativo = 0;
 
         String Chiave = this.Url;
-        if (VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() ||
-                (!VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() &&
-                !VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().equals(Chiave))) {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLMP3(Chiave);
+        // if (VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() ||
+        //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() &&
+        //         !VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().equals(Chiave))) {
+        //     VariabiliStaticheGlobali.getInstance().setChiaveDLMP3(Chiave);
 
             ApriDialog();
 
             downloadFile = new DownloadFileMP3();
             downloadFile.execute(Url);
-        } else {
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(),
-                    "Skippata operazione DL Brano uguale: " + Chiave);
-        }
+        // } else {
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //             }.getClass().getEnclosingMethod().getName(),
+        //             "Skippata operazione DL Brano uguale: " + Chiave);
+        // }
     }
 
     private void ChiudeDialog() {
@@ -120,7 +121,7 @@ public class DownloadMP3Nuovo {
         // }
 
         VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
-        VariabiliStaticheNuove.getInstance().setD2(null);
+        // VariabiliStaticheNuove.getInstance().setD2(null);
         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
     }
 
@@ -297,7 +298,7 @@ public class DownloadMP3Nuovo {
         protected void onProgressUpdate(final Integer... progress) {
             super.onProgressUpdate(progress);
 
-            hSelezionaRiga = new Handler();
+            hSelezionaRiga = new Handler(Looper.getMainLooper());
             hSelezionaRiga.postDelayed(runRiga=new Runnable() {
                 @Override
                 public void run() {
@@ -316,14 +317,14 @@ public class DownloadMP3Nuovo {
         }
 
         public void ControllaFineCiclo() {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLMP3("");
+            // VariabiliStaticheGlobali.getInstance().setChiaveDLMP3("");
 
-            if (VariabiliStaticheNuove.getInstance().getD()!=null) {
-                VariabiliStaticheNuove.getInstance().setD(null);
-            }
-            if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
-                VariabiliStaticheNuove.getInstance().setD2(null);
-            }
+            // if (VariabiliStaticheNuove.getInstance().getD()!=null) {
+            //     VariabiliStaticheNuove.getInstance().setD(null);
+            // }
+            // if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
+            //     VariabiliStaticheNuove.getInstance().setD2(null);
+            // }
 
             if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                 NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
@@ -384,7 +385,7 @@ public class DownloadMP3Nuovo {
                                     Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
                             SecondiAttesa = 0;
-                            hAttesaNuovoTentativo = new Handler();
+                            hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
                             rAttesaNuovoTentativo = (new Runnable() {
                                 @Override
                                 public void run() {

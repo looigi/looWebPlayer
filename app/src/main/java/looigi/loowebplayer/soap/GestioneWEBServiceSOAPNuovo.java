@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -76,29 +77,29 @@ public class GestioneWEBServiceSOAPNuovo {
 		this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
 		if (!this.Urletto.isEmpty()) {
-			String Chiave = this.Urletto + ";" + this.tOperazione;
-			if (VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() ||
-					(!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() &&
-					!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave))) {
-				VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
+			// String Chiave = this.Urletto + ";" + this.tOperazione;
+			// if (VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() ||
+			// 		(!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() &&
+			// 		!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave))) {
+			// 	VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
 
 				ApriDialog();
 
 				SplittaCampiUrletto(Urletto);
 
 				Errore = false;
-			} else {
-				VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-				String funzione = "";
-				if (new Object() {
-				}.getClass().getEnclosingMethod() != null) {
-					funzione = new Object() {
-					}.getClass().getEnclosingMethod().getName();
-				}
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
-						funzione,
-						"Skippata operazione SOAP uguale: " + Chiave);
-			}
+			// } else {
+			// 	VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+			// 	String funzione = "";
+			// 	if (new Object() {
+			// 	}.getClass().getEnclosingMethod() != null) {
+			// 		funzione = new Object() {
+			// 		}.getClass().getEnclosingMethod().getName();
+			// 	}
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+			// 			funzione,
+			// 			"Skippata operazione SOAP uguale: " + Chiave);
+			// }
 		} else {
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			String funzione = "";
@@ -361,7 +362,7 @@ public class GestioneWEBServiceSOAPNuovo {
 	    }
 	 	
 	    public void ControllaFineCiclo() {
-			VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
+			// VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
 
  			// if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
 				VariabiliStaticheNuove.getInstance().setDb(null);
@@ -448,7 +449,7 @@ public class GestioneWEBServiceSOAPNuovo {
 									Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
 							SecondiAttesa = 0;
-							hAttesaNuovoTentativo = new Handler();
+							hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
 							rAttesaNuovoTentativo = (new Runnable() {
 								@Override
 								public void run() {

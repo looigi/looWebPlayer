@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -71,20 +72,20 @@ public class DownloadTextFileNuovo {
         this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
         String Chiave = this.Url;
-        if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
-                (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
-                !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
+        // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
+        //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
+        //         !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
+        //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
             ApriDialog();
 
             downloadFile = new DownloadTxtFile();
             downloadFile.execute(Url);
-        } else {
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Skippata operazione DL Text uguale: "+Chiave);
-        }
+        // } else {
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Skippata operazione DL Text uguale: "+Chiave);
+        // }
     }
 
     private void ChiudeDialog() {
@@ -216,7 +217,7 @@ public class DownloadTextFileNuovo {
         }
 
         public void ControllaFineCiclo() {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
+            // VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
             ChiudeDialog();
 
             if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
@@ -246,7 +247,7 @@ public class DownloadTextFileNuovo {
                                     Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
                             SecondiAttesa = 0;
-                            hAttesaNuovoTentativo = new Handler();
+                            hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
                             rAttesaNuovoTentativo = (new Runnable() {
                                 @Override
                                 public void run() {

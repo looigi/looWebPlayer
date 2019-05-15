@@ -38,13 +38,13 @@ public class CheckURLFile {
         String Chiave = this.Url;
         // if (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
         //         !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave)) {
-        if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL() == null) {
-            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
-        }
-        if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
-                (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() &&
-                !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave))) {
-            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL(Chiave);
+        // if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL() == null) {
+        //     VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
+        // }
+        // if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
+        //         (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() &&
+        //         !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave))) {
+        //     VariabiliStaticheGlobali.getInstance().setChiaveCheckURL(Chiave);
 
             Url = sUrl;
             messErrore = "";
@@ -53,7 +53,7 @@ public class CheckURLFile {
 
             downloadFile = new CheckFile();
             downloadFile.execute(Url);
-        }
+        // }
     }
 
     public void StoppaEsecuzione() {
@@ -100,11 +100,11 @@ public class CheckURLFile {
         }
 
         public void ControllaFineCiclo() {
-            VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
+            // VariabiliStaticheGlobali.getInstance().setChiaveCheckURL("");
 
-            if (VariabiliStaticheNuove.getInstance().getCuf() != null) {
-                VariabiliStaticheNuove.getInstance().setCuf(null);
-            }
+            // if (VariabiliStaticheNuove.getInstance().getCuf() != null) {
+            //     VariabiliStaticheNuove.getInstance().setCuf(null);
+            // }
 
             if (messErrore.equals("ESCI")) {
                 VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");

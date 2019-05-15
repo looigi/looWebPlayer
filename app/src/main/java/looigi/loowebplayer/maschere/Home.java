@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
@@ -131,7 +132,7 @@ public class Home extends android.support.v4.app.Fragment {
                         Runnable runEliminaTxt;
                         Handler hEliminaTxt;
 
-                        hEliminaTxt = new Handler();
+                        hEliminaTxt = new Handler(Looper.getMainLooper());
                         hEliminaTxt.postDelayed(runEliminaTxt = new Runnable() {
                             @Override
                             public void run() {

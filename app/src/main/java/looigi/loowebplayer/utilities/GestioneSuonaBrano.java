@@ -3,6 +3,7 @@ package looigi.loowebplayer.utilities;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
@@ -101,7 +102,7 @@ public class GestioneSuonaBrano {
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");
-            vh.setHandlerSeekBar(new Handler());
+            vh.setHandlerSeekBar(new Handler(Looper.getMainLooper()));
             vh.getHandlerSeekBar().postDelayed(rSeekBar = new Runnable() {
                 @Override
                 public void run() {

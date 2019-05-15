@@ -69,7 +69,7 @@ public class bckService extends Service {
             Utility.getInstance().CambiaMaschera(R.id.utenza);
         }
 
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override

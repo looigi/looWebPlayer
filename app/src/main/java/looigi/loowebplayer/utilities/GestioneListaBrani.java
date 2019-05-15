@@ -3,6 +3,7 @@ package looigi.loowebplayer.utilities;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 
 import java.io.File;
@@ -224,7 +225,7 @@ public class GestioneListaBrani {
 
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
                 vol = 1;
-                hSfumaOutMP3 = new Handler();
+                hSfumaOutMP3 = new Handler(Looper.getMainLooper());
                 hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
                     @Override
                     public void run() {

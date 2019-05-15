@@ -25,11 +25,11 @@ public class PronunciaFrasi {
 
     private void Legge(final String Messaggio, final String Lingua) {
         if (tts==null) {
-            if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
-                hSelezionaRiga1 = new Handler();
-            } else {
+            // if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
+            //     hSelezionaRiga1 = new Handler();
+            // } else {
                 hSelezionaRiga1 = new Handler(Looper.getMainLooper());
-            }
+            // }
             hSelezionaRiga1.postDelayed(runRiga1=new Runnable() {
                 @Override
                 public void run() {
@@ -48,11 +48,11 @@ public class PronunciaFrasi {
             }, 500);
 
         } else {
-            if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
-                hSelezionaRiga1 = new Handler();
-            } else {
+            // if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
+            //     hSelezionaRiga1 = new Handler();
+            // } else {
                 hSelezionaRiga1 = new Handler(Looper.getMainLooper());
-            }
+            // }
             hSelezionaRiga1.postDelayed(runRiga1=new Runnable() {
                 @Override
                 public void run() {

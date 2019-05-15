@@ -25,18 +25,18 @@ public class VariabiliStaticheNuove {
     private GestioneTesti gt;
     private GestioneWEBServiceSOAPNuovo gm;
     private GestioneWEBServiceSOAPNuovo gb;
-    private DownloadMP3Nuovo d;
+    // private DownloadMP3Nuovo d;
     private GestioneWEBServiceSOAPNuovo db;
-    private DownloadMP3Nuovo d2;
-    private CheckURLFile cuf;
+    // private DownloadMP3Nuovo d2;
+    // private CheckURLFile cuf;
 
-    public CheckURLFile getCuf() {
-        return cuf;
-    }
+    // public CheckURLFile getCuf() {
+    //     return cuf;
+    // }
 
-    public void setCuf(CheckURLFile cuf) {
-        this.cuf = cuf;
-    }
+    // public void setCuf(CheckURLFile cuf) {
+    //     this.cuf = cuf;
+    // }
 
     public ScaricoCover getSc() {
         return sc;
@@ -70,13 +70,13 @@ public class VariabiliStaticheNuove {
         this.gb = gb;
     }
 
-    public DownloadMP3Nuovo getD() {
-        return d;
-    }
+    // public DownloadMP3Nuovo getD() {
+    //     return d;
+    // }
 
-    public void setD(DownloadMP3Nuovo d) {
-        this.d = d;
-    }
+    // public void setD(DownloadMP3Nuovo d) {
+    //     this.d = d;
+    // }
 
     public GestioneWEBServiceSOAPNuovo getDb() {
         return db;
@@ -86,11 +86,11 @@ public class VariabiliStaticheNuove {
         this.db = db;
     }
 
-    public DownloadMP3Nuovo getD2() {
-        return d2;
-    }
+    // public DownloadMP3Nuovo getD2() {
+    //     return d2;
+    // }
 
-    public void setD2(DownloadMP3Nuovo d2) {
-        this.d2 = d2;
-    }
+    // public void setD2(DownloadMP3Nuovo d2) {
+    //     this.d2 = d2;
+    // }
 }

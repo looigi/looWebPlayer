@@ -1,6 +1,7 @@
 package looigi.loowebplayer.utilities;
 
 import android.os.Handler;
+import android.os.Looper;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
@@ -25,7 +26,7 @@ public class GestioneMediaPlayer {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
             vol = 1;
 
-            hSfumaOutMP3 = new Handler();
+            hSfumaOutMP3 = new Handler(Looper.getMainLooper());
             hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
                 @Override
                 public void run() {

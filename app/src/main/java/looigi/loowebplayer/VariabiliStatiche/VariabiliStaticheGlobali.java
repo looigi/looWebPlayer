@@ -20,6 +20,7 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.DatiGenerali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
+import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
 import looigi.loowebplayer.utilities.Log;
 
 public class VariabiliStaticheGlobali {
@@ -107,15 +108,16 @@ public class VariabiliStaticheGlobali {
     private boolean OrientationPortrait = false;
     private String ImmagineMostrata;
 
-    private String ChiaveDLSoap = "";
-    private String ChiaveDLImmagine = "";
-    private String ChiaveDLText = "";
-    private String ChiaveDLMP3 = "";
-    private String ChiaveCheckURL = "";
+    // private String ChiaveDLSoap = "";
+    // private String ChiaveDLImmagine = "";
+    // private String ChiaveDLText = "";
+    // private String ChiaveDLMP3 = "";
+    // private String ChiaveCheckURL = "";
 
     private String lastRitorno = "";
     private Boolean ScreenON = true;
     private Intent iServizio;
+    private ScaricoBranoEAttesa sbea;
 
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -155,6 +157,14 @@ public class VariabiliStaticheGlobali {
         this.ctxPassaggio = ctxPassaggio;
     }
 
+    public ScaricoBranoEAttesa getSbea() {
+        return sbea;
+    }
+
+    public void setSbea(ScaricoBranoEAttesa sbea) {
+        this.sbea = sbea;
+    }
+
     public Intent getiServizio() {
         return iServizio;
     }
@@ -183,7 +193,7 @@ public class VariabiliStaticheGlobali {
         return AttesaSecondiBranoSuccessivo;
     }
 
-    public String getChiaveCheckURL() {
+    /* public String getChiaveCheckURL() {
         return ChiaveCheckURL;
     }
 
@@ -221,7 +231,7 @@ public class VariabiliStaticheGlobali {
 
     public void setChiaveDLSoap(String chiaveDLSoap) {
         ChiaveDLSoap = chiaveDLSoap;
-    }
+    } */
 
     public String getImmagineMostrata() {
         return ImmagineMostrata;

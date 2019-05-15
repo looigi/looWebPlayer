@@ -85,10 +85,10 @@ public class DownloadImmagineNuovo {
         this.Tentativo = 0;
 
         String Chiave = this.Url+";"+sOperazione;
-        if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
-                (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
-                !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
+        // if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
+        //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
+        //         !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
+        //     VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
             ApriDialog();
 
@@ -99,11 +99,11 @@ public class DownloadImmagineNuovo {
 
             downloadFile = new DownloadImageFile();
             downloadFile.execute(Url);
-        } else {
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Skippata operazione DL Immagine uguale: "+Chiave);
-        }
+        // } else {
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Skippata operazione DL Immagine uguale: "+Chiave);
+        // }
     }
 
     private void ChiudeDialog() {
@@ -179,7 +179,7 @@ public class DownloadImmagineNuovo {
         }
 
         public void ControllaFineCiclo() {
-            VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine("");
+            // VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine("");
 
             if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
                 VariabiliStaticheNuove.getInstance().setSc(null);
@@ -226,7 +226,7 @@ public class DownloadImmagineNuovo {
                                     Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
                             SecondiAttesa = 0;
-                            hAttesaNuovoTentativo = new Handler();
+                            hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
                             rAttesaNuovoTentativo = (new Runnable() {
                                 @Override
                                 public void run() {

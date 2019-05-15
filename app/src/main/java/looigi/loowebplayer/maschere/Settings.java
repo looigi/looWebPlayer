@@ -178,11 +178,11 @@ public class Settings extends Fragment {
                 }
             });
 
-            if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
-                hSelezionaRiga1 = new Handler();
-            } else {
+            // if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
+            //     hSelezionaRiga1 = new Handler();
+            // } else {
                 hSelezionaRiga1 = new Handler(Looper.getMainLooper());
-            }
+            // }
             hSelezionaRiga1.postDelayed(runRiga1=new Runnable() {
                 @Override
                 public void run() {
@@ -231,11 +231,11 @@ public class Settings extends Fragment {
                 }
             });
 
-            if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
-                hSelezionaRiga2 = new Handler();
-            } else {
+            // if (!VariabiliStaticheGlobali.getInstance().isEseguiHandlerConMainLooper()) {
+            //     hSelezionaRiga2 = new Handler();
+            // } else {
                 hSelezionaRiga2 = new Handler(Looper.getMainLooper());
-            }
+            // }
             hSelezionaRiga2.postDelayed(runRiga2=new Runnable() {
                 @Override
                 public void run() {

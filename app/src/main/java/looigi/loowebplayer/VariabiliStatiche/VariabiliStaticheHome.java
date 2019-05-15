@@ -287,7 +287,7 @@ public class VariabiliStaticheHome {
 
     public void EliminaOperazioneWEB(final int Numero, Boolean Immediato)  {
         Runnable runEliminaBarra;
-        Handler hEliminaBarra = new Handler();
+        Handler hEliminaBarra = new Handler(Looper.getMainLooper());
 
         if (Immediato) {
             EliminaRiga(Numero);

@@ -1,6 +1,7 @@
 package looigi.loowebplayer.utilities;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.LinearLayout;
 
 import java.io.File;
@@ -85,7 +86,7 @@ public class GestioneCaricamentoBraniNuovo {
         numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true,
                 "Attesa brano successivo");
 
-        hAttesaProssimo = new Handler();
+        hAttesaProssimo = new Handler(Looper.getMainLooper());
         hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
             @Override
             public void run() {
@@ -95,7 +96,7 @@ public class GestioneCaricamentoBraniNuovo {
                         secondi = 0;
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
-                        hAttesaDownloadS = new Handler();
+                        hAttesaDownloadS = new Handler(Looper.getMainLooper());
                         hAttesaDownloadS.postDelayed(rAttesaDownloadS = new Runnable() {
                             @Override
                             public void run() {
@@ -147,7 +148,7 @@ public class GestioneCaricamentoBraniNuovo {
     }
 
     private void waitNull(final Object classe) {
-        hAttesaDownload.add(new Handler());
+        hAttesaDownload.add(new Handler(Looper.getMainLooper()));
         rAttesaDownload.add(new Runnable() {
             @Override
             public void run() {
@@ -168,74 +169,74 @@ public class GestioneCaricamentoBraniNuovo {
         stopCounter = 0;
         qualeWait = -1;
 
-        if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Scarico Cover");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getSc().BloccaOperazione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getSc());
-        }
-        if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Gestione Testi");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getGt().BloccaOperazione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getGt());
-        }
-        if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Soap per multimedia");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getGm().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getGm());
-        }
-        if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Soap per brano");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getGb().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getGb());
-        }
-        if (VariabiliStaticheNuove.getInstance().getCuf()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo attesa per download");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getCuf().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getCuf());
-        }
-        if (VariabiliStaticheNuove.getInstance().getD()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Download brano 1");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getD().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getD());
-        }
-        if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Soap per download");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getDb().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getDb());
-        }
-        if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Stoppo Download brano 3");
-
-            qualeWait++;
-            VariabiliStaticheNuove.getInstance().getD2().StoppaEsecuzione();
-            // waitNull(VariabiliStaticheNuove.getInstance().getD2());
-        }
+        // if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Scarico Cover");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getSc().BloccaOperazione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getSc());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Gestione Testi");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getGt().BloccaOperazione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getGt());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Soap per multimedia");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getGm().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getGm());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Soap per brano");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getGb().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getGb());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getCuf()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo attesa per download");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getCuf().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getCuf());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getD()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Download brano 1");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getD().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getD());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Soap per download");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getDb().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getDb());
+        // }
+        // if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stoppo Download brano 3");
+//
+        //     qualeWait++;
+        //     VariabiliStaticheNuove.getInstance().getD2().StoppaEsecuzione();
+        //     // waitNull(VariabiliStaticheNuove.getInstance().getD2());
+        // }
 
         qualeWait = 0;
         if (qualeWait >0 ) {
-            hAttesaDownload.add(new Handler());
+            hAttesaDownload.add(new Handler(Looper.getMainLooper()));
             rAttesaDownload.add(new Runnable() {
                 @Override
                 public void run() {

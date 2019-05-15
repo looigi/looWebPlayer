@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -106,7 +107,7 @@ public class Splash extends android.support.v4.app.Fragment {
                 }
             });
 
-            hSelezionaRiga = new Handler();
+            hSelezionaRiga = new Handler(Looper.getMainLooper());
             hSelezionaRiga.postDelayed(runRiga=new Runnable() {
                 @Override
                 public void run() {
