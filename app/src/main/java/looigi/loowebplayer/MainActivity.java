@@ -36,6 +36,7 @@ import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.maschere.Splash;
 import looigi.loowebplayer.notifiche.Notifica;
+import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.Permessi;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private AudioManager mAudioManager;
     private ComponentName mReceiverComponent;
     private PhoneUnlockedReceiver receiver;
+    // private NetThreadNuovo ntn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +163,8 @@ public class MainActivity extends AppCompatActivity
         // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lettura configurazione valori");
         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().LeggeValori();
 
-        // NetThread.getInstance().start();
+        VariabiliStaticheGlobali.getInstance().setNtn(new NetThreadNuovo());
+        VariabiliStaticheGlobali.getInstance().getNtn().start();
 
         if (VariabiliStaticheGlobali.getInstance().getGiaEntrato()==null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
             Fragment fragment = new Splash();
@@ -262,6 +265,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.uscita:
                 VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().stopService(
                         VariabiliStaticheGlobali.getInstance().getiServizio());
+
+                VariabiliStaticheGlobali.getInstance().getNtn().StopNetThread();
 
                 if (receiver != null) {
                     unregisterReceiver(receiver);

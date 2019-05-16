@@ -20,6 +20,7 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.DatiGenerali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
+import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
 import looigi.loowebplayer.utilities.Log;
 
@@ -107,6 +108,8 @@ public class VariabiliStaticheGlobali {
     // private boolean StaGiaAttendendo = false;
     private boolean OrientationPortrait = false;
     private String ImmagineMostrata;
+    private NetThreadNuovo ntn;
+    private int NumeroBranoNuovo;
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";
@@ -155,6 +158,22 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public int getNumeroBranoNuovo() {
+        return NumeroBranoNuovo;
+    }
+
+    public void setNumeroBranoNuovo(int numeroBranoNuovo) {
+        NumeroBranoNuovo = numeroBranoNuovo;
+    }
+
+    public NetThreadNuovo getNtn() {
+        return ntn;
+    }
+
+    public void setNtn(NetThreadNuovo ntn) {
+        this.ntn = ntn;
     }
 
     public ScaricoBranoEAttesa getSbea() {

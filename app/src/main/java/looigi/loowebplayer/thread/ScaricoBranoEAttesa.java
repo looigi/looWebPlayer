@@ -10,6 +10,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
+import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.PronunciaFrasi;
 import looigi.loowebplayer.utilities.Utility;
@@ -127,7 +128,7 @@ public class ScaricoBranoEAttesa {
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                         "Stoppo CUF normale per numero brano " + Altro + " diverso dall'attuale");
 
-                                cuf.StoppaEsecuzione();
+                                cuf.StoppaEsecuzione(true);
                             }
                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                     "Download Brano"+Altro+". Cambio brano");
@@ -144,70 +145,25 @@ public class ScaricoBranoEAttesa {
                             hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
 
                             if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("OK")) {
+                                // VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(NumeroBrano);
+
                                 if (cuf!=null) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                             "Stoppo CUF normale per OK");
 
-                                    cuf.StoppaEsecuzione();
+                                    cuf.StoppaEsecuzione(false);
                                 }
 
-                                nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, true, "Download brano. Scaricamento");
+                                nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, true,
+                                        "Download brano. Scaricamento");
                                 if (inBackground) {
                                     GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.salva);
                                 }
 
-                                PronunciaFrasi pf = new PronunciaFrasi();
-                                pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
-
                                 hSelezionaRiga.removeCallbacks(runRiga);
                                 hSelezionaRiga = null;
 
-                                String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
-                                Boolean compresso = false;
-                                if (sBrano.toUpperCase().contains("COMPRESSI")) {
-                                    compresso = true;
-                                    url += "Compressi/";
-                                } else {
-                                    url += "Dati/";
-                                }
-                                if (!VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase().isEmpty()) {
-                                    url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
-                                }
-
-                                int campi = Brano.length - 1;
-                                String sBrano = Brano[campi];
-                                String sAlbum = Brano[campi - 1];
-                                String sArtista = Brano[campi - 2];
-
-                                if (!url.contains(sArtista) && !url.contains(sAlbum)) {
-                                    url += sArtista + "/" + sAlbum + "/" + sBrano;
-                                } else {
-                                    url += sBrano;
-                                }
-
-                                DownloadMP3Nuovo d = new DownloadMP3Nuovo();
-                                String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-
-                                StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-                                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-                                String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
-
-                                if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                                    d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
-                                } else {
-                                    d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" );
-                                }
-
-                                d.setNomeBrano(sBrano);
-                                d.setCompresso(compresso);
-                                if (inBackground) {
-                                    d.setAutomatico(true);
-                                } else {
-                                    d.setAutomatico(false);
-                                }
-                                d.setNumeroBrano(NumeroBrano);
-                                d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-                                d.startDownload(url, nn);
+                                ScaricaBrano(NumeroBrano, Brano);
 
                                 VariabiliStaticheGlobali.getInstance().setSbea(null);
                             } else {
@@ -221,7 +177,7 @@ public class ScaricoBranoEAttesa {
                                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                                 "Stoppo CUF normale per brano diverso o skippato");
 
-                                        cuf.StoppaEsecuzione();
+                                        cuf.StoppaEsecuzione(true);
                                     }
                                     // VariabiliStaticheNuove.getInstance().setCuf(null);
                                     GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
@@ -247,7 +203,7 @@ public class ScaricoBranoEAttesa {
                                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                                     "Stoppo CUF normale per tentativi esauriti");
 
-                                            cuf.StoppaEsecuzione();
+                                            cuf.StoppaEsecuzione(true);
                                         }
                                         // VariabiliStaticheNuove.getInstance().setCuf(null);
                                         GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
@@ -263,6 +219,18 @@ public class ScaricoBranoEAttesa {
 
                                         nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(nn, true,
                                                 "Download brano"+Altro+"\n'" + Appoggio2 + "'. Tentativi esauriti");
+                                        //***BRANO SCARICATO***
+
+                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                                "Tento di prendere il prossimo brano fra quelli già scaricati");
+                                        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                                        int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                        VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBrano);
+                                        GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+
+                                        ScaricaBrano(NumeroBrano, Brano);
+
+                                        VariabiliStaticheGlobali.getInstance().setSbea(null);
                                     }
                                 }
                             }
@@ -272,5 +240,57 @@ public class ScaricoBranoEAttesa {
                 }, 500);
             }
         }, VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
+    }
+
+    private void ScaricaBrano(int NumeroBrano, String[] Brano) {
+        PronunciaFrasi pf = new PronunciaFrasi();
+        pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
+
+        int campi = Brano.length - 1;
+        String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
+        Boolean compresso = false;
+        if (Brano[campi].toUpperCase().contains("COMPRESSI")) {
+            compresso = true;
+            url += "Compressi/";
+        } else {
+            url += "Dati/";
+        }
+        if (!VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase().isEmpty()) {
+            url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
+        }
+
+        String sBrano = Brano[campi];
+        String sAlbum = Brano[campi - 1];
+        String sArtista = Brano[campi - 2];
+
+        if (!url.contains(sArtista) && !url.contains(sAlbum)) {
+            url += sArtista + "/" + sAlbum + "/" + sBrano;
+        } else {
+            url += sBrano;
+        }
+
+        DownloadMP3Nuovo d = new DownloadMP3Nuovo();
+        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+
+        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+        String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+
+        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+            d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+        } else {
+            d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" );
+        }
+
+        d.setNomeBrano(sBrano);
+        d.setCompresso(compresso);
+        if (inBackground) {
+            d.setAutomatico(true);
+        } else {
+            d.setAutomatico(false);
+        }
+        d.setNumeroBrano(NumeroBrano);
+        d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+        d.startDownload(url, nn);
     }
 }

@@ -479,10 +479,19 @@ public class GestioneListaBrani {
     } */
 
     public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                "Controllo numero prossimo brano");
+        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        if (ceRete) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Controllo numero prossimo brano");
 
-        return ControllaProssimoBrano(Avanza);
+            return ControllaProssimoBrano(Avanza);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
+            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+            return CercaBranoGiaScaricato(false);
+        }
     }
 
     public int RitornaBranoPrecedente() {
@@ -508,8 +517,8 @@ public class GestioneListaBrani {
     }
 
     public void ScaricaBranoSuccessivoInBackground() {
-        // Boolean ceRete = NetThread.getInstance().isOk();
-        // if (ceRete) {
+        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        if (ceRete) {
             final int NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);
             VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBranoProssimo);
             BraniSuonati.add(NumeroBranoProssimo);
@@ -524,18 +533,16 @@ public class GestioneListaBrani {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
             String PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
             String PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Controllo esistenza file: " + PathMP3);
             File f = new File(PathMP3);
             File fc = new File(PathMP3_Compresso);
 
             VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
 
             if (f.exists() || fc.exists()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Brano già esistente... Non faccio niente");
-                // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-
-                // NetThread.getInstance().setCaroselloBloccato(false);
-                // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Brano già esistente... Non faccio niente");
 
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
                 VariabiliStaticheNuove.getInstance().setDb(null);
@@ -544,21 +551,10 @@ public class GestioneListaBrani {
                     VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
                 }
             } else {
-                // Runnable runRiga;
-                // Handler hSelezionaRiga;
-
                 final String Brano = Artista + ";" + Album + ";" + NomeBrano;
 
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico brano");
-                // hSelezionaRiga = new Handler();
-                // hSelezionaRiga.postDelayed(runRiga = new Runnable() {
-                //     @Override
-                //     public void run() {
-                        // VariabiliStaticheHome.getInstance().getLayOperazionWEB().setVisibility(LinearLayout.VISIBLE);
-                        // VariabiliStaticheHome.getInstance().getTxtOperazioneWEB().setText("Download automatico: "+NomeBrano);
                         int numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download automatico: "+NomeBrano);
-
-                        // VariabiliStaticheGlobali.getInstance().setNonFermareDownload(true);
 
                         String c[] = Brano.split(";", -1);
                         String Converte = "N";
@@ -594,9 +590,16 @@ public class GestioneListaBrani {
                 //     }
                 // }, 50);
             }
-        // } else {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Non c'è rete, evito il download in background del successivo brano");
-        //     VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-        // }
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+             "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
+            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+            // ***BRANO SCARICATO***
+            int NumeroBrano=CercaBranoGiaScaricato(false);
+            VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBrano);
+            BraniSuonati.add(NumeroBrano);
+            // VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+            //         .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+        }
     }
 }

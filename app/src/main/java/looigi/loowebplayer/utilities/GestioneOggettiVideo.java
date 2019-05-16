@@ -30,11 +30,16 @@ public class GestioneOggettiVideo {
 
     public void ControllaAvantiBrano(int NumeroBrano, Boolean VisualizzaMessaggio) {
         if (NumeroBrano>-1) {
-            VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-                    .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+            if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                        .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+            } else {
+                VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(NumeroBrano);
+            }
 
             // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Avanti. Prossimo brano: "+Integer.toString(NumeroBrano));
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Avanti. Prossimo brano: "+Integer.toString(NumeroBrano));
 
             GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
         } else {
@@ -169,10 +174,10 @@ public class GestioneOggettiVideo {
                             vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
                             GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano3();
                         } else {
+                            vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
+                            vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
                             try {
                                 vh.getMediaPlayer().start();
-                                vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
-                                vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
                                 // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
                             } catch (Exception e) {
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
@@ -192,10 +197,10 @@ public class GestioneOggettiVideo {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Stop");
                     VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
                     // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
+                    vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
+                    vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
                     try {
                         vh.getMediaPlayer().pause();
-                        vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
-                        vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
                     } catch (Exception e) {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
                         String error = Utility.getInstance().PrendeErroreDaException(e);

@@ -55,9 +55,12 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+        if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
             return;
         }
         lastTimePressed = System.currentTimeMillis();

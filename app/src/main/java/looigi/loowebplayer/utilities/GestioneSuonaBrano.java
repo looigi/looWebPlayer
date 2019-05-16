@@ -55,7 +55,10 @@ public class GestioneSuonaBrano {
             } else {
                 // VariabiliStaticheHome.getInstance().getLayOperazionWEB().setVisibility(LinearLayout.VISIBLE);
                 // VariabiliStaticheHome.getInstance().getTxtOperazioneWEB().setText();
-                VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,true, "Problemi nel caricamento del brano");
+                VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,true,
+                        "Problemi nel caricamento del brano");
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+                GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
             }
             // } else {
             //     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
@@ -113,7 +116,7 @@ public class GestioneSuonaBrano {
                         if (vh.getMediaPlayer() != null) {
                             int mCurrentPosition = vh.getMediaPlayer().getCurrentPosition();
                             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getCaricamentoAnticipato()) {
-                                int perc15 = vh.getMediaPlayer().getDuration() * 15 / 100;
+                                int perc15 = vh.getMediaPlayer().getDuration() * 10 / 100;
                                 if (mCurrentPosition >= perc15 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro

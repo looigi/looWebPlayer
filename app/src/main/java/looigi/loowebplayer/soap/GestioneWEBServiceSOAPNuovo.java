@@ -56,9 +56,16 @@ public class GestioneWEBServiceSOAPNuovo {
 	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
                                        String NS, String SA, int Timeout, int NumeroOperazione,
 									   boolean ApriDialog) {
-		if (System.currentTimeMillis() - lastTimePressed < 1000) {
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-			}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");
+		Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+		if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
+			try {
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+				}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");
+			} catch (Exception ignored) {
+
+			}
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			return;
 		}
 		lastTimePressed = System.currentTimeMillis();
@@ -159,8 +166,12 @@ public class GestioneWEBServiceSOAPNuovo {
 	}
 	
 	public void Esegue(final Context context) {
-    	bckAsyncTask = new BackgroundAsyncTask(context);
-    	bckAsyncTask.execute(Urletto);
+		Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+		if (ceRete) {
+			bckAsyncTask = new BackgroundAsyncTask(context);
+			bckAsyncTask.execute(Urletto);
+		}
 	}
 	
 	private void ChiudeDialog() {
@@ -435,9 +446,12 @@ public class GestioneWEBServiceSOAPNuovo {
 						}
 					} else {
 						// Errore... Riprovo ad eseguire la funzione
+						Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
 						if (Tentativo < QuantiTentativi &&
 								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
-								!tOperazione.equals("RitornaDatiUtente")) {
+								!tOperazione.equals("RitornaDatiUtente") &&
+								ceRete) {
 							Tentativo++;
 
 							final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

@@ -56,11 +56,16 @@ public class CheckURLFile {
         // }
     }
 
-    public void StoppaEsecuzione() {
+    public void StoppaEsecuzione(boolean Errore) {
         downloadFile.cancel(true);
 
-        VariabiliStaticheGlobali.getInstance().setEsciDaCheckFile(true);
-        messErrore="ESCI";
+        if (Errore) {
+            VariabiliStaticheGlobali.getInstance().setEsciDaCheckFile(true);
+            messErrore = "ESCI";
+        } else {
+            VariabiliStaticheGlobali.getInstance().setEsciDaCheckFile(false);
+            messErrore ="OK";
+        }
 
         downloadFile.ControllaFineCiclo();
     }

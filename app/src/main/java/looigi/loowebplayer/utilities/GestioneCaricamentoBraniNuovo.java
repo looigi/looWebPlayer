@@ -57,10 +57,7 @@ public class GestioneCaricamentoBraniNuovo {
         return HaCaricatoBrano;
     }
 
-    public void CaricaBrano() {
-        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-            GestioneListaBrani.getInstance().SuonaMusicaDiAttesa();
-        }
+    private void ImpostaProssimaCanzone() {
         GestioneImmagini.getInstance().StoppaTimerCarosello();
         GestioneImmagini.getInstance().setImmagineDaCambiare("");
         GestioneImmagini.getInstance().setImmNumber(-1);
@@ -81,18 +78,23 @@ public class GestioneCaricamentoBraniNuovo {
         CaricaBranoParteFinale();
 
         // Attesa fra un brano ed un altro per permettere lo skip senza effettuare caricamenti multipli
-        final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
         secondi=0;
         numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true,
                 "Attesa brano successivo");
+    }
+
+    public void CaricaBrano() {
+        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+            GestioneListaBrani.getInstance().SuonaMusicaDiAttesa();
+        }
+        // final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+        ImpostaProssimaCanzone();
 
         hAttesaProssimo = new Handler(Looper.getMainLooper());
         hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
             @Override
             public void run() {
                     if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
-                    // GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
-                    // VariabiliStaticheGlobali.getInstance().setStaGiaAttendendo(true);
                         secondi = 0;
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
@@ -100,16 +102,23 @@ public class GestioneCaricamentoBraniNuovo {
                         hAttesaDownloadS.postDelayed(rAttesaDownloadS = new Runnable() {
                             @Override
                             public void run() {
-                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() ||
-                                        NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                     hAttesaDownloadS = null;
 
-                                    if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
-                                        CaricaBrano2();
-                                    }
+                                    int NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+                                    VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
+                                    VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                                            .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+                                    ImpostaProssimaCanzone();
+                                    // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                                    CaricaBrano2();
+                                    // } else {
+                                    //     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
+                                    //             false, "Attesa termine download automatico. QUI NON DEVE PASSARE!!!"));
+                                    // }
                                 } else {
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
                                             false, "Attesa termine download automatico. Secondi: " + Integer.toString(secondi)));
@@ -119,6 +128,7 @@ public class GestioneCaricamentoBraniNuovo {
                             }
                         }, 1000);
                     } else {
+                        int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                         if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                             if (hAttesaProssimo != null && rAttesaProssimo != null) {
                                 hAttesaProssimo.removeCallbacks(rAttesaProssimo);
@@ -126,6 +136,8 @@ public class GestioneCaricamentoBraniNuovo {
                             }
 
                             // CaricaBrano2();
+                            VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
+                                    false, "Attesa termine download automatico. QUI NON DEVE PASSARE!!!"));
                         } else {
                             secondi++;
                             int ss = VariabiliStaticheGlobali.getInstance().getAttesaSecondiBranoSuccessivo();
