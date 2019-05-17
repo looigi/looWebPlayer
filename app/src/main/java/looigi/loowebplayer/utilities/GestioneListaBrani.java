@@ -176,10 +176,11 @@ public class GestioneListaBrani {
         }
 
         if (DaEsterno) {
-            if (IndiceSuonati == BraniSuonati.size()) {
-                IndiceSuonati--;
-            }
-            BraniSuonati.set(IndiceSuonati, Brano);
+            // if (IndiceSuonati == BraniSuonati.size()) {
+            //     IndiceSuonati--;
+            // }
+            // BraniSuonati.set(IndiceSuonati, Brano);
+            AggiungeBrano(Brano);
         }
 
         return Brano;
@@ -486,11 +487,11 @@ public class GestioneListaBrani {
                     "Controllo numero prossimo brano");
 
             return ControllaProssimoBrano(Avanza);
-        } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
-            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-            return CercaBranoGiaScaricato(false);
+       } else {
+           VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                   "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
+           VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+           return CercaBranoGiaScaricato(false);
         }
     }
 
@@ -595,9 +596,12 @@ public class GestioneListaBrani {
              "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
             VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
             // ***BRANO SCARICATO***
-            int NumeroBrano=CercaBranoGiaScaricato(false);
+            int NumeroBrano=CercaBranoGiaScaricato(true);
             VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBrano);
-            BraniSuonati.add(NumeroBrano);
+            VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+            // BraniSuonati.add(NumeroBrano);
+
+            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
             // VariabiliStaticheGlobali.getInstance().getDatiGenerali()
             //         .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
         }

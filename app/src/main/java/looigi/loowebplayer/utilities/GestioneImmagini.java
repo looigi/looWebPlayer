@@ -651,8 +651,13 @@ public class GestioneImmagini {
                     } else {
                         if (Tipo.equals("IMMAGINE")) {
                             ultimaBitmap = null;
-                            VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("IMMAGINE;" + Immagine);
-                            imgBrano.setImageBitmap(BitmapFactory.decodeFile(Immagine.replace("IMMAGINE;", "")));
+                            if (Immagine.isEmpty()) {
+                                Drawable icona_nessuna = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.nessuna);
+                                imgBrano.setImageDrawable(icona_nessuna);
+                            } else {
+                                VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("IMMAGINE;" + Immagine);
+                                imgBrano.setImageBitmap(BitmapFactory.decodeFile(Immagine.replace("IMMAGINE;", "")));
+                            }
                         } else {
                             ultimaBitmap = bitmap;
                             VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("BITMAP;");

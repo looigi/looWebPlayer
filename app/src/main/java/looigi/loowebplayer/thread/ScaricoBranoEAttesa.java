@@ -32,10 +32,6 @@ public class ScaricoBranoEAttesa {
         this.inBackground = inBackground;
     }
 
-    private void ControllaSeGiaLanciataElaborazione() {
-
-    }
-
     public void AttesaScaricamentoBrano(String Appoggio, Integer NumeroOperazione) {
         if (inBackground) {
             Altro=" in background";
@@ -137,7 +133,6 @@ public class ScaricoBranoEAttesa {
                             hAttendeRispostaCheckURL = null;
                             hSelezionaRiga.removeCallbacks(runRiga);
                             hSelezionaRiga = null;
-                            rAttendeRispostaCheckURL = null;
                         } else {
                             // if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().isEmpty()) {
                             //     hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 500);
@@ -171,6 +166,7 @@ public class ScaricoBranoEAttesa {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                             "Download Brano" +Altro+": " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
 
+                                    hAttendeRispostaCheckURL = null;
                                     // VariabiliStaticheNuove.getInstance().setD(null);
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nn, true);
                                     if (cuf!=null) {
@@ -224,9 +220,12 @@ public class ScaricoBranoEAttesa {
                                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                                 "Tento di prendere il prossimo brano fra quelli già scaricati");
                                         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-                                        int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                        int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
                                         VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBrano);
-                                        GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+                                        VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+                                        // GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+
+                                        GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
 
                                         ScaricaBrano(NumeroBrano, Brano);
 

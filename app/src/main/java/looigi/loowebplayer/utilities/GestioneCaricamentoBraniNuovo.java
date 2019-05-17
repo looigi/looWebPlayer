@@ -552,13 +552,13 @@ public class GestioneCaricamentoBraniNuovo {
             }
 
             DBRemotoNuovo dbr2 = new DBRemotoNuovo();
-            VariabiliStaticheNuove.getInstance().setGb(dbr2.RitornaBrano(VariabiliStaticheHome.getInstance().getContext(),
+            dbr2.RitornaBrano(VariabiliStaticheHome.getInstance().getContext(),
                     VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
                     Artista,
                     Album,
                     NomeBrano,
                     Converte,
-                    Qualita));
+                    Qualita);
         }
     }
 

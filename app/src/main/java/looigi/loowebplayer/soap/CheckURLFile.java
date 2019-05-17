@@ -16,6 +16,7 @@ public class CheckURLFile {
     private CheckFile downloadFile;
     private String Url;
     private int NumeroBrano;
+    private String urlUtente;
     private long lastTimePressed = 0;
 
     public void setContext(Context context) {
@@ -35,7 +36,7 @@ public class CheckURLFile {
         }
         lastTimePressed = System.currentTimeMillis();
 
-        String Chiave = this.Url;
+        // String Chiave = this.Url;
         // if (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||
         //         !VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().equals(Chiave)) {
         // if (VariabiliStaticheGlobali.getInstance().getChiaveCheckURL() == null) {
@@ -73,6 +74,14 @@ public class CheckURLFile {
     private class CheckFile extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... sUrl) {
+            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+            if (!ceRete) {
+                messErrore="ERROR: Assenza di rete";
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Check File error; Assenza di rete");
+                return null;
+            }
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Check file: "+sUrl[0]);
             try {

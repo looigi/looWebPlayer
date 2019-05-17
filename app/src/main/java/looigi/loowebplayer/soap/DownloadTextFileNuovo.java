@@ -130,6 +130,14 @@ public class DownloadTextFileNuovo {
         protected String doInBackground(String... sUrl) {
             messErrore = "";
 
+            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+            if (!ceRete) {
+                messErrore="ERROR: Assenza di rete";
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "TEXT FIle; Assenza di rete");
+                return null;
+            }
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Scarico del testo: " + sUrl[0]);
 
@@ -238,7 +246,11 @@ public class DownloadTextFileNuovo {
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+                        if (Tentativo < QuantiTentativi &&
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
+                                ceRete) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

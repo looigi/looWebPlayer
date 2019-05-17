@@ -121,6 +121,7 @@ public class VariabiliStaticheGlobali {
     private Boolean ScreenON = true;
     private Intent iServizio;
     private ScaricoBranoEAttesa sbea;
+    private Integer BranoImpostatoSenzaRete=-1;
 
     // private GestioneWEBServiceSOAP gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -158,6 +159,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public Integer getBranoImpostatoSenzaRete() {
+        return BranoImpostatoSenzaRete;
+    }
+
+    public void setBranoImpostatoSenzaRete(Integer branoImpostatoSenzaRete) {
+        BranoImpostatoSenzaRete = branoImpostatoSenzaRete;
     }
 
     public int getNumeroBranoNuovo() {

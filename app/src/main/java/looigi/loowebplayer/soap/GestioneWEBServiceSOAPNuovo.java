@@ -231,7 +231,15 @@ public class GestioneWEBServiceSOAPNuovo {
 
 	    @Override
 	    protected String doInBackground(String... sUrl) {
-            SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+			Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+			if (!ceRete) {
+				messErrore="ERROR: Assenza di rete";
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
+				return null;
+			}
+
+			SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             String Parametro="";
             String Valore="";
@@ -410,7 +418,7 @@ public class GestioneWEBServiceSOAPNuovo {
 					ChiudeDialog();
 
 					wsRitornoNuovo rRit = new wsRitornoNuovo();
-					Boolean Ancora = true;
+					boolean Ancora = true;
 
 					if (!Errore || NumeroBrano == -1) {
 						while (Ancora) {

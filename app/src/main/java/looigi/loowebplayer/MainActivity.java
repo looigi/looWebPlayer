@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         //replaces the default 'Back' button action
-        if(keyCode== KeyEvent.KEYCODE_BACK)   {
+        if(keyCode== KeyEvent.KEYCODE_BACK) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity
                 // super.onBackPressed();
             }
         }
-        return true;
+        return false;
     }
 
     /* @Override
@@ -258,10 +258,20 @@ public class MainActivity extends AppCompatActivity
 
         switch(id) {
             case R.id.about:
+                Utility.getInstance().CambiaMaschera(id);
+                break;
             case R.id.home:
+                Utility.getInstance().CambiaMaschera(id);
+                break;
             case R.id.utenza:
+                Utility.getInstance().CambiaMaschera(id);
+                break;
             case R.id.libreria:
+                Utility.getInstance().CambiaMaschera(id);
+                break;
             case R.id.equalizer:
+                Utility.getInstance().CambiaMaschera(id);
+                break;
             case R.id.uscita:
                 VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().stopService(
                         VariabiliStaticheGlobali.getInstance().getiServizio());

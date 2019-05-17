@@ -138,6 +138,14 @@ public class DownloadImmagineNuovo {
         protected String doInBackground(String... sUrl) {
             messErrore="";
 
+            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+            if (!ceRete) {
+                messErrore="ERROR: Assenza di rete";
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Immagine: Assenza di rete");
+                return null;
+            }
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Inizio lo scarico dell'immagine: "+sUrl[0]+". TIMEOUT: "+Integer.toString(TIMEOUT));
             try {
@@ -217,7 +225,11 @@ public class DownloadImmagineNuovo {
                 } else {
                     if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo < QuantiTentativi && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+                        if (Tentativo < QuantiTentativi &&
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
+                                ceRete) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

@@ -96,7 +96,13 @@ public class GestioneOggettiVideo {
                 }
             } */
 
-            int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+            int NumeroBrano;
+            if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete()>-1) {
+                NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+            } else {
+                NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+            }
             ControllaAvantiBrano(NumeroBrano, false);
         }
     }

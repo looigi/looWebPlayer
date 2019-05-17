@@ -148,6 +148,14 @@ public class DownloadMP3Nuovo {
             // RoutineDiDownload(sUrl[0]);
             messErrore="";
 
+            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+            if (!ceRete) {
+                messErrore="ERROR: Assenza di rete";
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "MP3: Assenza di rete");
+                return null;
+            }
+
             /* hSelezionaRiga = new Handler(Looper.getMainLooper());
             hSelezionaRiga.postDelayed(runRiga=new Runnable() {
                 @Override
@@ -222,6 +230,13 @@ public class DownloadMP3Nuovo {
                                 int len1 = 0;
                                 int lenF = 0;
                                 while ((len1 = is.read(buffer)) != -1) {
+                                    ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+                                    if (!ceRete) {
+                                        messErrore = "ESCI";
+                                        break;
+                                    }
+
                                     fos.write(buffer, 0, len1);
                                     if (len1 > 0) {
                                         lenF += len1;
@@ -376,7 +391,11 @@ public class DownloadMP3Nuovo {
                         }
                     } else {
                         // Errore... Riprovo ad eseguire la funzione
-                        if (Tentativo < QuantiTentativi && messErrore.contains("ERROR:") && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
+                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+                        if (Tentativo < QuantiTentativi && messErrore.contains("ERROR:") &&
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
+                                ceRete) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

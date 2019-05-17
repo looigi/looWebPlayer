@@ -1,6 +1,8 @@
 package looigi.loowebplayer.utilities;
 
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
+import android.net.Uri;
 
 import java.io.File;
 
@@ -98,6 +100,14 @@ public class GestioneImpostazioneBrani {
                         // }
                     }
                 } else {
+                    GestioneSuonaBrano.getInstance().SuonaBrano(Mp3);
+                }
+            } else {
+                vh.setMediaPlayer(MediaPlayer.create(vh.getContext(),
+                        Uri.parse(Mp3)));
+                if (vh.getMediaPlayer()!=null) {
+                    vh.getMediaPlayer().setLooping(false);
+
                     GestioneSuonaBrano.getInstance().SuonaBrano(Mp3);
                 }
             }

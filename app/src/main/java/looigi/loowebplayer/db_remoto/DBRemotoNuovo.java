@@ -1,13 +1,20 @@
 package looigi.loowebplayer.db_remoto;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
+import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
+import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
+import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.PronunciaFrasi;
+import looigi.loowebplayer.utilities.Utility;
 
 public class DBRemotoNuovo {
 	private String ws = "looWPlayer.asmx/";
@@ -66,44 +73,104 @@ public class DBRemotoNuovo {
 		return g;
 	}
 
-	public GestioneWEBServiceSOAPNuovo RitornaBrano(Context context, String Dire, String Artista, String Album,
-							 String Brano, String Converte, String Qualita) {
-		String Urletto="RitornaBrano?";
-		Urletto+="NomeUtente=" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente();
-		Urletto+="&DirectBase=" + Dire;
-		Urletto+="&Artista=" + ToglieCaratteriStrani(Artista);
-		Urletto+="&Album=" + ToglieCaratteriStrani(Album);
-		Urletto+="&Brano=" + ToglieCaratteriStrani(Brano);
-		Urletto+="&Converte=" + Converte;
-		Urletto+="&Qualita=" + Qualita;
+	private Runnable rAttendeRispostaCheckURL;
+	private Handler hAttendeRispostaCheckURL;
+	private int Secondi;
 
-		String messaggio="";
+	public void RitornaBrano(final Context context, final String Dire, final String Artista,
+													final String Album, final String Brano, final String Converte,
+													final String Qualita) {
+		String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Temp/" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente() + ".txt";
+		final CheckURLFile cuf = new CheckURLFile();
+		cuf.setNumeroBrano(-1);
+		cuf.startControl(url);
 
-		if (Converte.equals("S")) {
-			PronunciaFrasi pf = new PronunciaFrasi();
-			pf.PronunciaFrase("Compressione brano","ITALIANO");
+		Secondi=0;
+		final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+		final int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Controllo esecuzione remota");
 
-			messaggio="Compressione e download brano";
-		} else {
-			PronunciaFrasi pf = new PronunciaFrasi();
-			pf.PronunciaFrase("Download brano", "INGLESE");
+		hAttendeRispostaCheckURL = new Handler(Looper.getMainLooper());
+		hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL = new Runnable() {
+			@Override
+			public void run() {
+				if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+					if (cuf !=null) {
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+								"Stoppo CUF controllo esec. per numero brano diverso dall'attuale");
 
-			messaggio="Download brano";
-		}
+						cuf.StoppaEsecuzione(true);
+					}
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+							"CUF Controllo esecuzione. Cambio brano");
+					hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
+					hAttendeRispostaCheckURL = null;
+				} else {
+					hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
 
-		int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, messaggio);
+					if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("OK")) {
+						if (cuf!=null) {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+									"Stoppo CUF normale per OK");
 
-		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
-				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
-				"RitornaBrano",
-				NS,
-				SA,
-				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
-				NumeroOperazione,
-				false);
-		g.Esegue(context);
+							cuf.StoppaEsecuzione(false);
+						}
 
-		return g;
+						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Attesa termine esecuzione: " + Integer.toString(Secondi));
+
+						hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 1000);
+					} else {
+						if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("BRANO DIVERSO O SKIPPATO")) {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+									"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
+							hAttendeRispostaCheckURL = null;
+							if (cuf!=null) {
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+										"Stoppo CUF normale per brano diverso o skippato");
+
+								cuf.StoppaEsecuzione(true);
+							}
+
+							String Urletto="RitornaBrano?";
+							Urletto+="NomeUtente=" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente();
+							Urletto+="&DirectBase=" + Dire;
+							Urletto+="&Artista=" + ToglieCaratteriStrani(Artista);
+							Urletto+="&Album=" + ToglieCaratteriStrani(Album);
+							Urletto+="&Brano=" + ToglieCaratteriStrani(Brano);
+							Urletto+="&Converte=" + Converte;
+							Urletto+="&Qualita=" + Qualita;
+
+							String messaggio="";
+
+							if (Converte.equals("S")) {
+								PronunciaFrasi pf = new PronunciaFrasi();
+								pf.PronunciaFrase("Compressione brano","ITALIANO");
+
+								messaggio="Compressione e download brano";
+							} else {
+								PronunciaFrasi pf = new PronunciaFrasi();
+								pf.PronunciaFrase("Download brano", "INGLESE");
+
+								messaggio="Download brano";
+							}
+
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, messaggio);
+
+							GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+									VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+									"RitornaBrano",
+									NS,
+									SA,
+									VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+									NumeroOperazione,
+									false);
+							g.Esegue(context);
+
+							VariabiliStaticheNuove.getInstance().setGb(g);
+						}
+					}
+				}
+			}
+		}, 1000);
 	}
 
 	public GestioneWEBServiceSOAPNuovo RitornaBranoBackground(Context context, String Dire, String Artista, String Album,

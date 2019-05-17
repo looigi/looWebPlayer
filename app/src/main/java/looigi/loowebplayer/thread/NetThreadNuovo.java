@@ -36,12 +36,15 @@ public class NetThreadNuovo {
     // private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
-    private int SecondiDiAttesa = 5000;
+    private int SecondiDiAttesa = 1000;
     // private boolean StaGirando=false;
     private boolean haveConnectedWifi = false;
     private boolean haveConnectedMobile = false;
     private Activity act;
     private PowerManager pm;
+    private Integer conta=0;
+    private Integer quanti=-1;
+    private Boolean RetePresente=true;
     private ConnectivityManager connectivityManager;
 
     // private NetThreadNuovo() {
@@ -85,7 +88,7 @@ public class NetThreadNuovo {
                 // } else {
                 //     SecondiDiAttesa = 5000;
                 // }
-                SecondiDiAttesa = 5000;
+                SecondiDiAttesa = 1000;
                 // StaGirando = true;
 
                 InternalThread();
@@ -143,33 +146,50 @@ public class NetThreadNuovo {
                                 }
                             } */
 
-                        if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() != 2 && VariabiliStaticheGlobali.getInstance().getTipoSegnale() != 4) {
-                            OkNet = haveConnectedWifi || haveConnectedMobile;
-                        } else {
-                            if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() == 4) {
-                                OkNet = true;
+                            switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
+                                case 1:
+                                    OkNet = haveConnectedWifi || haveConnectedMobile;
+                                    break;
+                                case 2:
+                                    if (quanti==-1) {
+                                        quanti=new Random().nextInt(50) + 10;
+                                    }
+                                    conta++;
+                                    if (conta>quanti) {
+                                        conta=0;
+                                        // if (RetePresente) {
+                                            RetePresente=!RetePresente;
+                                        // }
+                                        OkNet=RetePresente;
+                                    }
+                                    break;
+                                case 3:
+                                    OkNet = false;
+                                    break;
+                                case 4:
+                                    OkNet = true;
+                                    break;
                             }
-                        }
 
-                        if (!OkNet) {
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                            if (!OkNet) {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                                        }
                                     }
-                                }
-                            });
-                        } else {
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                                });
+                            } else {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                                        }
                                     }
-                                }
-                            });
-                        }
+                                });
+                            }
                         // } catch (Exception ignored) {
                         // }
                     }
