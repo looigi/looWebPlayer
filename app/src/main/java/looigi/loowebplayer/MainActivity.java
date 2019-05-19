@@ -1,5 +1,6 @@
 package looigi.loowebplayer;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import java.text.DecimalFormat;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.chiamate.CallReceiver;
 import looigi.loowebplayer.chiamate.PhoneUnlockedReceiver;
 import looigi.loowebplayer.cuffie.GestioneTastoCuffie;
 import looigi.loowebplayer.cuffie.GestoreCuffie;
@@ -39,6 +41,7 @@ import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
+import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Permessi;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private AudioManager mAudioManager;
     private ComponentName mReceiverComponent;
     private PhoneUnlockedReceiver receiver;
+    private IntentFilter filterHeadset;
     // private NetThreadNuovo ntn;
 
     @Override
@@ -166,6 +170,9 @@ public class MainActivity extends AppCompatActivity
         VariabiliStaticheGlobali.getInstance().setNtn(new NetThreadNuovo());
         VariabiliStaticheGlobali.getInstance().getNtn().start();
 
+        filterHeadset = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(mNoisyReceiver, filterHeadset);
+
         if (VariabiliStaticheGlobali.getInstance().getGiaEntrato()==null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
             Fragment fragment = new Splash();
             FragmentTransaction ft = vg.getFragmentActivityPrincipale().getSupportFragmentManager().beginTransaction();
@@ -219,6 +226,15 @@ public class MainActivity extends AppCompatActivity
         }
         return false;
     }
+
+    private BroadcastReceiver mNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                GestioneOggettiVideo.getInstance().PlayBrano(false);
+            }
+        }
+    };
 
     /* @Override
     public void onBackPressed() {
@@ -277,6 +293,7 @@ public class MainActivity extends AppCompatActivity
                         VariabiliStaticheGlobali.getInstance().getiServizio());
 
                 VariabiliStaticheGlobali.getInstance().getNtn().StopNetThread();
+                unregisterReceiver(mNoisyReceiver);
 
                 if (receiver != null) {
                     unregisterReceiver(receiver);

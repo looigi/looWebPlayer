@@ -19,6 +19,8 @@ public class Permessi {
                 Manifest.permission.BLUETOOTH,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WAKE_LOCK,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
                 // android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.MODIFY_AUDIO_SETTINGS,
         };
