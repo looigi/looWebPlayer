@@ -23,7 +23,7 @@ public class DBRemotoNuovo {
     private Runnable rAttendeRispostaCheckURL;
     private Handler hAttendeRispostaCheckURL;
     private int Secondi;
-    private int MaxAttesa = 60000;
+    private int MaxAttesa = 60;
 
     private String ToglieCaratteriStrani(String Cosa) {
 		if (Cosa!=null) {
