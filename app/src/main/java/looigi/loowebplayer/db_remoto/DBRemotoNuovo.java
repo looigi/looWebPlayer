@@ -20,8 +20,12 @@ public class DBRemotoNuovo {
 	private String ws = "looWPlayer.asmx/";
 	private String NS="http://looWebPlayer.org/";
 	private String SA="http://looWebPlayer.org/";
+    private Runnable rAttendeRispostaCheckURL;
+    private Handler hAttendeRispostaCheckURL;
+    private int Secondi;
+    private int MaxAttesa = 60000;
 
-	private String ToglieCaratteriStrani(String Cosa) {
+    private String ToglieCaratteriStrani(String Cosa) {
 		if (Cosa!=null) {
 			String sCosa = Cosa.replace("?", "***PI***");
 			sCosa = sCosa.replace("&", "***AND***");
@@ -73,10 +77,6 @@ public class DBRemotoNuovo {
 		return g;
 	}
 
-	private Runnable rAttendeRispostaCheckURL;
-	private Handler hAttendeRispostaCheckURL;
-	private int Secondi;
-
 	public void RitornaBrano(final Context context, final String Dire, final String Artista,
 													final String Album, final String Brano, final String Converte,
 													final String Qualita) {
@@ -87,7 +87,8 @@ public class DBRemotoNuovo {
 
 		Secondi=0;
 		final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-		final int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Controllo esecuzione remota");
+		final int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
+				"Controllo esecuzione remota");
 
 		hAttendeRispostaCheckURL = new Handler(Looper.getMainLooper());
 		hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL = new Runnable() {
@@ -103,6 +104,7 @@ public class DBRemotoNuovo {
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 							"CUF Controllo esecuzione. Cambio brano");
 					hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
+					rAttendeRispostaCheckURL=null;
 					hAttendeRispostaCheckURL = null;
 				} else {
 					hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
@@ -112,65 +114,84 @@ public class DBRemotoNuovo {
 							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 									"Stoppo CUF normale per OK");
 
-							cuf.StoppaEsecuzione(false);
+							cuf.StoppaEsecuzione(true);
 						}
 
-						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Attesa termine esecuzione: " + Integer.toString(Secondi));
+						Secondi++;
+						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+                                "Attesa termine esecuzione remota: " + Integer.toString(Secondi));
 
-						hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 1000);
+						if (Secondi>=MaxAttesa) {
+							rAttendeRispostaCheckURL=null;
+							hAttendeRispostaCheckURL=null;
+
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+									"Attesa termine esecuzione remota. Termine superato. Eseguo comunque la funzione");
+							EsegueChiamataMP3(context, cuf, Dire, Artista, Album, Brano, Qualita,
+									Converte, NumeroOperazione);
+						} else {
+							hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 1000);
+						}
 					} else {
-						if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("BRANO DIVERSO O SKIPPATO")) {
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-									"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
-							hAttendeRispostaCheckURL = null;
-							if (cuf!=null) {
-								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-										"Stoppo CUF normale per brano diverso o skippato");
+						rAttendeRispostaCheckURL=null;
+						hAttendeRispostaCheckURL=null;
 
-								cuf.StoppaEsecuzione(true);
-							}
-
-							String Urletto="RitornaBrano?";
-							Urletto+="NomeUtente=" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente();
-							Urletto+="&DirectBase=" + Dire;
-							Urletto+="&Artista=" + ToglieCaratteriStrani(Artista);
-							Urletto+="&Album=" + ToglieCaratteriStrani(Album);
-							Urletto+="&Brano=" + ToglieCaratteriStrani(Brano);
-							Urletto+="&Converte=" + Converte;
-							Urletto+="&Qualita=" + Qualita;
-
-							String messaggio="";
-
-							if (Converte.equals("S")) {
-								PronunciaFrasi pf = new PronunciaFrasi();
-								pf.PronunciaFrase("Compressione brano","ITALIANO");
-
-								messaggio="Compressione e download brano";
-							} else {
-								PronunciaFrasi pf = new PronunciaFrasi();
-								pf.PronunciaFrase("Download brano", "INGLESE");
-
-								messaggio="Download brano";
-							}
-
-							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, messaggio);
-
-							GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
-									VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
-									"RitornaBrano",
-									NS,
-									SA,
-									VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
-									NumeroOperazione,
-									false);
-							g.Esegue(context);
-
-							VariabiliStaticheNuove.getInstance().setGb(g);
-						}
+						EsegueChiamataMP3(context, cuf, Dire, Artista, Album, Brano, Qualita,
+								Converte, NumeroOperazione);
 					}
 				}
 			}
 		}, 1000);
+	}
+
+	private void EsegueChiamataMP3(Context context, CheckURLFile cuf, String Dire, String Artista, String Album, String Brano, String Qualita,
+								   String Converte, int NumeroOperazione) {
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
+		hAttendeRispostaCheckURL = null;
+		if (cuf!=null) {
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					"Stoppo CUF normale per brano diverso o skippato");
+
+			cuf.StoppaEsecuzione(true);
+		}
+
+		String Urletto="RitornaBrano?";
+		Urletto+="NomeUtente=" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente();
+		Urletto+="&DirectBase=" + Dire;
+		Urletto+="&Artista=" + ToglieCaratteriStrani(Artista);
+		Urletto+="&Album=" + ToglieCaratteriStrani(Album);
+		Urletto+="&Brano=" + ToglieCaratteriStrani(Brano);
+		Urletto+="&Converte=" + Converte;
+		Urletto+="&Qualita=" + Qualita;
+
+		String messaggio="";
+
+		if (Converte.equals("S")) {
+			PronunciaFrasi pf = new PronunciaFrasi();
+			pf.PronunciaFrase("Compressione brano","ITALIANO");
+
+			messaggio="Compressione e download brano";
+		} else {
+			PronunciaFrasi pf = new PronunciaFrasi();
+			pf.PronunciaFrase("Download brano", "INGLESE");
+
+			messaggio="Download brano";
+		}
+
+		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, messaggio);
+
+		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"RitornaBrano",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+				NumeroOperazione,
+				false);
+		g.Esegue(context);
+
+		VariabiliStaticheNuove.getInstance().setGb(g);
 	}
 
 	public GestioneWEBServiceSOAPNuovo RitornaBranoBackground(Context context, String Dire, String Artista, String Album,

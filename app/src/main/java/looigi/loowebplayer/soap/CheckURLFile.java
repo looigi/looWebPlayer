@@ -123,10 +123,14 @@ public class CheckURLFile {
             if (messErrore.equals("ESCI")) {
                 VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
             } else {
-                if (VariabiliStaticheGlobali.getInstance().isEsciDaCheckFile()) {
-                    VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
-                } else {
+                if (messErrore.equals("OK")) {
                     VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL(messErrore);
+                } else {
+                    if (VariabiliStaticheGlobali.getInstance().isEsciDaCheckFile()) {
+                        VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL(messErrore);
+                    }
                 }
             }
             // }
