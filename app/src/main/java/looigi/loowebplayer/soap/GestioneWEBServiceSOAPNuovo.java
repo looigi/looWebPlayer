@@ -155,7 +155,7 @@ public class GestioneWEBServiceSOAPNuovo {
 									boolean ApriDialog, String Urletto) {
 			this.NAMESPACE = NAMESPACE;
 			// this.METHOD_NAME = METHOD_NAME;
-			this.Parametri = Parametri;
+			// this.Parametri = Parametri;
 			this.Timeout = TimeOut;
 			this.SOAP_ACTION = SOAP_ACTION;
 			this.NumeroOperazione = NumeroOperazione;
@@ -173,7 +173,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			String Perc=Cosa;
 			int pos;
 			String Indirizzo="";
-			String Variabili[];
+			String[] Variabili;
 			String Funzione="";
 
 			pos=Perc.indexOf("?");
