@@ -27,36 +27,30 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class GestioneWEBServiceSOAPNuovo {
-	private String tOperazione;
-	private Boolean Errore;
-  	private String Urletto;
-  	private String messErrore="";
-	private Integer Timeout;
-	private ProgressDialog progressDialog;
-
-    private String NAMESPACE;
-    private String METHOD_NAME = "";
-    private String SOAP_ACTION;
-    private String sURL = "";
-    private String Parametri[];
-    private String result="";
-    private int NumeroOperazione;
-    private boolean ApriDialog;
-	private int NumeroBrano;
+	private static BackgroundAsyncTask bckAsyncTask;
+	private static String messErrore="";
 	private long lastTimePressed = 0;
 
-    private int QuantiTentativi;
-    private int Tentativo;
-	private Handler hAttesaNuovoTentativo;
-	private Runnable rAttesaNuovoTentativo;
-	private int SecondiAttesa;
-
-	private BackgroundAsyncTask bckAsyncTask;
+	private String NAMESPACE;
+	private int Timeout;
+	private String SOAP_ACTION;
+	private int NumeroOperazione;
+	private String tOperazione;
+	private boolean ApriDialog;
+	private String Urletto;
 
 	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
                                        String NS, String SA, int Timeout, int NumeroOperazione,
 									   boolean ApriDialog) {
-		Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+		this.NAMESPACE = NS;
+		this.Timeout = Timeout;
+		this.SOAP_ACTION = SA;
+		this.NumeroOperazione = NumeroOperazione;
+		this.tOperazione = TipoOperazione;
+		this.ApriDialog = ApriDialog;
+		this.Urletto = urletto;
+
+		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 		if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
 			try {
@@ -70,31 +64,23 @@ public class GestioneWEBServiceSOAPNuovo {
 		}
 		lastTimePressed = System.currentTimeMillis();
 
-		this.tOperazione=TipoOperazione;
-		this.ApriDialog=ApriDialog;
-		this.NAMESPACE=NS;
-		this.SOAP_ACTION=SA;
-		this.Timeout=Timeout;
-		this.NumeroOperazione = NumeroOperazione;
-		this.Urletto=urletto;
+		// this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+		// this.Tentativo = 0;
 
-		this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-		this.Tentativo = 0;
+		// this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-		this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-
-		if (!this.Urletto.isEmpty()) {
+		if (!urletto.isEmpty()) {
 			// String Chiave = this.Urletto + ";" + this.tOperazione;
 			// if (VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() ||
 			// 		(!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().isEmpty() &&
 			// 		!VariabiliStaticheGlobali.getInstance().getChiaveDLSoap().equals(Chiave))) {
 			// 	VariabiliStaticheGlobali.getInstance().setChiaveDLSoap(Chiave);
 
-				ApriDialog();
+			// 	ApriDialog();
 
-				SplittaCampiUrletto(Urletto);
+			// 	SplittaCampiUrletto(Urletto);
 
-				Errore = false;
+			//	Errore = false;
 			// } else {
 			// 	VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			// 	String funzione = "";
@@ -107,6 +93,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			// 			funzione,
 			// 			"Skippata operazione SOAP uguale: " + Chiave);
 			// }
+			Esegue();
 		} else {
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			String funzione = "";
@@ -121,105 +108,141 @@ public class GestioneWEBServiceSOAPNuovo {
 		}
 	}
 
-	private void SplittaCampiUrletto(String Cosa) {
-		String Perc=Cosa;
-		int pos;
-		String Indirizzo="";
-		String Variabili[];
-		String Funzione="";
-		
-		pos=Perc.indexOf("?");
-		if (pos>-1) {
-			Indirizzo=Perc.substring(0, pos);
-			for (int i=Indirizzo.length()-1;i>0;i--) {
-				if (Indirizzo.substring(i, i+1).equals("/")) {
-					Funzione=Indirizzo.substring(i+1, Indirizzo.length());
-					Indirizzo=Indirizzo.substring(0, i);
-					break;
-				}
-			}
-			sURL=Indirizzo;
-			METHOD_NAME = Funzione;
-			SOAP_ACTION = NAMESPACE + Funzione;
-			Perc=Perc.substring(pos+1, Perc.length());
-			pos=Perc.indexOf("&");
-			if (pos>-1) {
-				Variabili=Perc.split("&",-1);
-			} else {
-				Variabili=new String[1];
-				Variabili[0]=Perc;
-			}
-			Parametri=Variabili;
-		} else {
-			Indirizzo=Perc;
-			for (int i=Indirizzo.length()-1;i>0;i--) {
-				if (Indirizzo.substring(i, i+1).equals("/")) {
-					Funzione=Indirizzo.substring(i+1, Indirizzo.length());
-					Indirizzo=Indirizzo.substring(0, i);
-					break;
-				}
-			}
-			sURL=Indirizzo;
-			METHOD_NAME = Funzione;
-			SOAP_ACTION = NAMESPACE + Funzione;
-		}
-	}
-	
-	public void Esegue(final Context context) {
-		Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+	public void Esegue() {
+		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 		if (ceRete) {
-			bckAsyncTask = new BackgroundAsyncTask(context);
+			bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+					ApriDialog, Urletto);
 			bckAsyncTask.execute(Urletto);
-		}
-	}
-	
-	private void ChiudeDialog() {
-        if (ApriDialog) {
-			try {
-				progressDialog.dismiss();
-			} catch (Exception ignored) {
-			}
-		}
-		VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
-		VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
-	}
-	
-	private void ApriDialog() {
-		if (ApriDialog) {
-			try {
-				progressDialog = new ProgressDialog(VariabiliStaticheGlobali.getInstance().getContext());
-				progressDialog.setMessage("Attendere Prego\n"+tOperazione);
-				progressDialog.setCancelable(false);
-				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progressDialog.show();
-			} catch (Exception ignored) {
-
-			}
 		}
 	}
 
 	public void StoppaEsecuzione() {
 		bckAsyncTask.cancel(true);
 
-		ChiudeDialog();
+		bckAsyncTask.ChiudeDialog();
 
 		messErrore ="ESCI";
 
 		bckAsyncTask.ControllaFineCiclo();
 	}
 
-	private class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
-		private Context context;
-		
-	    private BackgroundAsyncTask(Context cxt) {
-	        context = cxt;
+	private static class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
+		private String NAMESPACE;
+		private String METHOD_NAME = "";
+		private String[] Parametri;
+		private Integer Timeout;
+		private String SOAP_ACTION;
+		private Boolean Errore;
+		private String result="";
+		private int NumeroBrano;
+		private int NumeroOperazione;
+		private String tOperazione;
+		private int QuantiTentativi;
+		private int Tentativo;
+		private Handler hAttesaNuovoTentativo;
+		private Runnable rAttesaNuovoTentativo;
+		private int SecondiAttesa;
+		private boolean ApriDialog;
+		private ProgressDialog progressDialog;
+		private String Urletto;
+
+		private BackgroundAsyncTask(String NAMESPACE, int TimeOut,
+									String SOAP_ACTION, int NumeroOperazione, String tOperazione,
+									boolean ApriDialog, String Urletto) {
+			this.NAMESPACE = NAMESPACE;
+			// this.METHOD_NAME = METHOD_NAME;
+			this.Parametri = Parametri;
+			this.Timeout = TimeOut;
+			this.SOAP_ACTION = SOAP_ACTION;
+			this.NumeroOperazione = NumeroOperazione;
+			this.tOperazione = tOperazione;
+			this.ApriDialog = ApriDialog;
+			this.Urletto = Urletto;
+
+			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+
+			this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+			this.Tentativo = 0;
 	    }
-		
+
+		private void SplittaCampiUrletto(String Cosa) {
+			String Perc=Cosa;
+			int pos;
+			String Indirizzo="";
+			String Variabili[];
+			String Funzione="";
+
+			pos=Perc.indexOf("?");
+			if (pos>-1) {
+				Indirizzo=Perc.substring(0, pos);
+				for (int i=Indirizzo.length()-1;i>0;i--) {
+					if (Indirizzo.substring(i, i+1).equals("/")) {
+						Funzione=Indirizzo.substring(i+1, Indirizzo.length());
+						Indirizzo=Indirizzo.substring(0, i);
+						break;
+					}
+				}
+				Urletto=Indirizzo;
+				METHOD_NAME = Funzione;
+				SOAP_ACTION = NAMESPACE + Funzione;
+				Perc=Perc.substring(pos+1, Perc.length());
+				pos=Perc.indexOf("&");
+				if (pos>-1) {
+					Variabili=Perc.split("&",-1);
+				} else {
+					Variabili=new String[1];
+					Variabili[0]=Perc;
+				}
+				Parametri=Variabili;
+			} else {
+				Indirizzo=Perc;
+				for (int i=Indirizzo.length()-1;i>0;i--) {
+					if (Indirizzo.substring(i, i+1).equals("/")) {
+						Funzione=Indirizzo.substring(i+1, Indirizzo.length());
+						Indirizzo=Indirizzo.substring(0, i);
+						break;
+					}
+				}
+				Urletto=Indirizzo;
+				METHOD_NAME = Funzione;
+				SOAP_ACTION = NAMESPACE + Funzione;
+			}
+		}
+
+		private void ChiudeDialog() {
+			if (ApriDialog) {
+				try {
+					progressDialog.dismiss();
+				} catch (Exception ignored) {
+				}
+			}
+			VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
+		}
+
+		private void ApriDialog() {
+			if (ApriDialog) {
+				try {
+					progressDialog = new ProgressDialog(VariabiliStaticheGlobali.getInstance().getContext());
+					progressDialog.setMessage("Attendere Prego\n"+tOperazione);
+					progressDialog.setCancelable(false);
+					progressDialog.setCanceledOnTouchOutside(false);
+					progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDialog.show();
+				} catch (Exception ignored) {
+
+				}
+			}
+		}
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+
+			ApriDialog();
+			SplittaCampiUrletto(this.Urletto);
 		}
 		
 		@Override
@@ -231,7 +254,10 @@ public class GestioneWEBServiceSOAPNuovo {
 
 	    @Override
 	    protected String doInBackground(String... sUrl) {
-			Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+			boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+			Errore = false;
+			result = "";
 
 			if (!ceRete) {
 				messErrore="ERROR: Assenza di rete";
@@ -267,7 +293,7 @@ public class GestioneWEBServiceSOAPNuovo {
                 soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(sURL, Timeout);
+                aht = new HttpTransportSE(Urletto, Timeout);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled()){
@@ -454,7 +480,7 @@ public class GestioneWEBServiceSOAPNuovo {
 						}
 					} else {
 						// Errore... Riprovo ad eseguire la funzione
-						Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+						boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 						if (Tentativo < QuantiTentativi &&
 								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
@@ -482,8 +508,13 @@ public class GestioneWEBServiceSOAPNuovo {
 									if (SecondiAttesa>=TempoAttesa) {
 										VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-										ApriDialog();
-										Esegue(context);
+										boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+										if (ceRete) {
+											bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+													ApriDialog, Urletto);
+											bckAsyncTask.execute(Urletto);
+										}
 
 										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
 										hAttesaNuovoTentativo = null;

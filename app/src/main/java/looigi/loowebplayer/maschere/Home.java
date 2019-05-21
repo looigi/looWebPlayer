@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
+import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;

@@ -80,7 +80,7 @@ public class GestioneListaBrani {
         } else {
             int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
             Brano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
-            // Boolean ceRete = NetThreadNuovo.getInstance().isOk();
+            // boolean ceRete = NetThreadNuovo.getInstance().isOk();
 
             // if (ceRete) {
                 switch (ModalitaAvanzamento) {
@@ -128,7 +128,7 @@ public class GestioneListaBrani {
         int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
         int Brano = -1;
 
-        Boolean Ok = false;
+        boolean Ok = false;
 
         if (ModalitaAvanzamento==RANDOM) {
             int n = Brano;
@@ -480,7 +480,7 @@ public class GestioneListaBrani {
     } */
 
     public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
-        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
         if (ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),
@@ -518,7 +518,7 @@ public class GestioneListaBrani {
     }
 
     public void ScaricaBranoSuccessivoInBackground() {
-        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
         if (ceRete) {
             final int NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);
             VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBranoProssimo);

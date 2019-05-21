@@ -22,21 +22,12 @@ import looigi.loowebplayer.utilities.Utility;
 public class DownloadTextFileNuovo {
     private String Path;
     private String PathNomeFile;
-    private String messErrore="";
+    private static String messErrore="";
     private int NumeroOperazione;
-    private DownloadTxtFile downloadFile;
+    private static DownloadTxtFile downloadFile;
     private String Url;
-    private boolean ApriDialog;
-    private ProgressDialog progressDialog;
     private String tOperazione;
-    private int NumeroBrano;
     private long lastTimePressed = 0;
-
-    private int QuantiTentativi;
-    private int Tentativo;
-    private Handler hAttesaNuovoTentativo;
-    private Runnable rAttesaNuovoTentativo;
-    private int SecondiAttesa;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -55,7 +46,7 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -66,23 +57,19 @@ public class DownloadTextFileNuovo {
         lastTimePressed = System.currentTimeMillis();
 
         this.Url=sUrl;
-        this.ApriDialog=ApriDialog;
+        // this.ApriDialog=ApriDialog;
         this.NumeroOperazione=NOperazione;
 
-        this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-        this.Tentativo = 0;
 
-        this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-
-        String Chiave = this.Url;
+        // String Chiave = this.Url;
         // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
         //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
         //         !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
         //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
-            ApriDialog();
+            // ApriDialog();
 
-            downloadFile = new DownloadTxtFile();
+            downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
             downloadFile.execute(Url);
         // } else {
         //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
@@ -91,46 +78,81 @@ public class DownloadTextFileNuovo {
         // }
     }
 
-    private void ChiudeDialog() {
-        if (ApriDialog) {
-            try {
-                progressDialog.dismiss();
-            } catch (Exception ignored) {
-            }
-        }
-        VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
-        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
-    }
-
-    private void ApriDialog() {
-        if (ApriDialog) {
-            try {
-                progressDialog = new ProgressDialog(VariabiliStaticheGlobali.getInstance().getContext());
-                progressDialog.setMessage("Attendere Prego\n"+tOperazione);
-                progressDialog.setCancelable(false);
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
-            } catch (Exception ignored) {
-
-            }
-        }
-    }
-
     public void StoppaEsecuzione() {
         if (downloadFile != null) {
             downloadFile.cancel(true);
         }
 
-        ChiudeDialog();
+        downloadFile.ChiudeDialog();
     }
 
-    private class DownloadTxtFile extends AsyncTask<String, Integer, String> {
+    private static class DownloadTxtFile extends AsyncTask<String, Integer, String> {
+        private String Path;
+        private String PathNomeFile;
+        private int NumeroBrano;
+        private int NumeroOperazione;
+        private int QuantiTentativi;
+        private int Tentativo;
+        private Handler hAttesaNuovoTentativo;
+        private Runnable rAttesaNuovoTentativo;
+        private int SecondiAttesa;
+        private boolean ApriDialog;
+        private ProgressDialog progressDialog;
+        private String tOperazione;
+        private String Url;
+
+        public DownloadTxtFile(int NumeroOperazione, String Path, String PathNomeFile, boolean ApriDialog, String tOperazione, String Url) {
+            this.NumeroOperazione = NumeroOperazione;
+            this.Path = Path;
+            this.PathNomeFile = PathNomeFile;
+            this.ApriDialog = ApriDialog;
+            this.tOperazione = tOperazione;
+            this.Url = Url;
+
+            this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+
+            this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            this.Tentativo = 0;
+        }
+
+        private void ChiudeDialog() {
+            if (ApriDialog) {
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception ignored) {
+                }
+            }
+            VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
+        }
+
+        private void ApriDialog() {
+            if (ApriDialog) {
+                try {
+                    progressDialog = new ProgressDialog(VariabiliStaticheGlobali.getInstance().getContext());
+                    progressDialog.setMessage("Attendere Prego\n"+tOperazione);
+                    progressDialog.setCancelable(false);
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.show();
+                } catch (Exception ignored) {
+
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            ApriDialog();
+        }
+
         @Override
         protected String doInBackground(String... sUrl) {
             messErrore = "";
 
-            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
             if (!ceRete) {
                 messErrore="ERROR: Assenza di rete";
@@ -246,7 +268,7 @@ public class DownloadTextFileNuovo {
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi &&
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
@@ -275,7 +297,7 @@ public class DownloadTextFileNuovo {
 
                                         ApriDialog();
 
-                                        downloadFile = new DownloadTxtFile();
+                                        downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
                                         downloadFile.execute(Url);
 
                                         hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);

@@ -12,7 +12,7 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class CheckURLFile {
     private String Path;
-    private String messErrore = "";
+    private static String messErrore = "";
     private CheckFile downloadFile;
     private String Url;
     private int NumeroBrano;
@@ -31,7 +31,7 @@ public class CheckURLFile {
         if (System.currentTimeMillis() - lastTimePressed < 1000) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce");
-            VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
+            VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
             return;
         }
         lastTimePressed = System.currentTimeMillis();
@@ -71,14 +71,15 @@ public class CheckURLFile {
         downloadFile.ControllaFineCiclo();
     }
 
-    private class CheckFile extends AsyncTask<String, Integer, String> {
+    private static class CheckFile extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... sUrl) {
-            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
             if (!ceRete) {
                 messErrore="ERROR: Assenza di rete";
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Check File error; Assenza di rete");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Check File error; Assenza di rete");
                 return null;
             }
 
@@ -99,7 +100,8 @@ public class CheckURLFile {
                 }
             } catch (Exception e) {
                 messErrore="ERROR: "+Utility.getInstance().PrendeErroreDaException(e);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Check File error");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Check File error");
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             }
 
@@ -121,13 +123,13 @@ public class CheckURLFile {
             // }
 
             if (messErrore.equals("ESCI")) {
-                VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
+                VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
             } else {
                 if (messErrore.equals("OK")) {
                     VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL(messErrore);
                 } else {
                     if (VariabiliStaticheGlobali.getInstance().isEsciDaCheckFile()) {
-                        VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("BRANO DIVERSO O SKIPPATO");
+                        VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
                     } else {
                         VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL(messErrore);
                     }

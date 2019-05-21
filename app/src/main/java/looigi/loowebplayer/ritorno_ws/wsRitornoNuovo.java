@@ -458,7 +458,7 @@ public class wsRitornoNuovo {
                                         // e.EsegueChiamataMP3(NBrano, Brano, "Download MP3", VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
                                         //         new Date(System.currentTimeMillis()), true, nn);
                                     } else {
-                                        if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("BRANO DIVERSO O SKIPPATO")) {
+                                        if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("ESECUZIONE TERMINATA CON ESITO NEGATIVO")) {
                                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "Download Brano: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
@@ -468,7 +468,7 @@ public class wsRitornoNuovo {
                                             if (cuf != null) {
                                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                                         }.getClass().getEnclosingMethod().getName(),
-                                                        "Stoppo CUF background per brano diverso o skippato");
+                                                        "Stoppo CUF background per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
 
                                                 cuf.StoppaEsecuzione();
                                             }

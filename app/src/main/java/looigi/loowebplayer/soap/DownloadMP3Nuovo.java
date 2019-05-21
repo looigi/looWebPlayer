@@ -34,25 +34,25 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class DownloadMP3Nuovo {
     // private static ProgressDialog progressDialog;
-    private String Path;
-    private String NomeBrano;
-    private String messErrore="";
-    private Boolean Compresso=false;
-    private Boolean Automatico=false;
-    private int sizeMP3=0;
-    private DownloadFileMP3 downloadFile;
-    private int NumeroBrano;
-    private int NumeroOperazione;
-    private Runnable runRiga;
-    private Handler hSelezionaRiga;
-    private String Url;
+    private static String Path;
+    private static String NomeBrano;
+    private static String messErrore="";
+    private static Boolean Compresso=false;
+    private static Boolean Automatico=false;
+    private static int sizeMP3=0;
+    private static DownloadFileMP3 downloadFile;
+    private static int NumeroBrano;
+    private static int NumeroOperazione;
+    private static Runnable runRiga;
+    private static Handler hSelezionaRiga;
+    private static String Url;
     private long lastTimePressed = 0;
 
-    private int QuantiTentativi;
-    private int Tentativo;
-    private Handler hAttesaNuovoTentativo;
-    private Runnable rAttesaNuovoTentativo;
-    private int SecondiAttesa;
+    private static int QuantiTentativi;
+    private static int Tentativo;
+    private static Handler hAttesaNuovoTentativo;
+    private static Runnable rAttesaNuovoTentativo;
+    private static int SecondiAttesa;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -79,7 +79,7 @@ public class DownloadMP3Nuovo {
     }
 
     public void startDownload(String sUrl, int NO) {
-        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -88,18 +88,19 @@ public class DownloadMP3Nuovo {
             return;
         }
         lastTimePressed = System.currentTimeMillis();
+        VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(true);
 
-        this.Url=sUrl;
-        this.NumeroOperazione = NO;
+        Url=sUrl;
+        NumeroOperazione = NO;
 
         VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
         VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
         VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
 
-        this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-        this.Tentativo = 0;
+        QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+        Tentativo = 0;
 
-        String Chiave = this.Url;
+        // String Chiave = this.Url;
         // if (VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() ||
         //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().isEmpty() &&
         //         !VariabiliStaticheGlobali.getInstance().getChiaveDLMP3().equals(Chiave))) {
@@ -117,7 +118,7 @@ public class DownloadMP3Nuovo {
         // }
     }
 
-    private void ChiudeDialog() {
+    private static void ChiudeDialog() {
         // try {
         //     progressDialog.dismiss();
         // } catch (Exception ignored) {
@@ -125,10 +126,10 @@ public class DownloadMP3Nuovo {
 
         VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
         // VariabiliStaticheNuove.getInstance().setD2(null);
-        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
     }
 
-    private void ApriDialog() {
+    private static void ApriDialog() {
     }
 
     public void StoppaEsecuzione() {
@@ -142,30 +143,18 @@ public class DownloadMP3Nuovo {
         }
     }
 
-    private class DownloadFileMP3 extends AsyncTask<String, Integer, String> {
+    private static class DownloadFileMP3 extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... sUrl) {
-            // RoutineDiDownload(sUrl[0]);
             messErrore="";
 
-            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
             if (!ceRete) {
                 messErrore="ERROR: Assenza di rete";
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "MP3: Assenza di rete");
                 return null;
             }
-
-            /* hSelezionaRiga = new Handler(Looper.getMainLooper());
-            hSelezionaRiga.postDelayed(runRiga=new Runnable() {
-                @Override
-                public void run() {
-                    VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
-                    VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
-                    VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
-                    hSelezionaRiga.removeCallbacks(runRiga);
-                }
-            }, 50); */
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
                     new Object(){}.getClass().getEnclosingMethod().getName(),
@@ -249,6 +238,8 @@ public class DownloadMP3Nuovo {
                                     if (isCancelled()) {
                                         break;
                                     }
+
+                                    Thread.yield();
                                 }
                                 fos.flush();
                                 fos.close();
@@ -335,14 +326,7 @@ public class DownloadMP3Nuovo {
         }
 
         public void ControllaFineCiclo() {
-            // VariabiliStaticheGlobali.getInstance().setChiaveDLMP3("");
-
-            // if (VariabiliStaticheNuove.getInstance().getD()!=null) {
-            //     VariabiliStaticheNuove.getInstance().setD(null);
-            // }
-            // if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
-            //     VariabiliStaticheNuove.getInstance().setD2(null);
-            // }
+            VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
             if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                 NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
@@ -391,7 +375,7 @@ public class DownloadMP3Nuovo {
                         }
                     } else {
                         // Errore... Riprovo ad eseguire la funzione
-                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi && messErrore.contains("ERROR:") &&
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
@@ -442,6 +426,13 @@ public class DownloadMP3Nuovo {
                                 // NetThread.getInstance().setCaroselloBloccato(false);
                                 // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
 
+                                File ff = new File(NomeBrano);
+                                try {
+                                    ff.delete();
+                                } catch (Exception ignored) {
+
+                                }
+
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                 }.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato");
                                 int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
@@ -475,7 +466,7 @@ public class DownloadMP3Nuovo {
         }
     }
 
-    private void PrendeImmagineDaMP3(String mPath) {
+    private static void PrendeImmagineDaMP3(String mPath) {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(mPath);

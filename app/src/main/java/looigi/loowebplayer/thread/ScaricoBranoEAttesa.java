@@ -158,11 +158,11 @@ public class ScaricoBranoEAttesa {
                                 hSelezionaRiga.removeCallbacks(runRiga);
                                 hSelezionaRiga = null;
 
-                                ScaricaBrano(NumeroBrano, Brano);
+                                ScaricaBrano(NumeroBrano, Brano, nn);
 
                                 VariabiliStaticheGlobali.getInstance().setSbea(null);
                             } else {
-                                if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("BRANO DIVERSO O SKIPPATO")) {
+                                if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("ESECUZIONE TERMINATA CON ESITO NEGATIVO")) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                             "Download Brano" +Altro+": " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
 
@@ -171,7 +171,7 @@ public class ScaricoBranoEAttesa {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nn, true);
                                     if (cuf!=null) {
                                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                                                "Stoppo CUF normale per brano diverso o skippato");
+                                                "Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
 
                                         cuf.StoppaEsecuzione(true);
                                     }
@@ -227,7 +227,7 @@ public class ScaricoBranoEAttesa {
 
                                         GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
 
-                                        ScaricaBrano(NumeroBrano, Brano);
+                                        ScaricaBrano(NumeroBrano, Brano, nn);
 
                                         VariabiliStaticheGlobali.getInstance().setSbea(null);
                                     }
@@ -241,13 +241,13 @@ public class ScaricoBranoEAttesa {
         }, VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
     }
 
-    private void ScaricaBrano(int NumeroBrano, String[] Brano) {
+    private void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione) {
         PronunciaFrasi pf = new PronunciaFrasi();
         pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
 
         int campi = Brano.length - 1;
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
-        Boolean compresso = false;
+        boolean compresso = false;
         if (Brano[campi].toUpperCase().contains("COMPRESSI")) {
             compresso = true;
             url += "Compressi/";
@@ -290,6 +290,6 @@ public class ScaricoBranoEAttesa {
         }
         d.setNumeroBrano(NumeroBrano);
         d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-        d.startDownload(url, nn);
+        d.startDownload(url, NumeroOperazione);
     }
 }

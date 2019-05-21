@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaOperazioneWEB;
@@ -74,7 +76,7 @@ public class VariabiliStaticheHome {
     // protected PowerManager.WakeLock mWakeLock;
     private List<StrutturaImmagini> Imms = new ArrayList<>();
     private RelativeLayout layOperazionWEB;
-    private List<StrutturaOperazioneWEB> OperazioniWeb=new ArrayList<>();
+    private final List<StrutturaOperazioneWEB> OperazioniWeb = Collections.synchronizedList(new ArrayList<StrutturaOperazioneWEB>());
     private ProgressBar pMP3;
     private GestioneMembri gm;
     private GifImageView gifView;
@@ -205,15 +207,15 @@ public class VariabiliStaticheHome {
     }
 
     private int MaxNumeroOpWEB() {
-        int i=0;
+        String s = "";
 
-        for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-            if (ii.getNumeroOperazione()>i) {
-                i=ii.getNumeroOperazione();
-            }
+        for (int i = 0; i<7; i++) {
+            Random x = new Random();
+            int xx = x.nextInt(9);
+            s+=Integer.toString(xx);
         }
 
-        return i+1;
+        return Integer.parseInt(s);
     }
 
     public void ScriveOperazioniWEB() {
@@ -222,13 +224,14 @@ public class VariabiliStaticheHome {
         for (StrutturaOperazioneWEB ii : OperazioniWeb) {
             tt+=ii.getOperazione()+"\n";
         }
-        // layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
 
         String t2=tt;
 
         if (layOperazionWEB!=null) {
             if (t2.isEmpty()) {
-                layOperazionWEB.setVisibility(LinearLayout.GONE);
+                if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoMP3()) {
+                    layOperazionWEB.setVisibility(LinearLayout.GONE);
+                }
             } else {
                 t2=t2.substring(0, t2.length()-1);
                 layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
@@ -237,48 +240,35 @@ public class VariabiliStaticheHome {
 
         if (txtOperazioneWEB!=null)
             txtOperazioneWEB.setText(t2);
-
-        /* final String t = tt;
-
-        hEliminaBarra = new Handler(Looper.getMainLooper());
-        hEliminaBarra.postDelayed(runEliminaBarra = new Runnable() {
-            @Override
-            public void run() {
-                String t2=t;
-
-                if (layOperazionWEB!=null) {
-                    if (t2.isEmpty()) {
-                        layOperazionWEB.setVisibility(LinearLayout.GONE);
-                    } else {
-                        t2=t2.substring(0, t2.length()-1);
-                        layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
-                    }
-                }
-
-                txtOperazioneWEB.setText(t2);
-
-                hEliminaBarra.removeCallbacks(runEliminaBarra);
-            }
-        }, 50); */
-
     }
 
     private void EliminaRiga(int Numero) {
         int i = 0;
-        int q = 0;
+        // int q = 0;
+
         for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-            if (ii.getNumeroOperazione()==Numero) {
+            if (ii.getNumeroOperazione() == Numero) {
                 //if (!ii.getOperazione().toUpperCase().contains("COMPRESS")) {
-                    OperazioniWeb.remove(i);
-                    q++;
-                    break;
+                OperazioniWeb.remove(i);
+                // q++;
+                break;
                 //}
+            } else {
+                long diff = System.currentTimeMillis() - ii.getOraIniziale();
+                if (diff > 120000) {
+                    OperazioniWeb.remove(i);
+                    // q++;
+                    break;
+                }
             }
             i++;
         }
-        if (i==q) {
-            if (this.layOperazionWEB!=null) {
-                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+
+        if (OperazioniWeb.size() == 0) {
+            if (this.layOperazionWEB != null) {
+                if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoMP3()) {
+                    this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+                }
             }
         }
 
@@ -301,16 +291,25 @@ public class VariabiliStaticheHome {
         }
     }
 
-    public int AggiungeOperazioneWEB(int NumeroOperazione, Boolean Errore, String Operazione) {
+    synchronized public int AggiungeOperazioneWEB(int NumeroOperazione, Boolean Errore, String Operazione) {
         if (Operazione==null) {
             return -1;
         }
 
-        if (Operazione!=null && Operazione.trim().isEmpty()) {
+        if (Operazione.trim().isEmpty()) {
             return -1;
         }
 
         int n = 0;
+
+        Runnable runEliminaBarra;
+        Handler hEliminaBarra = new Handler(Looper.getMainLooper());
+
+        hEliminaBarra.postDelayed(runEliminaBarra = new Runnable() {
+            @Override
+            public void run() {
+            }
+        }, 3000);
 
         if (NumeroOperazione==-1) {
             n = MaxNumeroOpWEB();
@@ -318,6 +317,7 @@ public class VariabiliStaticheHome {
             StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
             s.setNumeroOperazione(n);
             s.setOperazione(Operazione.trim());
+            s.setOraIniziale(System.currentTimeMillis());
             OperazioniWeb.add(s);
 
             if (this.layOperazionWEB != null) {

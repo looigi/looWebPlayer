@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import java.io.File;
+
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 
@@ -59,6 +61,13 @@ public class GestioneSuonaBrano {
                         "Problemi nel caricamento del brano");
                 VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
                 GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
+
+                File ff = new File(Mp3);
+                try {
+                    ff.delete();
+                } catch (Exception ignored) {
+
+                }
             }
             // } else {
             //     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
@@ -76,32 +85,11 @@ public class GestioneSuonaBrano {
             vh.getSeekBar1().setProgress(0);
             VariabiliStaticheGlobali.getInstance().setMusicaTerminata(false);
 
-            // int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-            // StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-            // String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-            // if (VariabiliStaticheHome.getInstance().getImms().size() == 0) {
-            //     VariabiliStaticheHome.getInstance().setImms(GestioneImmagini.getInstance().RitornaImmaginiArtista("", Artista, -1, false));
-            // }
-            // if (VariabiliStaticheHome.getInstance().getImms().size() > 0) {
-            //     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-            //         GestioneImmagini.getInstance().CreaCarosello();
-            //     }
-            // } else {
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Nessuna immagine per far partire il carosello");
-            // }
-
-            // VariabiliStaticheGlobali.getInstance().setNonFermareDownload(false);
             GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
             VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(false);
 
             vh.getTxtTitoloBackground().setText("");
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);
-            // GestioneImmagini.getInstance().CreaCarosello(VariabiliStaticheHome.getInstance().getImms());
-            // VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata(null);
-
-            // if (VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
-            //     VariabiliStaticheGlobali.getInstance().setStaScaricandoBrano(false);
-            // }
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");

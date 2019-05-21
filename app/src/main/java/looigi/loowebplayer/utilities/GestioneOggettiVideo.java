@@ -25,9 +25,6 @@ public class GestioneOggettiVideo {
         return instance;
     }
 
-    // private Runnable runRiga;
-    // private Handler hSelezionaRiga;
-
     public void ControllaAvantiBrano(int NumeroBrano, Boolean VisualizzaMessaggio) {
         if (NumeroBrano>-1) {
             if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
@@ -52,51 +49,8 @@ public class GestioneOggettiVideo {
 
     public void AvantiBrano() {
         if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-            /* GestioneImmagini.getInstance().StoppaTimerCarosello();
-
-            if (VariabiliStaticheGlobali.getInstance().getStaSuonando() &&
-                    !VariabiliStaticheGlobali.getInstance().getMusicaTerminata() &&
-                    !VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                    !VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
-
-                // GestioneListaBrani.getInstance().setStavaSuonando(true);
-                // VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
-                VariabiliStaticheHome.getInstance().getMediaPlayer().pause();
-                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
-                VariabiliStaticheGlobali.getInstance().setStaAttendendoConMusichetta(true);
-                int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBrano(true, "AVANTI BRANO CON ATTESA");
-                ControllaAvantiBrano(NumeroBrano, false);
-            } else {
-                if (VariabiliStaticheGlobali.getInstance().getStaSuonando() &&
-                        !VariabiliStaticheGlobali.getInstance().getMusicaTerminata() &&
-                        !VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                        VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
-
-                    // GestioneListaBrani.getInstance().setStavaSuonando(true);
-                    VariabiliStaticheGlobali.getInstance().setStaScaricandoBrano(false);
-                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(-1);
-
-                    hSelezionaRiga = new Handler();
-                    hSelezionaRiga.postDelayed(runRiga = new Runnable() {
-                        @Override
-                        public void run() {
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Avanti brano con skip downlaod precedente");
-
-                            VariabiliStaticheGlobali.getInstance().setEcw(null);
-                            int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBrano(true, "AVANTI BRANO");
-                            ControllaAvantiBrano(NumeroBrano, false);
-                        }
-                    }, 1000);
-                } else {
-                    AccendeSpegneTastiAvantiIndietro(false);
-                    // VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
-                    VariabiliStaticheHome.getInstance().getMediaPlayer().pause();
-                    int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBrano(true, "AVANTI BRANO");
-                    ControllaAvantiBrano(NumeroBrano, false);
-                }
-            } */
-
             int NumeroBrano;
+
             if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete()>-1) {
                 NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
                 VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);

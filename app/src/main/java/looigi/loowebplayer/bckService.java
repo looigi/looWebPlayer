@@ -20,53 +20,62 @@ public class bckService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Entro nell'app");
-        Boolean CeUtente=false;
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Entro nell'app");
+        boolean CeUtente=false;
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ottiene utente attuale");
-        DBLocale db = new DBLocale(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
-        Cursor c = db.ottieniTuttiUtenti();
-        if (c.moveToFirst()) {
-            do {
-                StrutturaUtenti s = new StrutturaUtenti();
-                s.setIdUtente(c.getInt(0));
-                s.setUtente(c.getString(1));
-                s.setPassword(c.getString(2));
-                if (c.getString(3).toUpperCase().trim().equals("S")) {
-                    s.setAmministratore(true);
-                } else {
-                    s.setAmministratore(false);
-                }
-                s.setCartellaBase(c.getString(4));
-                VariabiliStaticheGlobali.getInstance().setUtente(s);
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(c.getInt(5));
+        if (VariabiliStaticheGlobali.getInstance().getContext()!=null) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Ottiene utente attuale");
+            DBLocale db = new DBLocale(VariabiliStaticheGlobali.getInstance().getContext());
+            db.open();
+            Cursor c = db.ottieniTuttiUtenti();
+            if (c.moveToFirst()) {
+                do {
+                    StrutturaUtenti s = new StrutturaUtenti();
+                    s.setIdUtente(c.getInt(0));
+                    s.setUtente(c.getString(1));
+                    s.setPassword(c.getString(2));
+                    if (c.getString(3).toUpperCase().trim().equals("S")) {
+                        s.setAmministratore(true);
+                    } else {
+                        s.setAmministratore(false);
+                    }
+                    s.setCartellaBase(c.getString(4));
+                    VariabiliStaticheGlobali.getInstance().setUtente(s);
+                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(c.getInt(5));
 
-                int modi = c.getInt(6);
-                switch(modi) {
-                    case 0:
-                        GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
-                        break;
-                    case 1:
-                        GestioneListaBrani.getInstance().setModalitaAvanzamento(SEQUENZIALE);
-                        break;
-                }
+                    int modi = c.getInt(6);
+                    switch (modi) {
+                        case 0:
+                            GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
+                            break;
+                        case 1:
+                            GestioneListaBrani.getInstance().setModalitaAvanzamento(SEQUENZIALE);
+                            break;
+                    }
 
-                CeUtente=true;
-            } while (c.moveToNext());
-        }
-        if (c!=null) {
-            c.close();
-        }
-        db.close();
+                    CeUtente = true;
+                } while (c.moveToNext());
+            }
+            if (c != null) {
+                c.close();
+            }
+            db.close();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Vado in Home");
-        VariabiliStaticheGlobali.getInstance().getContextPrincipale().getWindow().getDecorView().setBackgroundColor(Color.BLACK);
-        VariabiliStaticheGlobali.getInstance().getAppBar().setVisibility(LinearLayout.VISIBLE);
-        if (CeUtente) {
-            Utility.getInstance().CambiaMaschera(R.id.home);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "Vado in Home");
+            VariabiliStaticheGlobali.getInstance().getContextPrincipale().getWindow().getDecorView().setBackgroundColor(Color.BLACK);
+            VariabiliStaticheGlobali.getInstance().getAppBar().setVisibility(LinearLayout.VISIBLE);
+            if (CeUtente) {
+                Utility.getInstance().CambiaMaschera(R.id.home);
+            } else {
+                Utility.getInstance().CambiaMaschera(R.id.utenza);
+            }
         } else {
-            Utility.getInstance().CambiaMaschera(R.id.utenza);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Context non valido, skippo entrata nel service");
         }
 
         return Service.START_STICKY;

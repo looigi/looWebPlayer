@@ -83,7 +83,11 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(receiver, fRecv);
 
         if (VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie() != null) {
-            unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
+            try {
+                unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
+            } catch (Exception ignored) {
+
+            }
             VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie(null);
         }
         VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie (new GestoreCuffie());

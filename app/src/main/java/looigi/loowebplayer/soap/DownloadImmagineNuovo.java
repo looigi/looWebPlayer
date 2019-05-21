@@ -27,31 +27,20 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class DownloadImmagineNuovo {
     private String Path;
-    private int NumeroBrano;
-    private String messErrore="";
-    private Bitmap bitmap;
+    private int NumBrano;
     private Boolean inSfuma=false;
     private Boolean CaricaImmagineBrano=false;
-    private DownloadImageFile downloadFile;
-    private int NumeroOperazione;
+    private static DownloadImageFile downloadFile;
     private String Url;
-    private Integer TIMEOUT;
-    private Runnable runAttendeSfumatura;
-    private Handler hAttendeSfumatura;
     private long lastTimePressed = 0;
-
-    private int QuantiTentativi;
-    private int Tentativo;
-    private Handler hAttesaNuovoTentativo;
-    private Runnable rAttesaNuovoTentativo;
-    private int SecondiAttesa;
+    private int NumOperazione;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
     }
 
     public void setNumeroOperazione(int n) {
-        NumeroOperazione = n;
+        NumOperazione = n;
     }
 
     public void setPath(String path) {
@@ -59,7 +48,7 @@ public class DownloadImmagineNuovo {
     }
 
     public void setNumeroBrano(int numeroBrano) {
-        NumeroBrano = numeroBrano;
+        NumBrano = numeroBrano;
     }
 
     public void setInSfuma(Boolean i) {
@@ -71,36 +60,36 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
             return;
         }
         lastTimePressed = System.currentTimeMillis();
 
         this.Url=sUrl;
-        this.TIMEOUT = TO;
+        // this.TIMEOUT = TO;
 
-        this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-        this.Tentativo = 0;
+        // this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+        // this.Tentativo = 0;
 
-        String Chiave = this.Url+";"+sOperazione;
+        // String Chiave = this.Url+";"+sOperazione;
         // if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
         //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
         //         !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
         //     VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
-            ApriDialog();
+        //    ApriDialog();
 
             String sUrl2 = Url.substring(9, Url.length());
             Url = Url.substring(0, 9);
             sUrl2 = sUrl2.replace("//", "/");
             Url += sUrl2;
 
-            downloadFile = new DownloadImageFile();
+            downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url);
             downloadFile.execute(Url);
         // } else {
         //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
@@ -109,22 +98,8 @@ public class DownloadImmagineNuovo {
         // }
     }
 
-    private void ChiudeDialog() {
-        if (!messErrore.isEmpty()) {
-            // if (inSfuma) {
-                // GestioneImmagini.getInstance().ToglieAlpha();
-            // }
-        }
-
-        VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
-        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
-    }
-
-    private void ApriDialog() {
-    }
-
     public void StoppaEsecuzione() {
-        ChiudeDialog();
+        downloadFile.ChiudeDialog();
 
         if (downloadFile != null) {
             downloadFile.cancel(true);
@@ -133,12 +108,56 @@ public class DownloadImmagineNuovo {
         }
     }
 
-    public class DownloadImageFile extends AsyncTask<String, Integer, String> {
+    private static class DownloadImageFile extends AsyncTask<String, Integer, String> {
+        private String messErrore="";
+        private Bitmap bitmap;
+        private Integer TIMEOUT;
+        private int NumeroOperazione;
+        private int NumeroBrano;
+        private int QuantiTentativi;
+        private int Tentativo;
+        private Handler hAttesaNuovoTentativo;
+        private Runnable rAttesaNuovoTentativo;
+        private int SecondiAttesa;
+        private boolean inSfuma=false;
+        private String Path;
+        private Runnable runAttendeSfumatura;
+        private Handler hAttendeSfumatura;
+        private String Url;
+
+        public DownloadImageFile(int NO, int NB, int TIMEOUT, boolean IS, String P, String U) {
+            this.TIMEOUT = TIMEOUT;
+            this.NumeroOperazione = NO;
+            this.NumeroBrano = NB;
+            this.inSfuma = IS;
+            this.Path = P;
+            this.Url = U;
+
+            this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            this.Tentativo = 0;
+
+            ApriDialog();
+        }
+
+        public void ChiudeDialog() {
+            // if (!messErrore.isEmpty()) {
+            // if (inSfuma) {
+            // GestioneImmagini.getInstance().ToglieAlpha();
+            // }
+            // }
+
+            VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
+        }
+
+        private void ApriDialog() {
+        }
+
         @Override
         protected String doInBackground(String... sUrl) {
             messErrore="";
 
-            Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
             if (!ceRete) {
                 messErrore="ERROR: Assenza di rete";
@@ -189,7 +208,7 @@ public class DownloadImmagineNuovo {
             ControllaFineCiclo();
         }
 
-        public void ControllaFineCiclo() {
+        private void ControllaFineCiclo() {
             // VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine("");
 
             if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
@@ -225,7 +244,7 @@ public class DownloadImmagineNuovo {
                 } else {
                     if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        Boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi &&
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
@@ -252,9 +271,9 @@ public class DownloadImmagineNuovo {
                                     if (SecondiAttesa>=TempoAttesa) {
                                         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-                                        ApriDialog();
+                                        // ApriDialog();
 
-                                        downloadFile = new DownloadImageFile();
+                                        downloadFile = new DownloadImageFile(NumeroOperazione, NumeroBrano, TIMEOUT, inSfuma, Path, Url);
                                         downloadFile.execute(Url);
 
                                         hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);

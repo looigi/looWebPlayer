@@ -55,7 +55,7 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
 				NumeroOperazione,
 				true);
-		g.Esegue(context);
+		g.Esegue();
 	}
 
 	public GestioneWEBServiceSOAPNuovo RitornaDettaglioBrano(Context context, String Artista, String Album, String Brano, int NumeroOperazione) {
@@ -72,7 +72,7 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
 				NumeroOperazione,
 				false);
-		g.Esegue(context);
+		g.Esegue();
 
 		return g;
 	}
@@ -125,6 +125,7 @@ public class DBRemotoNuovo {
 							rAttendeRispostaCheckURL=null;
 							hAttendeRispostaCheckURL=null;
 
+							VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("File remoto rilevato ma proseguo");
 							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 									"Attesa termine esecuzione remota. Termine superato. Eseguo comunque la funzione");
 							EsegueChiamataMP3(context, cuf, Dire, Artista, Album, Brano, Qualita,
@@ -136,6 +137,7 @@ public class DBRemotoNuovo {
 						rAttendeRispostaCheckURL=null;
 						hAttendeRispostaCheckURL=null;
 
+						VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("File remoto non rilevato");
 						EsegueChiamataMP3(context, cuf, Dire, Artista, Album, Brano, Qualita,
 								Converte, NumeroOperazione);
 					}
@@ -148,10 +150,12 @@ public class DBRemotoNuovo {
 								   String Converte, int NumeroOperazione) {
 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 				"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
+		VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
+
 		hAttendeRispostaCheckURL = null;
 		if (cuf!=null) {
 			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-					"Stoppo CUF normale per brano diverso o skippato");
+					"Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
 
 			cuf.StoppaEsecuzione(true);
 		}
@@ -189,7 +193,7 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
 				NumeroOperazione,
 				false);
-		g.Esegue(context);
+		g.Esegue();
 
 		VariabiliStaticheNuove.getInstance().setGb(g);
 	}
@@ -244,7 +248,7 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
 				NumeroOperazione,
 				false);
-		g.Esegue(context);
+		g.Esegue();
 
 		return g;
 	}
@@ -262,7 +266,7 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
 				NumeroOperazione,
 				false);
-		g.Esegue(context);
+		g.Esegue();
 
 		return g;
 	}
@@ -279,6 +283,6 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
 				NumeroOperazione,
 				true);
-		g.Esegue(context);
+		g.Esegue();
 	}
 }

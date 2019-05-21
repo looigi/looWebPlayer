@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import java.io.File;
 import java.util.ArrayList;
 
+import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -63,6 +64,8 @@ public class GestioneCaricamentoBraniNuovo {
         GestioneImmagini.getInstance().setImmNumber(-1);
         GestioneImmagini.getInstance().ImpostaImmagineVuota();
         VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
+
+        MainActivity.ScriveBraniInLista();
 
         if (VariabiliStaticheGlobali.getInstance().getnOperazioneATOW() != -1) {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
