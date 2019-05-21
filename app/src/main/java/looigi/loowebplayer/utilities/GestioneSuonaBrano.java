@@ -11,6 +11,7 @@ import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 
 // import looigi.loowebplayer.maschere.Equalizer;
 
@@ -87,6 +88,17 @@ public class GestioneSuonaBrano {
 
             GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
             VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(false);
+
+            // Aggiorna il numero di volte ascoltata dal brano
+            int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
+
+            int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Aggiorna volte ascoltata");
+            int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(Ascoltata+1);
+
+            DBRemotoNuovo dbr = new DBRemotoNuovo();
+            dbr.VolteAscoltata(Integer.toString(NumeroBrano), nn);
+            // Aggiorna il numero di volte ascoltata dal brano
 
             vh.getTxtTitoloBackground().setText("");
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);

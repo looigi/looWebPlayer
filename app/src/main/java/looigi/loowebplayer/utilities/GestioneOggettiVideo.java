@@ -2,12 +2,15 @@ package looigi.loowebplayer.utilities;
 
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 
 public class GestioneOggettiVideo {
@@ -229,6 +232,15 @@ public class GestioneOggettiVideo {
         }
     }
 
+    private void SettaBellezza(int Quanto) {
+        int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
+
+        int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Modifica bellezza");
+
+        DBRemotoNuovo dbr = new DBRemotoNuovo();
+        dbr.AggiornaBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto), nn);
+    }
+
     public void ImpostaStelleAscoltata() {
         int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
         int n = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
@@ -239,6 +251,7 @@ public class GestioneOggettiVideo {
                 NumeroBrano = -1;
             }
         }
+        final int nBrano = NumeroBrano;
 
         VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
@@ -252,6 +265,49 @@ public class GestioneOggettiVideo {
         vh.getImgStella5().setImageDrawable(icona_no);
         vh.getImgStella6().setImageDrawable(icona_no);
         vh.getImgStella7().setImageDrawable(icona_no);
+
+        vh.getImgStella1().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(1);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(1);
+            }
+        });
+        vh.getImgStella2().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(2);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(2);
+            }
+        });
+        vh.getImgStella3().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(3);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(3);
+            }
+        });
+        vh.getImgStella4().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(4);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(4);
+            }
+        });
+        vh.getImgStella5().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(5);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(5);
+            }
+        });
+        vh.getImgStella6().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(6);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(6);
+            }
+        });
+        vh.getImgStella7().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SettaBellezza(7);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(7);
+            }
+        });
 
         if (NumeroBrano>-1) {
             int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();

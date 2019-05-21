@@ -542,4 +542,40 @@ public class wsRitornoNuovo {
             }, VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
         // } */
     }
+
+    public void RitornaModificaBellezza(final String Ritorno, int NumeroOperazione) {
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        if (Ritorno.contains("ERROR:")) {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    Ritorno,
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Ritorna modifica bellezza. OK");
+        }
+
+        GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
+    }
+
+    public void RitornaVolteAscoltata(final String Ritorno, int NumeroOperazione) {
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        if (Ritorno.contains("ERROR:")) {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    Ritorno,
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Ritorna volte ascoltata. OK");
+        }
+
+        GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
+    }
 }

@@ -249,8 +249,8 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getD2());
         // }
 
-        qualeWait = 0;
-        if (qualeWait >0 ) {
+        // qualeWait = 0;
+        // if (qualeWait >0 ) {
             hAttesaDownload.add(new Handler(Looper.getMainLooper()));
             rAttesaDownload.add(new Runnable() {
                 @Override
@@ -266,9 +266,9 @@ public class GestioneCaricamentoBraniNuovo {
                 }
             });
             hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
-        } else {
-            CaricaBranoParteFinale2();
-        }
+        // } else {
+        //     CaricaBranoParteFinale2();
+        // }
 
         /* if (VariabiliStaticheNuove.getInstance().getD()!=null ||
                 VariabiliStaticheNuove.getInstance().getD2()!=null) {

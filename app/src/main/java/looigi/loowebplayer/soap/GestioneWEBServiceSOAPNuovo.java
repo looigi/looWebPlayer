@@ -93,7 +93,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			// 			funzione,
 			// 			"Skippata operazione SOAP uguale: " + Chiave);
 			// }
-			Esegue();
+			// Esegue();
 		} else {
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 			String funzione = "";
@@ -112,9 +112,11 @@ public class GestioneWEBServiceSOAPNuovo {
 		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 		if (ceRete) {
-			bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-					ApriDialog, Urletto);
-			bckAsyncTask.execute(Urletto);
+			// if (bckAsyncTask==null) {
+				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+						ApriDialog, Urletto);
+				bckAsyncTask.execute(Urletto);
+			// }
 		}
 	}
 
@@ -406,7 +408,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			return null;
 	    }
 	 	
-	    public void ControllaFineCiclo() {
+	    private void ControllaFineCiclo() {
 			// VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
 
  			// if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
@@ -449,6 +451,14 @@ public class GestioneWEBServiceSOAPNuovo {
 					if (!Errore || NumeroBrano == -1) {
 						while (Ancora) {
 							switch (tOperazione) {
+								case "ModificaBellezza":
+									rRit.RitornaModificaBellezza(Ritorno, NumeroOperazione);
+									Ancora = false;
+									break;
+								case "VolteAscoltata":
+									rRit.RitornaVolteAscoltata(Ritorno, NumeroOperazione);
+									Ancora = false;
+									break;
 								case "RitornaListaBrani":
 									rRit.RitornaListaBrani(Ritorno);
 									Ancora = false;
@@ -538,6 +548,7 @@ public class GestioneWEBServiceSOAPNuovo {
 					}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione da remoto");
 				}
 			}
+			bckAsyncTask = null;
 		}
 
 	    @Override

@@ -285,4 +285,35 @@ public class DBRemotoNuovo {
 				true);
 		g.Esegue();
 	}
+
+	public void AggiornaBellezza(String idCanzone, String Bellezza, int NumeroOperazione) {
+		String Urletto="ModificaBellezza?";
+		Urletto+="idCanzone=" +idCanzone;
+		Urletto+="&Bellezza=" +Bellezza;
+
+		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"ModificaBellezza",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
+				NumeroOperazione,
+				true);
+		g.Esegue();
+	}
+
+	public void VolteAscoltata(String idCanzone, int NumeroOperazione) {
+		String Urletto="VolteAscoltata?";
+		Urletto+="idCanzone=" +idCanzone;
+
+		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"VolteAscoltata",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani(),
+				NumeroOperazione,
+				true);
+		g.Esegue();
+	}
 }
