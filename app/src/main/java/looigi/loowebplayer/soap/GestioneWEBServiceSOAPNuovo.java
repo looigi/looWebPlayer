@@ -52,7 +52,7 @@ public class GestioneWEBServiceSOAPNuovo {
 
 		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-		if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
+		if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
 			try {
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 				}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");

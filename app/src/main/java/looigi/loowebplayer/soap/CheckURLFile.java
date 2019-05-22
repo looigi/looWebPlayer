@@ -28,7 +28,9 @@ public class CheckURLFile {
     }
 
     public void startControl(String sUrl) {
-        if (System.currentTimeMillis() - lastTimePressed < 1000) {
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce");
             VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");

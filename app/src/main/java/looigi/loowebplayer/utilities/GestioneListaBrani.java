@@ -331,7 +331,7 @@ public class GestioneListaBrani {
     }
 
     public void SettaIndice(int indice) {
-        IndiceSuonati=indice;
+        IndiceSuonati=indice-1;
     }
 
     public void ScaricaBranoSuccessivoInBackground() {
@@ -362,6 +362,7 @@ public class GestioneListaBrani {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Brano già esistente... Non faccio niente");
 
+                VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
                 VariabiliStaticheNuove.getInstance().setDb(null);
 

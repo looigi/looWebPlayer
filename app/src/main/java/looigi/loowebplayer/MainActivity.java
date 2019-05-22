@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity
         vg.setContextPrincipale(this);
         vg.SettaIcone(this);
 
+        VariabiliStaticheGlobali.getInstance().setNtn(new NetThreadNuovo());
+        VariabiliStaticheGlobali.getInstance().getNtn().start();
+
         // Crea db locale per dati
         db_dati db = new db_dati();
         db.CreazioneTabellaBellezza();
@@ -178,9 +181,6 @@ public class MainActivity extends AppCompatActivity
 
         // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lettura configurazione valori");
         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().LeggeValori();
-
-        VariabiliStaticheGlobali.getInstance().setNtn(new NetThreadNuovo());
-        VariabiliStaticheGlobali.getInstance().getNtn().start();
 
         filterHeadset = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(mNoisyReceiver, filterHeadset);

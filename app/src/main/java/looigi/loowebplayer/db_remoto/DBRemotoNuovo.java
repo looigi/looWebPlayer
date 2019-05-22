@@ -114,7 +114,7 @@ public class DBRemotoNuovo {
 							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 									"Stoppo CUF normale per OK");
 
-							cuf.StoppaEsecuzione(true);
+							cuf.StoppaEsecuzione(false);
 						}
 
 						Secondi++;
@@ -157,7 +157,7 @@ public class DBRemotoNuovo {
 			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 					"Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
 
-			cuf.StoppaEsecuzione(true);
+			cuf.StoppaEsecuzione(false);
 		}
 
 		String Urletto="RitornaBrano?";

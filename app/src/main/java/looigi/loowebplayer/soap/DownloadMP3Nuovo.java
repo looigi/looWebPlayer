@@ -81,7 +81,7 @@ public class DownloadMP3Nuovo {
     public void startDownload(String sUrl, int NO) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-        if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
+        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "DL Mp3 troppo veloce");
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);

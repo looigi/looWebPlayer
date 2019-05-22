@@ -92,41 +92,36 @@ public class NetThreadNuovo {
                 SecondiDiAttesa = 5000;
                 // StaGirando = true;
 
+                ControlloRete();
+
                 InternalThread();
             }
         }
     }
 
-    private void InternalThread() {
-        if (tTmrBattery == null) {
-            tTmrBattery = new Timer();
-            tTmrBattery.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!stopNet) {
-                        // try {
-                        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
+    private void ControlloRete() {
+        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
 
-                        haveConnectedWifi = false;
-                        haveConnectedMobile = false;
+        haveConnectedWifi = false;
+        haveConnectedMobile = false;
 
-                        for (NetworkInfo ni : netInfo) {
-                            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
-                                if (ni.isConnected()) {
-                                    haveConnectedWifi = true;
-                                    break;
-                                }
-                            }
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
+                if (ni.isConnected()) {
+                    haveConnectedWifi = true;
+                    break;
+                }
+            }
 
-                            if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
-                                if (ni.isConnected()) {
-                                    haveConnectedMobile = true;
-                                    break;
-                                }
-                            }
-                        }
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
+                if (ni.isConnected()) {
+                    haveConnectedMobile = true;
+                    break;
+                }
+            }
+        }
 
-                        // ScreenOn = pm.isScreenOn();
+        // ScreenOn = pm.isScreenOn();
 
                             /* if (ScreenOn) {
                                 if (CaroselloBloccato) {
@@ -150,55 +145,65 @@ public class NetThreadNuovo {
                                 }
                             } */
 
-                            switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
-                                case 1:
-                                    OkNet = haveConnectedWifi || haveConnectedMobile;
-                                    if (OkNet) {
-                                        getGsmLevel();
-                                    }
-                                    break;
-                                case 2:
-                                    if (quanti==-1) {
-                                        quanti=new Random().nextInt(50) + 10;
-                                    }
-                                    conta++;
-                                    if (conta>quanti) {
-                                        conta=0;
-                                        // if (RetePresente) {
-                                            RetePresente=!RetePresente;
-                                        // }
-                                        OkNet=RetePresente;
-                                    }
-                                    break;
-                                case 3:
-                                    OkNet = false;
-                                    break;
-                                case 4:
-                                    OkNet = true;
-                                    break;
-                            }
+        switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
+            case 1:
+                OkNet = haveConnectedWifi || haveConnectedMobile;
+                if (OkNet && !haveConnectedWifi) {
+                    getGsmLevel();
+                }
+                break;
+            case 2:
+                if (quanti==-1) {
+                    quanti=new Random().nextInt(50) + 10;
+                }
+                conta++;
+                if (conta>quanti) {
+                    conta=0;
+                    // if (RetePresente) {
+                    RetePresente=!RetePresente;
+                    // }
+                    OkNet=RetePresente;
+                }
+                break;
+            case 3:
+                OkNet = false;
+                break;
+            case 4:
+                OkNet = true;
+                break;
+        }
 
-                            if (!OkNet) {
-                                act.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
-                                        }
-                                    }
-                                });
-                            } else {
-                                act.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
-                                        }
-                                    }
-                                });
-                            }
-                        // } catch (Exception ignored) {
-                        // }
+        if (!OkNet) {
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                    }
+                }
+            });
+        } else {
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                    }
+                }
+            });
+        }
+        // } catch (Exception ignored) {
+        // }
+    }
+
+    private void InternalThread() {
+        if (tTmrBattery == null) {
+            tTmrBattery = new Timer();
+            tTmrBattery.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!stopNet) {
+                        ControlloRete();
                     }
                 }
             }, 0, SecondiDiAttesa);

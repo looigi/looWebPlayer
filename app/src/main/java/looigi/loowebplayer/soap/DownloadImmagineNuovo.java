@@ -62,7 +62,7 @@ public class DownloadImmagineNuovo {
     public void startDownload(String sUrl, String sOperazione, int TO) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-        if (System.currentTimeMillis() - lastTimePressed < 1000 || !ceRete) {
+        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
