@@ -10,6 +10,7 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 
@@ -52,6 +53,7 @@ public class GestioneOggettiVideo {
 
     public void AvantiBrano() {
         if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+            VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
             int NumeroBrano;
 
             if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete()>-1) {
@@ -98,88 +100,46 @@ public class GestioneOggettiVideo {
 
         if (vh.getPuoAvanzare()) {
             if (Acceso) {
-                // if (!VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    // if (vh.getMediaPlayer() != null || !VariabiliStaticheGlobali.getInstance().getHaCaricatoTuttiIDettagliDelBrano()) {
-                    /* if (!VariabiliStaticheGlobali.getInstance().getHaCaricatoTuttiIDettagliDelBrano()) {
-                        int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-                        if (NumeroBrano > -1) {
-                            VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Play");
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
 
-                            if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getUltimaCanzoneSuonata() ||
-                                    !VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
-                                VariabiliStaticheGlobali.getInstance().setUltimaCanzoneSuonata(NumeroBrano);
-                                GestioneCaricamentoBrani.getInstance().CaricaBrano(true);
-                            } else {
-                                if (vh.getMediaPlayer() != null) {
-                                    vh.getMediaPlayer().start();
-                                    vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
-                                    vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
-
-                                    // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
-                                    // GestioneImmagini.getInstance().CreaCarosello(VariabiliStaticheHome.getInstance().getImms());
-                                }
-                            }
-                        } else {
-                            if (vh.getMediaPlayer() != null) {
-                                vh.getMediaPlayer().start();
-                                vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
-                                vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
-                                // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
-                            }
-                        }
-                    } else { */
-                        // VariabiliStaticheHome.getInstance().getLayOperazionWEB().setVisibility(LinearLayout.GONE);
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Play");
-                        VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
-
-                        if (!GestioneCaricamentoBraniNuovo.getInstance().isHaCaricatoBrano()) {
-                            vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
-                            vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
-                            GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano3();
-                        } else {
-                            vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
-                            vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
-                            try {
-                                vh.getMediaPlayer().start();
-                                // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
-                            } catch (Exception e) {
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-                                String error = Utility.getInstance().PrendeErroreDaException(e);
-
-                                // VariabiliStaticheHome.getInstance().getLayOperazionWEB().setVisibility(LinearLayout.VISIBLE);
-                                // VariabiliStaticheHome.getInstance().getTxtOperazioneWEB().setText(error);
-                                VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true, error);
-                            }
-                        }
-                    // }
-                    // }
-                // }
-            } else {
-                // if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    // if (vh.getMediaPlayer() != null) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Stop");
-                    VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
-                    // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-                    vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
-                    vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
+                if (!GestioneCaricamentoBraniNuovo.getInstance().isHaCaricatoBrano()) {
+                    vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
+                    vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
+                    GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano3();
+                } else {
+                    vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
+                    vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
                     try {
-                        vh.getMediaPlayer().pause();
+                        vh.getMediaPlayer().start();
                     } catch (Exception e) {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
                         String error = Utility.getInstance().PrendeErroreDaException(e);
 
-                        // VariabiliStaticheHome.getInstance().getLayOperazionWEB().setVisibility(LinearLayout.VISIBLE);
-                        // VariabiliStaticheHome.getInstance().getTxtOperazioneWEB().setText(error);
                         VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true, error);
                     }
-                    // }
-                // }
+                }
+            } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Stop");
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+
+                vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
+                vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
+                try {
+                    vh.getMediaPlayer().pause();
+                } catch (Exception e) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                    String error = Utility.getInstance().PrendeErroreDaException(e);
+
+                    VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, true, error);
+                }
             }
         }
     }
 
     public void IndietroBrano() {
         if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+            VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
             GestioneImmagini.getInstance().StoppaTimerCarosello();
 
             int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
@@ -239,6 +199,9 @@ public class GestioneOggettiVideo {
 
         DBRemotoNuovo dbr = new DBRemotoNuovo();
         dbr.AggiornaBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto), nn);
+
+        db_dati db = new db_dati();
+        db.ScriveBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto));
     }
 
     public void ImpostaStelleAscoltata() {

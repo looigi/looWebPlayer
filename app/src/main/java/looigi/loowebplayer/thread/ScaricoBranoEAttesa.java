@@ -40,7 +40,13 @@ public class ScaricoBranoEAttesa {
         }
 
         VariabiliStaticheGlobali.getInstance().setLastRitorno(Appoggio);
-        final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+        final int NumeroBrano;
+
+        if (!inBackground) {
+            NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+        } else {
+            NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+        }
 
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna brano" + Altro + ".");
@@ -119,7 +125,8 @@ public class ScaricoBranoEAttesa {
                 hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL = new Runnable() {
                     @Override
                     public void run() {
-                        if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                        if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                             if (cuf !=null) {
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                         "Stoppo CUF normale per numero brano " + Altro + " diverso dall'attuale");
@@ -134,14 +141,9 @@ public class ScaricoBranoEAttesa {
                             hSelezionaRiga.removeCallbacks(runRiga);
                             hSelezionaRiga = null;
                         } else {
-                            // if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().isEmpty()) {
-                            //     hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL, 500);
-                            // } else {
                             hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
 
                             if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("OK")) {
-                                // VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(NumeroBrano);
-
                                 if (cuf!=null) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                             "Stoppo CUF normale per OK");
@@ -221,7 +223,7 @@ public class ScaricoBranoEAttesa {
                                                 "Tento di prendere il prossimo brano fra quelli già scaricati");
                                         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
                                         int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
-                                        VariabiliStaticheGlobali.getInstance().setBranoAutomatico(NumeroBrano);
+                                        VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
                                         VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
                                         // GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
 

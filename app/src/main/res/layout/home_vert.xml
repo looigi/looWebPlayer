@@ -92,7 +92,7 @@
                     android:shadowDy="2"
                     android:textStyle="italic|bold"
                     android:shadowRadius="2"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical|left"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -102,7 +102,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal|center_vertical"
+                android:gravity="right|bottom"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -239,9 +239,23 @@
             android:layout_below="@id/layBarra"
             android:layout_width="match_parent"
             android:padding="3dp"
-            android:weightSum="4"
+            android:weightSum="5"
             android:baselineAligned="true"
             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:id="@+id/imgListaBrani"
+                    android:src="@drawable/lista_brani"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -491,6 +505,31 @@
             </ScrollView>
         </LinearLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rltListaBrani"
+        android:background="@color/bianco_trasparente"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_margin="20dp"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/lstListaBrani"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+        </ListView>
+
+        <ImageView
+            android:id="@+id/imgChiudiLista"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/error"
+            android:layout_margin="2dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/imgoffline"

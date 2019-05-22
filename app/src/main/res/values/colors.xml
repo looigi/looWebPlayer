@@ -13,4 +13,5 @@
     <color name="grigio">#888888</color>
     <color name="bianco_trasparente">#bbFFFFFF</color>
     <color name="giallo">#aaaa00</color>
+    <color name="traslucent">#00ffffff</color>
 </resources>

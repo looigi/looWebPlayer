@@ -258,7 +258,9 @@ public class GestioneCaricamentoBraniNuovo {
                     if (stopCounter < qualeWait) {
                         hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
                     } else {
-                        hAttesaDownload.get(hAttesaDownload.size()-1).removeCallbacks(rAttesaDownload.get(rAttesaDownload.size()-1));
+                        if (hAttesaDownload.get(hAttesaDownload.size()-1) != null) {
+                            hAttesaDownload.get(hAttesaDownload.size() - 1).removeCallbacks(rAttesaDownload.get(rAttesaDownload.size() - 1));
+                        }
                         hAttesaDownload.set(hAttesaDownload.size()-1, null);
 
                         CaricaBranoParteFinale2();

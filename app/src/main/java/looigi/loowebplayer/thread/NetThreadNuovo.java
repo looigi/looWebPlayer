@@ -36,7 +36,7 @@ public class NetThreadNuovo {
     private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
-    private int SecondiDiAttesa = 2500;
+    private int SecondiDiAttesa = 5000;
     // private boolean StaGirando=false;
     private boolean haveConnectedWifi = false;
     private boolean haveConnectedMobile = false;
@@ -89,7 +89,7 @@ public class NetThreadNuovo {
                 // } else {
                 //     SecondiDiAttesa = 5000;
                 // }
-                SecondiDiAttesa = 2500;
+                SecondiDiAttesa = 5000;
                 // StaGirando = true;
 
                 InternalThread();

@@ -161,7 +161,8 @@ public class DownloadImmagineNuovo {
 
             if (!ceRete) {
                 messErrore="ERROR: Assenza di rete";
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Immagine: Assenza di rete");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Immagine: Assenza di rete");
                 return null;
             }
 
@@ -221,8 +222,9 @@ public class DownloadImmagineNuovo {
 
             ChiudeDialog();
 
-            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().
-                    getQualeCanzoneStaSuonando() && NumeroBrano != 0) {
+            if (NumeroBrano>-1 &&
+                    NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                    VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                 if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
                         VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
                     GestioneImmagini.getInstance().ImpostaImmagineVuota();

@@ -36,6 +36,7 @@ import looigi.loowebplayer.chiamate.PhoneUnlockedReceiver;
 import looigi.loowebplayer.cuffie.GestioneTastoCuffie;
 import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.maschere.Splash;
 import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.thread.NetThreadNuovo;
@@ -67,6 +68,12 @@ public class MainActivity extends AppCompatActivity
         vg.setFragmentActivityPrincipale(this);
         vg.setContextPrincipale(this);
         vg.SettaIcone(this);
+
+        // Crea db locale per dati
+        db_dati db = new db_dati();
+        db.CreazioneTabellaBellezza();
+        db.CreazioneTabellaAscoltate();
+        // Crea db locale per dati
 
         mAudioManager =  (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         mReceiverComponent = new ComponentName(this, GestioneTastoCuffie.class);
@@ -141,7 +148,8 @@ public class MainActivity extends AppCompatActivity
                             fc.delete();
                         }
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritornata struttura brano nulla");
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Ritornata struttura brano nulla");
                     }
                 }
 

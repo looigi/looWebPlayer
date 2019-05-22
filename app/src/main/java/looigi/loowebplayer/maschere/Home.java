@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -21,12 +22,20 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
+import looigi.loowebplayer.dati.adapters.AdapterAscoltati;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.gif.GifImageView;
 import looigi.loowebplayer.notifiche.Notifica;
@@ -36,6 +45,7 @@ import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneImpostazioneBrani;
 import looigi.loowebplayer.utilities.GestioneLayout;
+import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.GestioneTesti;
 import looigi.loowebplayer.utilities.RiempieListaInBackground;
@@ -170,6 +180,10 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setLayIntestazione((LinearLayout) view.findViewById(R.id.layIntestazione));
             vh.setImgLinguettaTesto((ImageView) view.findViewById(R.id.imgLinguettaTesto));
             vh.setTxtTesto((TextView) view.findViewById(R.id.txTesto));
+            vh.setImgListaBrani((ImageView) view.findViewById(R.id.imgListaBrani));
+            vh.setImgChiudeListaBrani((ImageView) view.findViewById(R.id.imgChiudiLista));
+            vh.setRltListaBrani((RelativeLayout) view.findViewById(R.id.rltListaBrani));
+            vh.setLstListaBrani((ListView) view.findViewById(R.id.lstListaBrani));
             vh.setImgStella1((ImageView) view.findViewById(R.id.imgStella1));
             vh.setImgStella2((ImageView) view.findViewById(R.id.imgStella2));
             vh.setImgStella3((ImageView) view.findViewById(R.id.imgStella3));
@@ -183,6 +197,8 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setpMP3((ProgressBar) view.findViewById(R.id.pbarMP3));
             vh.setTxtTitoloBackground((TextView) view.findViewById(R.id.txtTitoloBackground));
             vh.setLayStelle((LinearLayout) view.findViewById(R.id.layStelle));
+
+            vh.getRltListaBrani().setVisibility(LinearLayout.GONE);
 
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaBellezza()) {
                 vh.getLayStelle().setVisibility(LinearLayout.VISIBLE);
@@ -277,6 +293,28 @@ public class Home extends android.support.v4.app.Fragment {
                     } else {
                         VariabiliStaticheHome.getInstance().getTxtTesto().setText("");
                     }
+                }
+            });
+
+            VariabiliStaticheHome.getInstance().getImgListaBrani().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
+                    List<Integer> ll = new ArrayList<>();
+                    for (int i = l.size()-1; i>=0; i--) {
+                        ll.add(l.get(i));
+                    }
+                    if (ll != null) {
+                        AdapterAscoltati a = new AdapterAscoltati(VariabiliStaticheGlobali.getInstance().getContext(),
+                                android.R.layout.simple_list_item_1, ll);
+                        VariabiliStaticheHome.getInstance().getLstListaBrani().setAdapter(a);
+                    }
+                    vh.getRltListaBrani().setVisibility(LinearLayout.VISIBLE);
+                }
+            });
+
+            VariabiliStaticheHome.getInstance().getImgChiudeListaBrani().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    vh.getRltListaBrani().setVisibility(LinearLayout.GONE);
                 }
             });
 
@@ -452,7 +490,7 @@ public class Home extends android.support.v4.app.Fragment {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // moveTaskToBack(true);
-                    if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
                         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         return true;
                     }

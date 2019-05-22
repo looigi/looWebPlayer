@@ -424,7 +424,9 @@ public class GestioneWEBServiceSOAPNuovo {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			// }
 
-			if (NumeroBrano>-1 && (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando())) {
+			if (NumeroBrano>-1 &&
+					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
+					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
 				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 						"SOAP: Cambio brano");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

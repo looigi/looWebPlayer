@@ -131,7 +131,7 @@ public class DBLocale {
         args.put("ultimaCanzoneSuonata", UltimaCanzone);
         args.put("ModalitaAvanzamento", ModoAvanzamento);
 
-        Boolean rit = db.update(DATABASE_TABELLA, args, "id=" + rigaId, null) > 0;
+        boolean rit = db.update(DATABASE_TABELLA, args, "id=" + rigaId, null) > 0;
 
         return rit;
     }

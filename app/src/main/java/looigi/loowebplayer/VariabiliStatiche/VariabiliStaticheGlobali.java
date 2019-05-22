@@ -71,6 +71,7 @@ public class VariabiliStaticheGlobali {
     private DatiGenerali DatiGenerali=new DatiGenerali();
     // private Boolean bloccaCarosello=false;
     private Boolean StaSuonando=false;
+    private Boolean ScrittaAscoltata=false;
     private Boolean MusicaTerminata=false;
     // private Boolean StaSuonandoAttesa=false;
     private Log log = new Log();
@@ -110,6 +111,7 @@ public class VariabiliStaticheGlobali {
     private String ImmagineMostrata;
     private NetThreadNuovo ntn;
     private int NumeroBranoNuovo;
+    private int NumeroProssimoBrano=-1;
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";
@@ -162,7 +164,23 @@ public class VariabiliStaticheGlobali {
         this.ctxPassaggio = ctxPassaggio;
     }
 
-    public boolean isStaScaricandoMP3() {
+    public int getNumeroProssimoBrano() {
+        return NumeroProssimoBrano;
+    }
+
+    public void setNumeroProssimoBrano(int numeroProssimoBrano) {
+        NumeroProssimoBrano = numeroProssimoBrano;
+    }
+
+    public Boolean getScrittaAscoltata() {
+        return ScrittaAscoltata;
+    }
+
+    public void setScrittaAscoltata(Boolean scrittaAscoltata) {
+        ScrittaAscoltata = scrittaAscoltata;
+    }
+
+    public boolean getStaScaricandoMP3() {
         return StaScaricandoMP3;
     }
 

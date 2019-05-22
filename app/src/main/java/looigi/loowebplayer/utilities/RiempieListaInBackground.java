@@ -5,16 +5,20 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.File;
+import java.util.List;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAlbum;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaArtisti;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAscoltate;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaConfig;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaMembri;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
+import looigi.loowebplayer.db_locale.db_dati;
 
 public class RiempieListaInBackground {
     private Context context;
@@ -285,6 +289,18 @@ public class RiempieListaInBackground {
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Prende solo brani filtrati per stelle");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().FiltraInBaseAlleStelle();
+
+            // Aggiorna i dati caricati da remoto con quelli in locale
+            db_dati db = new db_dati();
+            List<StrutturaBellezza> lb = db.RitornaTuttiDatiBellezza();
+            List<StrutturaAscoltate> la = db.RitornaTuttiDatiAscoltate();
+            for (StrutturaBellezza b : lb) {
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone()).setStelle(b.getBellezza());
+            }
+            for (StrutturaAscoltate a : la) {
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone()).setQuanteVolteAscoltato(a.getQuante());
+            }
+            // Aggiorna i dati caricati da remoto con quelli in locale
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setValoriCaricati(true);
 

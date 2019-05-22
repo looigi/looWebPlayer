@@ -231,7 +231,9 @@ public class DownloadMP3Nuovo {
                                         lenF += len1;
                                     }
                                     publishProgress((int) (lenF * 100 / sizeMP3));
-                                    if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                                    if (NumeroBrano>-1 &&
+                                            NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                            VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                                         messErrore = "ESCI";
                                         break;
                                     }
@@ -328,7 +330,9 @@ public class DownloadMP3Nuovo {
         public void ControllaFineCiclo() {
             VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
-            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            if (NumeroBrano>-1 &&
+                    NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                    VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                 NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                         "DL MP3: Cambio brano");
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

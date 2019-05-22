@@ -253,7 +253,9 @@ public class DownloadTextFileNuovo {
             // VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
             ChiudeDialog();
 
-            if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            if (NumeroBrano>-1 &&
+                    NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                    VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Scarico testo. Cambio brano");

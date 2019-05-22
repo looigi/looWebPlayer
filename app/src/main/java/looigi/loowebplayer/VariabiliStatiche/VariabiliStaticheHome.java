@@ -1,19 +1,16 @@
 package looigi.loowebplayer.VariabiliStatiche;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +20,6 @@ import java.util.Random;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaOperazioneWEB;
 import looigi.loowebplayer.gif.GifImageView;
-import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneMembri;
 
 public class VariabiliStaticheHome {
@@ -62,6 +58,10 @@ public class VariabiliStaticheHome {
     private TextView txtMembri;
     private LinearLayout txtMembriTitolo;
     private String BranoDaCaricare = "";
+    private ImageView imgListaBrani;
+    private ImageView imgChiudeListaBrani;
+    private RelativeLayout rltListaBrani;
+    private ListView lstListaBrani;
     private ImageView imgStella1;
     private ImageView imgStella2;
     private ImageView imgStella3;
@@ -92,6 +92,38 @@ public class VariabiliStaticheHome {
 
     public Context getContext() {
         return context;
+    }
+
+    public ListView getLstListaBrani() {
+        return lstListaBrani;
+    }
+
+    public void setLstListaBrani(ListView lstListaBrani) {
+        this.lstListaBrani = lstListaBrani;
+    }
+
+    public ImageView getImgChiudeListaBrani() {
+        return imgChiudeListaBrani;
+    }
+
+    public void setImgChiudeListaBrani(ImageView imgChiudeListaBrani) {
+        this.imgChiudeListaBrani = imgChiudeListaBrani;
+    }
+
+    public RelativeLayout getRltListaBrani() {
+        return rltListaBrani;
+    }
+
+    public void setRltListaBrani(RelativeLayout rltListaBrani) {
+        this.rltListaBrani = rltListaBrani;
+    }
+
+    public ImageView getImgListaBrani() {
+        return imgListaBrani;
+    }
+
+    public void setImgListaBrani(ImageView imgListaBrani) {
+        this.imgListaBrani = imgListaBrani;
     }
 
     public LinearLayout getLayStelle() {
@@ -229,7 +261,7 @@ public class VariabiliStaticheHome {
 
         if (layOperazionWEB!=null) {
             if (t2.isEmpty()) {
-                if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoMP3()) {
+                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
                     layOperazionWEB.setVisibility(LinearLayout.GONE);
                 }
             } else {
@@ -266,7 +298,7 @@ public class VariabiliStaticheHome {
 
         if (OperazioniWeb.size() == 0) {
             if (this.layOperazionWEB != null) {
-                if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoMP3()) {
+                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
                     this.layOperazionWEB.setVisibility(LinearLayout.GONE);
                 }
             }
@@ -302,15 +334,6 @@ public class VariabiliStaticheHome {
 
         int n = 0;
 
-        Runnable runEliminaBarra;
-        Handler hEliminaBarra = new Handler(Looper.getMainLooper());
-
-        hEliminaBarra.postDelayed(runEliminaBarra = new Runnable() {
-            @Override
-            public void run() {
-            }
-        }, 3000);
-
         if (NumeroOperazione==-1) {
             n = MaxNumeroOpWEB();
 
@@ -332,6 +355,7 @@ public class VariabiliStaticheHome {
                     StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
                     s.setNumeroOperazione(NumeroOperazione);
                     s.setOperazione(Operazione.trim());
+                    s.setOraIniziale(System.currentTimeMillis());
 
                     OperazioniWeb.set(i, s);
 
@@ -347,6 +371,7 @@ public class VariabiliStaticheHome {
 
                 StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
                 s.setNumeroOperazione(n);
+                s.setOraIniziale(System.currentTimeMillis());
                 s.setOperazione(Operazione.trim());
                 OperazioniWeb.add(s);
             }

@@ -11,6 +11,7 @@ import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 
 // import looigi.loowebplayer.maschere.Equalizer;
@@ -88,17 +89,7 @@ public class GestioneSuonaBrano {
 
             GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
             VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(false);
-
-            // Aggiorna il numero di volte ascoltata dal brano
-            int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
-
-            int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Aggiorna volte ascoltata");
-            int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
-            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(Ascoltata+1);
-
-            DBRemotoNuovo dbr = new DBRemotoNuovo();
-            dbr.VolteAscoltata(Integer.toString(NumeroBrano), nn);
-            // Aggiorna il numero di volte ascoltata dal brano
+            VariabiliStaticheGlobali.getInstance().setScrittaAscoltata(false);
 
             vh.getTxtTitoloBackground().setText("");
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);
@@ -115,24 +106,43 @@ public class GestioneSuonaBrano {
                     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                         if (vh.getMediaPlayer() != null) {
                             int mCurrentPosition = vh.getMediaPlayer().getCurrentPosition();
+
+                            int perc75 = vh.getMediaPlayer().getDuration() * 75 / 100;
+                            if (mCurrentPosition >= perc75 && !VariabiliStaticheGlobali.getInstance().getScrittaAscoltata()) {
+                                VariabiliStaticheGlobali.getInstance().setScrittaAscoltata(true);
+
+                                // Aggiorna il numero di volte ascoltata dal brano
+                                int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
+
+                                int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Aggiorna volte ascoltata");
+                                int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(Ascoltata+1);
+
+                                DBRemotoNuovo dbr = new DBRemotoNuovo();
+                                dbr.VolteAscoltata(Integer.toString(NumeroBrano), nn);
+
+                                db_dati db = new db_dati();
+                                db.ScriveAscoltate(Integer.toString(NumeroBrano));
+                                // Aggiorna il numero di volte ascoltata dal brano
+                            }
+
                             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getCaricamentoAnticipato()) {
-                                int perc15 = vh.getMediaPlayer().getDuration() * 10 / 100;
-                                if (mCurrentPosition >= perc15 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                                int perc10 = vh.getMediaPlayer().getDuration() * 10 / 100;
+                                if (mCurrentPosition >= perc10 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro
                                     if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
-                                        // NetThread.getInstance().setCaroselloBloccato(true);
-                                        // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-                                        if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
-                                            // VariabiliStaticheHome.getInstance().getImgBrano().setImageBitmap(BitmapFactory.decodeFile(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata()));
-                                            GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
-                                        } else {
-                                            GestioneImmagini.getInstance().ImpostaImmagineVuota();
-                                        }
-                                        GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
+                                        // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
+                                        //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
+                                        // } else {
+                                        //     GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                                        // }
+                                        // GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
                                         VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
-                                        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
-                                        GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
+                                        if (GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale() >= GestioneListaBrani.getInstance().RitornaQuantiBraniInLista()) {
+                                            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
+                                            GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
+                                        }
                                     }
                                 }
                             }
