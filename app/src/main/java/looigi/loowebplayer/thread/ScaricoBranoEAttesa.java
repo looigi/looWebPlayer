@@ -222,10 +222,16 @@ public class ScaricoBranoEAttesa {
                                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                                                 "Tento di prendere il prossimo brano fra quelli già scaricati");
                                         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-                                        int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
+                                        int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
                                         VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
                                         VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
                                         // GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+
+                                        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                        final String NomeBrano = s.getNomeBrano();
+                                        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+
+                                        VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
 
                                         GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
 
@@ -244,8 +250,8 @@ public class ScaricoBranoEAttesa {
     }
 
     private void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione) {
-        PronunciaFrasi pf = new PronunciaFrasi();
-        pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
+        // PronunciaFrasi pf = new PronunciaFrasi();
+        // pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
 
         int campi = Brano.length - 1;
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";

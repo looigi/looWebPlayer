@@ -439,11 +439,19 @@ public class DownloadMP3Nuovo {
 
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                 }.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato");
-                                int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
+                                int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
                                 if (brano > -1) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                     }.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato. OK: " + Integer.toString(brano));
                                     GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
+                                    VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                                    VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(brano);
+
+                                    StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                    final String NomeBrano = s.getNomeBrano();
+                                    String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+
+                                    VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
                                 } else {
                                     VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText("Nessun brano caricato");
                                 }

@@ -114,7 +114,8 @@ public class GestioneSuonaBrano {
                                 // Aggiorna il numero di volte ascoltata dal brano
                                 int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getNumeroBranoInAscolto();
 
-                                int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Aggiorna volte ascoltata");
+                                int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
+                                        "Aggiorna volte ascoltata");
                                 int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(Ascoltata+1);
 
@@ -124,6 +125,8 @@ public class GestioneSuonaBrano {
                                 db_dati db = new db_dati();
                                 db.ScriveAscoltate(Integer.toString(NumeroBrano));
                                 // Aggiorna il numero di volte ascoltata dal brano
+
+                                VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nn, true);
                             }
 
                             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getCaricamentoAnticipato()) {
@@ -218,6 +221,7 @@ public class GestioneSuonaBrano {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (vh.getMediaPlayer() != null && fromUser) {
                         VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
+                        VariabiliStaticheGlobali.getInstance().setScrittaAscoltata(true);
 
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Spostato brano tramite barra. Progress: " + Integer.toString(progress));

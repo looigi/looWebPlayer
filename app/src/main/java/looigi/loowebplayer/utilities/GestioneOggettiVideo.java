@@ -141,6 +141,7 @@ public class GestioneOggettiVideo {
         if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
             VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
             GestioneImmagini.getInstance().StoppaTimerCarosello();
+            VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
 
             int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
             if (NumeroBrano > -1) {
@@ -202,6 +203,8 @@ public class GestioneOggettiVideo {
 
         db_dati db = new db_dati();
         db.ScriveBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto));
+
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nn, true);
     }
 
     public void ImpostaStelleAscoltata() {

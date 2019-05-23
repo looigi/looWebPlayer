@@ -69,10 +69,10 @@ public class AdapterAscoltati extends ArrayAdapter
 		int indice = GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale();
 		int id = GestioneListaBrani.getInstance().RitornaIdInBaseAllIndice(indice);
 		if (prossimo) {
-			convertView.setBackgroundColor(Color.argb(255, 0,220, 0));
+			convertView.setBackgroundColor(Color.argb(255, 80,220, 80));
 		} else {
 			if (id == idCanzone) {
-				convertView.setBackgroundColor(Color.argb(255, 220, 0, 0));
+				convertView.setBackgroundColor(Color.argb(255, 220, 80, 80));
 				VariabiliStaticheHome.getInstance().getLstListaBrani().smoothScrollToPosition(position);
 			} else {
 				if (Utility.getInstance().ePari(position)) {

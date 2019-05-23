@@ -369,37 +369,40 @@ public class GestioneListaBrani {
             } else {
                 final String Brano = Artista + ";" + Album + ";" + NomeBrano;
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scarico brano");
-                        int numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download automatico: "+NomeBrano);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Scarico brano");
+                int numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
+                        "Download automatico: "+NomeBrano);
 
-                        String c[] = Brano.split(";", -1);
-                        String Converte = "N";
-                        String Qualita = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getRapportoCompressione();
-                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
-                            Converte = "S";
-                        }
+                String c[] = Brano.split(";", -1);
+                String Converte = "N";
+                String Qualita = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getRapportoCompressione();
+                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
+                    Converte = "S";
+                }
 
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dettaglio brano. Ritorna brano: " +
-                                VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + " " +
-                                c[0] + " " +
-                                c[1] + " " +
-                                c[2] + " " +
-                                Converte + " " +
-                                Qualita
-                        );
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Ritorna dettaglio brano. Ritorna brano: " +
+                        VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + " " +
+                        c[0] + " " +
+                        c[1] + " " +
+                        c[2] + " " +
+                        Converte + " " +
+                        Qualita
+                );
 
-                        DBRemotoNuovo dbr = new DBRemotoNuovo();
-                        VariabiliStaticheNuove.getInstance().setDb(dbr.RitornaBranoBackground(VariabiliStaticheHome.getInstance().getContext(),
-                                VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
-                                c[0],
-                                c[1],
-                                c[2],
-                                Converte,
-                                Qualita,
-                                NumeroBranoProssimo,
-                                true,
-                                numOperazione
-                        ));
+                DBRemotoNuovo dbr = new DBRemotoNuovo();
+                VariabiliStaticheNuove.getInstance().setDb(dbr.RitornaBranoBackground(VariabiliStaticheHome.getInstance().getContext(),
+                        VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
+                        c[0],
+                        c[1],
+                        c[2],
+                        Converte,
+                        Qualita,
+                        NumeroBranoProssimo,
+                        true,
+                        numOperazione
+                ));
 
                 VariabiliStaticheNuove.getInstance().setDb(null);
             }
@@ -407,9 +410,15 @@ public class GestioneListaBrani {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
              "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
             VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-            int NumeroBrano=CercaBranoGiaScaricato(true);
+            int NumeroBrano=CercaBranoGiaScaricato(false);
             VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
             VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+
+            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+            final String NomeBrano = s.getNomeBrano();
+            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+
+            VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
 
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
         }

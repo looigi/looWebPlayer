@@ -106,10 +106,7 @@ public class GestioneCaricamentoBraniNuovo {
                             @Override
                             public void run() {
                                 int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() ||
-                                        (NumeroBrano>-1 &&
-                                                NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
-                                                VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
+                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
@@ -127,10 +124,18 @@ public class GestioneCaricamentoBraniNuovo {
                                     //             false, "Attesa termine download automatico. QUI NON DEVE PASSARE!!!"));
                                     // }
                                 } else {
-                                    VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
-                                            false, "Attesa termine download automatico. Secondi: " + Integer.toString(secondi)));
-                                    hAttesaDownloadS.postDelayed(rAttesaDownloadS, 1000);
-                                    secondi++;
+                                    if (NumeroBrano>-1 &&
+                                        NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                        VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+
+                                        hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
+                                        hAttesaDownloadS = null;
+                                    } else {
+                                        VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
+                                                false, "Attesa termine download automatico. Secondi: " + Integer.toString(secondi)));
+                                        hAttesaDownloadS.postDelayed(rAttesaDownloadS, 1000);
+                                        secondi++;
+                                    }
                                 }
                             }
                         }, 1000);
