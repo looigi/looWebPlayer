@@ -11,6 +11,7 @@ import java.util.List;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAscoltate;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
+import looigi.loowebplayer.utilities.Utility;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -28,17 +29,25 @@ public class db_dati {
     }
 
     private SQLiteDatabase ApreDB() {
-        return  VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
-                PathDB + NomeDB, MODE_PRIVATE, null);
+        SQLiteDatabase db = null;
+        try {
+            db = VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
+                    PathDB + NomeDB, MODE_PRIVATE, null);
+        } catch (Exception e) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Problemi nell'apertura del db: " + Utility.getInstance().PrendeErroreDaException(e));
+        }
+        return  db;
     }
 
     public void CreazioneTabellaAscoltate() {
         try {
             SQLiteDatabase myDB = ApreDB();
-
-            myDB.execSQL("CREATE TABLE IF NOT EXISTS "
-                    + "Ascoltate "
-                    + " (Path VARCHAR, idCanzone INT(5), Volte INT(3));");
+            if (myDB != null) {
+                myDB.execSQL("CREATE TABLE IF NOT EXISTS "
+                        + "Ascoltate "
+                        + " (Path VARCHAR, idCanzone INT(5), Volte INT(3));");
+            }
         } catch (Exception ignored) {
 
         }
@@ -47,10 +56,11 @@ public class db_dati {
     public void CreazioneTabellaBellezza() {
         try {
             SQLiteDatabase myDB = ApreDB();
-
-            myDB.execSQL("CREATE TABLE IF NOT EXISTS "
-                    + "Bellezza "
-                    + " (Path VARCHAR, idCanzone INT(5), Bellezza INT(1));");
+            if (myDB != null) {
+                myDB.execSQL("CREATE TABLE IF NOT EXISTS "
+                        + "Bellezza "
+                        + " (Path VARCHAR, idCanzone INT(5), Bellezza INT(1));");
+            }
         } catch (Exception ignored) {
 
         }
@@ -65,19 +75,20 @@ public class db_dati {
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
         SQLiteDatabase myDB = ApreDB();
+        if (myDB != null) {
+            Cursor c = myDB.rawQuery("SELECT * FROM Bellezza WHERE Path = ?", new String[]{pathBase});
+            c.moveToFirst();
+            if (c.getCount() > 0) {
+                do {
+                    StrutturaBellezza sb = new StrutturaBellezza();
+                    sb.setIdCanzone(c.getInt(c.getColumnIndex("idCanzone")));
+                    sb.setBellezza(c.getInt(c.getColumnIndex("Bellezza")));
 
-        Cursor c = myDB.rawQuery("SELECT * FROM Bellezza WHERE Path = ?" , new String[] {pathBase});
-        c.moveToFirst();
-        if (c != null) {
-            do {
-                StrutturaBellezza sb = new StrutturaBellezza();
-                sb.setIdCanzone(c.getInt(c.getColumnIndex("idCanzone")));
-                sb.setBellezza(c.getInt(c.getColumnIndex("Bellezza")));
-
-                l.add(sb);
-            } while(c.moveToNext());
+                    l.add(sb);
+                } while (c.moveToNext());
+            }
+            c.close();
         }
-        c.close();
 
         return l;
     }
@@ -91,58 +102,61 @@ public class db_dati {
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
         SQLiteDatabase myDB = ApreDB();
+        if (myDB != null) {
+            Cursor c = myDB.rawQuery("SELECT * FROM Ascoltate WHERE Path = ?", new String[]{pathBase});
+            c.moveToFirst();
+            if (c.getCount() > 0) {
+                do {
+                    StrutturaAscoltate sb = new StrutturaAscoltate();
+                    sb.setIdCanzone(c.getInt(c.getColumnIndex("idCanzone")));
+                    sb.setQuante(c.getInt(c.getColumnIndex("Quante")));
 
-        Cursor c = myDB.rawQuery("SELECT * FROM Ascoltate WHERE Path = ?" , new String[] {pathBase});
-        c.moveToFirst();
-        if (c.getCount() > 0) {
-            do {
-                StrutturaAscoltate sb = new StrutturaAscoltate();
-                sb.setIdCanzone(c.getInt(c.getColumnIndex("idCanzone")));
-                sb.setQuante(c.getInt(c.getColumnIndex("Quante")));
-
-                l.add(sb);
-            } while(c.moveToNext());
+                    l.add(sb);
+                } while (c.moveToNext());
+            }
+            c.close();
         }
-        c.close();
 
         return l;
     }
 
     public boolean ScriveBellezza(String idCanzone, String Bellezza) {
+        boolean Ok = true;
+
         if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
             return false;
         }
 
         SQLiteDatabase myDB = ApreDB();
+        if (myDB != null) {
+            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+            int iBellezza = -1;
 
-        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-        boolean Ok = true;
-        int iBellezza = -1;
-
-        Cursor c = myDB.rawQuery("SELECT * FROM Bellezza WHERE Path = ? AND idCanzone = ?" , new String[] {pathBase, idCanzone});
-        c.moveToFirst();
-        if (c.getCount() > 0) {
-            iBellezza = c.getInt(c.getColumnIndex("Bellezza"));
-        }
-        c.close();
-
-        if (iBellezza == -1) {
-            try {
-                myDB.execSQL("INSERT INTO"
-                        + " Bellezza"
-                        + " (Path, idCanzone, Bellezza)"
-                        + " VALUES ('" + pathBase + "', " + idCanzone + ", " + Bellezza + ");");
-            } catch (SQLException e) {
-                Ok = false;
+            Cursor c = myDB.rawQuery("SELECT * FROM Bellezza WHERE Path = ? AND idCanzone = ?", new String[]{pathBase, idCanzone});
+            c.moveToFirst();
+            if (c.getCount() > 0) {
+                iBellezza = c.getInt(c.getColumnIndex("Bellezza"));
             }
-        } else {
-            try {
-                myDB.execSQL("UPDATE"
-                        + " Bellezza"
-                        + " Set Bellezza=" + Bellezza
-                        + " Where Path = '" + pathBase + "' And idCanzone = " + idCanzone + ";");
-            } catch (SQLException e) {
-                Ok = false;
+            c.close();
+
+            if (iBellezza == -1) {
+                try {
+                    myDB.execSQL("INSERT INTO"
+                            + " Bellezza"
+                            + " (Path, idCanzone, Bellezza)"
+                            + " VALUES ('" + pathBase + "', " + idCanzone + ", " + Bellezza + ");");
+                } catch (SQLException e) {
+                    Ok = false;
+                }
+            } else {
+                try {
+                    myDB.execSQL("UPDATE"
+                            + " Bellezza"
+                            + " Set Bellezza=" + Bellezza
+                            + " Where Path = '" + pathBase + "' And idCanzone = " + idCanzone + ";");
+                } catch (SQLException e) {
+                    Ok = false;
+                }
             }
         }
 
@@ -150,40 +164,42 @@ public class db_dati {
     }
 
     public boolean ScriveAscoltate(String idCanzone) {
+        boolean Ok = true;
+
         if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
             return false;
         }
 
         SQLiteDatabase myDB = ApreDB();
+        if (myDB != null) {
+            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+            int iQuante = -1;
 
-        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-        boolean Ok = true;
-        int iQuante = -1;
-
-        Cursor c = myDB.rawQuery("SELECT * FROM Ascoltate WHERE Path = ? AND idCanzone = ?" , new String[] {pathBase, idCanzone});
-        c.moveToFirst();
-        if (c.getCount() > 0) {
-            iQuante = c.getInt(c.getColumnIndex("Quante"));
-        }
-        c.close();
-
-        if (iQuante == -1) {
-            try {
-                myDB.execSQL("INSERT INTO"
-                        + " Ascoltate"
-                        + " (Path, idCanzone, Quante)"
-                        + " VALUES ('" + pathBase + "', " + idCanzone + ", 1);");
-            } catch (SQLException e) {
-                Ok = false;
+            Cursor c = myDB.rawQuery("SELECT * FROM Ascoltate WHERE Path = ? AND idCanzone = ?", new String[]{pathBase, idCanzone});
+            c.moveToFirst();
+            if (c.getCount() > 0) {
+                iQuante = c.getInt(c.getColumnIndex("Quante"));
             }
-        } else {
-            try {
-                myDB.execSQL("UPDATE"
-                        + " Ascoltate"
-                        + " Set Quante = Quante + 1"
-                        + " Where Path = '" + pathBase + "' And idCanzone = " + idCanzone + ";");
-            } catch (SQLException e) {
-                Ok = false;
+            c.close();
+
+            if (iQuante == -1) {
+                try {
+                    myDB.execSQL("INSERT INTO"
+                            + " Ascoltate"
+                            + " (Path, idCanzone, Quante)"
+                            + " VALUES ('" + pathBase + "', " + idCanzone + ", 1);");
+                } catch (SQLException e) {
+                    Ok = false;
+                }
+            } else {
+                try {
+                    myDB.execSQL("UPDATE"
+                            + " Ascoltate"
+                            + " Set Quante = Quante + 1"
+                            + " Where Path = '" + pathBase + "' And idCanzone = " + idCanzone + ";");
+                } catch (SQLException e) {
+                    Ok = false;
+                }
             }
         }
 

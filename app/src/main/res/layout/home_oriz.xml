@@ -230,6 +230,45 @@
                 android:layout_weight="1"
                 android:layout_height="40dp" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtQuanteAscoltate"
+            android:textColor="@color/bianco"
+            android:shadowColor="@color/nero"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:textSize="14sp"
+            android:text="prova prova"
+            android:gravity="center_horizontal"
+            android:textStyle="bold|italic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtQuanteScaricate"
+            android:textColor="@color/bianco"
+            android:shadowColor="@color/nero"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:text="prova prova"
+            android:textStyle="bold|italic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <LinearLayout

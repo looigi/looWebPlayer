@@ -461,6 +461,9 @@ public class DownloadMP3Nuovo {
                 }
             }
 
+            VariabiliStaticheHome.getInstance().setQuanteScaricate(VariabiliStaticheHome.getInstance().getQuanteScaricate() + 1);
+            Utility.getInstance().ScriveScaricateAscoltate();
+
             VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.GONE);
             VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);
 

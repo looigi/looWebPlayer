@@ -50,6 +50,11 @@ public class AdapterAscoltati extends ArrayAdapter
 		convertView = inflater.inflate(R.layout.listview_mp3, null);
 
 		int riga = lista.get(position);
+		boolean prossimo = false;
+		if (riga < 0) {
+			riga=-riga;
+			prossimo=true;
+		}
 		StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(riga);
 
 		int idCanzone = s.getIdBrano();
@@ -63,14 +68,18 @@ public class AdapterAscoltati extends ArrayAdapter
 
 		int indice = GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale();
 		int id = GestioneListaBrani.getInstance().RitornaIdInBaseAllIndice(indice);
-		if (id == idCanzone) {
-			convertView.setBackgroundColor(Color.argb(255, 220, 0, 0));
-			VariabiliStaticheHome.getInstance().getLstListaBrani().smoothScrollToPosition(position);
+		if (prossimo) {
+			convertView.setBackgroundColor(Color.argb(255, 0,220, 0));
 		} else {
-			if (Utility.getInstance().ePari(position)) {
-				convertView.setBackgroundColor(Color.WHITE);
+			if (id == idCanzone) {
+				convertView.setBackgroundColor(Color.argb(255, 220, 0, 0));
+				VariabiliStaticheHome.getInstance().getLstListaBrani().smoothScrollToPosition(position);
 			} else {
-				convertView.setBackgroundColor(Color.argb(255, 230, 230, 230));
+				if (Utility.getInstance().ePari(position)) {
+					convertView.setBackgroundColor(Color.WHITE);
+				} else {
+					convertView.setBackgroundColor(Color.argb(255, 230, 230, 230));
+				}
 			}
 		}
 
@@ -105,24 +114,29 @@ public class AdapterAscoltati extends ArrayAdapter
 			public void onClick(View v) {
 				int idCanzone = lista.get(position);
 
-				List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
-				int i = 0;
-				for (Integer ll : l) {
-					if (ll == idCanzone) {
-						break;
+				if (idCanzone>=0) {
+					List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
+					int i = 0;
+					for (Integer ll : l) {
+						if (ll == idCanzone) {
+							break;
+						}
+						i++;
 					}
-					i++;
-				}
-				int NumeroBrano = l.get(i);
-				GestioneListaBrani.getInstance().SettaIndice(i+1);
-				if (NumeroBrano > -1) {
-					VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-							.getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+					if (i < l.size() - 1) {
+						int NumeroBrano = l.get(i);
+						GestioneListaBrani.getInstance().SettaIndice(i);
+						if (NumeroBrano > -1) {
+							VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+									.getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
 
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-							"Impostazione brano esatto: " + Integer.toString(NumeroBrano));
-					GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
-					VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+									}.getClass().getEnclosingMethod().getName(),
+									"Impostazione brano esatto: " + Integer.toString(NumeroBrano));
+							GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+							VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+						}
+					}
 				}
 			}
 		});

@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech;
 import java.util.Locale;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 
 public class PronunciaFrasi {
     private Runnable runRiga1;
@@ -64,7 +65,11 @@ public class PronunciaFrasi {
     }
 
     private void Legge2(String Messaggio, String Lingua) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge2 PronunciaFrasi");
+        if (VariabiliStaticheHome.getInstance().getMediaPlayer()!=null) {
+            VariabiliStaticheHome.getInstance().getMediaPlayer().setVolume(50F, 50F);
+        }
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Legge2 PronunciaFrasi");
         try {
             int result = -1;
             if (Lingua.equals("ITALIANO")) {
@@ -74,7 +79,8 @@ public class PronunciaFrasi {
             }
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi. Linguaggio non installato");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "ERROR in pronuncia frasi. Linguaggio non installato");
             } else {
                 tts.speak(Messaggio, TextToSpeech.QUEUE_ADD, null);
             }
@@ -82,6 +88,9 @@ public class PronunciaFrasi {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi.");
             int a=0;
+        }
+        if (VariabiliStaticheHome.getInstance().getMediaPlayer()!=null) {
+            VariabiliStaticheHome.getInstance().getMediaPlayer().setVolume(100F, 100F);
         }
     }
 

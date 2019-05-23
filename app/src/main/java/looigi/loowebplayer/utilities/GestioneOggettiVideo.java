@@ -197,8 +197,8 @@ public class GestioneOggettiVideo {
 
         int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Modifica bellezza");
 
-        DBRemotoNuovo dbr = new DBRemotoNuovo();
-        dbr.AggiornaBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto), nn);
+        // DBRemotoNuovo dbr = new DBRemotoNuovo();
+        // dbr.AggiornaBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto), nn);
 
         db_dati db = new db_dati();
         db.ScriveBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto));

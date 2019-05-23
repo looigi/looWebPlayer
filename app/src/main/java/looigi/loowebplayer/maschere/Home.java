@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
+import org.kobjects.util.Util;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -197,8 +199,15 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setpMP3((ProgressBar) view.findViewById(R.id.pbarMP3));
             vh.setTxtTitoloBackground((TextView) view.findViewById(R.id.txtTitoloBackground));
             vh.setLayStelle((LinearLayout) view.findViewById(R.id.layStelle));
+            vh.setTxtQuanteAscoltate((TextView) view.findViewById(R.id.txtQuanteAscoltate));
+            vh.setTxtQuanteScaricate((TextView) view.findViewById(R.id.txtQuanteScaricate));
+            vh.setTxtTitoloBackground((TextView) view.findViewById(R.id.txtTitoloBackground));
 
             vh.getRltListaBrani().setVisibility(LinearLayout.GONE);
+
+            vh.setQuanteAscoltate(0);
+            vh.setQuanteScaricate(0);
+            Utility.getInstance().ScriveScaricateAscoltate();
 
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaBellezza()) {
                 vh.getLayStelle().setVisibility(LinearLayout.VISIBLE);
@@ -300,6 +309,10 @@ public class Home extends android.support.v4.app.Fragment {
                 public void onClick(View v) {
                     List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
                     List<Integer> ll = new ArrayList<>();
+                    if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() > -1) {
+                        // Aggiunge prossimo brano
+                        ll.add(-VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano());
+                    }
                     for (int i = l.size()-1; i>=0; i--) {
                         ll.add(l.get(i));
                     }

@@ -86,12 +86,48 @@ public class VariabiliStaticheHome {
     private Boolean PuoAvanzare;
     private TextView txtTitoloBackground;
     private LinearLayout layStelle;
+    private int QuanteAscoltate=0;
+    private int QuanteScaricate=0;
+    private TextView txtQuanteAscoltate;
+    private TextView txtQuanteScaricate;
 
     // private Handler hCambioImmagine;
     // private Runnable rCambioImmagine;
 
     public Context getContext() {
         return context;
+    }
+
+    public TextView getTxtQuanteAscoltate() {
+        return txtQuanteAscoltate;
+    }
+
+    public void setTxtQuanteAscoltate(TextView txtQuanteAscoltate) {
+        this.txtQuanteAscoltate = txtQuanteAscoltate;
+    }
+
+    public TextView getTxtQuanteScaricate() {
+        return txtQuanteScaricate;
+    }
+
+    public void setTxtQuanteScaricate(TextView txtQuanteScaricate) {
+        this.txtQuanteScaricate = txtQuanteScaricate;
+    }
+
+    public int getQuanteAscoltate() {
+        return QuanteAscoltate;
+    }
+
+    public void setQuanteAscoltate(int quanteAscoltate) {
+        QuanteAscoltate = quanteAscoltate;
+    }
+
+    public int getQuanteScaricate() {
+        return QuanteScaricate;
+    }
+
+    public void setQuanteScaricate(int quanteScaricate) {
+        QuanteScaricate = quanteScaricate;
     }
 
     public ListView getLstListaBrani() {

@@ -18,6 +18,7 @@ import java.io.StringWriter;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
 import looigi.loowebplayer.maschere.About;
 // import looigi.loowebplayer.maschere.Equalizer;
@@ -235,5 +236,10 @@ public class Utility {
 		}
 
 		return NumeroBrano;
+	}
+
+	public void ScriveScaricateAscoltate() {
+		VariabiliStaticheHome.getInstance().getTxtQuanteAscoltate().setText("Ascoltate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteAscoltate()));
+		VariabiliStaticheHome.getInstance().getTxtQuanteScaricate().setText("Scaricate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteScaricate()));
 	}
 }

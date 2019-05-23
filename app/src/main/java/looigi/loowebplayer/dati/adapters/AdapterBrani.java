@@ -91,7 +91,7 @@ public class AdapterBrani extends RecyclerView.Adapter<AdapterBrani.MyViewHolder
                 int idBrano = horizontalList.get(position).getIdBrano();
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setNumeroBranoInAscolto(idBrano);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(idBrano);
-                GestioneListaBrani.getInstance().AggiungeBrano(idBrano);
+                // GestioneListaBrani.getInstance().AggiungeBrano(idBrano);
                 GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
                 Utility.getInstance().CambiaMaschera(R.id.home);
             }

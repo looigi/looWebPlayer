@@ -105,13 +105,17 @@ public class GestioneCaricamentoBraniNuovo {
                         hAttesaDownloadS.postDelayed(rAttesaDownloadS = new Runnable() {
                             @Override
                             public void run() {
-                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                                int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() ||
+                                        (NumeroBrano>-1 &&
+                                                NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                                VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                     hAttesaDownloadS = null;
 
-                                    int NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+                                    NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
                                     VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
                                     VariabiliStaticheGlobali.getInstance().getDatiGenerali()
                                             .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
@@ -309,6 +313,9 @@ public class GestioneCaricamentoBraniNuovo {
     }
 
     private void CaricaBranoParteFinale() {
+        VariabiliStaticheHome.getInstance().setQuanteAscoltate(VariabiliStaticheHome.getInstance().getQuanteAscoltate() + 1);
+        Utility.getInstance().ScriveScaricateAscoltate();
+
         // GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Inizio Carica Brano.");

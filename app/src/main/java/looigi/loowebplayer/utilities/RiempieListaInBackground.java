@@ -311,14 +311,16 @@ public class RiempieListaInBackground {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Fatto");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Riempie lista in background. Fatto");
             StrutturaConfig vg = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione();
 
             ChiudeDialog();
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
                 if (vg.getQualeCanzoneStaSuonando()==-1) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Imposta canzone visto che è nulla");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Riempie lista in background. Imposta canzone visto che è nulla");
                     int NumeroBrano;
                     if (vg.getRicordaUltimoBrano() &&
                             vg.getNumeroBranoInAscolto()>-1) {

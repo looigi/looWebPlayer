@@ -118,8 +118,8 @@ public class GestioneSuonaBrano {
                                 int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(Ascoltata+1);
 
-                                DBRemotoNuovo dbr = new DBRemotoNuovo();
-                                dbr.VolteAscoltata(Integer.toString(NumeroBrano), nn);
+                                // DBRemotoNuovo dbr = new DBRemotoNuovo();
+                                // dbr.VolteAscoltata(Integer.toString(NumeroBrano), nn);
 
                                 db_dati db = new db_dati();
                                 db.ScriveAscoltate(Integer.toString(NumeroBrano));
@@ -217,7 +217,7 @@ public class GestioneSuonaBrano {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (vh.getMediaPlayer() != null && fromUser) {
-                        // VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
+                        VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
 
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Spostato brano tramite barra. Progress: " + Integer.toString(progress));
