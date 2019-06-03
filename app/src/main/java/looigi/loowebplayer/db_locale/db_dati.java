@@ -120,11 +120,11 @@ public class db_dati {
         return l;
     }
 
-    public boolean ScriveBellezza(String idCanzone, String Bellezza) {
-        boolean Ok = true;
+    public String ScriveBellezza(String idCanzone, String Bellezza) {
+        String Ok = "";
 
         if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
-            return false;
+            return "";
         }
 
         SQLiteDatabase myDB = ApreDB();
@@ -146,7 +146,7 @@ public class db_dati {
                             + " (Path, idCanzone, Bellezza)"
                             + " VALUES ('" + pathBase + "', " + idCanzone + ", " + Bellezza + ");");
                 } catch (SQLException e) {
-                    Ok = false;
+                    Ok = Utility.getInstance().PrendeErroreDaException(e);
                 }
             } else {
                 try {
@@ -155,7 +155,7 @@ public class db_dati {
                             + " Set Bellezza=" + Bellezza
                             + " Where Path = '" + pathBase + "' And idCanzone = " + idCanzone + ";");
                 } catch (SQLException e) {
-                    Ok = false;
+                    Ok = Utility.getInstance().PrendeErroreDaException(e);
                 }
             }
         }

@@ -109,15 +109,15 @@ public class GestioneWEBServiceSOAPNuovo {
 	}
 
 	public void Esegue() {
-		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-		if (ceRete) {
+		// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+		// if (ceRete) {
 			// if (bckAsyncTask==null) {
 				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
 						ApriDialog, Urletto);
 				bckAsyncTask.execute(Urletto);
 			// }
-		}
+		// }
 	}
 
 	public void StoppaEsecuzione() {
@@ -256,16 +256,16 @@ public class GestioneWEBServiceSOAPNuovo {
 
 	    @Override
 	    protected String doInBackground(String... sUrl) {
-			boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+			// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 			Errore = false;
 			result = "";
 
-			if (!ceRete) {
-				messErrore="ERROR: Assenza di rete";
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
-				return null;
-			}
+			// if (!ceRete) {
+			// 	messErrore="ERROR: Assenza di rete";
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
+			// 	return null;
+			// }
 
 			SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
 

@@ -202,7 +202,15 @@ public class GestioneOggettiVideo {
         // dbr.AggiornaBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto), nn);
 
         db_dati db = new db_dati();
-        db.ScriveBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto));
+        String Ritorno = db.ScriveBellezza(Integer.toString(NumeroBrano), Integer.toString(Quanto));
+        if (Ritorno.isEmpty()) {
+            ImpostaStelleAscoltata();
+        } else {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    "ERRORE: " + Ritorno,
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
+        }
 
         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nn, true);
     }
@@ -234,44 +242,44 @@ public class GestioneOggettiVideo {
 
         vh.getImgStella1().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(1);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(1);
+                SettaBellezza(1);
             }
         });
         vh.getImgStella2().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(2);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(2);
+                SettaBellezza(2);
             }
         });
         vh.getImgStella3().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(3);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(3);
+                SettaBellezza(3);
             }
         });
         vh.getImgStella4().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(4);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(4);
+                SettaBellezza(4);
             }
         });
         vh.getImgStella5().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(5);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(5);
+                SettaBellezza(5);
             }
         });
         vh.getImgStella6().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(6);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(6);
+                SettaBellezza(6);
             }
         });
         vh.getImgStella7().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SettaBellezza(7);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(nBrano).setStelle(7);
+                SettaBellezza(7);
             }
         });
 

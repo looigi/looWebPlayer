@@ -157,14 +157,14 @@ public class DownloadImmagineNuovo {
         protected String doInBackground(String... sUrl) {
             messErrore="";
 
-            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-            if (!ceRete) {
-                messErrore="ERROR: Assenza di rete";
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                        "Immagine: Assenza di rete");
-                return null;
-            }
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+            // if (!ceRete) {
+            //     messErrore="ERROR: Assenza di rete";
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //             "Immagine: Assenza di rete");
+            //     return null;
+            // }
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Inizio lo scarico dell'immagine: "+sUrl[0]+". TIMEOUT: "+Integer.toString(TIMEOUT));
@@ -238,14 +238,15 @@ public class DownloadImmagineNuovo {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(), "DL Immagine: Cambio brano");
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                        }.getClass().getEnclosingMethod().getName(),
-                        "Scarico dell'immagine. Post execute. Errore: " + messErrore);
                 if (messErrore.equals("ESCI")) {
                     // sVariabiliStaticheNuove.getInstance().setSc(null);
                 } else {
                     if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
                         // Errore... Riprovo ad eseguire la funzione
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
+                                "Scarico dell'immagine. Post execute. Errore: " + messErrore);
+
                         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi &&

@@ -61,14 +61,19 @@ public class GestioneFiles {
                 // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartelle "+Percorso);
                 String Campi[]=(Percorso+"/").split("/",-1);
                 String ss="";
+                int quantiSenza = 3;
+                int quale = 0;
 
                 for (String s : Campi) {
                     if (!s.isEmpty()) {
                         ss += "/" + s;
-                        CreaCartella(ss);
-                        if (!fileExistsInSD(".noMedia",ss )) {
-                            // Crea file per nascondere alla galleria i files immagine della cartella
-                            generateNoteOnSD(ss, ".noMedia","");
+                        quale++;
+                        if (quale>quantiSenza) {
+                            CreaCartella(ss);
+                            if (!fileExistsInSD(".noMedia", ss)) {
+                                // Crea file per nascondere alla galleria i files immagine della cartella
+                                generateNoteOnSD(ss, ".noMedia", "");
+                            }
                         }
                     }
                 }

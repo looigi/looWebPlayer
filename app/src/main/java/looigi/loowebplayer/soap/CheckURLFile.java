@@ -60,7 +60,9 @@ public class CheckURLFile {
     }
 
     public void StoppaEsecuzione(boolean Errore) {
-        downloadFile.cancel(true);
+        if (downloadFile!=null) {
+            downloadFile.cancel(true);
+        }
 
         if (Errore) {
             VariabiliStaticheGlobali.getInstance().setEsciDaCheckFile(true);
@@ -70,20 +72,22 @@ public class CheckURLFile {
             messErrore ="OK";
         }
 
-        downloadFile.ControllaFineCiclo();
+        if (downloadFile!=null) {
+            downloadFile.ControllaFineCiclo();
+        }
     }
 
     private static class CheckFile extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... sUrl) {
-            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-            if (!ceRete) {
-                messErrore="ERROR: Assenza di rete";
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                        "Check File error; Assenza di rete");
-                return null;
-            }
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+            // if (!ceRete) {
+            //     messErrore="ERROR: Assenza di rete";
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //             "Check File error; Assenza di rete");
+            //     return null;
+            // }
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Check file: "+sUrl[0]);

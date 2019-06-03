@@ -152,13 +152,13 @@ public class DownloadTextFileNuovo {
         protected String doInBackground(String... sUrl) {
             messErrore = "";
 
-            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-            if (!ceRete) {
-                messErrore="ERROR: Assenza di rete";
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "TEXT FIle; Assenza di rete");
-                return null;
-            }
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+            // if (!ceRete) {
+            //     messErrore="ERROR: Assenza di rete";
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "TEXT FIle; Assenza di rete");
+            //     return null;
+            // }
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Scarico del testo: " + sUrl[0]);

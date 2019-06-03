@@ -231,7 +231,7 @@ public class NetThreadNuovo {
                 OkNet = true;
                 level = SIGNAL_STRENGTH_MODERATE;
             } else {
-                OkNet = false;
+                OkNet = true;
                 level = SIGNAL_STRENGTH_POOR;
             }
         } else {
