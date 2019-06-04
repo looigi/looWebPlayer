@@ -149,7 +149,7 @@ public class NetThreadNuovo {
             case 1:
                 OkNet = haveConnectedWifi || haveConnectedMobile;
                 if (OkNet && !haveConnectedWifi) {
-                    getGsmLevel();
+                    // getGsmLevel();
                 }
                 break;
             case 2:
