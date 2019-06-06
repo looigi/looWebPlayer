@@ -28,15 +28,15 @@ public class CheckURLFile {
     }
 
     public void startControl(String sUrl) {
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce");
-            VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
-            return;
-        }
-        lastTimePressed = System.currentTimeMillis();
+        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //     }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce o mancanza di rete");
+        //     VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
+        //     return;
+        // }
+        // lastTimePressed = System.currentTimeMillis();
 
         // String Chiave = this.Url;
         // if (!VariabiliStaticheGlobali.getInstance().getChiaveCheckURL().isEmpty() ||

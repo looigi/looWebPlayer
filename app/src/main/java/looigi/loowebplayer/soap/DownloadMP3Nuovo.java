@@ -45,6 +45,7 @@ public class DownloadMP3Nuovo {
     private int NumeroOperazione;
     private String Url;
     private long lastTimePressed = 0;
+    private static int Tentativo;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -71,19 +72,20 @@ public class DownloadMP3Nuovo {
     }
 
     public void startDownload(String sUrl, int NO) {
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "DL Mp3 troppo veloce");
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            return;
-        }
-        lastTimePressed = System.currentTimeMillis();
+        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //     }.getClass().getEnclosingMethod().getName(), "DL Mp3 troppo veloce");
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+        //     return;
+        // }
+        // lastTimePressed = System.currentTimeMillis();
         VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(true);
 
         Url=sUrl;
         NumeroOperazione = NO;
+        Tentativo = 0;
 
         VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.VISIBLE);
         VariabiliStaticheHome.getInstance().getpMP3().setMax(100);
@@ -136,7 +138,6 @@ public class DownloadMP3Nuovo {
         private String Url;
 //
         private int QuantiTentativi;
-        private int Tentativo;
         // private Handler hAttesaNuovoTentativo;
         // private Runnable rAttesaNuovoTentativo;
         private int SecondiAttesa;
@@ -154,7 +155,6 @@ public class DownloadMP3Nuovo {
             this.Url = Url;
 
             QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-            Tentativo = 0;
         }
 
         private void ChiudeDialog() {
@@ -414,11 +414,10 @@ public class DownloadMP3Nuovo {
                         }
                     } else {
                         // Errore... Riprovo ad eseguire la funzione
-                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi && messErrore.contains("ERROR:") &&
-                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
-                                ceRete) {
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

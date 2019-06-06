@@ -34,6 +34,7 @@ public class DownloadImmagineNuovo {
     private String Url;
     private long lastTimePressed = 0;
     private int NumOperazione;
+    private static int Tentativo;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -60,15 +61,16 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
-            return;
-        }
-        lastTimePressed = System.currentTimeMillis();
+        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //     }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
+        //     return;
+        // }
+        // lastTimePressed = System.currentTimeMillis();
+        this.Tentativo = 0;
 
         this.Url=sUrl;
         // this.TIMEOUT = TO;
@@ -115,7 +117,6 @@ public class DownloadImmagineNuovo {
         private int NumeroOperazione;
         private int NumeroBrano;
         private int QuantiTentativi;
-        private int Tentativo;
         private Handler hAttesaNuovoTentativo;
         private Runnable rAttesaNuovoTentativo;
         private int SecondiAttesa;
@@ -134,7 +135,6 @@ public class DownloadImmagineNuovo {
             this.Url = U;
 
             this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-            this.Tentativo = 0;
 
             ApriDialog();
         }
@@ -247,11 +247,10 @@ public class DownloadImmagineNuovo {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Scarico dell'immagine. Post execute. Errore: " + messErrore);
 
-                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi &&
-                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
-                                ceRete) {
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;

@@ -80,15 +80,16 @@ public class DBRemotoNuovo {
 	public void RitornaBrano(final Context context, final String Dire, final String Artista,
 													final String Album, final String Brano, final String Converte,
 													final String Qualita) {
-		String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Temp/" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente() + ".txt";
+		int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
+				"Controllo esecuzione remota");
+
+		/*String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Temp/" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente() + ".txt";
 		final CheckURLFile cuf = new CheckURLFile();
 		cuf.setNumeroBrano(-1);
 		cuf.startControl(url);
 
 		Secondi=0;
 		final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-		final int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
-				"Controllo esecuzione remota");
 
 		hAttendeRispostaCheckURL = new Handler(Looper.getMainLooper());
 		hAttendeRispostaCheckURL.postDelayed(rAttendeRispostaCheckURL = new Runnable() {
@@ -143,22 +144,25 @@ public class DBRemotoNuovo {
 					}
 				}
 			}
-		}, 1000);
+		}, 1000);*/
+
+		EsegueChiamataMP3(Dire, Artista, Album, Brano, Qualita,
+				Converte, NumeroOperazione);
 	}
 
-	private void EsegueChiamataMP3(Context context, CheckURLFile cuf, String Dire, String Artista, String Album, String Brano, String Qualita,
+	private void EsegueChiamataMP3(String Dire, String Artista, String Album, String Brano, String Qualita,
 								   String Converte, int NumeroOperazione) {
 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 				"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
 		VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
 
 		hAttendeRispostaCheckURL = null;
-		if (cuf!=null) {
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-					"Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
-
-			cuf.StoppaEsecuzione(false);
-		}
+		// if (cuf!=null) {
+		// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+		// 			"Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
+//
+		// 	cuf.StoppaEsecuzione(false);
+		// }
 
 		String Urletto="RitornaBrano?";
 		Urletto+="NomeUtente=" + VariabiliStaticheGlobali.getInstance().getUtente().getUtente();

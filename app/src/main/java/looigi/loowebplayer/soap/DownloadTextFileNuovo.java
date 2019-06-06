@@ -28,6 +28,7 @@ public class DownloadTextFileNuovo {
     private String Url;
     private String tOperazione;
     private long lastTimePressed = 0;
+    private static int Tentativo;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -46,20 +47,20 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-        if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            return;
-        }
-        lastTimePressed = System.currentTimeMillis();
+        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+//
+        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //     }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
+        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+        //     return;
+        // }
+        // lastTimePressed = System.currentTimeMillis();
 
         this.Url=sUrl;
         // this.ApriDialog=ApriDialog;
         this.NumeroOperazione=NOperazione;
-
+        this.Tentativo = 0;
 
         // String Chiave = this.Url;
         // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
@@ -92,7 +93,6 @@ public class DownloadTextFileNuovo {
         private int NumeroBrano;
         private int NumeroOperazione;
         private int QuantiTentativi;
-        private int Tentativo;
         private Handler hAttesaNuovoTentativo;
         private Runnable rAttesaNuovoTentativo;
         private int SecondiAttesa;
@@ -112,7 +112,6 @@ public class DownloadTextFileNuovo {
             this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
             this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-            this.Tentativo = 0;
         }
 
         private void ChiudeDialog() {
@@ -270,11 +269,10 @@ public class DownloadTextFileNuovo {
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione
-                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
                         if (Tentativo < QuantiTentativi &&
-                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
-                                ceRete) {
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
                             final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo-1)) / 1000;
