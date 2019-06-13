@@ -5,9 +5,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
@@ -43,7 +48,25 @@ public class DialogMessaggio
 
         Message = message;
 
+        PlaySound();
+
         create(a);
+    }
+
+    private void PlaySound() {
+        final AssetFileDescriptor afd = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                .getResources().openRawResourceFd(R.raw.dialog_sound);
+        final FileDescriptor fileDescriptor = afd.getFileDescriptor();
+        MediaPlayer player = new MediaPlayer();
+        try {
+            player.setDataSource(fileDescriptor, afd.getStartOffset(),
+                    afd.getLength());
+            player.setLooping(false);
+            player.prepare();
+            player.start();
+        } catch (IOException ignored) {
+
+        }
     }
 
     private void create(Context context)

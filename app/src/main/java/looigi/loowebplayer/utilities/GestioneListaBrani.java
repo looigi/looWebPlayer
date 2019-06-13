@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 
 import java.io.File;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,6 +18,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 // import looigi.loowebplayer.thread.NetThreadNuovo;
 
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
@@ -114,7 +116,15 @@ public class GestioneListaBrani {
         } else {
             if (IndiceSuonati < BraniSuonati.size()) {
                 IndiceSuonati++;
-                Brano = BraniSuonati.get(IndiceSuonati);
+                if (IndiceSuonati<BraniSuonati.size()) {
+                    Brano = BraniSuonati.get(IndiceSuonati);
+                } else {
+                    DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                            "Non riesco a prendere il brano successivo.\nIndice suonati più grande del vettore contenitore: " +
+                                    Integer.toString(IndiceSuonati) + "/" + Integer.toString(BraniSuonati.size()-1),
+                            true,
+                            VariabiliStaticheGlobali.NomeApplicazione);
+                }
                 Avanza = false;
             } else {
                 int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
@@ -292,6 +302,7 @@ public class GestioneListaBrani {
 
     public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
         if (ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),
@@ -304,31 +315,51 @@ public class GestioneListaBrani {
                         }.getClass().getEnclosingMethod().getName(),
                         "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+
                 return CercaBranoGiaScaricato(false);
             } else {
                 if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1){
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                             }.getClass().getEnclosingMethod().getName(),
-                            "Non c'è rete, imposto il brano impostato senza rete");
+                            "Non c'è rete, imposto il brano impostato senza rete 1");
 
-                    return VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                    int n = BranoSenzarete();
+                    return n; // VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
                 } else {
                     if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() > -1) {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
-                                "Non c'è rete, imposto il prossimo brano");
+                                "Non c'è rete, imposto il brano impostato senza rete 2");
 
-                        return VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
+                        int n = BranoSenzarete();
+                        return n; // VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
                     } else {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
-                                "Non c'è rete e non c'è nessun brano impostato");
+                                "Non c'è rete, imposto il brano impostato senza rete 3");
 
-                        return -1;
+                        int n = BranoSenzarete();
+                        return n; // -1;
                     }
                 }
             }
        }
+    }
+
+    private int BranoSenzarete() {
+        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+        int NumeroBrano=CercaBranoGiaScaricato(false);
+        VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
+        VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+        VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
+
+        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+        final String NomeBrano = s.getNomeBrano();
+        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+
+        VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
+
+        return NumeroBrano;
     }
 
     public int RitornaBranoPrecedente() {
@@ -359,6 +390,7 @@ public class GestioneListaBrani {
 
     public void ScaricaBranoSuccessivoInBackground() {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        // ceRete = false;
         if (ceRete) {
             final int NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);
             VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
@@ -433,19 +465,7 @@ public class GestioneListaBrani {
                 VariabiliStaticheNuove.getInstance().setDb(null);
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-             "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
-            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-            int NumeroBrano=CercaBranoGiaScaricato(false);
-            VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
-            VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
-            VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
-
-            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-            final String NomeBrano = s.getNomeBrano();
-            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-
-            VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
+            int N = BranoSenzarete();
 
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
         }

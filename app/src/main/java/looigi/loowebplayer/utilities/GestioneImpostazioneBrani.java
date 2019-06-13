@@ -8,6 +8,7 @@ import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 
 public class GestioneImpostazioneBrani {
     private static final GestioneImpostazioneBrani ourInstance = new GestioneImpostazioneBrani();
@@ -78,6 +79,11 @@ public class GestioneImpostazioneBrani {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setCompressioneMP3(false);
                 GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
             }
+
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    "Brano non valido...",
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
         } else {
             // VariabiliStaticheHome.getInstance().getImgLoadBrano().setVisibility(LinearLayout.GONE);
 
