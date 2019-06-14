@@ -184,6 +184,24 @@ public class ScaricoBranoEAttesa {
                                         GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ko);
                                     }
 
+                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                            "Tento di prendere il prossimo brano fra quelli già scaricati");
+                                    VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                                    int NumeroBrano=GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                    VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
+                                    VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+                                    // GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+
+                                    StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                    final String NomeBrano = s.getNomeBrano();
+                                    String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+
+                                    VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
+
+                                    GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
+
+                                    ScaricaBrano(NumeroBrano, Brano, nn);
+
                                     VariabiliStaticheGlobali.getInstance().setSbea(null);
 
                                     hSelezionaRiga.removeCallbacks(runRiga);
