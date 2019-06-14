@@ -5,8 +5,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -47,9 +49,57 @@ import looigi.loowebplayer.utilities.Permessi;
 import looigi.loowebplayer.utilities.Utility;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+        implements NavigationView.OnNavigationItemSelectedListener,
+        bckService.ServiceCallbacks {
+    private bckService myService;
+    private boolean bound = false;
     private VariabiliStaticheGlobali vg = VariabiliStaticheGlobali.getInstance();
+
+    /** Callbacks for service binding, passed to bindService() */
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // cast the IBinder and get MyService instance
+            bckService.LocalBinder binder = (bckService.LocalBinder) service;
+            myService = binder.getService();
+            bound = true;
+            myService.setCallbacks(MainActivity.this); // register
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            bound = false;
+        }
+    };
+
+    /* Defined by ServiceCallbacks interface */
+    @Override
+    public void doSomething() {
+        vg.setContext(this);
+        vg.setFragmentActivityPrincipale(this);
+        vg.setContextPrincipale(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // bind to Service
+        Intent intent = new Intent(this, bckService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from service
+        if (bound) {
+            myService.setCallbacks(null); // unregister
+            unbindService(serviceConnection);
+            bound = false;
+        }
+    }
+
     private AudioManager mAudioManager;
     private ComponentName mReceiverComponent;
     private PhoneUnlockedReceiver receiver;
