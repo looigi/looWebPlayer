@@ -525,57 +525,59 @@ public class GestioneCaricamentoBraniNuovo {
 
         String PathMP3 = "";
         String PathMP3_Compresso = "";
-        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-            PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
-            PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
-        } else {
-            PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + NomeBrano;
-            PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + CompattazioneMP3 + NomeBrano;
-        }
-
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-        }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
-        File f = new File(PathMP3);
-        File fc = new File(PathMP3_Compresso);
-        if (f.exists() || fc.exists()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "Brano già scaricato");
-            // VariabiliStaticheHome.getInstance().setBranoDaCaricare("");
-            if (f.exists()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Imposta brano normale");
-
-                GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3);
+        if (pathBase != null) {
+            if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
+                PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
             } else {
+                PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + NomeBrano;
+                PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + CompattazioneMP3 + NomeBrano;
+            }
+
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
+            File f = new File(PathMP3);
+            File fc = new File(PathMP3_Compresso);
+            if (f.exists() || fc.exists()) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Imposta brano compresso");
+                }.getClass().getEnclosingMethod().getName(), "Brano già scaricato");
+                // VariabiliStaticheHome.getInstance().setBranoDaCaricare("");
+                if (f.exists()) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Imposta brano normale");
 
-                GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3_Compresso);
-            }
-            if (f.exists() && fc.exists() && !CompattazioneMP3.isEmpty()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Elimino brano non compresso. Compresso già esistente");
-                f.delete();
-            }
-        } else {
-            // VariabiliStaticheGlobali.getInstance().setHaCaricatoTuttiIDettagliDelBrano(false);
-            // VariabiliStaticheHome.getInstance().setBranoDaCaricare(Artista + ";" + Album + ";" + NomeBrano);
+                    GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3);
+                } else {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Imposta brano compresso");
 
-            // Scarica Brano
-            String Converte = "N";
-            String Qualita = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getRapportoCompressione();
-            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
-                Converte = "S";
-            }
+                    GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3_Compresso);
+                }
+                if (f.exists() && fc.exists() && !CompattazioneMP3.isEmpty()) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Elimino brano non compresso. Compresso già esistente");
+                    f.delete();
+                }
+            } else {
+                // VariabiliStaticheGlobali.getInstance().setHaCaricatoTuttiIDettagliDelBrano(false);
+                // VariabiliStaticheHome.getInstance().setBranoDaCaricare(Artista + ";" + Album + ";" + NomeBrano);
 
-            DBRemotoNuovo dbr2 = new DBRemotoNuovo();
-            dbr2.RitornaBrano(VariabiliStaticheHome.getInstance().getContext(),
-                    VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
-                    Artista,
-                    Album,
-                    NomeBrano,
-                    Converte,
-                    Qualita);
+                // Scarica Brano
+                String Converte = "N";
+                String Qualita = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getRapportoCompressione();
+                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
+                    Converte = "S";
+                }
+
+                DBRemotoNuovo dbr2 = new DBRemotoNuovo();
+                dbr2.RitornaBrano(VariabiliStaticheHome.getInstance().getContext(),
+                        VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
+                        Artista,
+                        Album,
+                        NomeBrano,
+                        Converte,
+                        Qualita);
+            }
         }
     }
 
