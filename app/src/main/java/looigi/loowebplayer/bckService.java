@@ -18,33 +18,8 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.R
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
 
 public class bckService extends Service {
-
-    public interface ServiceCallbacks {
-        void doSomething();
-    }
-
-    private final IBinder binder = new LocalBinder();
-    // Registered callbacks
-    private ServiceCallbacks serviceCallbacks;
-
-    public void setCallbacks(ServiceCallbacks callbacks) {
-        serviceCallbacks = callbacks;
-    }
-
-    // Class used for the client Binder.
-    public class LocalBinder extends Binder {
-        bckService getService() {
-            // Return this instance of MyService so clients can call public methods
-            return bckService.this;
-        }
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (serviceCallbacks != null) {
-            serviceCallbacks.doSomething();
-        }
-
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Entro nell'app");
         boolean CeUtente=false;
@@ -102,7 +77,16 @@ public class bckService extends Service {
             Utility.getInstance().CambiaMaschera(R.id.utenza);
         }
 
-    return Service.START_STICKY;
+        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Intent dialogIntent = new Intent(this, MainActivity.class);
+        // dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // startActivity(dialogIntent);
     }
 
     @Override

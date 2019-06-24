@@ -297,10 +297,10 @@ public class wsRitornoNuovo {
             NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
         }
 
-        String Brano[] = Ritorno.split("/");
+        String Brano[] = Ritorno.split("\\\\", -1);
 
         ScaricoBranoEAttesa s = new ScaricoBranoEAttesa();
-        s.ScaricaBrano(NumeroBrano, Brano, NumeroOperazione);
+        s.ScaricaBrano(NumeroBrano, Brano, NumeroOperazione, inBackGround);
     }
 
     public void RitornaBrano(final String Ritorno, final int NumeroOperazione) {
@@ -310,7 +310,7 @@ public class wsRitornoNuovo {
         //     return;
         // }
 
-        if (VariabiliStaticheGlobali.getInstance().getSbea() == null) {
+        /* if (VariabiliStaticheGlobali.getInstance().getSbea() == null) {
             ScaricoBranoEAttesa s = new ScaricoBranoEAttesa();
             s.setInBackground(false);
             VariabiliStaticheGlobali.getInstance().setSbea(s);
@@ -318,11 +318,11 @@ public class wsRitornoNuovo {
         } else {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Stesso brano. Evito la duplicazione della funzione.");
-        }
+        } */
     }
 
     public void RitornaBranoBackground(final String Ritorno, final int NumeroOperazione) {
-        if (VariabiliStaticheGlobali.getInstance().getSbea() == null) {
+        /* if (VariabiliStaticheGlobali.getInstance().getSbea() == null) {
             ScaricoBranoEAttesa s = new ScaricoBranoEAttesa();
             s.setInBackground(true);
             VariabiliStaticheGlobali.getInstance().setSbea(s);
@@ -330,7 +330,7 @@ public class wsRitornoNuovo {
         } else {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Stesso brano in background. Evito la duplicazione della funzione.");
-        }
+        } */
 
         /* final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 

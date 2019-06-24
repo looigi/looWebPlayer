@@ -479,21 +479,21 @@ public class GestioneWEBServiceSOAPNuovo {
 									rRit.RitornaDettaglioBrano(Ritorno, NumeroOperazione);
 									Ancora = false;
 									break;
-								case "RitornaBrano":
+								/* case "RitornaBrano":
 									rRit.RitornaBrano(Ritorno, NumeroOperazione);
 									Ancora = false;
-									break;
+									break; */
 								case "RitornaMultimediaArtista":
 									GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
 									rRit.RitornaMultimediaArtista(Ritorno);
 									Ancora = false;
 									break;
-								case "RitornaBranoBackground":
+								/* case "RitornaBranoBackground":
 									GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ricerca);
 
 									rRit.RitornaBranoBackground(Ritorno, NumeroOperazione);
 									Ancora = false;
-									break;
+									break; */
 							}
 						}
 					} else {
