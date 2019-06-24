@@ -8,6 +8,7 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
+import looigi.loowebplayer.soap.AttesaScaricamentoBrano;
 import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
@@ -172,6 +173,7 @@ public class DBRemotoNuovo {
 		Urletto+="&Brano=" + ToglieCaratteriStrani(Brano);
 		Urletto+="&Converte=" + Converte;
 		Urletto+="&Qualita=" + Qualita;
+		Urletto+="&Attendi=true";
 
 		String messaggio="";
 
@@ -189,7 +191,7 @@ public class DBRemotoNuovo {
 
 		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, messaggio);
 
-		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+		/* GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
 				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
 				"RitornaBrano",
 				NS,
@@ -197,12 +199,23 @@ public class DBRemotoNuovo {
 				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
 				NumeroOperazione,
 				false);
+		g.Esegue(); */
+
+		AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"RitornaBrano",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+				NumeroOperazione,
+				false,
+				false);
 		g.Esegue();
 
-		VariabiliStaticheNuove.getInstance().setGb(g);
+		// VariabiliStaticheNuove.getInstance().setGb(g);
 	}
 
-	public GestioneWEBServiceSOAPNuovo RitornaBranoBackground(Context context, String Dire, String Artista, String Album,
+	public AttesaScaricamentoBrano RitornaBranoBackground(Context context, String Dire, String Artista, String Album,
 							String Brano, String Converte, String Qualita, int NumeroBrano, Boolean NonFernmareDownload,
 									   int NumeroOperazione) {
 		// if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
@@ -216,6 +229,7 @@ public class DBRemotoNuovo {
 			Urletto += "&Brano=" + ToglieCaratteriStrani(Brano);
 			Urletto += "&Converte=" + Converte;
 			Urletto += "&Qualita=" + Qualita;
+			Urletto +="&Attendi=true";
 
 			String messaggio = "";
 			if (Converte.equals("S")) {
@@ -244,13 +258,24 @@ public class DBRemotoNuovo {
         //             "Skippato... Già ce n'è un altro in coda");
         // }
 
-		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+		/* GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
 				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
 				"RitornaBranoBackground",
 				NS,
 				SA,
 				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
 				NumeroOperazione,
+				false);
+		g.Esegue(); */
+
+		AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"RitornaBranoBackground",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+				NumeroOperazione,
+				true,
 				false);
 		g.Esegue();
 

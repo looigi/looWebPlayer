@@ -1,7 +1,6 @@
 package looigi.loowebplayer.soap;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,7 +25,7 @@ import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
-public class GestioneWEBServiceSOAPNuovo {
+public class AttesaScaricamentoBrano {
 	private static BackgroundAsyncTask bckAsyncTask;
 	private static String messErrore="";
 	private long lastTimePressed = 0;
@@ -39,10 +38,11 @@ public class GestioneWEBServiceSOAPNuovo {
 	private boolean ApriDialog;
 	private String Urletto;
 	private static int Tentativo;
+	private boolean inBackGround;
 
-	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
-                                       String NS, String SA, int Timeout, int NumeroOperazione,
-									   boolean ApriDialog) {
+	public AttesaScaricamentoBrano(String urletto, String TipoOperazione,
+                                   String NS, String SA, int Timeout, int NumeroOperazione,
+                                   boolean inBackGround, boolean ApriDialog) {
 		this.NAMESPACE = NS;
 		this.Timeout = Timeout;
 		this.SOAP_ACTION = SA;
@@ -50,6 +50,7 @@ public class GestioneWEBServiceSOAPNuovo {
 		this.tOperazione = TipoOperazione;
 		this.ApriDialog = ApriDialog;
 		this.Urletto = urletto;
+		this.inBackGround = inBackGround;
 		this.Tentativo = 0;
 
 		// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
@@ -116,7 +117,7 @@ public class GestioneWEBServiceSOAPNuovo {
 		// if (ceRete) {
 			// if (bckAsyncTask==null) {
 				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-						ApriDialog, Urletto);
+						inBackGround, ApriDialog, Urletto);
 				bckAsyncTask.execute(Urletto);
 			// }
 		// }
@@ -151,10 +152,11 @@ public class GestioneWEBServiceSOAPNuovo {
 		private ProgressDialog progressDialog;
 		private String Urletto;
 		private String UrlConvertito;
+		private boolean inBackground;
 
 		private BackgroundAsyncTask(String NAMESPACE, int TimeOut,
 									String SOAP_ACTION, int NumeroOperazione, String tOperazione,
-									boolean ApriDialog, String Urletto) {
+									boolean inBackground, boolean ApriDialog, String Urletto) {
 			this.NAMESPACE = NAMESPACE;
 			// this.METHOD_NAME = METHOD_NAME;
 			// this.Parametri = Parametri;
@@ -164,6 +166,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			this.tOperazione = tOperazione;
 			this.ApriDialog = ApriDialog;
 			this.Urletto = Urletto;
+			this.inBackground = inBackground;
 
 			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
@@ -299,7 +302,7 @@ public class GestioneWEBServiceSOAPNuovo {
                 soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(UrlConvertito, Timeout);
+                aht = new HttpTransportSE(UrlConvertito, 500000);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled()){
@@ -416,10 +419,10 @@ public class GestioneWEBServiceSOAPNuovo {
 			// VariabiliStaticheGlobali.getInstance().setChiaveDLSoap("***");
 
  			// if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
-			//	VariabiliStaticheNuove.getInstance().setDb(null);
+			// 	VariabiliStaticheNuove.getInstance().setDb(null);
 			//}
 			// if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
-			//	VariabiliStaticheNuove.getInstance().setGb(null);
+			// 	VariabiliStaticheNuove.getInstance().setGb(null);
 			// }
 			// if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
 				VariabiliStaticheNuove.getInstance().setGm(null);
@@ -459,39 +462,12 @@ public class GestioneWEBServiceSOAPNuovo {
 					if (!Errore || NumeroBrano == -1) {
 						while (Ancora) {
 							switch (tOperazione) {
-								case "ModificaBellezza":
-									rRit.RitornaModificaBellezza(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "VolteAscoltata":
-									rRit.RitornaVolteAscoltata(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "RitornaListaBrani":
-									rRit.RitornaListaBrani(Ritorno);
-									Ancora = false;
-									break;
-								case "RitornaDatiUtente":
-									rRit.RitornaDatiUtente(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "RitornaDettaglioBrano":
-									rRit.RitornaDettaglioBrano(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
 								case "RitornaBrano":
-									rRit.RitornaBrano(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "RitornaMultimediaArtista":
-									GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
-									rRit.RitornaMultimediaArtista(Ritorno);
+									rRit.RitornaBranoConAttesa(Ritorno, NumeroOperazione, inBackground);
 									Ancora = false;
 									break;
 								case "RitornaBranoBackground":
-									GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ricerca);
-
-									rRit.RitornaBranoBackground(Ritorno, NumeroOperazione);
+									rRit.RitornaBranoConAttesa(Ritorno, NumeroOperazione, inBackground);
 									Ancora = false;
 									break;
 							}
@@ -528,8 +504,8 @@ public class GestioneWEBServiceSOAPNuovo {
 										// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 										// if (ceRete) {
-											bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-													ApriDialog, Urletto);
+											bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+													inBackground, ApriDialog, Urletto);
 											bckAsyncTask.execute(Urletto);
 										// }
 

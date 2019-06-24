@@ -418,7 +418,7 @@ public class GestioneListaBrani {
 
                 VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
-                VariabiliStaticheNuove.getInstance().setDb(null);
+                // VariabiliStaticheNuove.getInstance().setDb(null);
 
                 if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                     VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
@@ -450,7 +450,7 @@ public class GestioneListaBrani {
                 );
 
                 DBRemotoNuovo dbr = new DBRemotoNuovo();
-                VariabiliStaticheNuove.getInstance().setDb(dbr.RitornaBranoBackground(VariabiliStaticheHome.getInstance().getContext(),
+                dbr.RitornaBranoBackground(VariabiliStaticheHome.getInstance().getContext(),
                         VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase(),
                         c[0],
                         c[1],
@@ -460,9 +460,9 @@ public class GestioneListaBrani {
                         NumeroBranoProssimo,
                         true,
                         numOperazione
-                ));
+                );
 
-                VariabiliStaticheNuove.getInstance().setDb(null);
+                // VariabiliStaticheNuove.getInstance().setDb(null);
             }
         } else {
             int N = BranoSenzarete();

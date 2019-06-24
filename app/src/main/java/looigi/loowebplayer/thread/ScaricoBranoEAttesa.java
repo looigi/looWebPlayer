@@ -267,7 +267,7 @@ public class ScaricoBranoEAttesa {
         }, VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
     }
 
-    private void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione) {
+    public void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione) {
         // PronunciaFrasi pf = new PronunciaFrasi();
         // pf.PronunciaFrase("Scarico brano"+Altro, "ITALIANO");
 

@@ -282,6 +282,27 @@ public class wsRitornoNuovo {
         } */
     }
 
+    public void RitornaBranoConAttesa(String Ritorno, int NumeroOperazione, boolean inBackGround) {
+        // if (Ritorno.equals(VariabiliStaticheGlobali.getInstance().getLastRitorno())) {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //             "Stesso brano. Evito la duplicazione della funzione.");
+        //     return;
+        // }
+
+        int NumeroBrano = -1;
+
+        if (!inBackGround) {
+            NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+        } else {
+            NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+        }
+
+        String Brano[] = Ritorno.split("/");
+
+        ScaricoBranoEAttesa s = new ScaricoBranoEAttesa();
+        s.ScaricaBrano(NumeroBrano, Brano, NumeroOperazione);
+    }
+
     public void RitornaBrano(final String Ritorno, final int NumeroOperazione) {
         // if (Ritorno.equals(VariabiliStaticheGlobali.getInstance().getLastRitorno())) {
         //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),

@@ -1,5 +1,6 @@
 package looigi.loowebplayer.VariabiliStatiche;
 
+import looigi.loowebplayer.soap.AttesaScaricamentoBrano;
 import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
@@ -24,9 +25,9 @@ public class VariabiliStaticheNuove {
     private ScaricoCover sc;
     private GestioneTesti gt;
     private GestioneWEBServiceSOAPNuovo gm;
-    private GestioneWEBServiceSOAPNuovo gb;
+    // private AttesaScaricamentoBrano gb;
     // private DownloadMP3Nuovo d;
-    private GestioneWEBServiceSOAPNuovo db;
+    // private GestioneWEBServiceSOAPNuovo db;
     // private DownloadMP3Nuovo d2;
     // private CheckURLFile cuf;
 
@@ -62,13 +63,13 @@ public class VariabiliStaticheNuove {
         this.gm = gm;
     }
 
-    public GestioneWEBServiceSOAPNuovo getGb() {
+    /* public AttesaScaricamentoBrano getGb() {
         return gb;
     }
 
-    public void setGb(GestioneWEBServiceSOAPNuovo gb) {
+    public void setGb(AttesaScaricamentoBrano gb) {
         this.gb = gb;
-    }
+    } */
 
     // public DownloadMP3Nuovo getD() {
     //     return d;
@@ -78,13 +79,13 @@ public class VariabiliStaticheNuove {
     //     this.d = d;
     // }
 
-    public GestioneWEBServiceSOAPNuovo getDb() {
+    /* public GestioneWEBServiceSOAPNuovo getDb() {
         return db;
     }
 
     public void setDb(GestioneWEBServiceSOAPNuovo db) {
         this.db = db;
-    }
+    } */
 
     // public DownloadMP3Nuovo getD2() {
     //     return d2;
