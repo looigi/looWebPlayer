@@ -8,6 +8,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
@@ -285,42 +286,54 @@ public class ScaricoBranoEAttesa {
             url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
         }
 
-        String sBrano = Brano[campi];
-        String sAlbum = Brano[campi - 1];
-        String sArtista = Brano[campi - 2];
+        if (Brano.length > 2) {
+            String sBrano = Brano[campi];
+            String sAlbum = Brano[campi - 1];
+            String sArtista = Brano[campi - 2];
 
-        if (!url.contains(sArtista) && !url.contains(sAlbum)) {
-            url += sArtista + "/" + sAlbum + "/" + sBrano;
+            if (!url.contains(sArtista) && !url.contains(sAlbum)) {
+                url += sArtista + "/" + sAlbum + "/" + sBrano;
+            } else {
+                url += sBrano;
+            }
+
+            if (inBackground) {
+                GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.salva);
+            }
+
+            DownloadMP3Nuovo d = new DownloadMP3Nuovo();
+            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+
+            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+
+            if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+            } else {
+                d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/");
+            }
+
+            d.setNomeBrano(sBrano);
+            d.setCompresso(compresso);
+            if (inBackground) {
+                d.setAutomatico(true);
+            } else {
+                d.setAutomatico(false);
+            }
+            d.setNumeroBrano(NumeroBrano);
+            d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+            d.startDownload(url, NumeroOperazione);
         } else {
-            url += sBrano;
+            String bb = "";
+
+            for (String b : Brano) {
+                bb += (b + ";");
+            }
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    "Errore durante la routine ScaricaBrano.\nBrano: " + bb,
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
         }
-
-        if (inBackground) {
-            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.salva);
-        }
-
-        DownloadMP3Nuovo d = new DownloadMP3Nuovo();
-        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-
-        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-        String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
-
-        if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-            d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
-        } else {
-            d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" );
-        }
-
-        d.setNomeBrano(sBrano);
-        d.setCompresso(compresso);
-        if (inBackground) {
-            d.setAutomatico(true);
-        } else {
-            d.setAutomatico(false);
-        }
-        d.setNumeroBrano(NumeroBrano);
-        d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-        d.startDownload(url, NumeroOperazione);
     }
 }
