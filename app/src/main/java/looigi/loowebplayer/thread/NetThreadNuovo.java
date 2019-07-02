@@ -30,22 +30,22 @@ public class NetThreadNuovo {
     private boolean OkNet = true;
     private boolean ScreenOn = true;
     // private static NetThreadNuovo instance = null;
-    private int signalStrengthValue;
-    private TelephonyManager manager;
-    private PhoneStateListener phoneListener;
-    private SignalStrength LivelloSegnale;
+    // private int signalStrengthValue;
+    // private TelephonyManager manager;
+    // private PhoneStateListener phoneListener;
+    // private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
     private int SecondiDiAttesa = 5000;
     // private boolean StaGirando=false;
-    private boolean haveConnectedWifi = false;
-    private boolean haveConnectedMobile = false;
+    // private boolean haveConnectedWifi = false;
+    // private boolean haveConnectedMobile = false;
     private Activity act;
     private PowerManager pm;
     private Integer conta=0;
     private Integer quanti=-1;
-    private Boolean RetePresente=true;
-    private ConnectivityManager connectivityManager;
+    // private Boolean RetePresente=true;
+    // private ConnectivityManager connectivityManager;
 
     // private NetThreadNuovo() {
     // }
@@ -70,19 +70,19 @@ public class NetThreadNuovo {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
             if (tTmrBattery == null) {
                 act = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale();
-                connectivityManager = (ConnectivityManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+                // connectivityManager = (ConnectivityManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                //         .getSystemService(Context.CONNECTIVITY_SERVICE);
                 pm = (PowerManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
                         getSystemService(Context.POWER_SERVICE);
 
                 this.stopNet = false;
 
-                phoneListener = new myPhoneStateListener();
-                manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                        .getSystemService(Context.TELEPHONY_SERVICE);
-                manager.listen(phoneListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                // phoneListener = new myPhoneStateListener();
+                // manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                //         .getSystemService(Context.TELEPHONY_SERVICE);
+                // manager.listen(phoneListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-                setupSignalStrength();
+                // setupSignalStrength();
 
                 // if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() == 2) {
                 //     SecondiDiAttesa = 1000;
@@ -100,99 +100,73 @@ public class NetThreadNuovo {
     }
 
     private void ControlloRete() {
-        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
+        // NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
 
-        haveConnectedWifi = false;
-        haveConnectedMobile = false;
+        // haveConnectedWifi = false;
+        // haveConnectedMobile = false;
 
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
-                if (ni.isConnected()) {
-                    haveConnectedWifi = true;
-                    break;
-                }
-            }
+        // for (NetworkInfo ni : netInfo) {
+        //     if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
+        //         if (ni.isConnected()) {
+        //             haveConnectedWifi = true;
+        //             break;
+        //         }
+        //     }
+//
+        //     if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
+        //         if (ni.isConnected()) {
+        //             haveConnectedMobile = true;
+        //             break;
+        //         }
+        //     }
+        // }
 
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
-                if (ni.isConnected()) {
-                    haveConnectedMobile = true;
-                    break;
-                }
-            }
-        }
+        // switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
+        //     case 1:
+        //         OkNet = haveConnectedWifi || haveConnectedMobile;
+        //         if (OkNet && !haveConnectedWifi) {
+        //             // getGsmLevel();
+        //         }
+        //         break;
+        //     case 2:
+        //         if (quanti==-1) {
+        //             quanti=new Random().nextInt(50) + 10;
+        //         }
+        //         conta++;
+        //         if (conta>quanti) {
+        //             conta=0;
+        //             // if (RetePresente) {
+        //             RetePresente=!RetePresente;
+        //             // }
+        //             OkNet=RetePresente;
+        //         }
+        //         break;
+        //     case 3:
+        //         OkNet = false;
+        //         break;
+        //     case 4:
+        //         OkNet = true;
+        //         break;
+        // }
 
-        // ScreenOn = pm.isScreenOn();
-
-                            /* if (ScreenOn) {
-                                if (CaroselloBloccato) {
-                                    if (VariabiliStaticheGlobali.getInstance().getBloccaCarosello() &&
-                                         VariabiliStaticheGlobali.getInstance().getStaSuonando() &&
-                                        !VariabiliStaticheGlobali.getInstance().isCaroselloBloccatoDaAutomatico()) {
-                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Schermo bloccato con tasto");
-                                        SbloccoCarosello();
-                                    }
-                                }
-                            }
-                            if (!ScreenOn) {
-                                if (!CaroselloBloccato) {
-                                    if (!VariabiliStaticheGlobali.getInstance().getBloccaCarosello() &&
-                                            VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Schermo sbloccato con tasto");
-                                        CaroselloBloccato = true;
-                                        VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-                                        VariabiliStaticheHome.getInstance().ImpostaUltimaImmagine(true);
-                                    }
-                                }
-                            } */
-
-        switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
-            case 1:
-                OkNet = haveConnectedWifi || haveConnectedMobile;
-                if (OkNet && !haveConnectedWifi) {
-                    // getGsmLevel();
-                }
-                break;
-            case 2:
-                if (quanti==-1) {
-                    quanti=new Random().nextInt(50) + 10;
-                }
-                conta++;
-                if (conta>quanti) {
-                    conta=0;
-                    // if (RetePresente) {
-                    RetePresente=!RetePresente;
-                    // }
-                    OkNet=RetePresente;
-                }
-                break;
-            case 3:
-                OkNet = false;
-                break;
-            case 4:
-                OkNet = true;
-                break;
-        }
-
-        if (!OkNet) {
-            act.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
-                    }
-                }
-            });
-        } else {
-            act.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
-                    }
-                }
-            });
-        }
-        // } catch (Exception ignored) {
+        // if (!OkNet) {
+        //     act.runOnUiThread(new Runnable() {
+        //         @Override
+        //         public void run() {
+        //             if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+        //                 VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+        //             }
+        //         }
+        //     });
+        // } else {
+        //     act.runOnUiThread(new Runnable() {
+        //         @Override
+        //         public void run() {
+        //             if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
+        //                 VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+        //             }
+        //         }
+        //     });
         // }
     }
 
@@ -211,7 +185,7 @@ public class NetThreadNuovo {
     }
 
     private void getGsmLevel() {
-        if (LivelloSegnale!=null) {
+        /* if (LivelloSegnale!=null) {
             int level;
             // ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
             // asu = 0 (-113dB or less) is very weak
@@ -236,50 +210,30 @@ public class NetThreadNuovo {
             }
         } else {
             OkNet = false;
-        }
-
-        // return level;
+        } */
     }
 
-    /* public boolean isStaGirando() {
-        return StaGirando;
-    } */
+    // private void setupSignalStrength() {
+    //     manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    //     phoneListener = new PhoneStateListener() {
+    //         @Override
+    //         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+    //             if (manager!=null && manager.getNetworkOperator().equals("")) {
+    //                 // signalIcon.setVisibility(View.GONE);
+    //             } else {
+    //                 // signalIcon.setVisibility(View.VISIBLE);
+    //                 if (signalStrength!=null) {
+    //                     LivelloSegnale = signalStrength;
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+    // }
 
-    private void setupSignalStrength() {
-        manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        phoneListener = new PhoneStateListener() {
-            @Override
-            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-                if (manager!=null && manager.getNetworkOperator().equals("")) {
-                    // signalIcon.setVisibility(View.GONE);
-                } else {
-                    // signalIcon.setVisibility(View.VISIBLE);
-                    if (signalStrength!=null) {
-                        LivelloSegnale = signalStrength;
-                    }
-
-                    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        // See https://github.com/AlstonLin/TheLearningLock/issues/54
-                        // Integer imageRes = signalStrengthToIcon.get(signalStrength.getLevel());
-                        // if (imageRes != null) signalIcon.setImageResource(imageRes);
-                        // else signalIcon.setImageResource(signalStrengthToIcon.get(4));
-                    // } else {
-                        // Just show the full icon
-                        // signalIcon.setImageResource(signalStrengthToIcon.get(4));
-                    // }
-                }
-            }
-        };
-        manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-    }
-
-  public boolean isOk() {
-      return OkNet;
-  }
-
-    /* public boolean isScreenOn() {
-        return ScreenOn;
-    } */
+  // public boolean isOk() {
+  //     return OkNet;
+  // }
 
     public void StopNetThread() {
         if (tTmrBattery!=null) {
@@ -293,17 +247,17 @@ public class NetThreadNuovo {
         }
     }
 
-    private class myPhoneStateListener extends PhoneStateListener {
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            super.onSignalStrengthsChanged(signalStrength);
-            if (signalStrength.isGsm()) {
-                if (signalStrength.getGsmSignalStrength() != 99)
-                    signalStrengthValue = signalStrength.getGsmSignalStrength() * 2 - 113;
-                else
-                    signalStrengthValue = signalStrength.getGsmSignalStrength();
-            } else {
-                signalStrengthValue = signalStrength.getCdmaDbm();
-            }
-        }
-    }
+    // private class myPhoneStateListener extends PhoneStateListener {
+    //     public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+    //         super.onSignalStrengthsChanged(signalStrength);
+    //         if (signalStrength.isGsm()) {
+    //             if (signalStrength.getGsmSignalStrength() != 99)
+    //                 signalStrengthValue = signalStrength.getGsmSignalStrength() * 2 - 113;
+    //             else
+    //                 signalStrengthValue = signalStrength.getGsmSignalStrength();
+    //         } else {
+    //             signalStrengthValue = signalStrength.getCdmaDbm();
+    //         }
+    //     }
+    // }
 }
