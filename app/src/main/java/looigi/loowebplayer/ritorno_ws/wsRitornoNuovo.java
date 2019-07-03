@@ -15,7 +15,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.maschere.Utenza;
-import looigi.loowebplayer.soap.CheckURLFile;
+// import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.DownloadTextFileNuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;

@@ -1,7 +1,7 @@
 package looigi.loowebplayer.VariabiliStatiche;
 
 import looigi.loowebplayer.soap.AttesaScaricamentoBrano;
-import looigi.loowebplayer.soap.CheckURLFile;
+// import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 import looigi.loowebplayer.utilities.GestioneTesti;

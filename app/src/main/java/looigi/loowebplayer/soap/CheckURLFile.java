@@ -1,4 +1,4 @@
-package looigi.loowebplayer.soap;
+/* package looigi.loowebplayer.soap;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -144,4 +144,4 @@ public class CheckURLFile {
             // }
         }
     }
-}
+}*/

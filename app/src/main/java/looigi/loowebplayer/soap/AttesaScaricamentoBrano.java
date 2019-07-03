@@ -20,6 +20,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Traffico;
@@ -116,6 +117,8 @@ public class AttesaScaricamentoBrano {
 //
 		// if (ceRete) {
 			// if (bckAsyncTask==null) {
+				GestioneCPU.getInstance().AttivaCPU();
+
 				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
 						inBackGround, ApriDialog, Urletto);
 				bckAsyncTask.execute(Urletto);
@@ -532,6 +535,7 @@ public class AttesaScaricamentoBrano {
 				}
 			}
 			bckAsyncTask = null;
+			GestioneCPU.getInstance().DisattivaCPU();
 		}
 
 	    @Override

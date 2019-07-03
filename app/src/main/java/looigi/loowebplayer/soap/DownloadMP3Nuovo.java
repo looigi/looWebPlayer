@@ -23,6 +23,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneImpostazioneBrani;
@@ -98,6 +99,8 @@ public class DownloadMP3Nuovo {
         //     VariabiliStaticheGlobali.getInstance().setChiaveDLMP3(Chiave);
 
             // ApriDialog();
+
+            GestioneCPU.getInstance().AttivaCPU();
 
             downloadFile = new DownloadFileMP3(NumeroOperazione, Path, Compresso, NomeBrano,
                 NumeroBrano, Automatico, Url);
@@ -513,6 +516,8 @@ public class DownloadMP3Nuovo {
             if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
             }
+
+            GestioneCPU.getInstance().DisattivaCPU();
         }
 
         private void PrendeImmagineDaMP3(String mPath) {

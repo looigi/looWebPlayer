@@ -9,7 +9,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.dialog.DialogMessaggio;
-import looigi.loowebplayer.soap.CheckURLFile;
+// import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
@@ -26,7 +26,7 @@ public class ScaricoBranoEAttesa {
     private int Conta;
     private int PerPronuncia;
     private int nn;
-    private CheckURLFile cuf;
+    // private CheckURLFile cuf;
     private String Altro="";
 
     public void setInBackground(boolean inBackground) {

@@ -15,7 +15,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
-import looigi.loowebplayer.soap.CheckURLFile;
+// import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 

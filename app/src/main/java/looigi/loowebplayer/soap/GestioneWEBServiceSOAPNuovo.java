@@ -21,6 +21,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Traffico;
@@ -115,6 +116,8 @@ public class GestioneWEBServiceSOAPNuovo {
 //
 		// if (ceRete) {
 			// if (bckAsyncTask==null) {
+				GestioneCPU.getInstance().AttivaCPU();
+
 				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
 						ApriDialog, Urletto);
 				bckAsyncTask.execute(Urletto);
@@ -555,6 +558,7 @@ public class GestioneWEBServiceSOAPNuovo {
 					}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione da remoto");
 				}
 			}
+			GestioneCPU.getInstance().DisattivaCPU();
 			bckAsyncTask = null;
 		}
 

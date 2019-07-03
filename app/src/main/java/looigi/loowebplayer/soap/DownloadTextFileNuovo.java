@@ -15,6 +15,7 @@ import java.net.URL;
 import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.RiempieListaInBackground;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
@@ -69,6 +70,7 @@ public class DownloadTextFileNuovo {
         //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
             // ApriDialog();
+            GestioneCPU.getInstance().AttivaCPU();
 
             downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
             downloadFile.execute(Url);
@@ -321,6 +323,7 @@ public class DownloadTextFileNuovo {
                     }
                 }
             }
+            GestioneCPU.getInstance().DisattivaCPU();
         }
     }
 }

@@ -20,6 +20,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.notifiche.Notifica;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.Traffico;
@@ -90,6 +91,8 @@ public class DownloadImmagineNuovo {
             Url = Url.substring(0, 9);
             sUrl2 = sUrl2.replace("//", "/");
             Url += sUrl2;
+
+            GestioneCPU.getInstance().AttivaCPU();
 
             downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url);
             downloadFile.execute(Url);
@@ -447,6 +450,7 @@ public class DownloadImmagineNuovo {
                     }
                 }
             }
+            GestioneCPU.getInstance().DisattivaCPU();
         }
     }
 }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.db_locale.DBLocale;
+import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -28,6 +29,7 @@ public class bckService extends Service {
             VariabiliStaticheGlobali.getInstance().setContext(this);
         }
 
+        GestioneCPU.getInstance().ImpostaValori(this);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(),
                 "Ottiene utente attuale");
@@ -77,7 +79,7 @@ public class bckService extends Service {
             Utility.getInstance().CambiaMaschera(R.id.utenza);
         }
 
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override

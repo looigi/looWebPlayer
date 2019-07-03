@@ -9,7 +9,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.soap.AttesaScaricamentoBrano;
-import looigi.loowebplayer.soap.CheckURLFile;
+// import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
