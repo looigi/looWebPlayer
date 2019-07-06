@@ -127,6 +127,9 @@ public class AttesaScaricamentoBrano {
 	}
 
 	public void StoppaEsecuzione() {
+		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+				"Blocco compressione e download per cambio brano");
+
 		bckAsyncTask.cancel(true);
 
 		bckAsyncTask.ChiudeDialog();
@@ -302,12 +305,17 @@ public class AttesaScaricamentoBrano {
             HttpTransportSE aht = null;
             messErrore="";
             try {
-                soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+				VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+						"Inizio chiamata compressione e download");
+
+				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(UrlConvertito, 500000);
+                aht = new HttpTransportSE(UrlConvertito, 120000);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
+				VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+						"Fine chiamata compressione e download");
 				if(isCancelled()){
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
@@ -434,6 +442,8 @@ public class AttesaScaricamentoBrano {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			// }
 
+			VariabiliStaticheGlobali.getInstance().setAsb(null);
+
 			if (NumeroBrano>-1 &&
 					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
 					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
@@ -535,6 +545,7 @@ public class AttesaScaricamentoBrano {
 				}
 			}
 			bckAsyncTask = null;
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 			GestioneCPU.getInstance().DisattivaCPU();
 		}
 

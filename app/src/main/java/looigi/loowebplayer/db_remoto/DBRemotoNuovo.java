@@ -26,7 +26,11 @@ public class DBRemotoNuovo {
     private int Secondi;
     private int MaxAttesa = 60;
 
-    private String ToglieCaratteriStrani(String Cosa) {
+	private Handler hAttesaProssimo;
+	private Runnable rAttesaProssimo;
+	private int attesa = 0;
+
+	private String ToglieCaratteriStrani(String Cosa) {
 		if (Cosa!=null) {
 			String sCosa = Cosa.replace("?", "***PI***");
 			sCosa = sCosa.replace("&", "***AND***");
@@ -152,7 +156,7 @@ public class DBRemotoNuovo {
 	}
 
 	private void EsegueChiamataMP3(String Dire, String Artista, String Album, String Brano, String Qualita,
-								   String Converte, int NumeroOperazione) {
+								   String Converte, final int NumeroOperazione) {
 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 				"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
 		VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
@@ -175,6 +179,7 @@ public class DBRemotoNuovo {
 		Urletto+="&Qualita=" + Qualita;
 		Urletto+="&Attendi=true";
 
+		final String Urletto2 = Urletto;
 		String messaggio="";
 
 		if (Converte.equals("S")) {
@@ -201,23 +206,77 @@ public class DBRemotoNuovo {
 				false);
 		g.Esegue(); */
 
-		AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
-				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
-				"RitornaBrano",
-				NS,
-				SA,
-				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
-				NumeroOperazione,
-				false,
-				false);
-		g.Esegue();
+		if (VariabiliStaticheGlobali.getInstance().getAsb() != null) {
+			attesa = 0;
+			VariabiliStaticheGlobali.getInstance().getAsb().StoppaEsecuzione();
+			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Attesa blocco download per canzone precedente");
+			hAttesaProssimo = new Handler(Looper.getMainLooper());
+			rAttesaProssimo = new Runnable() {
+				@Override
+				public void run() {
+					if (VariabiliStaticheGlobali.getInstance().getAsb() != null) {
+						attesa++;
+						if (attesa<10) {
+							hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
+						} else {
+							VariabiliStaticheGlobali.getInstance().setAsb(null);
+							hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+							hAttesaProssimo = null;
+
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Blocco download automatico per canzone precedente");
+							AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+									VariabiliStaticheGlobali.RadiceWS + ws + Urletto2,
+									"RitornaBrano",
+									NS,
+									SA,
+									VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+									NumeroOperazione,
+									false,
+									false);
+							VariabiliStaticheGlobali.getInstance().setAsb(g);
+							g.Esegue();
+						}
+					} else {
+						hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+						hAttesaProssimo = null;
+
+						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Compressione e downloadn brano");
+						AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+								VariabiliStaticheGlobali.RadiceWS + ws + Urletto2,
+								"RitornaBrano",
+								NS,
+								SA,
+								VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+								NumeroOperazione,
+								false,
+								false);
+						VariabiliStaticheGlobali.getInstance().setAsb(g);
+						g.Esegue();
+					}
+				}
+			};
+			hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
+		} else {
+			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Compressione e downloadn brano");
+			AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+					VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+					"RitornaBrano",
+					NS,
+					SA,
+					VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+					NumeroOperazione,
+					false,
+					false);
+			VariabiliStaticheGlobali.getInstance().setAsb(g);
+			g.Esegue();
+		}
 
 		// VariabiliStaticheNuove.getInstance().setGb(g);
 	}
 
-	public AttesaScaricamentoBrano RitornaBranoBackground(Context context, String Dire, String Artista, String Album,
+	public void RitornaBranoBackground(Context context, String Dire, String Artista, String Album,
 							String Brano, String Converte, String Qualita, int NumeroBrano, Boolean NonFernmareDownload,
-									   int NumeroOperazione) {
+									   final int NumeroOperazione) {
 		// if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
 			VariabiliStaticheGlobali.getInstance().setStaScaricandoBrano(true);
 
@@ -231,6 +290,7 @@ public class DBRemotoNuovo {
 			Urletto += "&Qualita=" + Qualita;
 			Urletto +="&Attendi=true";
 
+			final String Urletto2 = Urletto;
 			String messaggio = "";
 			if (Converte.equals("S")) {
 
@@ -268,18 +328,67 @@ public class DBRemotoNuovo {
 				false);
 		g.Esegue(); */
 
-		AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
-				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
-				"RitornaBranoBackground",
-				NS,
-				SA,
-				VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
-				NumeroOperazione,
-				true,
-				false);
-		g.Esegue();
+		if (VariabiliStaticheGlobali.getInstance().getAsb() != null) {
+			attesa = 0;
+			VariabiliStaticheGlobali.getInstance().getAsb().StoppaEsecuzione();
+			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Attesa blocco download per canzone precedente");
+			hAttesaProssimo = new Handler(Looper.getMainLooper());
+			rAttesaProssimo = new Runnable() {
+				@Override
+				public void run() {
+					if (VariabiliStaticheGlobali.getInstance().getAsb() != null) {
+						attesa++;
+						if (attesa<10) {
+							hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
+						} else {
+							VariabiliStaticheGlobali.getInstance().setAsb(null);
+							hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+							hAttesaProssimo = null;
 
-		return g;
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Blocco download automatico per canzone precedente");
+							AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+									VariabiliStaticheGlobali.RadiceWS + ws + Urletto2,
+									"RitornaBranoBackground",
+									NS,
+									SA,
+									VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+									NumeroOperazione,
+									true,
+									false);
+							g.Esegue();
+						}
+					} else {
+						hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+						hAttesaProssimo = null;
+
+						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Compressione e download brano in background");
+						AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+								VariabiliStaticheGlobali.RadiceWS + ws + Urletto2,
+								"RitornaBranoBackground",
+								NS,
+								SA,
+								VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+								NumeroOperazione,
+								true,
+								false);
+						g.Esegue();
+					}
+				}
+			};
+			hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
+		} else {
+			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Compressione e download brano in background");
+			AttesaScaricamentoBrano g = new AttesaScaricamentoBrano(
+					VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+					"RitornaBranoBackground",
+					NS,
+					SA,
+					VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(),
+					NumeroOperazione,
+					true,
+					false);
+			g.Esegue();
+		}
 	}
 
 	public GestioneWEBServiceSOAPNuovo RitornaMultimediaArtista(Context context, String Artista, int NumeroOperazione) {
