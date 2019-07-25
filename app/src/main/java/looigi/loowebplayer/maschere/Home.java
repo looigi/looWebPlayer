@@ -205,8 +205,8 @@ public class Home extends android.support.v4.app.Fragment {
 
             vh.getRltListaBrani().setVisibility(LinearLayout.GONE);
 
-            vh.setQuanteAscoltate(0);
-            vh.setQuanteScaricate(0);
+            // vh.setQuanteAscoltate(0);
+            // vh.setQuanteScaricate(0);
             Utility.getInstance().ScriveScaricateAscoltate();
 
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getVisualizzaBellezza()) {

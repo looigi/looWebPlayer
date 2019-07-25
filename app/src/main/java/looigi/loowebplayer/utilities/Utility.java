@@ -239,7 +239,11 @@ public class Utility {
 	}
 
 	public void ScriveScaricateAscoltate() {
-		VariabiliStaticheHome.getInstance().getTxtQuanteAscoltate().setText("Ascoltate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteAscoltate()));
-		VariabiliStaticheHome.getInstance().getTxtQuanteScaricate().setText("Scaricate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteScaricate()));
+		if (VariabiliStaticheHome.getInstance().getTxtQuanteAscoltate() != null) {
+			VariabiliStaticheHome.getInstance().getTxtQuanteAscoltate().setText("Ascoltate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteAscoltate()));
+		}
+		if (VariabiliStaticheHome.getInstance().getTxtQuanteScaricate() != null) {
+			VariabiliStaticheHome.getInstance().getTxtQuanteScaricate().setText("Scaricate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteScaricate()));
+		}
 	}
 }

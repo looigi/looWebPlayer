@@ -29,7 +29,7 @@ public class StrutturaConfig {
     private Boolean RicordaUltimoBrano=true;
     private Boolean TestoInInglese=true;
     private Boolean ScriveLog=true;
-    private Boolean Membri=true;
+    private Boolean Membri=false;
     private Boolean DownloadImmagini=true;
     private Boolean ReloadAutomatico=true;
     private Boolean CaricamentoAnticipato=true;
