@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
@@ -42,6 +44,7 @@ import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.maschere.Splash;
 import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.thread.NetThreadNuovo;
+import looigi.loowebplayer.utilities.EliminazioneVecchiFiles;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     private AudioManager mAudioManager;
     private ComponentName mReceiverComponent;
     private PhoneUnlockedReceiver receiver;
-    private IntentFilter filterHeadset;
+    private boolean CiSonoPermessi;
     // private NetThreadNuovo ntn;
 
     @Override
@@ -62,7 +65,29 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         Permessi p=new Permessi();
-        p.ControllaPermessi(this);
+        CiSonoPermessi = p.ControllaPermessi(this);
+        if (CiSonoPermessi) {
+            EsegueEntrata();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        if (!CiSonoPermessi) {
+            int index = 0;
+            Map<String, Integer> PermissionsMap = new HashMap<String, Integer>();
+            for (String permission : permissions) {
+                PermissionsMap.put(permission, grantResults[index]);
+                index++;
+            }
+
+            EsegueEntrata();
+        }
+    }
+
+    private void EsegueEntrata() {
+        IntentFilter filterHeadset;
 
         VariabiliStaticheGlobali vg = VariabiliStaticheGlobali.getInstance();
         vg.setContext(this);
@@ -79,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         db.CreazioneTabellaAscoltate();
         // Crea db locale per dati
 
-        mAudioManager =  (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         mReceiverComponent = new ComponentName(this, GestioneTastoCuffie.class);
         mAudioManager.registerMediaButtonEventReceiver(mReceiverComponent);
 
@@ -101,7 +126,7 @@ public class MainActivity extends AppCompatActivity
             }
             VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie(null);
         }
-        VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie (new GestoreCuffie());
+        VariabiliStaticheGlobali.getInstance().setMyReceiverCuffie(new GestoreCuffie());
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie(), filter);
 
@@ -121,18 +146,19 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
                 int n = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
-                if (NumeroBrano>n) {
-                    if (n>0) {
+                if (NumeroBrano > n) {
+                    if (n > 0) {
                         NumeroBrano = 0;
                     } else {
                         NumeroBrano = -1;
                     }
                 }
 
-                if (NumeroBrano!=-1) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Eliminazione files per refresh");
+                if (NumeroBrano != -1) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Eliminazione files per refresh");
                     StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-                    if (s!=null) {
+                    if (s != null) {
                         String NomeBrano = s.getNomeBrano();
                         String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
                         String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
@@ -152,7 +178,8 @@ public class MainActivity extends AppCompatActivity
                             fc.delete();
                         }
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
                                 "Ritornata struttura brano nulla");
                     }
                 }
@@ -178,7 +205,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        GestioneFiles.getInstance().CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/");
+        GestioneFiles.getInstance().CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/");
 
         // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lettura configurazione valori");
         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().LeggeValori();
@@ -186,7 +213,9 @@ public class MainActivity extends AppCompatActivity
         filterHeadset = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(mNoisyReceiver, filterHeadset);
 
-        if (VariabiliStaticheGlobali.getInstance().getGiaEntrato()==null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
+        VariabiliStaticheHome.getInstance().ScriveOperazioniWEB();
+
+        if (VariabiliStaticheGlobali.getInstance().getGiaEntrato() == null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
             Fragment fragment = new Splash();
             FragmentTransaction ft = vg.getFragmentActivityPrincipale().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);

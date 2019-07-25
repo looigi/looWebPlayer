@@ -134,6 +134,13 @@ public class Settings extends Fragment {
             final Switch chkSuperiore = view.findViewById(R.id.chkSuperiore);
             Switch chkControlloRete = view.findViewById(R.id.chkControlloRete);
 
+            Switch chkPuliziaPerNumeroFiles = view.findViewById(R.id.chkPerNumeroFiles);
+            Switch chkPuliziaPerMega = view.findViewById(R.id.chkPerMega);
+            final EditText edtNumeroFiles = view.findViewById(R.id.edtNumeroFiles);
+            final EditText edtMega = view.findViewById(R.id.edtMega);
+            final Button cmdPuliziaPerNumeroFiles = view.findViewById(R.id.btnSalvaNumeroFiles);
+            final Button cmdPuliziaPerMega = view.findViewById(R.id.btnSalvaMega);
+
             Button cmdPulisceLog = view.findViewById(R.id.btnPulisceLog);
             Button cmdRefreshBrani = view.findViewById(R.id.btnRefreshBrani);
             Button cmdPulisceFiltro = view.findViewById(R.id.btnPulisceFiltro);
@@ -248,6 +255,112 @@ public class Settings extends Fragment {
                 }
             }, 500);
             // Valori stelle
+
+            // Switch pulizia per numero files
+            boolean bNumeroFiles = vg.isPuliziaPerFiles();
+            chkPuliziaPerNumeroFiles.setChecked(bNumeroFiles);
+            chkPuliziaPerNumeroFiles.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch pulizia per numero files: "+isChecked);
+
+                    vg.setPuliziaPerFiles(isChecked);
+
+                    if (isChecked) {
+                        edtNumeroFiles.setEnabled(true);
+                        cmdPuliziaPerNumeroFiles.setEnabled(true);
+                    } else {
+                        edtNumeroFiles.setEnabled(false);
+                        cmdPuliziaPerNumeroFiles.setEnabled(false);
+                    }
+
+                    vg.SalvaDati();
+                }
+            });
+            if (bNumeroFiles) {
+                edtNumeroFiles.setEnabled(true);
+                cmdPuliziaPerNumeroFiles.setEnabled(true);
+            } else {
+                edtNumeroFiles.setEnabled(false);
+                cmdPuliziaPerNumeroFiles.setEnabled(false);
+            }
+            edtNumeroFiles.setText(Integer.toString(vg.getQuantiFilesMemorizzati()));
+
+            cmdPuliziaPerNumeroFiles.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato Salva Numero Files per Pulizia");
+
+                    String ee = edtNumeroFiles.getText().toString();
+                    int e = Integer.parseInt(ee);
+                    if (e < 10 || e > 1000) {
+                        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                                "Valore non valido (10 - 1000)", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    } else {
+                        vg.setQuantiFilesMemorizzati(e);
+                        vg.SalvaDati();
+
+                        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                                "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
+                    }
+                }
+            });
+            // Switch pulizia per numero files
+
+            // Switch pulizia per mega
+            boolean bMega = vg.isPuliziaPerMega();
+            chkPuliziaPerMega.setChecked(bMega);
+            chkPuliziaPerMega.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch pulizia per mega: "+isChecked);
+
+                    vg.setPuliziaPerMega(isChecked);
+
+                    if (isChecked) {
+                        edtMega.setEnabled(true);
+                        cmdPuliziaPerMega.setEnabled(true);
+                    } else {
+                        edtMega.setEnabled(false);
+                        cmdPuliziaPerMega.setEnabled(false);
+                    }
+
+                    vg.SalvaDati();
+                }
+            });
+            if (bMega) {
+                edtMega.setEnabled(true);
+                cmdPuliziaPerMega.setEnabled(true);
+            } else {
+                edtMega.setEnabled(false);
+                cmdPuliziaPerMega.setEnabled(false);
+            }
+            edtMega.setText(Integer.toString(vg.getQuantiMBAlMassimo()));
+
+            cmdPuliziaPerMega.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato Salva Mega per Pulizia");
+
+                    String ee = edtMega.getText().toString();
+                    int e = Integer.parseInt(ee);
+                    if (e < 10 || e > 1000) {
+                        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                                "Valore non valido (10 - 1000)", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    } else {
+                        vg.setQuantiMBAlMassimo(e);
+                        vg.SalvaDati();
+
+                        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                                "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
+                    }
+                }
+            });
+            // Switch pulizia per mega
 
             // Switch stelle
             Boolean bStelle = vg.isStelle();
@@ -646,7 +759,7 @@ public class Settings extends Fragment {
                     GestioneOggettiVideo.getInstance().ScriveFiltro();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Brani ricaricati", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Brani ricaricati", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
 
@@ -660,7 +773,7 @@ public class Settings extends Fragment {
                     VariabiliStaticheGlobali.getInstance().getLog().PulisceFileDiLog();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "File di log pulito", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "File di log pulito", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
 
@@ -712,7 +825,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             Button btnTimeoutDLLB = view.findViewById(R.id.btTimeoutDLLB);
@@ -726,7 +839,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             Button btnAttesaDLMP3 = view.findViewById(R.id.btAttesaDLMP3);
@@ -740,7 +853,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             Button btnTimeoutDLIMM = view.findViewById(R.id.btTimeoutDLIMM);
@@ -754,7 +867,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
 
@@ -816,7 +929,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             optIrregolare.setOnClickListener( new View.OnClickListener() {
@@ -836,7 +949,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             optAssente.setOnClickListener( new View.OnClickListener() {
@@ -856,7 +969,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
             optPresente.setOnClickListener( new View.OnClickListener() {
@@ -876,7 +989,7 @@ public class Settings extends Fragment {
                     vg.SalvaDati();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                            "Salvataggio effettuato", true, VariabiliStaticheGlobali.NomeApplicazione);
+                            "Salvataggio effettuato", false, VariabiliStaticheGlobali.NomeApplicazione);
                 }
             });
 
@@ -921,7 +1034,7 @@ public class Settings extends Fragment {
             r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                    "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);
         }
     };
 
@@ -937,7 +1050,7 @@ public class Settings extends Fragment {
             r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                    "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);
         }
     };
 
@@ -953,7 +1066,7 @@ public class Settings extends Fragment {
             r.RiempieStrutture(true);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
-                    "Impostato ordinamento e sistemata lista brani", true, VariabiliStaticheGlobali.NomeApplicazione);
+                    "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);
         }
     };
 

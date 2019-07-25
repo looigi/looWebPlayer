@@ -15,14 +15,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
 import looigi.loowebplayer.utilities.GestioneCPU;
-import looigi.loowebplayer.utilities.GestioneImmagini;
-import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -119,9 +116,12 @@ public class AttesaScaricamentoBrano {
 			// if (bckAsyncTask==null) {
 				GestioneCPU.getInstance().AttivaCPU();
 
-				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-						inBackGround, ApriDialog, Urletto);
-				bckAsyncTask.execute(Urletto);
+		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+		 		"Chiamata compressione e download");
+
+		bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+				inBackGround, ApriDialog, Urletto);
+		bckAsyncTask.execute(Urletto);
 			// }
 		// }
 	}
@@ -160,6 +160,10 @@ public class AttesaScaricamentoBrano {
 		private String UrlConvertito;
 		private boolean inBackground;
 
+		private Handler hAttesaTermine;
+		private Runnable rAttesaTermine;
+		private int secondi;
+
 		private BackgroundAsyncTask(String NAMESPACE, int TimeOut,
 									String SOAP_ACTION, int NumeroOperazione, String tOperazione,
 									boolean inBackground, boolean ApriDialog, String Urletto) {
@@ -177,7 +181,29 @@ public class AttesaScaricamentoBrano {
 			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
 			this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-	    }
+
+			FaiPartireTimerDiProsecuzione();
+		}
+
+		private void FaiPartireTimerDiProsecuzione() {
+			secondi = 0;
+
+			hAttesaTermine = new Handler(Looper.getMainLooper());
+			hAttesaTermine.postDelayed(rAttesaTermine = new Runnable() {
+				@Override
+				public void run() {
+					secondi++;
+					VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+							"Chiamata compressione e download: secondi " + secondi);
+                    hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+				}
+			}, 1000);
+		}
+
+		private void TerminaTimerDiProsecuzione() {
+			hAttesaTermine.removeCallbacks(rAttesaTermine);
+			hAttesaTermine = null;
+		}
 
 		private String SplittaCampiUrletto(String Cosa) {
 			String Perc=Cosa;
@@ -305,8 +331,8 @@ public class AttesaScaricamentoBrano {
             HttpTransportSE aht = null;
             messErrore="";
             try {
-				VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
-						"Inizio chiamata compressione e download");
+				// VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+				// 		"Inizio chiamata compressione e download");
 
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
@@ -314,8 +340,8 @@ public class AttesaScaricamentoBrano {
                 aht = new HttpTransportSE(UrlConvertito, 120000);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
-				VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
-						"Fine chiamata compressione e download");
+				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
 				if(isCancelled()){
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
@@ -441,6 +467,11 @@ public class AttesaScaricamentoBrano {
 			// if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			// }
+
+			TerminaTimerDiProsecuzione();
+
+			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Termine download / compressione");
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 			VariabiliStaticheGlobali.getInstance().setAsb(null);
 

@@ -158,6 +158,7 @@ public class DownloadMP3Nuovo {
             this.Url = Url;
 
             QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Download in corso");
         }
 
         private void ChiudeDialog() {
@@ -366,6 +367,7 @@ public class DownloadMP3Nuovo {
         }
 
         public void ControllaFineCiclo() {
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
             VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
             if (NumeroBrano>-1 &&

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.db_locale.DBLocale;
+import looigi.loowebplayer.utilities.EliminazioneVecchiFiles;
 import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.Utility;
@@ -75,6 +76,11 @@ public class bckService extends Service {
         VariabiliStaticheGlobali.getInstance().getAppBar().setVisibility(LinearLayout.VISIBLE);
         if (CeUtente) {
             Utility.getInstance().CambiaMaschera(R.id.home);
+
+            // Elimina vecchi files in base ai valori delle impostazioni
+            EliminazioneVecchiFiles e = new EliminazioneVecchiFiles();
+            e.EliminaFilesSeMaggioriAlNumeroImpostato();
+            // Elimina vecchi files in base ai valori delle impostazioni
         } else {
             Utility.getInstance().CambiaMaschera(R.id.utenza);
         }

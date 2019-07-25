@@ -11,7 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
@@ -182,5 +185,22 @@ public class GestioneFiles {
         }
 
         return files;
+    }
+
+    public List<File> ScansionaDirectory(File parentDir) {
+        ArrayList<File> inFiles = new ArrayList<File>();
+        File[] files = parentDir.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                inFiles.addAll(ScansionaDirectory(file));
+            } else {
+                if(file.getName().toUpperCase().contains(".MP3") || file.getName().toUpperCase().contains(".WMA")){
+                    if (!file.getName().toUpperCase().contains(".DAT")) {
+                        inFiles.add(file);
+                    }
+                }
+            }
+        }
+        return inFiles;
     }
 }

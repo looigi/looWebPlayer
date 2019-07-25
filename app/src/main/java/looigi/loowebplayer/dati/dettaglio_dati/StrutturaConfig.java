@@ -45,6 +45,10 @@ public class StrutturaConfig {
     private String ValoreBellezza="0";
     private Boolean PronunciaOperazioni=true;
     private int QuantiTentativi=3;
+    private boolean PuliziaPerFiles = false;
+    private boolean PuliziaPerMega = false;
+    private int QuantiFilesMemorizzati = 150;
+    private int QuantiMBAlMassimo = 500;
 
     public void SalvaDati() {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
@@ -80,6 +84,10 @@ public class StrutturaConfig {
         String toAMP3 = Integer.toString(VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
         String toIMM = Integer.toString(VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
         String tipoSegnale = Integer.toString(VariabiliStaticheGlobali.getInstance().getTipoSegnale());
+        String sPuliziaPerFiles = "S"; if (!PuliziaPerFiles) sPuliziaPerFiles="N";
+        String sPuliziaPerMega = "S"; if (!PuliziaPerMega) sPuliziaPerMega="N";
+        String QuantiFilesPulizia = Integer.toString(QuantiFilesMemorizzati);
+        String QuantiMegaPulizia = Integer.toString(QuantiMBAlMassimo);
 
         String Stringona = 
                 sRandom + ";" +
@@ -116,7 +124,11 @@ public class StrutturaConfig {
                 tipoSegnale+";"+
                 sVisualizzaBellezza+";"+
                 sSfumaBrano+";"+
-                sControlloRete+";";
+                sControlloRete+";"+
+                sPuliziaPerFiles+';'+
+                QuantiFilesPulizia+';'+
+                sPuliziaPerMega+';'+
+                QuantiMegaPulizia+';'
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -195,6 +207,16 @@ public class StrutturaConfig {
                     VisualizzaBellezza = sVisualizzaBellezza.equals("S");
                     SfumaBrano = sSfumaBrano.equals("S");
                     ControlloRete = sControlloRete.equals("S");
+
+                    String sPuliziaPerFiles = Campi[35];
+                    String sQuantiFilesPulizia = Campi[36];
+                    String sPuliziaPerMega = Campi[37];
+                    String sQuantiMegaPulizia = Campi[38];
+
+                    PuliziaPerFiles = sPuliziaPerFiles.equals("S");
+                    QuantiFilesMemorizzati = Integer.parseInt(sQuantiFilesPulizia);
+                    PuliziaPerMega = sPuliziaPerMega.equals("S");
+                    QuantiMBAlMassimo = Integer.parseInt(sQuantiMegaPulizia);
 
                     if (Random) {
                         GestioneListaBrani.getInstance().setModalitaAvanzamento(RANDOM);
@@ -419,6 +441,38 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isPuliziaPerFiles() {
+        return PuliziaPerFiles;
+    }
+
+    public void setPuliziaPerFiles(boolean puliziaPerFiles) {
+        PuliziaPerFiles = puliziaPerFiles;
+    }
+
+    public boolean isPuliziaPerMega() {
+        return PuliziaPerMega;
+    }
+
+    public void setPuliziaPerMega(boolean puliziaPerMega) {
+        PuliziaPerMega = puliziaPerMega;
+    }
+
+    public int getQuantiMBAlMassimo() {
+        return QuantiMBAlMassimo;
+    }
+
+    public void setQuantiMBAlMassimo(int quantiMBAlMassimo) {
+        QuantiMBAlMassimo = quantiMBAlMassimo;
+    }
+
+    public int getQuantiFilesMemorizzati() {
+        return QuantiFilesMemorizzati;
+    }
+
+    public void setQuantiFilesMemorizzati(int quantiFilesMemorizzati) {
+        QuantiFilesMemorizzati = quantiFilesMemorizzati;
     }
 
     public Boolean getMembri() {

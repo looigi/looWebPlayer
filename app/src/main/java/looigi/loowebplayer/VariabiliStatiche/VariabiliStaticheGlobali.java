@@ -114,6 +114,7 @@ public class VariabiliStaticheGlobali {
     private int NumeroBranoNuovo;
     private int NumeroProssimoBrano=-1;
     private AttesaScaricamentoBrano asb;
+    private boolean AttendeFineScaricamento = false;
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";
@@ -164,6 +165,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public boolean isAttendeFineScaricamento() {
+        return AttendeFineScaricamento;
+    }
+
+    public void setAttendeFineScaricamento(boolean attendeFineScaricamento) {
+        AttendeFineScaricamento = attendeFineScaricamento;
     }
 
     public AttesaScaricamentoBrano getAsb() {

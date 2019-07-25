@@ -98,6 +98,7 @@ public class GestioneCaricamentoBraniNuovo {
             @Override
             public void run() {
                     if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
                         secondi = 0;
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
@@ -106,13 +107,19 @@ public class GestioneCaricamentoBraniNuovo {
                             @Override
                             public void run() {
                                 int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
+                                    || !VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()
+                                    || secondi > 44) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                     hAttesaDownloadS = null;
 
-                                    NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+                                    if (!VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento() || secondi > 44) {
+                                        NumeroBrano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                    } else {
+                                        NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+                                    }
                                     VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
                                     VariabiliStaticheGlobali.getInstance().getDatiGenerali()
                                             .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
@@ -130,6 +137,8 @@ public class GestioneCaricamentoBraniNuovo {
 
                                         hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                         hAttesaDownloadS = null;
+
+                                        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
                                     } else {
                                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
                                                 false, "Attesa termine download automatico. Secondi: " + Integer.toString(secondi)));

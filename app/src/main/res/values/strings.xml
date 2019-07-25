@@ -14,6 +14,11 @@
     <string name="about">About</string>
     <string name="ok">Ok</string>
     <string name="enabled">Abilitato</string>
+    <string name="pulizia">Pulizia Disco</string>
+    <string name="pulizia_per_numero_files">Per Numero Files</string>
+    <string name="pulizia_per_mega">Per Mega</string>
+    <string name="pulizia_numero_files">Numero Files</string>
+    <string name="pulizia_mega">Mega</string>
     <string name="flat">Flat</string>
     <string name="bass_boost">Bass Boost</string>
     <string name="annulla">Annulla</string>

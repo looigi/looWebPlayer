@@ -52,17 +52,21 @@ public class GestioneOggettiVideo {
     }
 
     public void AvantiBrano() {
-        if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-            VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
-            int NumeroBrano;
+        if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
+            VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        } else {
+            if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                int NumeroBrano;
 
-            if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete()>-1) {
-                NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
-                VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
-            } else {
-                NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
+                    NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                    VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+                } else {
+                    NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                }
+                ControllaAvantiBrano(NumeroBrano, false);
             }
-            ControllaAvantiBrano(NumeroBrano, false);
         }
     }
 
@@ -138,19 +142,24 @@ public class GestioneOggettiVideo {
     }
 
     public void IndietroBrano() {
-        if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-            VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
-            GestioneImmagini.getInstance().StoppaTimerCarosello();
-            VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
+        if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
+            VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        } else {
+            if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                GestioneImmagini.getInstance().StoppaTimerCarosello();
+                VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
 
-            int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
-            if (NumeroBrano > -1) {
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-                        .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+                int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
+                if (NumeroBrano > -1) {
+                    VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                            .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
 
-                // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Indietro. Brano precedente: " + Integer.toString(NumeroBrano));
-                GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+                    // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Indietro. Brano precedente: " + Integer.toString(NumeroBrano));
+                    GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+                }
             }
         }
     }
