@@ -17,7 +17,7 @@ public class EliminazioneVecchiFiles {
 
     private static class EliminaFilesAsync extends AsyncTask<String, Integer, String> {
         private long MbSuDisco;
-        private boolean CancellaVeramente = false;
+        private boolean CancellaVeramente = true;
 
         @Override
         protected String doInBackground(String... sUrl) {
