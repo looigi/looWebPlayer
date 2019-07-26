@@ -101,6 +101,7 @@ public class DownloadMP3Nuovo {
             // ApriDialog();
 
             GestioneCPU.getInstance().AttivaCPU();
+            VariabiliStaticheGlobali.getInstance().setgMP3(this);
 
             downloadFile = new DownloadFileMP3(NumeroOperazione, Path, Compresso, NomeBrano,
                 NumeroBrano, Automatico, Url);
@@ -368,6 +369,7 @@ public class DownloadMP3Nuovo {
 
         public void ControllaFineCiclo() {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+            VariabiliStaticheGlobali.getInstance().setgMP3(null);
             VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
             if (NumeroBrano>-1 &&

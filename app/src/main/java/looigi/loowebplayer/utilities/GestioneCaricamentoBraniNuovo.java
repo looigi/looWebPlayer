@@ -116,6 +116,16 @@ public class GestioneCaricamentoBraniNuovo {
                                     hAttesaDownloadS = null;
 
                                     if (!VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento() || secondi > 44) {
+                                        if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
+                                            VariabiliStaticheGlobali.getInstance().getgWSoap().StoppaEsecuzione();
+                                        }
+                                        if (VariabiliStaticheGlobali.getInstance().getgMP3() !=null) {
+                                            VariabiliStaticheGlobali.getInstance().getgMP3().StoppaEsecuzione();
+                                        }
+                                        if (VariabiliStaticheGlobali.getInstance().getgAttesa() !=null) {
+                                            VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
+                                        }
+
                                         NumeroBrano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
                                     } else {
                                         NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();

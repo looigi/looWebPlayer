@@ -117,6 +117,7 @@ public class GestioneWEBServiceSOAPNuovo {
 		// if (ceRete) {
 			// if (bckAsyncTask==null) {
 				GestioneCPU.getInstance().AttivaCPU();
+				VariabiliStaticheGlobali.getInstance().setgWSoap(this);
 
 				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
 						ApriDialog, Urletto);
@@ -228,7 +229,7 @@ public class GestioneWEBServiceSOAPNuovo {
 				}
 			}
 			VariabiliStaticheGlobali.getInstance().setOperazioneInCorso("");
-			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
+			// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(this.NumeroOperazione, false);
 		}
 
 		private void ApriDialog() {
@@ -430,6 +431,8 @@ public class GestioneWEBServiceSOAPNuovo {
 			// if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			// }
+			VariabiliStaticheGlobali.getInstance().setgWSoap(null);
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 
 			if (NumeroBrano>-1 &&
 					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
@@ -526,7 +529,7 @@ public class GestioneWEBServiceSOAPNuovo {
 											"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
 													" Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
 									if (SecondiAttesa>=TempoAttesa) {
-										VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+										// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 										// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 

@@ -114,7 +114,8 @@ public class AttesaScaricamentoBrano {
 //
 		// if (ceRete) {
 			// if (bckAsyncTask==null) {
-				GestioneCPU.getInstance().AttivaCPU();
+		GestioneCPU.getInstance().AttivaCPU();
+		VariabiliStaticheGlobali.getInstance().setgAttesa(this);
 
 		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 		 		"Chiamata compressione e download");
@@ -467,6 +468,7 @@ public class AttesaScaricamentoBrano {
 			// if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
 				VariabiliStaticheNuove.getInstance().setGt(null);
 			// }
+			VariabiliStaticheGlobali.getInstance().setgAttesa(null);
 
 			TerminaTimerDiProsecuzione();
 
@@ -543,14 +545,18 @@ public class AttesaScaricamentoBrano {
 											"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
 													" Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
 									if (SecondiAttesa>=TempoAttesa) {
-										VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+										// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 										// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 										// if (ceRete) {
-											bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-													inBackground, ApriDialog, Urletto);
-											bckAsyncTask.execute(Urletto);
+										// TerminaTimerDiProsecuzione();
+
+										FaiPartireTimerDiProsecuzione();
+
+										bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+												inBackground, ApriDialog, Urletto);
+										bckAsyncTask.execute(Urletto);
 										// }
 
 										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);

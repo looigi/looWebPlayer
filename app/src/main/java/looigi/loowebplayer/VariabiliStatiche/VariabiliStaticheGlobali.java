@@ -21,6 +21,8 @@ import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.DatiGenerali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.soap.AttesaScaricamentoBrano;
+import looigi.loowebplayer.soap.DownloadMP3Nuovo;
+import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
 import looigi.loowebplayer.utilities.Log;
@@ -129,10 +131,11 @@ public class VariabiliStaticheGlobali {
     private Integer BranoImpostatoSenzaRete=-1;
     private boolean StaScaricandoMP3=false;
 
-    // private GestioneWEBServiceSOAP gWSoap = null;
+    private GestioneWEBServiceSOAPNuovo gWSoap = null;
     // private DownloadImmagine gImmC = null;
     // private DownloadImmagine gImmI = null;
-    // private DownloadMP3 gMP3 = null;
+    private DownloadMP3Nuovo gMP3 = null;
+    private AttesaScaricamentoBrano gAttesa = null;
     // private DownloadTextFile gText = null;
 
     private Drawable play;
@@ -165,6 +168,30 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public AttesaScaricamentoBrano getgAttesa() {
+        return gAttesa;
+    }
+
+    public void setgAttesa(AttesaScaricamentoBrano gAttesa) {
+        this.gAttesa = gAttesa;
+    }
+
+    public DownloadMP3Nuovo getgMP3() {
+        return gMP3;
+    }
+
+    public void setgMP3(DownloadMP3Nuovo gMP3) {
+        this.gMP3 = gMP3;
+    }
+
+    public GestioneWEBServiceSOAPNuovo getgWSoap() {
+        return gWSoap;
+    }
+
+    public void setgWSoap(GestioneWEBServiceSOAPNuovo gWSoap) {
+        this.gWSoap = gWSoap;
     }
 
     public boolean isAttendeFineScaricamento() {
