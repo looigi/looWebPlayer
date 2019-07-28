@@ -502,6 +502,8 @@ public class GestioneCaricamentoBraniNuovo {
             this.Artista = Artista;
             this.Album = Album;
             this.NomeBrano = NomeBrano;
+
+            VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
         }
     }
 

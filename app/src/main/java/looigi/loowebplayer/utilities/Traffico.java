@@ -58,8 +58,8 @@ public class Traffico {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String oggi = formatter.format(todayDate);
 
-        DBLocaleTraffico db = new DBLocaleTraffico(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
+        DBLocaleTraffico db = new DBLocaleTraffico();
+        db.CreazioneTabellaTraffico();
         Cursor c = db.ottieniValoriPerData(oggi);
         if (c.moveToFirst()) {
             do {
@@ -77,12 +77,12 @@ public class Traffico {
             long l = db.inserisciDati(oggi, Long.toString(VariabiliStaticheGlobali.getInstance().getBytesScaricati()));
         }
 
-        db.close();
+        // db.close();
     }
 
     public String LeggeTrafficoTotale() {
-        DBLocaleTraffico db = new DBLocaleTraffico(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
+        DBLocaleTraffico db = new DBLocaleTraffico();
+        db.CreazioneTabellaTraffico();
 
         Long MaxV=0L;
         String DataMax="";
@@ -123,7 +123,7 @@ public class Traffico {
             } while (c.moveToNext());
         }
 
-        db.close();
+        // db.close();
 
         Long Media = Tot/Giorni;
 
@@ -135,8 +135,8 @@ public class Traffico {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String oggi = formatter.format(todayDate);
 
-        DBLocaleTraffico db = new DBLocaleTraffico(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
+        DBLocaleTraffico db = new DBLocaleTraffico();
+        // db.open();
 
         // db.cancellaDati();
 
@@ -157,7 +157,7 @@ public class Traffico {
             ScriveTrafficoAVideo(0L);
         }
 
-        db.close();
+        // db.close();
     }
 
     public void ScriveTrafficoAVideo(final Long t) {

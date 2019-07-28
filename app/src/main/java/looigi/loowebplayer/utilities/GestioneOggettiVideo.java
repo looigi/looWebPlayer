@@ -105,7 +105,7 @@ public class GestioneOggettiVideo {
         if (vh.getPuoAvanzare()) {
             if (Acceso) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Play");
-                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+                // VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
 
                 if (!GestioneCaricamentoBraniNuovo.getInstance().isHaCaricatoBrano()) {
                     vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());

@@ -21,12 +21,9 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheUtenza;
 import looigi.loowebplayer.dati.NomiMaschere;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
-import looigi.loowebplayer.db_locale.DBLocale;
+import looigi.loowebplayer.db_locale.DBLocaleUtenti;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
-import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.Utility;
-
-import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
 
 public class Utenza extends android.support.v4.app.Fragment {
     private Context context;
@@ -142,14 +139,14 @@ public class Utenza extends android.support.v4.app.Fragment {
                 s.setCartellaBase(c[4]);
                 VariabiliStaticheGlobali.getInstance().setUtente(s);
 
-                DBLocale db = new DBLocale(VariabiliStaticheGlobali.getInstance().getContext());
-                db.open();
+                DBLocaleUtenti db = new DBLocaleUtenti();
+                // db.open();
                 String amm = "N";
                 if (s.isAmministratore()) {
                     amm = "S";
                 }
                 long id = db.inserisciUtente(s.getUtente(), s.getPassword(), amm, s.getCartellaBase(), "-1", "0");
-                db.close();
+                // db.close();
 
                 String path=VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/Lista.dat";
                 File f = new File(path);

@@ -454,4 +454,18 @@ public class DBRemotoNuovo {
 				false);
 		g.Esegue();
 	}
+
+    public void RitornaVersioneApplicazione(Context context, int NumeroOperazione) {
+        String Urletto="RitornaVersioneApplicazione";
+
+        GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+                VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+                "RitornaVersioneApplicazione",
+                NS,
+                SA,
+                VariabiliStaticheGlobali.getInstance().getTimeOutImmagini(),
+                NumeroOperazione,
+                false);
+        g.Esegue();
+    }
 }

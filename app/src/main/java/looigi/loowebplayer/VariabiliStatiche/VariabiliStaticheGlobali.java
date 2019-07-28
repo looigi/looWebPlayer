@@ -138,6 +138,11 @@ public class VariabiliStaticheGlobali {
     private AttesaScaricamentoBrano gAttesa = null;
     // private DownloadTextFile gText = null;
 
+    private boolean StaAggiornandoLaVersione = false;
+    private boolean HaControllatoLaVersione = false;
+
+    private String UltimaOperazioneSOAP = "";
+
     private Drawable play;
     private Drawable play_dis;
     private Drawable stop;
@@ -168,6 +173,30 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public String getUltimaOperazioneSOAP() {
+        return UltimaOperazioneSOAP;
+    }
+
+    public void setUltimaOperazioneSOAP(String ultimaOperazioneSOAP) {
+        UltimaOperazioneSOAP = ultimaOperazioneSOAP;
+    }
+
+    public boolean isHaControllatoLaVersione() {
+        return HaControllatoLaVersione;
+    }
+
+    public void setHaControllatoLaVersione(boolean haControllatoLaVersione) {
+        HaControllatoLaVersione = haControllatoLaVersione;
+    }
+
+    public boolean isStaAggiornandoLaVersione() {
+        return StaAggiornandoLaVersione;
+    }
+
+    public void setStaAggiornandoLaVersione(boolean staAggiornandoLaVersione) {
+        StaAggiornandoLaVersione = staAggiornandoLaVersione;
     }
 
     public AttesaScaricamentoBrano getgAttesa() {

@@ -16,6 +16,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.maschere.Utenza;
 // import looigi.loowebplayer.soap.CheckURLFile;
+import looigi.loowebplayer.nuova_versione.ControlloVersioneApplicazione;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.DownloadTextFileNuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
@@ -40,6 +41,21 @@ public class wsRitornoNuovo {
 
     private String ToglieTag(String Cosa) {
         return Cosa;
+    }
+
+    public void RitornaVersioneApplicazione(String Ritorno, int NumeroOperazione) {
+        String Appoggio=ToglieTag(Ritorno);
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna versione applicazione: " + Appoggio);
+
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        if (Appoggio.toUpperCase().contains("ERROR:")) {
+            //DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(), Appoggio, true, "Cv Calcio");
+        } else {
+            ControlloVersioneApplicazione.ControlloVersione(Appoggio);
+        }
     }
 
     public void RitornaListaBrani(final String Ritorno) {

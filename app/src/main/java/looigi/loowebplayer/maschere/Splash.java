@@ -2,8 +2,6 @@ package looigi.loowebplayer.maschere;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,19 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.bckService;
 import looigi.loowebplayer.dati.NomiMaschere;
-import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
-import looigi.loowebplayer.db_locale.DBLocale;
-import looigi.loowebplayer.utilities.GestioneListaBrani;
-import looigi.loowebplayer.utilities.Utility;
-
-import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
-import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
 
 public class Splash extends android.support.v4.app.Fragment {
     private Context context;

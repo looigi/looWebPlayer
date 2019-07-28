@@ -53,6 +53,15 @@ public class GestioneWEBServiceSOAPNuovo {
 		this.Urletto = urletto;
 		this.Tentativo = 0;
 
+		// Annulla l'ultima operazione se ne arrivano 2 uguali
+		String ope = urletto + TipoOperazione + NS + SA;
+		if (VariabiliStaticheGlobali.getInstance().getUltimaOperazioneSOAP().equals(ope)) {
+			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+			return;
+		}
+		VariabiliStaticheGlobali.getInstance().setUltimaOperazioneSOAP(ope);
+        // Annulla l'ultima operazione se ne arrivano 2 uguali
+
 		// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
 		// if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
@@ -492,6 +501,10 @@ public class GestioneWEBServiceSOAPNuovo {
 								case "RitornaMultimediaArtista":
 									GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
 									rRit.RitornaMultimediaArtista(Ritorno);
+									Ancora = false;
+									break;
+								case "RitornaVersioneApplicazione":
+									rRit.RitornaVersioneApplicazione(Ritorno, NumeroOperazione);
 									Ancora = false;
 									break;
 								/* case "RitornaBranoBackground":

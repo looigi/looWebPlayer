@@ -137,6 +137,7 @@ public class DownloadMP3Nuovo {
         // private DownloadFileMP3 downloadFile;
         private int NumeroBrano;
         private int NumeroOperazione;
+        private int NumeroOper;
         // private Runnable runRiga;
         // private Handler hSelezionaRiga;
         private String Url;
@@ -159,7 +160,7 @@ public class DownloadMP3Nuovo {
             this.Url = Url;
 
             QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Download in corso");
+            NumeroOper = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download in corso");
         }
 
         private void ChiudeDialog() {
@@ -369,6 +370,7 @@ public class DownloadMP3Nuovo {
 
         public void ControllaFineCiclo() {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOper, true);
             VariabiliStaticheGlobali.getInstance().setgMP3(null);
             VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
@@ -525,78 +527,89 @@ public class DownloadMP3Nuovo {
         }
 
         private void PrendeImmagineDaMP3(String mPath) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3");
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(mPath);
-            InputStream inputStream = null;
-            if (mmr.getEmbeddedPicture() != null) {
-                inputStream = new ByteArrayInputStream(mmr.getEmbeddedPicture());
-            }
-            mmr.release();
-
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            // int a1 = NomeBrano.indexOf(".");
-            // String sNome = NomeBrano.substring(0,a1) +".jpg";
-
-            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-            String NomeBrano = s.getNomeBrano();
-            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
-            // String NomeBrano = NomeBrano;
-            if (NomeBrano.contains(".")) {
-                NomeBrano=NomeBrano.substring(0,NomeBrano.indexOf("."));
-            }
-
-            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-            String PathFile = "";
-            Boolean MP3Organizzati = false;
-            if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/" + Album + ".jpg";
-                GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/");
-                MP3Organizzati = true;
-            } else {
-                PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/"+NomeBrano+".jpg";
-                GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/");
-                MP3Organizzati = false;
-            }
-
-            File f = new File(PathFile);
-            if (f.exists()) {
-                if (!MP3Organizzati) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(),
-                            "Ritorna immagine brano presa da mp3. La imposto");
-                    GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
-
-                    GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
-                    VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+            try {
+                mmr.setDataSource(mPath);
+                InputStream inputStream = null;
+                if (mmr.getEmbeddedPicture() != null) {
+                    inputStream = new ByteArrayInputStream(mmr.getEmbeddedPicture());
                 }
-            } else {
-                try {
-                    FileOutputStream out = new FileOutputStream(PathFile);
-                    if (out != null && bitmap != null) {
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                mmr.release();
 
-                        if (!MP3Organizzati) {
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                    }.getClass().getEnclosingMethod().getName(),
-                                    "Ritorna immagine brano presa da mp3. La imposto");
-                            GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                // int a1 = NomeBrano.indexOf(".");
+                // String sNome = NomeBrano.substring(0,a1) +".jpg";
 
-                            GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
-                            VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
-                        }
+                StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                String NomeBrano = s.getNomeBrano();
+                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+                // String NomeBrano = NomeBrano;
+                if (NomeBrano.contains(".")) {
+                    NomeBrano = NomeBrano.substring(0, NomeBrano.indexOf("."));
+                }
+
+                String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+                String PathFile = "";
+                Boolean MP3Organizzati = false;
+                if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                    PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/" + Album + ".jpg";
+                    GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/");
+                    MP3Organizzati = true;
+                } else {
+                    PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + NomeBrano + ".jpg";
+                    GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/");
+                    MP3Organizzati = false;
+                }
+
+                File f = new File(PathFile);
+                if (f.exists()) {
+                    if (!MP3Organizzati) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
+                                "Ritorna immagine brano presa da mp3. La imposto");
+                        GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+
+                        GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+                        VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
                     }
-                } catch (IOException e) {
-                    // e.printStackTrace();
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-                    // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
-                    GestioneImmagini.getInstance().StoppaTimerCarosello();
-                    GestioneImmagini.getInstance().setImmagineDaCambiare("");
-                    GestioneImmagini.getInstance().setImmNumber(-1);
-                    GestioneImmagini.getInstance().ImpostaImmagineVuota();
-                    VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
+                } else {
+                    try {
+                        FileOutputStream out = new FileOutputStream(PathFile);
+                        if (out != null && bitmap != null) {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+                            if (!MP3Organizzati) {
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                        }.getClass().getEnclosingMethod().getName(),
+                                        "Ritorna immagine brano presa da mp3. La imposto");
+                                GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
+
+                                GestioneImmagini.getInstance().SettaImmagineSuIntestazione(PathFile);
+                                VariabiliStaticheGlobali.getInstance().setImmagineMostrata(PathFile);
+                            }
+                        }
+                    } catch (IOException e) {
+                        // e.printStackTrace();
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
+                        GestioneImmagini.getInstance().StoppaTimerCarosello();
+                        GestioneImmagini.getInstance().setImmagineDaCambiare("");
+                        GestioneImmagini.getInstance().setImmNumber(-1);
+                        GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                        VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
+                    }
                 }
+            } catch (Exception e) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
+                // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende immagine da MP3. Errore: "+e.getMessage());
+                GestioneImmagini.getInstance().StoppaTimerCarosello();
+                GestioneImmagini.getInstance().setImmagineDaCambiare("");
+                GestioneImmagini.getInstance().setImmNumber(-1);
+                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
             }
         }
     }

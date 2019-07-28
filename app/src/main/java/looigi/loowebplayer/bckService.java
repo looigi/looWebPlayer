@@ -4,13 +4,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Binder;
 import android.os.IBinder;
 import android.widget.LinearLayout;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
-import looigi.loowebplayer.db_locale.DBLocale;
+import looigi.loowebplayer.db_locale.DBLocaleUtenti;
 import looigi.loowebplayer.utilities.EliminazioneVecchiFiles;
 import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
@@ -22,7 +21,8 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.S
 public class bckService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                        .getEnclosingMethod().getName(),
                 "Entro nell'app");
         boolean CeUtente=false;
 
@@ -34,8 +34,9 @@ public class bckService extends Service {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(),
                 "Ottiene utente attuale");
-        DBLocale db = new DBLocale(VariabiliStaticheGlobali.getInstance().getContext());
-        db.open();
+        DBLocaleUtenti db = new DBLocaleUtenti();
+        db.CreazioneTabellaUtenti();
+
         Cursor c = db.ottieniTuttiUtenti();
         if (c.moveToFirst()) {
             do {
@@ -68,7 +69,7 @@ public class bckService extends Service {
         if (c != null) {
             c.close();
         }
-        db.close();
+        // db.close();
 
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
         }.getClass().getEnclosingMethod().getName(), "Vado in Home");

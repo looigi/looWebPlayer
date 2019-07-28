@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -91,8 +92,18 @@ public class DialogMessaggio
 
         VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().runOnUiThread(new Runnable() {
             public void run() {
-                AlertDialog alert = builder.create();
-                alert.show();
+                try {
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } catch (Exception ignored) {
+                    if (VariabiliStaticheGlobali.getInstance().getContext() != null) {
+                        Toast.makeText(VariabiliStaticheGlobali.getInstance().getContext(),
+                                Message, Toast.LENGTH_LONG).show();
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Dialog messaggio. Errore: " + Message);
+                    }
+                }
             }
         });
     }

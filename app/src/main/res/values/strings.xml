@@ -62,6 +62,7 @@
     <string name="timeout_dl_lb">T.o. DL L.Brani</string>
     <string name="debug">Debug</string>
     <string name="crea_log">Crea Log</string>
+    <string name="mostra_operazioni">Mostra Operazioni</string>
     <string name="pulisce_log">Pulisce log</string>
     <string name="usa_scaricati">Solo MP3 Scaricati</string>
     <string name="down_imm">Download Immagini</string>

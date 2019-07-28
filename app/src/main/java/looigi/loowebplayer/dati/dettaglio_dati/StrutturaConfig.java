@@ -46,6 +46,7 @@ public class StrutturaConfig {
     private Boolean PronunciaOperazioni=true;
     private int QuantiTentativi=3;
     private boolean PuliziaPerFiles = false;
+    private boolean MostraOperazioni = false;
     private boolean PuliziaPerMega = false;
     private int QuantiFilesMemorizzati = 150;
     private int QuantiMBAlMassimo = 500;
@@ -88,6 +89,7 @@ public class StrutturaConfig {
         String sPuliziaPerMega = "S"; if (!PuliziaPerMega) sPuliziaPerMega="N";
         String QuantiFilesPulizia = Integer.toString(QuantiFilesMemorizzati);
         String QuantiMegaPulizia = Integer.toString(QuantiMBAlMassimo);
+        String sMostraOperazioni = "S"; if (!MostraOperazioni) sMostraOperazioni="N";
 
         String Stringona = 
                 sRandom + ";" +
@@ -128,7 +130,8 @@ public class StrutturaConfig {
                 sPuliziaPerFiles+';'+
                 QuantiFilesPulizia+';'+
                 sPuliziaPerMega+';'+
-                QuantiMegaPulizia+';'
+                QuantiMegaPulizia+';'+
+                sMostraOperazioni+';'
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -223,6 +226,9 @@ public class StrutturaConfig {
                     } else {
                         GestioneListaBrani.getInstance().setModalitaAvanzamento(SEQUENZIALE);
                     }
+
+                    String sMostraOperazioni = Campi[39];
+                    MostraOperazioni = sMostraOperazioni.equals("S");
 
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
@@ -441,6 +447,14 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isMostraOperazioni() {
+        return MostraOperazioni;
+    }
+
+    public void setMostraOperazioni(boolean mostraOperazioni) {
+        MostraOperazioni = mostraOperazioni;
     }
 
     public boolean isPuliziaPerFiles() {

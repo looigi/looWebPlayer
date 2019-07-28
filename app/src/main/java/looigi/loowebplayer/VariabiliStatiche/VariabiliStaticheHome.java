@@ -275,151 +275,181 @@ public class VariabiliStaticheHome {
     }
 
     private int MaxNumeroOpWEB() {
-        String s = "";
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
+            String s = "";
 
-        for (int i = 0; i<7; i++) {
-            Random x = new Random();
-            int xx = x.nextInt(9);
-            s+=Integer.toString(xx);
+            for (int i = 0; i < 7; i++) {
+                Random x = new Random();
+                int xx = x.nextInt(9);
+                s += Integer.toString(xx);
+            }
+
+            return Integer.parseInt(s);
+        } else {
+            return -1;
         }
-
-        return Integer.parseInt(s);
     }
 
     public void ScriveOperazioniWEB() {
-        String tt="";
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
+            String tt = "";
 
-        for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-            tt+=ii.getOperazione()+"\n";
-        }
+            for (StrutturaOperazioneWEB ii : OperazioniWeb) {
+                tt += ii.getOperazione() + "\n";
+            }
 
-        String t2=tt;
+            String t2 = tt;
 
-        if (layOperazionWEB!=null) {
-            if (t2.isEmpty()) {
-                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
-                    layOperazionWEB.setVisibility(LinearLayout.GONE);
+            if (layOperazionWEB != null) {
+                if (t2.isEmpty()) {
+                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
+                        layOperazionWEB.setVisibility(LinearLayout.GONE);
+                    }
+                } else {
+                    t2 = t2.substring(0, t2.length() - 1);
+                    layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
                 }
-            } else {
-                t2=t2.substring(0, t2.length()-1);
-                layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
+            }
+
+            if (txtOperazioneWEB != null)
+                txtOperazioneWEB.setText(t2);
+        } else {
+            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
             }
         }
-
-        if (txtOperazioneWEB!=null)
-            txtOperazioneWEB.setText(t2);
     }
 
     private void EliminaRiga(int Numero) {
-        int i = 0;
-        // int q = 0;
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
+            int i = 0;
+            // int q = 0;
 
-        for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-            if (ii.getNumeroOperazione() == Numero) {
-                //if (!ii.getOperazione().toUpperCase().contains("COMPRESS")) {
-                OperazioniWeb.remove(i);
-                // q++;
-                break;
-                //}
-            } else {
-                long diff = System.currentTimeMillis() - ii.getOraIniziale();
-                if (diff > 120000) {
+            for (StrutturaOperazioneWEB ii : OperazioniWeb) {
+                if (ii.getNumeroOperazione() == Numero) {
+                    //if (!ii.getOperazione().toUpperCase().contains("COMPRESS")) {
                     OperazioniWeb.remove(i);
                     // q++;
                     break;
-                }
-            }
-            i++;
-        }
-
-        if (OperazioniWeb.size() == 0) {
-            if (this.layOperazionWEB != null) {
-                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
-                    this.layOperazionWEB.setVisibility(LinearLayout.GONE);
-                }
-            }
-        }
-
-        ScriveOperazioniWEB();
-    }
-
-    public void EliminaOperazioneWEB(final int Numero, Boolean Immediato)  {
-        Runnable runEliminaBarra;
-        Handler hEliminaBarra = new Handler(Looper.getMainLooper());
-
-        if (Immediato) {
-            EliminaRiga(Numero);
-        } else {
-            hEliminaBarra.postDelayed(runEliminaBarra = new Runnable() {
-                @Override
-                public void run() {
-                    EliminaRiga(Numero);
-                }
-            }, 3000);
-        }
-    }
-
-    synchronized public int AggiungeOperazioneWEB(int NumeroOperazione, Boolean Errore, String Operazione) {
-        if (Operazione==null) {
-            return -1;
-        }
-
-        if (Operazione.trim().isEmpty()) {
-            return -1;
-        }
-
-        int n = 0;
-
-        if (NumeroOperazione==-1) {
-            n = MaxNumeroOpWEB();
-
-            StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
-            s.setNumeroOperazione(n);
-            s.setOperazione(Operazione.trim());
-            s.setOraIniziale(System.currentTimeMillis());
-            OperazioniWeb.add(s);
-
-            if (this.layOperazionWEB != null) {
-                this.layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
-            }
-        } else {
-            int i=0;
-            boolean Ok = false;
-
-            for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-                if (ii.getNumeroOperazione()==NumeroOperazione) {
-                    StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
-                    s.setNumeroOperazione(NumeroOperazione);
-                    s.setOperazione(Operazione.trim());
-                    s.setOraIniziale(System.currentTimeMillis());
-
-                    OperazioniWeb.set(i, s);
-
-                    n=NumeroOperazione;
-                    Ok=true;
-                    break;
+                    //}
+                } else {
+                    long diff = System.currentTimeMillis() - ii.getOraIniziale();
+                    if (diff > 120000) {
+                        OperazioniWeb.remove(i);
+                        // q++;
+                        break;
+                    }
                 }
                 i++;
             }
 
-            if (!Ok) {
+            if (OperazioniWeb.size() == 0) {
+                if (this.layOperazionWEB != null) {
+                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
+                        this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+                    }
+                }
+            }
+
+            ScriveOperazioniWEB();
+        } else {
+            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+            }
+        }
+    }
+
+    public void EliminaOperazioneWEB(final int Numero, Boolean Immediato)  {
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
+            Runnable runEliminaBarra;
+            Handler hEliminaBarra = new Handler(Looper.getMainLooper());
+
+            if (Immediato) {
+                EliminaRiga(Numero);
+            } else {
+                hEliminaBarra.postDelayed(runEliminaBarra = new Runnable() {
+                    @Override
+                    public void run() {
+                        EliminaRiga(Numero);
+                    }
+                }, 3000);
+            }
+        } else {
+            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+            }
+        }
+    }
+
+    synchronized public int AggiungeOperazioneWEB(int NumeroOperazione, Boolean Errore, String Operazione) {
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
+            if (Operazione == null) {
+                return -1;
+            }
+
+            if (Operazione.trim().isEmpty()) {
+                return -1;
+            }
+
+            int n = 0;
+
+            if (NumeroOperazione == -1) {
                 n = MaxNumeroOpWEB();
 
                 StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
                 s.setNumeroOperazione(n);
-                s.setOraIniziale(System.currentTimeMillis());
                 s.setOperazione(Operazione.trim());
+                s.setOraIniziale(System.currentTimeMillis());
                 OperazioniWeb.add(s);
+
+                if (this.layOperazionWEB != null) {
+                    this.layOperazionWEB.setVisibility(LinearLayout.VISIBLE);
+                }
+            } else {
+                int i = 0;
+                boolean Ok = false;
+
+                for (StrutturaOperazioneWEB ii : OperazioniWeb) {
+                    if (ii.getNumeroOperazione() == NumeroOperazione) {
+                        StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
+                        s.setNumeroOperazione(NumeroOperazione);
+                        s.setOperazione(Operazione.trim());
+                        s.setOraIniziale(System.currentTimeMillis());
+
+                        OperazioniWeb.set(i, s);
+
+                        n = NumeroOperazione;
+                        Ok = true;
+                        break;
+                    }
+                    i++;
+                }
+
+                if (!Ok) {
+                    n = MaxNumeroOpWEB();
+
+                    StrutturaOperazioneWEB s = new StrutturaOperazioneWEB();
+                    s.setNumeroOperazione(n);
+                    s.setOraIniziale(System.currentTimeMillis());
+                    s.setOperazione(Operazione.trim());
+                    OperazioniWeb.add(s);
+                }
             }
+
+            ScriveOperazioniWEB();
+
+            if (Errore) {
+                EliminaOperazioneWEB(n, false);
+            }
+
+            return n;
+        } else {
+            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+                this.layOperazionWEB.setVisibility(LinearLayout.GONE);
+            }
+
+            return -1;
         }
-
-        ScriveOperazioniWEB();
-
-        if (Errore) {
-            EliminaOperazioneWEB(n, false);
-        }
-
-        return n;
     }
 
     public RelativeLayout getLayOperazionWEB() {

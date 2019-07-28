@@ -150,6 +150,8 @@ public class Settings extends Fragment {
             TextView txtFiltro = view.findViewById(R.id.txtFiltro);
             final TextView txtTentativi = view.findViewById(R.id.txtQuantiTentativi);
 
+            Switch chkMostraOperazioni = view.findViewById(R.id.chkMostraOperazioni);
+
             optNessuno = view.findViewById(R.id.optNessuno);
             optData = view.findViewById(R.id.optData);
             optAlfabetico= view.findViewById(R.id.optAlfabetico);
@@ -255,6 +257,21 @@ public class Settings extends Fragment {
                 }
             }, 500);
             // Valori stelle
+
+            // Switch mostra operazioni
+            boolean bMostraOperazioni = vg.isMostraOperazioni();
+            chkMostraOperazioni.setChecked(bMostraOperazioni);
+            chkMostraOperazioni.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch mostra operazioni: "+isChecked);
+
+                    vg.setMostraOperazioni(isChecked);
+
+                    vg.SalvaDati();
+                }
+            });
 
             // Switch pulizia per numero files
             boolean bNumeroFiles = vg.isPuliziaPerFiles();
