@@ -19,7 +19,7 @@ public class ControlloVersioneApplicazione {
 
     public static void ControlloVersione(String NuovaVersione) {
         if (!NuovaVersione.equals(verAttuale) && !NuovaVersione.isEmpty()) {
-            String path = VariabiliStaticheGlobali.RadiceWS+"/NuoveVersioni/looWebPlayer.apk";
+            String path = VariabiliStaticheGlobali.RadiceWS+"NuoveVersioni/looWebPlayer.apk";
 
             UpdateApp attualizaApp = new UpdateApp();
             attualizaApp.execute(path);

@@ -1,8 +1,11 @@
 package looigi.loowebplayer.nuova_versione;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.BuildConfig;
@@ -66,6 +69,7 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
         ApriDialog();
 
         VariabiliStaticheGlobali.getInstance().setStaAggiornandoLaVersione(true);
+        File outputFile = null;
 
         try {
             URL url = new URL(arg0[0]);
@@ -76,7 +80,7 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
             String pathDestinazione = VariabiliStaticheGlobali.getInstance().PercorsoDIR;
             File file = new File(pathDestinazione);
             file.mkdirs();
-            File outputFile = new File(file, "update.apk");
+            outputFile = new File(file, "update.apk");
             if(outputFile.exists()){
                 outputFile.delete();
             }
@@ -93,10 +97,10 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
             is.close();
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // without this flag android returned a intent error!
-            Uri contentUri = FileProvider.getUriForFile(context,
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    new File(VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/update.apk"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // without this flag android returned a intent error!
+            Uri contentUri = FileProvider.getUriForFile(VariabiliStaticheGlobali.getInstance().getContext(),
+                 BuildConfig.APPLICATION_ID + ".provider",
+                 new File(VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/update.apk"));
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -104,6 +108,10 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
             messErrore="";
         } catch (Exception ignored) {
             messErrore=ignored.getMessage();
+        }
+
+        if(outputFile.exists()){
+            outputFile.delete();
         }
 
         ChiudeDialog();
