@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.BuildConfig;
 import android.support.v4.content.FileProvider;
 
@@ -96,22 +97,12 @@ public class UpdateApp extends AsyncTask<String,Void,Void> {
             fos.close();
             is.close();
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // without this flag android returned a intent error!
-            Uri contentUri = FileProvider.getUriForFile(VariabiliStaticheGlobali.getInstance().getContext(),
-                 BuildConfig.APPLICATION_ID + ".provider",
-                 new File(VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/update.apk"));
-            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
+            Intent intent = new Intent(VariabiliStaticheGlobali.getInstance().getContext(), installAPK.class);
             VariabiliStaticheGlobali.getInstance().getContext().startActivity(intent);
+
             messErrore="";
         } catch (Exception ignored) {
             messErrore=ignored.getMessage();
-        }
-
-        if(outputFile.exists()){
-            outputFile.delete();
         }
 
         ChiudeDialog();
