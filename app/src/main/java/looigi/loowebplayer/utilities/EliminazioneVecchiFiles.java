@@ -74,8 +74,9 @@ public class EliminazioneVecchiFiles {
                                     f.delete();
                                 }
                             }
+                            long perc = (QuantiMB  * 15) / 100;
                             MbSuDisco -= (sf.getDimensione() / 1024 / 1024);
-                            if (MbSuDisco < QuantiMB) {
+                            if (MbSuDisco < QuantiMB - perc) {
                                 break;
                             }
                         }

@@ -84,7 +84,7 @@ public class GestioneFiles {
         // }, 50);
     }
 
-    private void generateNoteOnSD(String Percorso, String sFileName, String sBody) {
+    public void generateNoteOnSD(String Percorso, String sFileName, String sBody) {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Generazione file di testo: "+Percorso+sFileName);
         try {
             File gpxfile = new File(Percorso, sFileName);

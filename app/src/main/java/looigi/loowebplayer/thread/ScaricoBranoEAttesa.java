@@ -305,25 +305,32 @@ public class ScaricoBranoEAttesa {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
             StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+            if (s != null) {
+                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
 
-            if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
-            } else {
-                d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/");
-            }
+                if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                    d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + sArtista + "/" + sAlbum);
+                } else {
+                    d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/");
+                }
 
-            d.setNomeBrano(sBrano);
-            d.setCompresso(compresso);
-            if (inBackground) {
-                d.setAutomatico(true);
+                d.setNomeBrano(sBrano);
+                d.setCompresso(compresso);
+                if (inBackground) {
+                    d.setAutomatico(true);
+                } else {
+                    d.setAutomatico(false);
+                }
+                d.setNumeroBrano(NumeroBrano);
+                d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+                d.startDownload(url, NumeroOperazione);
             } else {
-                d.setAutomatico(false);
+                DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                        "Struttura vuota in ScaricaBrano. Numero Brano: " + NumeroBrano,
+                        true,
+                        VariabiliStaticheGlobali.NomeApplicazione);
             }
-            d.setNumeroBrano(NumeroBrano);
-            d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-            d.startDownload(url, NumeroOperazione);
         } else {
             String bb = "";
 

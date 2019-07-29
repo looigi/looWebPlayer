@@ -22,27 +22,23 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
-import org.kobjects.util.Util;
-
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
 import looigi.loowebplayer.dati.adapters.AdapterAscoltati;
-import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
-import looigi.loowebplayer.db_locale.db_dati;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.gif.GifImageView;
 import looigi.loowebplayer.notifiche.Notifica;
 // import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.nuova_versione.ControlloVersioneApplicazione;
+import looigi.loowebplayer.soap.DownloadImmagineNuovo;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
@@ -519,9 +515,39 @@ public class Home extends android.support.v4.app.Fragment {
 
                 ControlloVersioneApplicazione c = new ControlloVersioneApplicazione();
                 c.ControllaVersione();
+
+                ControlloImmagineUtente();
             }
 
             VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);
+        }
+    }
+
+    private void ControlloImmagineUtente() {
+        StrutturaUtenti s = VariabiliStaticheGlobali.getInstance().getUtente();
+        if (s != null) {
+            String Utente = s.getUtente();
+            String UrlImmagine = VariabiliStaticheGlobali.RadiceWS + "/App_Themes/Standard/Images/Utenti/" + Utente + ".jpg";
+            String PathImmagine = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Utente";
+            GestioneFiles.getInstance().CreaCartella(PathImmagine);
+            if (!GestioneFiles.getInstance().fileExistsInSD(".noMedia", PathImmagine)) {
+                // Crea file per nascondere alla galleria i files immagine della cartella
+                GestioneFiles.getInstance().generateNoteOnSD(PathImmagine, ".noMedia", "");
+            }
+            PathImmagine += "/" + Utente + ".jpg";
+            File f = new File(PathImmagine);
+            if (!f.exists()) {
+                int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine utente");
+
+                DownloadImmagineNuovo d = new DownloadImmagineNuovo();
+                d.setPath(PathImmagine);
+                d.setInSfuma(false);
+                d.setNumeroOperazione(NumeroOperazione);
+                d.setImmagineUtente(true);
+
+                d.startDownload(UrlImmagine,
+                        "Download immagine utente", 10000);
+            }
         }
     }
 }

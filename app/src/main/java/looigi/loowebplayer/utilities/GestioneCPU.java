@@ -33,14 +33,23 @@ public class GestioneCPU {
                 "Attiva CPU");
 
         if (!GiaAttivo) {
-            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "MyApp::MyWakelockTag");
-            wakeLock.acquire(60000);
-            GiaAttivo = true;
+            if (powerManager == null) {
+                powerManager = (PowerManager) ctx.getSystemService(POWER_SERVICE);
+            }
+            if (powerManager != null) {
+                wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                        "MyApp::MyWakelockTag");
+                wakeLock.acquire(60000);
+                GiaAttivo = true;
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(),
-                    "Attivata");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Attivata");
+            } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "NON Attivata");
+            }
         } else {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),

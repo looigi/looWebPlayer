@@ -1,6 +1,7 @@
 package looigi.loowebplayer.maschere;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -79,6 +81,18 @@ public class Utenza extends android.support.v4.app.Fragment {
                     System.exit(0);
                 }
             });
+
+            ImageView imgUtenza = view.findViewById(R.id.imgUtente);
+            String PathImmagine = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Utente";
+            StrutturaUtenti s = VariabiliStaticheGlobali.getInstance().getUtente();
+            String Utente = s.getUtente();
+            imgUtenza.setImageBitmap(BitmapFactory.decodeFile(PathImmagine + "/" + Utente + ".jpg"));
+
+            TextView txtUtente = view.findViewById(R.id.txtUtente);
+            txtUtente.setText(Utente);
+
+            TextView txtCartella = view.findViewById(R.id.txtCartella);
+            txtCartella.setText(s.getCartellaBase());
 
             Button btnOk = view.findViewById(R.id.btnOk);
             btnOk.setOnClickListener(new View.OnClickListener() {

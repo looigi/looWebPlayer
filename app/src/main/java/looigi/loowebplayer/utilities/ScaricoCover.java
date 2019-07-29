@@ -56,7 +56,7 @@ public class ScaricoCover {
             d.setPath(PathFile);
             d.setInSfuma(false);
             d.setNumeroOperazione(nScarico);
-            d.setCaricaImmagineBrano(true);
+            d.setImmagineUtente(false);
 
             int TimeOut = VariabiliStaticheGlobali.getInstance().getTimeOutImmagini();
 
