@@ -547,9 +547,10 @@ public class GestioneWEBServiceSOAPNuovo {
 										// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 										// if (ceRete) {
-											bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-													ApriDialog, Urletto);
-											bckAsyncTask.execute(Urletto);
+										VariabiliStaticheGlobali.getInstance().setUltimaOperazioneSOAP(Long.toString(System.currentTimeMillis()));
+										bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+												ApriDialog, Urletto);
+										bckAsyncTask.execute(Urletto);
 										// }
 
 										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);

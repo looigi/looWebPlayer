@@ -33,7 +33,10 @@ public class GestioneCPU {
                 "Attiva CPU");
 
         if (!GiaAttivo) {
-            if (powerManager == null) {
+            if (ctx == null) {
+                ctx = VariabiliStaticheGlobali.getInstance().getContext();
+            }
+            if (powerManager == null && ctx != null) {
                 powerManager = (PowerManager) ctx.getSystemService(POWER_SERVICE);
             }
             if (powerManager != null) {
