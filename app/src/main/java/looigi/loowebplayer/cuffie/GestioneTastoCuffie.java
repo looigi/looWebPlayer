@@ -20,19 +20,26 @@ public class GestioneTastoCuffie extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-            KeyEvent event = (KeyEvent) intent .getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+            KeyEvent event = (KeyEvent) intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
 
             if (event == null) {
                 return;
             }
 
-            if (event.getAction()== KeyEvent.KEYCODE_MEDIA_PLAY) {
+            long sec = (System.currentTimeMillis() - VariabiliStaticheGlobali.getInstance().getLastTimePressed()) / 1000;
+            if (sec < 5 &&
+                    VariabiliStaticheGlobali.getInstance().getLastTimePressed() >0) {
+                return;
+            }
+            VariabiliStaticheGlobali.getInstance().setLastTimePressed(System.currentTimeMillis());
+
+            /* if (event.getKeyCode() == 126) {
                 if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                     GestioneOggettiVideo.getInstance().PlayBrano(false);
                 } else {
                     GestioneOggettiVideo.getInstance().PlayBrano(true);
                 }
-            	// Bluetooth
+                // Bluetooth
             	// Calendar c = Calendar.getInstance();
             	// int seconds = c.get(Calendar.SECOND);
             	// int diffe=PlayerOne.SecondoUltimoCambio-seconds;
@@ -47,9 +54,9 @@ public class GestioneTastoCuffie extends BroadcastReceiver {
 	    	    	
 	    	    // 	PlayerOne.SecondoUltimoCambio=seconds;
             	// }
-            }
+            } */
 
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getKeyCode() == 88) {
             	// Calendar c = Calendar.getInstance();
             	// int seconds = c.get(Calendar.SECOND);
             	// int diffe=PlayerOne.SecondoUltimoCambio-seconds;
@@ -61,12 +68,12 @@ public class GestioneTastoCuffie extends BroadcastReceiver {
             	//
             	// } else {
                 GestioneOggettiVideo.getInstance().AvantiBrano();
-	    	    	
+
 	    	    // 	PlayerOne.SecondoUltimoCambio=seconds;
             	// }
             }
 
-            if (event.getAction() == KeyEvent.ACTION_UP) {
+            if (event.getKeyCode() == 87) {
                 // Calendar c = Calendar.getInstance();
                 // int seconds = c.get(Calendar.SECOND);
                 // int diffe=PlayerOne.SecondoUltimoCambio-seconds;

@@ -142,6 +142,7 @@ public class VariabiliStaticheGlobali {
     private boolean HaControllatoLaVersione = false;
 
     private String UltimaOperazioneSOAP = "";
+    private long lastTimePressed = 0;
 
     private Drawable play;
     private Drawable play_dis;
@@ -173,6 +174,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public long getLastTimePressed() {
+        return lastTimePressed;
+    }
+
+    public void setLastTimePressed(long lastTimePressed) {
+        this.lastTimePressed = lastTimePressed;
     }
 
     public String getUltimaOperazioneSOAP() {

@@ -1,5 +1,7 @@
 package looigi.loowebplayer.nuova_versione;
 
+import java.io.File;
+
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
@@ -25,6 +27,12 @@ public class ControlloVersioneApplicazione {
             attualizaApp.execute(path);
         // } else {
             // MainActivity.PrendeDatiStatistici(VariabiliStatiche.getInstance().getMainContext());
+        } else {
+            String outapk = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/update.apk";
+            File f = new File(outapk);
+            if (f.exists()) {
+                f.delete();
+            }
         }
     }
 }

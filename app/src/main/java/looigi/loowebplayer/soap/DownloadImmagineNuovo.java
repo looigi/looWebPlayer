@@ -233,7 +233,7 @@ public class DownloadImmagineNuovo {
 
                 Utility.getInstance().saveImageFile(bitmap, Path);
             } else {
-                if (NumeroBrano > -1 &&
+                if (NumeroBrano > 0 &&
                         NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
                         VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                     if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||

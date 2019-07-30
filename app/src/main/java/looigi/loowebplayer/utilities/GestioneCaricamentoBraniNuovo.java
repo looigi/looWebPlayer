@@ -464,6 +464,8 @@ public class GestioneCaricamentoBraniNuovo {
             // Lancio scarico cover
 
             // Testo brano
+            GestioneTesti g = new GestioneTesti();
+            g.SettaTesto(true);
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
             int nTesto = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Lettura testo");
@@ -484,7 +486,7 @@ public class GestioneCaricamentoBraniNuovo {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
             String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
             File f = new File(PathListaImm);
-            if (f.exists()) {
+            if (!f.exists()) {
                 DBRemotoNuovo dbr = new DBRemotoNuovo();
                 VariabiliStaticheNuove.getInstance().setGm(dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
                         Artista, nMultimedia));

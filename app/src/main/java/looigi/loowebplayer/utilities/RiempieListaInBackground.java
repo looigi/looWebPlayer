@@ -294,11 +294,15 @@ public class RiempieListaInBackground {
             db_dati db = new db_dati();
             List<StrutturaBellezza> lb = db.RitornaTuttiDatiBellezza();
             List<StrutturaAscoltate> la = db.RitornaTuttiDatiAscoltate();
-            for (StrutturaBellezza b : lb) {
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone()).setStelle(b.getBellezza());
+            if (lb != null) {
+                for (StrutturaBellezza b : lb) {
+                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone()).setStelle(b.getBellezza());
+                }
             }
-            for (StrutturaAscoltate a : la) {
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone()).setQuanteVolteAscoltato(a.getQuante());
+            if (la != null) {
+                for (StrutturaAscoltate a : la) {
+                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone()).setQuanteVolteAscoltato(a.getQuante());
+                }
             }
             // Aggiorna i dati caricati da remoto con quelli in locale
 

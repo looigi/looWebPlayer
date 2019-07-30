@@ -62,7 +62,8 @@ public class GestioneTesti {
         String sTesto = "";
 
         VariabiliStaticheHome.getInstance().getImgLinguettaTesto().setVisibility(LinearLayout.GONE);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Imposta testo. Pulisce: "+Pulisce);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Imposta testo. Pulisce: "+Pulisce);
         if (!Pulisce) {
             int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
             if (NumeroBrano>-1) {
@@ -120,10 +121,12 @@ public class GestioneTesti {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(idBrano).setStelle(Integer.parseInt(t[3]));
             }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. ImpostaStelleAscoltata in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Ritorna testo da SD. ImpostaStelleAscoltata in Home");
             GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. SettaTesto in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Ritorna testo da SD. SettaTesto in Home");
             SettaTesto(false);
 
             if (idBrano>-1) {

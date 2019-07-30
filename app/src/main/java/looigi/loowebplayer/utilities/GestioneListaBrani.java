@@ -374,7 +374,9 @@ public class GestioneListaBrani {
                     IndiceSuonati--;
                 }
             }
-            Brano = BraniSuonati.get(IndiceSuonati);
+            if (IndiceSuonati < BraniSuonati.size() && IndiceSuonati > -1) {
+                Brano = BraniSuonati.get(IndiceSuonati);
+            }
         } else {
             if (BraniSuonati.size()>0) {
                 Brano = BraniSuonati.get(0);

@@ -159,8 +159,11 @@ public class wsRitornoNuovo {
         // String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(Integer.parseInt(idArtista)).getArtista();
 
         if (imm.size() > 0) {
+            // String ListaImmagini = "";
+
             for (StrutturaImmagini i : imm) {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(Integer.parseInt(idArtista)).getImmagini().add(i);
+                // ListaImmagini += i + ";";
             }
 
             // GestioneImmagini.getInstance().SalvaImmaginiSuSD(Artista, imm);
@@ -169,6 +172,7 @@ public class wsRitornoNuovo {
             // if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
             //     GestioneImmagini.getInstance().CreaCarosello();
             // }
+            // GestioneImmagini.getInstance().SalvaMultimediaArtista(ListaImmagini);
         }
         VariabiliStaticheHome.getInstance().setImms(imm);
 

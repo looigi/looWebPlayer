@@ -190,13 +190,15 @@ public class GestioneFiles {
     public List<File> ScansionaDirectory(File parentDir) {
         ArrayList<File> inFiles = new ArrayList<File>();
         File[] files = parentDir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                inFiles.addAll(ScansionaDirectory(file));
-            } else {
-                if(file.getName().toUpperCase().contains(".MP3") || file.getName().toUpperCase().contains(".WMA")){
-                    if (!file.getName().toUpperCase().contains(".DAT")) {
-                        inFiles.add(file);
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    inFiles.addAll(ScansionaDirectory(file));
+                } else {
+                    if (file.getName().toUpperCase().contains(".MP3") || file.getName().toUpperCase().contains(".WMA")) {
+                        if (!file.getName().toUpperCase().contains(".DAT")) {
+                            inFiles.add(file);
+                        }
                     }
                 }
             }

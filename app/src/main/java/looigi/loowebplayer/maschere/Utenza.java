@@ -94,6 +94,13 @@ public class Utenza extends android.support.v4.app.Fragment {
             TextView txtCartella = view.findViewById(R.id.txtCartella);
             txtCartella.setText(s.getCartellaBase());
 
+            TextView txtTipoUtente = view.findViewById(R.id.txtTipoUtente);
+            if (s.isAmministratore()) {
+                txtTipoUtente.setText("Amministratore");
+            } else {
+                txtTipoUtente.setText("Utente");
+            }
+
             Button btnOk = view.findViewById(R.id.btnOk);
             btnOk.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {

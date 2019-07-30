@@ -39,6 +39,7 @@
     <string name="qualita">Qualità</string>
     <string name="modalita_random">Avanzamento random</string>
     <string name="brano">brano</string>
+    <string name="tipo_utente">Tipo Utente</string>
     <string name="modalita_compressione">Compressione MP3</string>
     <string name="framerate">Framerate</string>
     <string name="salvataggio">Salvataggio Oggetti</string>
