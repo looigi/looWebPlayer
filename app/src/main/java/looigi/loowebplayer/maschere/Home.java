@@ -39,6 +39,7 @@ import looigi.loowebplayer.notifiche.Notifica;
 // import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.nuova_versione.ControlloVersioneApplicazione;
 import looigi.loowebplayer.soap.DownloadImmagineNuovo;
+import looigi.loowebplayer.utilities.DettagliBrano;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
@@ -55,6 +56,7 @@ public class Home extends android.support.v4.app.Fragment {
     // private Context context;
     private static String TAG = NomiMaschere.getInstance().getHome();
     private Boolean TestoMostrato=false;
+    private Boolean DettagliMostrati=false;
     private boolean haCliccatoSuBackground=false;
 
     @Override
@@ -109,7 +111,7 @@ public class Home extends android.support.v4.app.Fragment {
     private void initializeGraphic() {
         Context context = VariabiliStaticheGlobali.getInstance().getContext();
         VariabiliStaticheHome.getInstance().setContext(context);
-        View view = VariabiliStaticheGlobali.getInstance().getViewActivity();
+        final View view = VariabiliStaticheGlobali.getInstance().getViewActivity();
 
         if (view != null) {
             final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
@@ -175,9 +177,11 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setTxtMembriTitolo((LinearLayout) view.findViewById(R.id.layMembri));
             // vh.setTxtTraffico((TextView) view.findViewById(R.id.txtTraffico));
             vh.setTxtAscoltata((TextView) view.findViewById(R.id.txtAscoltata));
-            vh.setLayHome((LinearLayout) view.findViewById(R.id.layTesto));
+            vh.setLayTesto((LinearLayout) view.findViewById(R.id.layTesto));
+            vh.setLayDettagli((LinearLayout) view.findViewById(R.id.layDettagliMP3));
             vh.setLayIntestazione((LinearLayout) view.findViewById(R.id.layIntestazione));
             vh.setImgLinguettaTesto((ImageView) view.findViewById(R.id.imgLinguettaTesto));
+            vh.setImgLinguettaDettagli((ImageView) view.findViewById(R.id.imgLinguettaDettagliMP3));
             vh.setTxtTesto((TextView) view.findViewById(R.id.txTesto));
             vh.setImgListaBrani((ImageView) view.findViewById(R.id.imgListaBrani));
             vh.setImgChiudeListaBrani((ImageView) view.findViewById(R.id.imgChiudiLista));
@@ -244,11 +248,11 @@ public class Home extends android.support.v4.app.Fragment {
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMascheraTestoAperta()) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Apro maschera testo per config");
                 TestoMostrato=true;
-                vh.getLayHome().setVisibility(LinearLayout.VISIBLE);
+                vh.getLayTesto().setVisibility(LinearLayout.VISIBLE);
             } else {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Chiudo maschera testo per config");
                 TestoMostrato=false;
-                vh.getLayHome().setVisibility(LinearLayout.GONE);
+                vh.getLayTesto().setVisibility(LinearLayout.GONE);
             }
 
             ImageView imgInglese = view.findViewById(R.id.imgInglese);
@@ -346,15 +350,41 @@ public class Home extends android.support.v4.app.Fragment {
                     // }
 
                     if (!TestoMostrato) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Apro maschera testo");
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Apro maschera testo");
                         TestoMostrato=true;
                         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setMascheraTestoAperta(true);
-                        vh.getLayHome().setVisibility(LinearLayout.VISIBLE);
+                        vh.getLayTesto().setVisibility(LinearLayout.VISIBLE);
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Chiudo maschera testo");
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Chiudo maschera testo");
                         TestoMostrato=false;
                         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setMascheraTestoAperta(false);
-                        vh.getLayHome().setVisibility(LinearLayout.GONE);
+                        vh.getLayTesto().setVisibility(LinearLayout.GONE);
+                    }
+                }
+            });
+
+            vh.getLayDettagli().setVisibility(LinearLayout.GONE);
+            vh.getImgLinguettaDettagli().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Linguetta Testo");
+                    //     NetThread.getInstance().SbloccoCarosello();
+                    // }
+
+                    if (!DettagliMostrati) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Apro maschera dettagli");
+                        DettagliMostrati=true;
+                        DettagliBrano db = new DettagliBrano();
+                        db.RitornaDettagliBrano(view);
+                        vh.getLayDettagli().setVisibility(LinearLayout.VISIBLE);
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Chiudo maschera dettagli");
+                        DettagliMostrati=false;
+                        vh.getLayDettagli().setVisibility(LinearLayout.GONE);
                     }
                 }
             });

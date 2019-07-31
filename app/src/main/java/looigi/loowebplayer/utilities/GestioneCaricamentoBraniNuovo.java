@@ -64,6 +64,7 @@ public class GestioneCaricamentoBraniNuovo {
         GestioneImmagini.getInstance().setImmNumber(-1);
         GestioneImmagini.getInstance().ImpostaImmagineVuota();
         VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("");
+        VariabiliStaticheGlobali.getInstance().setImmagineMostrata("");
 
         MainActivity.ScriveBraniInLista();
 
@@ -109,7 +110,7 @@ public class GestioneCaricamentoBraniNuovo {
                                 int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                                 if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
                                     || !VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()
-                                    || secondi > 44) {
+                                    || secondi > VariabiliStaticheGlobali.TempoAttesaFineDownload) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
@@ -422,7 +423,7 @@ public class GestioneCaricamentoBraniNuovo {
                     vh.setGm(new GestioneMembri());
                     int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getIdArtista();
                     int quantiMembri = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().size();
-                    Boolean Ok = true;
+                    boolean Ok = true;
                     if (quantiMembri == 1) {
                         String membro = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().get(0).getMembro().trim();
                         if (membro.isEmpty() || membro.toUpperCase().contains("NESSUN MEMBRO")) {

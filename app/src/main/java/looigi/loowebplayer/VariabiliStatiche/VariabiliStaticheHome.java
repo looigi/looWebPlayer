@@ -49,9 +49,11 @@ public class VariabiliStaticheHome {
     private TextView txtMin;
     private TextView txtMax;
     private TextView txtFiltro;
-    private LinearLayout layHome;
+    private LinearLayout layTesto;
+    private LinearLayout layDettagli;
     private LinearLayout layIntestazione;
     private ImageView imgLinguettaTesto;
+    private ImageView imgLinguettaDettagli;
     private TextView txtTesto;
     private TextView txtAscoltata;
     private TextView txtOperazioneWEB;
@@ -96,6 +98,22 @@ public class VariabiliStaticheHome {
 
     public Context getContext() {
         return context;
+    }
+
+    public LinearLayout getLayDettagli() {
+        return layDettagli;
+    }
+
+    public void setLayDettagli(LinearLayout layDettagli) {
+        this.layDettagli = layDettagli;
+    }
+
+    public ImageView getImgLinguettaDettagli() {
+        return imgLinguettaDettagli;
+    }
+
+    public void setImgLinguettaDettagli(ImageView imgLinguettaDettagli) {
+        this.imgLinguettaDettagli = imgLinguettaDettagli;
     }
 
     public TextView getTxtQuanteAscoltate() {
@@ -588,12 +606,12 @@ public class VariabiliStaticheHome {
         this.imgLinguettaTesto = imgLinguettaTesto;
     }
 
-    public LinearLayout getLayHome() {
-        return layHome;
+    public LinearLayout getLayTesto() {
+        return layTesto;
     }
 
-    public void setLayHome(LinearLayout layHome) {
-        this.layHome = layHome;
+    public void setLayTesto(LinearLayout layTesto) {
+        this.layTesto = layTesto;
     }
 
     public void setContext(Context context) {

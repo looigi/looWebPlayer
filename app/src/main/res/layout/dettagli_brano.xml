@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="2dp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layDettagliMP3"
+            android:layout_width="180dp"
+            android:padding="2dp"
+            android:orientation="vertical"
+            android:background="@color/bianco_trasparente"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:gravity="center_horizontal"
+                        android:padding="2dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imgDettagliMP3"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txDettagliNome"
+                        android:textColor="@color/bianco"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="20sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliTraccia"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliArtista"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliAlbum"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliAnno"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliMembri"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliDimensioni"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliStelle"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliAscoltato"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliDurata"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txDettagliNumImmagini"
+                        android:textColor="@color/nero"
+                        android:shadowColor="@color/grigio"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:textSize="16sp"
+                        android:shadowRadius="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/imgCondividi"
+                        android:background="@drawable/condividi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgLinguettaDettagliMP3"
+            android:tint="@color/bianco"
+            android:background="@drawable/linguetta_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

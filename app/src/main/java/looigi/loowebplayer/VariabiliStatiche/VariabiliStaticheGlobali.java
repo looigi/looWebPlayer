@@ -57,6 +57,7 @@ public class VariabiliStaticheGlobali {
     final public static String NomeApplicazione="Looigi's Web Player";
     final public static int TempoImmagineVisibile=15000;
     final public static int TempoSfumatura=3000;
+    final public static int TempoAttesaFineDownload = 30;
 
     private int TimeOutDownloadMP3=125000;
     private int TimeOutListaBrani=200000;

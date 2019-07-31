@@ -152,7 +152,8 @@ public class GestioneSuonaBrano {
                             vh.getSeekBar1().setProgress(mCurrentPosition);
 
                             // if (!vh.getMediaPlayer().isPlaying()) {
-                            if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= vh.getMediaPlayer().getDuration()) {
+                            int perc2 = vh.getMediaPlayer().getDuration() * 75 / 100;
+                            if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= perc2) {
                                 // hNuovoMP3 = new Handler();
                                 // hNuovoMP3.postDelayed(NuovoMp3 = new Runnable() {
                                 // @Override
