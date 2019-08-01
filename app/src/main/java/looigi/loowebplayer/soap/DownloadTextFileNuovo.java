@@ -314,8 +314,6 @@ public class DownloadTextFileNuovo {
                                     }
                                 }
                             }
-                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTesto(testoFinale);
-                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTestoTradotto("");
 
                             StrutturaBrani sb = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
                             GestioneTesti g = new GestioneTesti();
@@ -332,6 +330,11 @@ public class DownloadTextFileNuovo {
                             int idArtista = sb.getIdArtista();
                             String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
                             String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(sb.getIdAlbum()).getNomeAlbum();
+
+                            testoFinale = sNomeBrano.toUpperCase() + "**A CAPO**" + Artista + "**A CAPO**" + "**A CAPO**" + testoFinale;
+
+                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTesto(testoFinale);
+                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTestoTradotto("");
 
                             g.SalvaTestoSuSD(Artista, Album, sNomeBrano, testoFinale, "", Integer.toString(Ascoltata), Integer.toString(Bellezza));
                             g.SettaTesto(false);
