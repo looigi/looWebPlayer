@@ -185,7 +185,9 @@ public class DownloadTextFileNuovo {
                 HttpURLConnection c = (HttpURLConnection) url.openConnection();
                 String redirect = c.getHeaderField("Location");
                 if (redirect != null){
-                    c = (HttpURLConnection) new URL(redirect).openConnection();
+                    if (!redirect.toUpperCase().contains("INTERNAL")) {
+                        c = (HttpURLConnection) new URL(redirect).openConnection();
+                    }
                 }
                 c.setInstanceFollowRedirects(false);
                 c.setRequestMethod("GET");
