@@ -301,7 +301,7 @@ public class GestioneListaBrani {
     }
 
     public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
-        boolean ceRete = true; // VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         if (ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -391,7 +391,7 @@ public class GestioneListaBrani {
     }
 
     public void ScaricaBranoSuccessivoInBackground() {
-        boolean ceRete = true; // VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
         // ceRete = false;
         if (ceRete) {
             final int NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);

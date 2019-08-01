@@ -151,6 +151,7 @@ public class Settings extends Fragment {
             final TextView txtTentativi = view.findViewById(R.id.txtQuantiTentativi);
 
             Switch chkMostraOperazioni = view.findViewById(R.id.chkMostraOperazioni);
+            Switch chkScaricaTesti = view.findViewById(R.id.chkScaricaTesto);
 
             optNessuno = view.findViewById(R.id.optNessuno);
             optData = view.findViewById(R.id.optData);
@@ -268,6 +269,21 @@ public class Settings extends Fragment {
                             "Selezionato switch mostra operazioni: "+isChecked);
 
                     vg.setMostraOperazioni(isChecked);
+
+                    vg.SalvaDati();
+                }
+            });
+
+            // Switch scarica testo
+            boolean bScaricaTesto = vg.isScaricaTestoBrano();
+            chkScaricaTesti.setChecked(bScaricaTesto);
+            chkScaricaTesti.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch scarica testo: "+isChecked);
+
+                    vg.setScaricaTestoBrano(isChecked);
 
                     vg.SalvaDati();
                 }

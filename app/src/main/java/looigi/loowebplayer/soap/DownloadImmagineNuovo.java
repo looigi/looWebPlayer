@@ -90,10 +90,19 @@ public class DownloadImmagineNuovo {
             sUrl2 = sUrl2.replace("//", "/");
             Url += sUrl2;
 
-            GestioneCPU.getInstance().AttivaCPU();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-            downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url, ImmagineUtente);
+        GestioneCPU.getInstance().AttivaCPU();
+
+        downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url, ImmagineUtente);
+        if (ceRete) {
             downloadFile.execute(Url);
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "DL Immagine mancanza di rete");
+
+            StoppaEsecuzione();
+        }
         // } else {
         //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
         //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),

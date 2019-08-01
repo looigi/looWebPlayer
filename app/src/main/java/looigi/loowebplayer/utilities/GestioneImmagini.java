@@ -410,18 +410,24 @@ public class GestioneImmagini {
         } else {
             // if (NetThreadNuovo.getInstance().isScreenOn()) {
             if (VariabiliStaticheGlobali.getInstance().getScreenON()) {
-                int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine artista");
+                boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-                SfumaImmagine(false);
+                if (ceRete) {
+                    int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine artista");
 
-                // Ci troviamo in caso di immagine non ancora scaricata. La scarico
-                DownloadImmagineNuovo d = new DownloadImmagineNuovo();
-                d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-                d.setPath(PathFile);
-                d.setNumeroBrano(NumeroBrano);
-                d.setNumeroOperazione(NumeroOperazione);
-                d.setInSfuma(true);
-                d.startDownload(sUrl, "Download Immagine", VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
+                    SfumaImmagine(false);
+
+                    // Ci troviamo in caso di immagine non ancora scaricata. La scarico
+                    DownloadImmagineNuovo d = new DownloadImmagineNuovo();
+                    d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+                    d.setPath(PathFile);
+                    d.setNumeroBrano(NumeroBrano);
+                    d.setNumeroOperazione(NumeroOperazione);
+                    d.setInSfuma(true);
+                    d.startDownload(sUrl, "Download Immagine", VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
+                } else {
+                    CreaCarosello();
+                }
             } else {
                 CreaCarosello();
             }
@@ -695,6 +701,9 @@ public class GestioneImmagini {
                             imgBrano.setImageBitmap(ultimaBitmap);
                         }
                     }
+                } else {
+                    Drawable icona_nessuna = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.nessuna);
+                    imgBrano.setImageDrawable(icona_nessuna);
                 }
 
                 hSelezionaUltimaImmagine.removeCallbacksAndMessages(null);

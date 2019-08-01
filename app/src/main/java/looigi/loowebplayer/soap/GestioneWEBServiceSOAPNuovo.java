@@ -1,7 +1,6 @@
 package looigi.loowebplayer.soap;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,14 +15,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
-import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
+import looigi.loowebplayer.ritorno_ws.RitornoDaWSIntermedioSOAP;
 import looigi.loowebplayer.utilities.GestioneCPU;
-import looigi.loowebplayer.utilities.GestioneImmagini;
-import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -121,18 +117,23 @@ public class GestioneWEBServiceSOAPNuovo {
 	}
 
 	public void Esegue() {
-		// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+		boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
-		// if (ceRete) {
-			// if (bckAsyncTask==null) {
-				GestioneCPU.getInstance().AttivaCPU();
-				VariabiliStaticheGlobali.getInstance().setgWSoap(this);
+		GestioneCPU.getInstance().AttivaCPU();
+		VariabiliStaticheGlobali.getInstance().setgWSoap(this);
 
-				bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-						ApriDialog, Urletto);
+		bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+				ApriDialog, Urletto);
+		if (ceRete) {
+			// if (bckAsyncTask==null) {
 				bckAsyncTask.execute(Urletto);
 			// }
-		// }
+		} else {
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+			}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete iniziale");
+
+			StoppaEsecuzione();
+		}
 	}
 
 	public void StoppaEsecuzione() {
@@ -443,6 +444,10 @@ public class GestioneWEBServiceSOAPNuovo {
 			VariabiliStaticheGlobali.getInstance().setgWSoap(null);
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
 
+			ChiudeDialog();
+
+			final RitornoDaWSIntermedioSOAP r = new RitornoDaWSIntermedioSOAP();
+
 			if (NumeroBrano>-1 &&
 					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
 					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
@@ -450,75 +455,24 @@ public class GestioneWEBServiceSOAPNuovo {
 						"SOAP: Cambio brano");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 				}.getClass().getEnclosingMethod().getName(), "SOAP: Cambio brano");
+
+				r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
 			} else {
 				if (!messErrore.equals("ESCI")) {
-					String Ritorno = result;
+					r.ChiamaRoutinesInCasoDiOK(result, messErrore, NumeroOperazione, NumeroBrano, Errore, tOperazione);
+				} else {
+					// Errore... Riprovo ad eseguire la funzione
+					boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-					if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug().isEmpty()) {
-						messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug();
-						Ritorno = messErrore;
-					}
+					if (!ceRete) {
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+						}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete");
 
-					if (Ritorno.contains("ERROR:")) {
-						messErrore = Ritorno;
-						Errore = true;
-					}
+						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+								"Errore SOAP. Mancanza di rete");
 
-					ChiudeDialog();
-
-					wsRitornoNuovo rRit = new wsRitornoNuovo();
-					boolean Ancora = true;
-
-					// Errore = true;
-
-					if (!Errore || NumeroBrano == -1) {
-						while (Ancora) {
-							switch (tOperazione) {
-								case "ModificaBellezza":
-									rRit.RitornaModificaBellezza(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "VolteAscoltata":
-									rRit.RitornaVolteAscoltata(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "RitornaListaBrani":
-									rRit.RitornaListaBrani(Ritorno);
-									Ancora = false;
-									break;
-								case "RitornaDatiUtente":
-									rRit.RitornaDatiUtente(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								case "RitornaDettaglioBrano":
-									rRit.RitornaDettaglioBrano(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								/* case "RitornaBrano":
-									rRit.RitornaBrano(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break; */
-								case "RitornaMultimediaArtista":
-									GestioneImmagini.getInstance().SalvaMultimediaArtista(Ritorno);
-									rRit.RitornaMultimediaArtista(Ritorno);
-									Ancora = false;
-									break;
-								case "RitornaVersioneApplicazione":
-									rRit.RitornaVersioneApplicazione(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break;
-								/* case "RitornaBranoBackground":
-									GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ricerca);
-
-									rRit.RitornaBranoBackground(Ritorno, NumeroOperazione);
-									Ancora = false;
-									break; */
-							}
-						}
+						r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
 					} else {
-						// Errore... Riprovo ad eseguire la funzione
-						// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
 						if (Tentativo < QuantiTentativi &&
 								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
 								!tOperazione.equals("RitornaDatiUtente")) {
@@ -541,17 +495,26 @@ public class GestioneWEBServiceSOAPNuovo {
 									NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 											"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
 													" Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
-									if (SecondiAttesa>=TempoAttesa) {
-										// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+									if (SecondiAttesa >= TempoAttesa) {
+										boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-										// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+										if (ceRete) {
+											VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+											}.getClass().getEnclosingMethod().getName(), "SOAP: Nuovo richiamo funzione");
 
-										// if (ceRete) {
-										VariabiliStaticheGlobali.getInstance().setUltimaOperazioneSOAP(Long.toString(System.currentTimeMillis()));
-										bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-												ApriDialog, Urletto);
-										bckAsyncTask.execute(Urletto);
-										// }
+											VariabiliStaticheGlobali.getInstance().setUltimaOperazioneSOAP(Long.toString(System.currentTimeMillis()));
+											bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+													ApriDialog, Urletto);
+											bckAsyncTask.execute(Urletto);
+										} else {
+											VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+											}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete 2");
+
+											NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+													"Errore SOAP. Mancanza di rete in richiamo funzione");
+
+											r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
+										}
 
 										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
 										hAttesaNuovoTentativo = null;
@@ -564,17 +527,15 @@ public class GestioneWEBServiceSOAPNuovo {
 							// Errore... Riprovo ad eseguire la funzione
 						} else {
 							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 							}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
+
+							r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
 						}
 					}
-				} else {
-					NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-							"Stoppata esecuzione da remoto");
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-					}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione da remoto");
 				}
 			}
+
 			GestioneCPU.getInstance().DisattivaCPU();
 			bckAsyncTask = null;
 		}

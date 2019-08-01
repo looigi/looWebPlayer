@@ -29,9 +29,6 @@ public class GestioneCaricamentoBraniNuovo {
     private GestioneCaricamentoBraniNuovo() {
     }
 
-    // private Runnable runScaricamentiBrano;
-    // private Handler hProsegueScaricamentiBrano;
-
     private ArrayList<Handler> hAttesaDownload = new ArrayList<Handler>();
     private ArrayList<Runnable> rAttesaDownload = new ArrayList<Runnable>();
     private Handler hAttesaDownloadS;

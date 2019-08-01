@@ -10,6 +10,7 @@ import java.util.List;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
+import looigi.loowebplayer.utilities.ScaricoTesto;
 
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
@@ -50,6 +51,7 @@ public class StrutturaConfig {
     private boolean PuliziaPerMega = false;
     private int QuantiFilesMemorizzati = 150;
     private int QuantiMBAlMassimo = 500;
+    private boolean ScaricaTestoBrano = true;
 
     public void SalvaDati() {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
@@ -90,6 +92,7 @@ public class StrutturaConfig {
         String QuantiFilesPulizia = Integer.toString(QuantiFilesMemorizzati);
         String QuantiMegaPulizia = Integer.toString(QuantiMBAlMassimo);
         String sMostraOperazioni = "S"; if (!MostraOperazioni) sMostraOperazioni="N";
+        String sScaricaTesto = "S"; if (!ScaricaTestoBrano) sScaricaTesto="N";
 
         String Stringona = 
                 sRandom + ";" +
@@ -131,7 +134,8 @@ public class StrutturaConfig {
                 QuantiFilesPulizia+';'+
                 sPuliziaPerMega+';'+
                 QuantiMegaPulizia+';'+
-                sMostraOperazioni+';'
+                sMostraOperazioni+';'+
+                sScaricaTesto+';'
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -229,6 +233,8 @@ public class StrutturaConfig {
 
                     String sMostraOperazioni = Campi[39];
                     MostraOperazioni = sMostraOperazioni.equals("S");
+                    String sScaricoTesto = Campi[40];
+                    ScaricaTestoBrano = sScaricoTesto.equals("S");
 
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
@@ -447,6 +453,14 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isScaricaTestoBrano() {
+        return ScaricaTestoBrano;
+    }
+
+    public void setScaricaTestoBrano(boolean scaricaTestoBrano) {
+        ScaricaTestoBrano = scaricaTestoBrano;
     }
 
     public boolean isMostraOperazioni() {

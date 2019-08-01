@@ -15,7 +15,11 @@ import java.net.URL;
 import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
+import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.utilities.GestioneCPU;
+import looigi.loowebplayer.utilities.GestioneFiles;
+import looigi.loowebplayer.utilities.GestioneTesti;
 import looigi.loowebplayer.utilities.RiempieListaInBackground;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
@@ -70,10 +74,22 @@ public class DownloadTextFileNuovo {
         //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
             // ApriDialog();
-            GestioneCPU.getInstance().AttivaCPU();
+        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-            downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
+        GestioneCPU.getInstance().AttivaCPU();
+
+        downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
+        if (ceRete) {
             downloadFile.execute(Url);
+        } else {
+            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Download testo mancanza di rete");
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "DL Text mancanza di rete");
+
+            StoppaEsecuzione();
+        }
         // } else {
         //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
         //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
@@ -167,6 +183,11 @@ public class DownloadTextFileNuovo {
             try {
                 URL url = new URL(sUrl[0]);
                 HttpURLConnection c = (HttpURLConnection) url.openConnection();
+                String redirect = c.getHeaderField("Location");
+                if (redirect != null){
+                    c = (HttpURLConnection) new URL(redirect).openConnection();
+                }
+                c.setInstanceFollowRedirects(false);
                 c.setRequestMethod("GET");
                 c.setConnectTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
                 c.setReadTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
@@ -262,12 +283,65 @@ public class DownloadTextFileNuovo {
                 }.getClass().getEnclosingMethod().getName(), "Scarico testo. Cambio brano");
             } else {
                 if (messErrore.isEmpty()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(),
-                            "Scarico del testo. Richiamo RiempieStrutture in Home");
-                    RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
-                    // MainActivity.ScriveBraniInLista();
+                    if (tOperazione.equals("Scarico testo brano")) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
+                                "Scarico testo brano. Conversione");
+
+                        File f = new File(Path + "/" + PathNomeFile);
+                        if (f.exists()) {
+                            String testo = GestioneFiles.getInstance().LeggeFileDiTesto(Path + "/" + PathNomeFile);
+                            testo = testo.substring(testo.indexOf("<div class='lyricbox'>") + 22, testo.length());
+                            testo = testo.substring(0, testo.indexOf("<div class='lyricsbreak'>"));
+                            testo = testo.replace("<i>", "");
+                            testo = testo.replace("</i>", "");
+                            testo = testo.replace("<br />", "**A CAPO**");
+                            testo = testo.replace("&#", "");
+                            String[] c = testo.split(";", -1);
+                            String testoFinale = "";
+                            for (String cc : c) {
+                                if (!cc.isEmpty()) {
+                                    if (cc.contains("**A CAPO**")) {
+                                        int v = Integer.parseInt(cc.replace("**A CAPO**", ""));
+                                        char ccc = ((char) v);
+                                        testoFinale += "**A CAPO**" + ccc;
+                                    } else {
+                                        int v = Integer.parseInt(cc);
+                                        char ccc = ((char) v);
+                                        testoFinale += ccc;
+                                    }
+                                }
+                            }
+                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTesto(testoFinale);
+                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTestoTradotto("");
+
+                            StrutturaBrani sb = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                            GestioneTesti g = new GestioneTesti();
+                            int Ascoltata = sb.getQuanteVolteAscoltato();
+                            int Bellezza = sb.getStelle();
+                            String sNomeBrano = sb.getNomeBrano();
+                            if (sNomeBrano.contains("-")) {
+                                String[] A = sNomeBrano.split("-");
+                                sNomeBrano = A[1].trim();
+                            }
+                            if (sNomeBrano.contains(".")) {
+                                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
+                            }
+                            int idArtista = sb.getIdArtista();
+                            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+                            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(sb.getIdAlbum()).getNomeAlbum();
+
+                            g.SalvaTestoSuSD(Artista, Album, sNomeBrano, testoFinale, "", Integer.toString(Ascoltata), Integer.toString(Bellezza));
+                            g.SettaTesto(false);
+                        }
+                    } else {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(),
+                                "Scarico del testo. Richiamo RiempieStrutture in Home");
+                        RiempieListaInBackground r = new RiempieListaInBackground();
+                        r.RiempieStrutture(true);
+                        // MainActivity.ScriveBraniInLista();
+                    }
                 } else {
                     if (messErrore.equals("ESCI")) {
                         // Errore... Riprovo ad eseguire la funzione

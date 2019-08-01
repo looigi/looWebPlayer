@@ -91,7 +91,7 @@ public class VariabiliStaticheGlobali {
     private Date UltimaDataCaricamento=null;
     private String UltimaCosaPronunciata="";
     private int UltimaCanzoneSuonata=-2;
-    private Boolean HaScaricatoAutomaticamente;
+    private Boolean HaScaricatoAutomaticamente=false;
     private Boolean StaScaricandoAutomaticamente =false;
     // private Boolean StaAttendendoConMusichetta=false;
     // private Boolean NonFermareDownload;

@@ -296,12 +296,16 @@ public class RiempieListaInBackground {
             List<StrutturaAscoltate> la = db.RitornaTuttiDatiAscoltate();
             if (lb != null) {
                 for (StrutturaBellezza b : lb) {
-                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone()).setStelle(b.getBellezza());
+                    if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone())!=null) {
+                        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(b.getIdCanzone()).setStelle(b.getBellezza());
+                    }
                 }
             }
             if (la != null) {
                 for (StrutturaAscoltate a : la) {
-                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone()).setQuanteVolteAscoltato(a.getQuante());
+                    if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone())!=null) {
+                        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(a.getIdCanzone()).setQuanteVolteAscoltato(a.getQuante());
+                    }
                 }
             }
             // Aggiorna i dati caricati da remoto con quelli in locale
