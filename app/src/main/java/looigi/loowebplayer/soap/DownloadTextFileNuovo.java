@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -273,7 +274,7 @@ public class DownloadTextFileNuovo {
             ControllaFineCiclo();
         }
 
-        public void ControllaFineCiclo() {
+        private void ControllaFineCiclo() {
             // VariabiliStaticheGlobali.getInstance().setChiaveDLText("***");
             ChiudeDialog();
 
@@ -293,51 +294,55 @@ public class DownloadTextFileNuovo {
                         File f = new File(Path + "/" + PathNomeFile);
                         if (f.exists()) {
                             String testo = GestioneFiles.getInstance().LeggeFileDiTesto(Path + "/" + PathNomeFile);
-                            testo = testo.substring(testo.indexOf("<div class='lyricbox'>") + 22, testo.length());
-                            testo = testo.substring(0, testo.indexOf("<div class='lyricsbreak'>"));
-                            testo = testo.replace("<i>", "");
-                            testo = testo.replace("</i>", "");
-                            testo = testo.replace("<br />", "**A CAPO**");
-                            testo = testo.replace("&#", "");
-                            String[] c = testo.split(";", -1);
-                            String testoFinale = "";
-                            for (String cc : c) {
-                                if (!cc.isEmpty()) {
-                                    if (cc.contains("**A CAPO**")) {
-                                        int v = Integer.parseInt(cc.replace("**A CAPO**", ""));
-                                        char ccc = ((char) v);
-                                        testoFinale += "**A CAPO**" + ccc;
-                                    } else {
-                                        int v = Integer.parseInt(cc);
-                                        char ccc = ((char) v);
-                                        testoFinale += ccc;
+                            if (testo.contains("<div class='lyricsbreak'>") && testo.contains("<div class='lyricbox'>")) {
+                                testo = testo.substring(testo.indexOf("<div class='lyricbox'>") + 22, testo.length());
+                                testo = testo.substring(0, testo.indexOf("<div class='lyricsbreak'>"));
+                                testo = testo.replace("<i>", "");
+                                testo = testo.replace("</i>", "");
+                                testo = testo.replace("<br />", "**A CAPO**");
+                                testo = testo.replace("&#", "");
+                                String[] c = testo.split(";", -1);
+                                String testoFinale = "";
+                                for (String cc : c) {
+                                    if (!cc.isEmpty()) {
+                                        if (cc.contains("**A CAPO**")) {
+                                            int v = Integer.parseInt(cc.replace("**A CAPO**", ""));
+                                            char ccc = ((char) v);
+                                            testoFinale += "**A CAPO**" + ccc;
+                                        } else {
+                                            int v = Integer.parseInt(cc);
+                                            char ccc = ((char) v);
+                                            testoFinale += ccc;
+                                        }
                                     }
                                 }
+
+                                StrutturaBrani sb = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+                                GestioneTesti g = new GestioneTesti();
+                                int Ascoltata = sb.getQuanteVolteAscoltato();
+                                int Bellezza = sb.getStelle();
+                                String sNomeBrano = sb.getNomeBrano();
+                                if (sNomeBrano.contains("-")) {
+                                    String[] A = sNomeBrano.split("-");
+                                    sNomeBrano = A[1].trim();
+                                }
+                                if (sNomeBrano.contains(".")) {
+                                    sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
+                                }
+                                int idArtista = sb.getIdArtista();
+                                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+                                String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(sb.getIdAlbum()).getNomeAlbum();
+
+                                testoFinale = sNomeBrano.toUpperCase() + "**A CAPO**" + Artista.toUpperCase() + "**A CAPO**" + "**A CAPO**" + testoFinale;
+
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTesto(testoFinale);
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTestoTradotto("");
+
+                                g.SalvaTestoSuSD(Artista, Album, sNomeBrano, testoFinale, "", Integer.toString(Ascoltata), Integer.toString(Bellezza));
+                                g.SettaTesto(false);
+
+                                VariabiliStaticheHome.getInstance().getImgScaricaTesto().setVisibility(LinearLayout.GONE);
                             }
-
-                            StrutturaBrani sb = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-                            GestioneTesti g = new GestioneTesti();
-                            int Ascoltata = sb.getQuanteVolteAscoltato();
-                            int Bellezza = sb.getStelle();
-                            String sNomeBrano = sb.getNomeBrano();
-                            if (sNomeBrano.contains("-")) {
-                                String[] A = sNomeBrano.split("-");
-                                sNomeBrano = A[1].trim();
-                            }
-                            if (sNomeBrano.contains(".")) {
-                                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
-                            }
-                            int idArtista = sb.getIdArtista();
-                            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
-                            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(sb.getIdAlbum()).getNomeAlbum();
-
-                            testoFinale = sNomeBrano.toUpperCase() + "**A CAPO**" + Artista + "**A CAPO**" + "**A CAPO**" + testoFinale;
-
-                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTesto(testoFinale);
-                            VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati().get(NumeroBrano).setTestoTradotto("");
-
-                            g.SalvaTestoSuSD(Artista, Album, sNomeBrano, testoFinale, "", Integer.toString(Ascoltata), Integer.toString(Bellezza));
-                            g.SettaTesto(false);
                         }
                     } else {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -376,10 +381,17 @@ public class DownloadTextFileNuovo {
                                     if (SecondiAttesa>=TempoAttesa) {
                                         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-                                        ApriDialog();
+                                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                                        if (ceRete) {
+                                            ApriDialog();
 
-                                        downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
-                                        downloadFile.execute(Url);
+                                            downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
+                                            downloadFile.execute(Url);
+                                        } else {
+                                            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            }.getClass().getEnclosingMethod().getName(), "Scarico testo. Errore di rete");
+                                        }
 
                                         hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
                                         hAttesaNuovoTentativo = null;

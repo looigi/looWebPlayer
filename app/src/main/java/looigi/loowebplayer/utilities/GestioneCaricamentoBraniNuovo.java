@@ -14,6 +14,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
+import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovo;
 // import looigi.loowebplayer.soap.CheckURLFile;
 import looigi.loowebplayer.soap.DownloadMP3Nuovo;
@@ -88,8 +89,12 @@ public class GestioneCaricamentoBraniNuovo {
         if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
             GestioneListaBrani.getInstance().SuonaMusicaDiAttesa();
         }
+        VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
+
         // final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
         ImpostaProssimaCanzone();
+
+        secondi = 0;
 
         hAttesaProssimo = new Handler(Looper.getMainLooper());
         hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
@@ -97,7 +102,6 @@ public class GestioneCaricamentoBraniNuovo {
             public void run() {
                     if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                         VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
-                        secondi = 0;
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
                         hAttesaDownloadS = new Handler(Looper.getMainLooper());
@@ -124,7 +128,7 @@ public class GestioneCaricamentoBraniNuovo {
                                             VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
                                         }
 
-                                        NumeroBrano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                        NumeroBrano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
                                     } else {
                                         NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
                                     }
@@ -172,8 +176,8 @@ public class GestioneCaricamentoBraniNuovo {
                             int ss = VariabiliStaticheGlobali.getInstance().getAttesaSecondiBranoSuccessivo();
                             numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(numOperazione, true,
                                     "Attesa brano successivo. Secondi: " + Integer.toString(ss - secondi));
-                            if (secondi > ss) {
-                                // Non c'è skip... Proseguo
+                            if (secondi > ss || VariabiliStaticheGlobali.getInstance().isEsciDallAttesa()) {
+                                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
                                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(numOperazione, true);
 
                                 CaricaBrano2();
@@ -497,11 +501,15 @@ public class GestioneCaricamentoBraniNuovo {
             }
             // Multimedia artista
 
-            // Caricamento Brano
             this.pathBase = pathBase;
             this.Artista = Artista;
             this.Album = Album;
             this.NomeBrano = NomeBrano;
+
+            Notifica.getInstance().setTitolo(NomeBrano);
+            Notifica.getInstance().setArtista(Artista);
+            Notifica.getInstance().setAlbum(Album);
+            Notifica.getInstance().AggiornaNotifica();
 
             VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
         }

@@ -92,12 +92,21 @@ public class VariabiliStaticheHome {
     private int QuanteScaricate=0;
     private TextView txtQuanteAscoltate;
     private TextView txtQuanteScaricate;
+    private ImageView imgScaricaTesto;
 
     // private Handler hCambioImmagine;
     // private Runnable rCambioImmagine;
 
     public Context getContext() {
         return context;
+    }
+
+    public ImageView getImgScaricaTesto() {
+        return imgScaricaTesto;
+    }
+
+    public void setImgScaricaTesto(ImageView imgScaricaTesto) {
+        this.imgScaricaTesto = imgScaricaTesto;
     }
 
     public LinearLayout getLayDettagli() {

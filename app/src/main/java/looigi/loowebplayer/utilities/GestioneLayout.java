@@ -28,21 +28,60 @@ public class GestioneLayout {
     }
 
     public void SpegneLayout() {
-        Handler hNascondeLayout;
-        Runnable runNascondeLayout;
+        if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraSempreTitolo()) {
+            Handler hNascondeLayout;
+            Runnable runNascondeLayout;
 
-        hNascondeLayout = new Handler();
-        hNascondeLayout.postDelayed(runNascondeLayout = new Runnable() {
-            @Override
-            public void run() {
-                fadeOut.setDuration(3000);
-                fadeOut.setStartOffset(100);
+            hNascondeLayout = new Handler();
+            hNascondeLayout.postDelayed(runNascondeLayout = new Runnable() {
+                @Override
+                public void run() {
+                    fadeOut.setDuration(3000);
+                    fadeOut.setStartOffset(100);
 
-                fadeOut.setAnimationListener(new Animation.AnimationListener(){
+                    fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationEnd(Animation arg0) {
+                            VariabiliStaticheHome.getInstance().getLayIntestazione().setVisibility(LinearLayout.GONE);
+                            StaGiaFacendo = false;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation arg0) {
+                        }
+
+                        @Override
+                        public void onAnimationStart(Animation arg0) {
+                        }
+                    });
+
+                    VariabiliStaticheHome.getInstance().getLayIntestazione().startAnimation(fadeOut);
+                }
+            }, 5000);
+        }
+    }
+
+    public void ResettaLayout() {
+        if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraSempreTitolo()) {
+            StaGiaFacendo = true;
+            SpegneLayout();
+        }
+    }
+
+    public void VisualizzaLayout(int tempo) {
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraSempreTitolo()) {
+            VariabiliStaticheHome.getInstance().getLayIntestazione().setVisibility(LinearLayout.VISIBLE);
+        } else {
+            if (!StaGiaFacendo) {
+                StaGiaFacendo = true;
+
+                fadeIn.setDuration(tempo);
+                fadeIn.setStartOffset(tempo);
+
+                fadeIn.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        VariabiliStaticheHome.getInstance().getLayIntestazione().setVisibility(LinearLayout.GONE);
-                        StaGiaFacendo = false;
+                        SpegneLayout();
                     }
 
                     @Override
@@ -51,43 +90,12 @@ public class GestioneLayout {
 
                     @Override
                     public void onAnimationStart(Animation arg0) {
+                        VariabiliStaticheHome.getInstance().getLayIntestazione().setVisibility(LinearLayout.VISIBLE);
                     }
                 });
 
-                VariabiliStaticheHome.getInstance().getLayIntestazione().startAnimation(fadeOut);
+                VariabiliStaticheHome.getInstance().getLayIntestazione().startAnimation(fadeIn);
             }
-        }, 5000);
-    }
-
-    public void ResettaLayout() {
-        StaGiaFacendo = true;
-        SpegneLayout();
-    }
-
-    public void VisualizzaLayout(int tempo) {
-        if (!StaGiaFacendo) {
-            StaGiaFacendo = true;
-
-            fadeIn.setDuration(tempo);
-            fadeIn.setStartOffset(tempo);
-
-            fadeIn.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationEnd(Animation arg0) {
-                    SpegneLayout();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation arg0) {
-                }
-
-                @Override
-                public void onAnimationStart(Animation arg0) {
-                    VariabiliStaticheHome.getInstance().getLayIntestazione().setVisibility(LinearLayout.VISIBLE);
-                }
-            });
-
-            VariabiliStaticheHome.getInstance().getLayIntestazione().startAnimation(fadeIn);
         }
     }
 }

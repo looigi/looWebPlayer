@@ -52,6 +52,7 @@ public class StrutturaConfig {
     private int QuantiFilesMemorizzati = 150;
     private int QuantiMBAlMassimo = 500;
     private boolean ScaricaTestoBrano = true;
+    private boolean MostraSempreTitolo = true;
 
     public void SalvaDati() {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
@@ -93,6 +94,7 @@ public class StrutturaConfig {
         String QuantiMegaPulizia = Integer.toString(QuantiMBAlMassimo);
         String sMostraOperazioni = "S"; if (!MostraOperazioni) sMostraOperazioni="N";
         String sScaricaTesto = "S"; if (!ScaricaTestoBrano) sScaricaTesto="N";
+        String sMostraTitolo = "S"; if (!MostraSempreTitolo) sMostraTitolo="N";
 
         String Stringona = 
                 sRandom + ";" +
@@ -135,7 +137,8 @@ public class StrutturaConfig {
                 sPuliziaPerMega+';'+
                 QuantiMegaPulizia+';'+
                 sMostraOperazioni+';'+
-                sScaricaTesto+';'
+                sScaricaTesto+';'+
+                sMostraTitolo+';'
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -235,6 +238,8 @@ public class StrutturaConfig {
                     MostraOperazioni = sMostraOperazioni.equals("S");
                     String sScaricoTesto = Campi[40];
                     ScaricaTestoBrano = sScaricoTesto.equals("S");
+                    String sMostraTitolo = Campi[41];
+                    MostraSempreTitolo = sMostraTitolo.equals("S");
 
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
@@ -453,6 +458,14 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isMostraSempreTitolo() {
+        return MostraSempreTitolo;
+    }
+
+    public void setMostraSempreTitolo(boolean mostraSempreTitolo) {
+        MostraSempreTitolo = mostraSempreTitolo;
     }
 
     public boolean isScaricaTestoBrano() {

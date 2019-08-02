@@ -60,8 +60,15 @@ public class GestioneListaBrani {
     private int IndiceSuonati=0;
 
     public void AggiungeBrano(int idBrano) {
+        boolean Ultimo = false;
+
+        if (IndiceSuonati==BraniSuonati.size()) {
+            Ultimo = true;
+        }
         BraniSuonati.add(idBrano);
-        IndiceSuonati++;
+        if (Ultimo) {
+            IndiceSuonati++;
+        }
     }
 
     public int RitornaIndiceBranoAttuale() {
@@ -226,7 +233,7 @@ public class GestioneListaBrani {
             }
         }
 
-        if (DaEsterno) {
+        if (Brano>-1 && DaEsterno) {
             // if (IndiceSuonati == BraniSuonati.size()) {
             //     IndiceSuonati--;
             // }
@@ -303,6 +310,8 @@ public class GestioneListaBrani {
     public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
+        // ceRete = false;
+
         if (ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),
@@ -316,32 +325,33 @@ public class GestioneListaBrani {
                         "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
 
-                return CercaBranoGiaScaricato(false);
+                return CercaBranoGiaScaricato(true);
             } else {
-                if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1){
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(),
-                            "Non c'è rete, imposto il brano impostato senza rete 1");
-
-                    int n = BranoSenzarete();
-                    return n; // VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
-                } else {
-                    if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() > -1) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                }.getClass().getEnclosingMethod().getName(),
-                                "Non c'è rete, imposto il brano impostato senza rete 2");
-
-                        int n = BranoSenzarete();
-                        return n; // VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
-                    } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                }.getClass().getEnclosingMethod().getName(),
-                                "Non c'è rete, imposto il brano impostato senza rete 3");
-
-                        int n = BranoSenzarete();
-                        return n; // -1;
-                    }
-                }
+                // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1){
+                //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                //             }.getClass().getEnclosingMethod().getName(),
+                //             "Non c'è rete, imposto il brano impostato senza rete 1");
+//
+                //     int n = BranoSenzarete();
+                //     return n; // VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                // } else {
+                    // if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() > -1) {
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    //             }.getClass().getEnclosingMethod().getName(),
+                    //             "Non c'è rete, imposto il brano impostato senza rete 2");
+//
+                    //     int n = BranoSenzarete();
+                    //     return n; // VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
+                    // } else {
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    //             }.getClass().getEnclosingMethod().getName(),
+                    //             "Non c'è rete, imposto il brano impostato senza rete 3");
+//
+                    //     int n = BranoSenzarete();
+                    //     return n; // -1;
+                    // }
+                // }
+                return VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
             }
        }
     }

@@ -246,4 +246,27 @@ public class Utility {
 			VariabiliStaticheHome.getInstance().getTxtQuanteScaricate().setText("Scaricate: " + Integer.toString(VariabiliStaticheHome.getInstance().getQuanteScaricate()));
 		}
 	}
+
+	public String ConverteStringaInUrl(String stringa) {
+		byte[] a = stringa.getBytes();
+		String sRitorno = "";
+
+		for (byte b : a) {
+			if (b>=65 && b<=90) {
+				sRitorno += (char) b;
+			} else {
+				if (b>=97 && b<=122) {
+					sRitorno += (char) b;
+				} else {
+					String h = Integer.toHexString(b);
+					if (h.length() == 1) {
+						h = "0" + h;
+					}
+					sRitorno += "%" + h;
+				}
+			}
+		}
+
+		return sRitorno;
+	}
 }

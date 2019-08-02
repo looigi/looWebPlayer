@@ -38,11 +38,18 @@ public class GestioneOggettiVideo {
                 VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(NumeroBrano);
             }
 
+            if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete()>-1) {
+                GestioneListaBrani.getInstance().AggiungeBrano(VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete());
+                VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+            }
+
             // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Avanti. Prossimo brano: "+Integer.toString(NumeroBrano));
 
             GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+
+            VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
         } else {
             if (VisualizzaMessaggio) {
                 DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
@@ -56,15 +63,17 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
         } else {
             if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+
                 VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
                 int NumeroBrano;
 
-                if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
-                    NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
-                    VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
-                } else {
-                    NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
-                }
+                // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
+                //     NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                //     VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+                // } else {
+                     NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                // }
                 ControllaAvantiBrano(NumeroBrano, false);
             }
         }
@@ -103,6 +112,8 @@ public class GestioneOggettiVideo {
         VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
         if (vh.getPuoAvanzare()) {
+            VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+
             if (Acceso) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Play");
                 // VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
@@ -146,6 +157,8 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
         } else {
             if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+
                 VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
                 GestioneImmagini.getInstance().StoppaTimerCarosello();
                 VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
@@ -160,6 +173,8 @@ public class GestioneOggettiVideo {
                     }.getClass().getEnclosingMethod().getName(), "Indietro. Brano precedente: " + Integer.toString(NumeroBrano));
                     GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
                 }
+
+                VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
             }
         }
     }
@@ -296,10 +311,33 @@ public class GestioneOggettiVideo {
             int Ascoltata = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getQuanteVolteAscoltato();
             int Bellezza = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getStelle();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Imposta stelle: " + Integer.toString(Bellezza));
-            vh.getTxtAscoltata().setText("Volte ascoltata: " + Integer.toString(Ascoltata));
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Imposta stelle: " + Integer.toString(Bellezza));
+            if (Ascoltata==-1) {
+                vh.getTxtAscoltata().setVisibility(LinearLayout.GONE);
+            } else {
+                vh.getTxtAscoltata().setVisibility(LinearLayout.VISIBLE);
+                vh.getTxtAscoltata().setText("Volte ascoltata: " + Integer.toString(Ascoltata));
+            }
+
+            vh.getImgStella1().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella2().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella3().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella4().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella5().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella6().setVisibility(LinearLayout.VISIBLE);
+            vh.getImgStella7().setVisibility(LinearLayout.VISIBLE);
 
             switch (Bellezza) {
+                case -1:
+                    vh.getImgStella1().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella2().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella3().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella4().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella5().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella6().setVisibility(LinearLayout.GONE);
+                    vh.getImgStella7().setVisibility(LinearLayout.GONE);
+                    break;
                 case 1:
                     vh.getImgStella1().setImageDrawable(icona_si);
                     break;

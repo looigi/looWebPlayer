@@ -86,11 +86,11 @@ public class DettagliBrano {
             ImageView img = (ImageView) view.findViewById(R.id.imgDettagliMP3);
             ImageView imgCondividi = view.findViewById(R.id.imgCondividi);
             ImageView imgScaricoTesto = view.findViewById(R.id.imgScaricoTesto);
-            if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricaTestoBrano()) {
-                imgScaricoTesto.setVisibility(LinearLayout.GONE);
-            } else {
-                imgScaricoTesto.setVisibility(LinearLayout.VISIBLE);
-            }
+            // if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricaTestoBrano()) {
+            //     imgScaricoTesto.setVisibility(LinearLayout.GONE);
+            // } else {
+            //     imgScaricoTesto.setVisibility(LinearLayout.VISIBLE);
+            // }
 
             txtBrano.setText(sNomeBrano);
             txtTraccia.setText(Traccia);

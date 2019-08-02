@@ -2,10 +2,13 @@ package looigi.loowebplayer.utilities;
 
 import android.widget.LinearLayout;
 
+import org.kobjects.util.Util;
+
 import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.soap.DownloadTextFileNuovo;
@@ -61,6 +64,7 @@ public class GestioneTesti {
                 sTesto = sTesto.replace("**PV**", ";");
                 if (!sTesto.toUpperCase().contains("NESSUN TESTO") && !sTesto.isEmpty()) {
                     VariabiliStaticheHome.getInstance().getImgLinguettaTesto().setVisibility(LinearLayout.VISIBLE);
+                    VariabiliStaticheHome.getInstance().getImgScaricaTesto().setVisibility(LinearLayout.GONE);
                 }
             }
         }
@@ -151,11 +155,15 @@ public class GestioneTesti {
 
             if (Testo.toUpperCase().contains("NESSUN TESTO RILEVATO") || Testo.isEmpty()) {
                 if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricaTestoBrano()) {
+                    VariabiliStaticheHome.getInstance().getImgScaricaTesto().setVisibility(LinearLayout.VISIBLE);
+
                     int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                     StrutturaBrani sb = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
                     GestioneTesti g = new GestioneTesti();
                     g.ScaricaTestoDaWeb(sb);
                 }
+            } else {
+                VariabiliStaticheHome.getInstance().getImgScaricaTesto().setVisibility(LinearLayout.GONE);
             }
 
             // if (Testo.toUpperCase().contains("NESSUN") || Testo.trim().isEmpty()) {
@@ -192,6 +200,16 @@ public class GestioneTesti {
         if (sNomeBrano.contains(".")) {
             sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
         }
+        if (sNomeBrano.contains("(")) {
+            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("("));
+        }
+        if (sNomeBrano.contains("[")) {
+            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("["));
+        }
+        if (sNomeBrano.contains(",")) {
+            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf(","));
+        }
+        sNomeBrano = sNomeBrano.trim();
         int idArtista = sb.getIdArtista();
         String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
 
@@ -201,9 +219,10 @@ public class GestioneTesti {
         d.setOperazione("Scarico testo brano");
         d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
 
-        Artista=Artista.replace(" ","%20");
-        sNomeBrano=sNomeBrano.replace(" ","%20");
-        String url = "http://lyrics.wikia.com/wiki/" + Artista + ":" + sNomeBrano;
+        String sArtista = Utility.getInstance().ConverteStringaInUrl(Artista);
+        String NomeBrano = Utility.getInstance().ConverteStringaInUrl(sNomeBrano);
+
+        String url = "http://lyrics.wikia.com/wiki/" + sArtista + ":" + NomeBrano;
 
         int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Scarico testo");
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(

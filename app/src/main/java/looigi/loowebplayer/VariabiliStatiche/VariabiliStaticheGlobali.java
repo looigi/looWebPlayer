@@ -144,6 +144,7 @@ public class VariabiliStaticheGlobali {
 
     private String UltimaOperazioneSOAP = "";
     private long lastTimePressed = 0;
+    private boolean EsciDallAttesa = false;
 
     private Drawable play;
     private Drawable play_dis;
@@ -175,6 +176,14 @@ public class VariabiliStaticheGlobali {
 
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
+    }
+
+    public boolean isEsciDallAttesa() {
+        return EsciDallAttesa;
+    }
+
+    public void setEsciDallAttesa(boolean esciDallAttesa) {
+        EsciDallAttesa = esciDallAttesa;
     }
 
     public long getLastTimePressed() {
@@ -276,7 +285,7 @@ public class VariabiliStaticheGlobali {
     public Integer getBranoImpostatoSenzaRete() {
         return BranoImpostatoSenzaRete;
     }
-
+//
     public void setBranoImpostatoSenzaRete(Integer branoImpostatoSenzaRete) {
         BranoImpostatoSenzaRete = branoImpostatoSenzaRete;
     }

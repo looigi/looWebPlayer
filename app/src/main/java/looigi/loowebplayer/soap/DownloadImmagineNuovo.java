@@ -293,10 +293,17 @@ public class DownloadImmagineNuovo {
                                         if (SecondiAttesa >= TempoAttesa) {
                                             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-                                            // ApriDialog();
+                                            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                                            if (ceRete) {
+                                                // ApriDialog();
 
-                                            downloadFile = new DownloadImageFile(NumeroOperazione, NumeroBrano, TIMEOUT, inSfuma, Path, Url, ImmagineUtente);
-                                            downloadFile.execute(Url);
+                                                downloadFile = new DownloadImageFile(NumeroOperazione, NumeroBrano, TIMEOUT, inSfuma, Path, Url, ImmagineUtente);
+                                                downloadFile.execute(Url);
+                                            } else {
+                                                VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+                                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                                }.getClass().getEnclosingMethod().getName(), "Scarico immagine. Errore di rete");
+                                            }
 
                                             hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
                                             hAttesaNuovoTentativo = null;

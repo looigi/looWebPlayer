@@ -505,7 +505,7 @@ public class DownloadMP3Nuovo {
 
                                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                 }.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato");
-                                int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+                                int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
                                 if (brano > -1) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                     }.getClass().getEnclosingMethod().getName(), "Cerco eventuale brano già scaricato. OK: " + Integer.toString(brano));
