@@ -125,8 +125,13 @@ public class Utility {
 				vg.getContextPrincipale().getSupportActionBar().setTitle(title);
 			}
 
-			DrawerLayout drawer = vg.getFragmentActivityPrincipale().findViewById(R.id.drawer_layout);
-			drawer.closeDrawer(GravityCompat.START);
+			if (vg.getFragmentActivityPrincipale()!=null) {
+				DrawerLayout drawer = vg.getFragmentActivityPrincipale().findViewById(R.id.drawer_layout);
+				drawer.closeDrawer(GravityCompat.START);
+			} else {
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+						"Perso il fragment principale");
+			}
 
 			ImpostaMenu();
 		}

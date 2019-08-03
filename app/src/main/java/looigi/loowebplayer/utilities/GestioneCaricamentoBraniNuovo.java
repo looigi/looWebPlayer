@@ -1,5 +1,6 @@
 package looigi.loowebplayer.utilities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
+import looigi.loowebplayer.bckService;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
@@ -339,6 +341,17 @@ public class GestioneCaricamentoBraniNuovo {
     }
 
     private void CaricaBranoParteFinale() {
+        if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Dati utente persi. Provo a ricaricare il service");
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    "Dati Utente persi. Ricarico il service",
+                    true,
+                    VariabiliStaticheGlobali.NomeApplicazione);
+            Intent i= new Intent(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(), bckService.class);
+            VariabiliStaticheGlobali.getInstance().setiServizio(i);
+        }
+
         VariabiliStaticheHome.getInstance().setQuanteAscoltate(VariabiliStaticheHome.getInstance().getQuanteAscoltate() + 1);
         Utility.getInstance().ScriveScaricateAscoltate();
 

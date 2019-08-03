@@ -45,6 +45,7 @@ import looigi.loowebplayer.cuffie.GestioneTastoCuffie;
 import looigi.loowebplayer.cuffie.GestoreCuffie;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_locale.db_dati;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.maschere.Splash;
 import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.thread.NetThreadNuovo;
@@ -385,5 +386,77 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                "Richiamata funzione onStop",
+                true,
+                VariabiliStaticheGlobali.NomeApplicazione);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onStop");
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+
+        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                "Richiamata funzione onLowMemory",
+                true,
+                VariabiliStaticheGlobali.NomeApplicazione);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onLowMemory");
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onPostResume");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                "Richiamata funzione onDestroy",
+                true,
+                VariabiliStaticheGlobali.NomeApplicazione);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onDestroy");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onResume");
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onResumeFragments");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                "Richiamata funzione onPause",
+                true,
+                VariabiliStaticheGlobali.NomeApplicazione);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Richiamata funzione onPause");
     }
 }

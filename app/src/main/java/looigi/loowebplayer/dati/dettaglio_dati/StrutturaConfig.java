@@ -54,6 +54,13 @@ public class StrutturaConfig {
     private boolean ScaricaTestoBrano = true;
     private boolean MostraSempreTitolo = true;
 
+    private int TimeOutDownloadMP3=45000;
+    private int TimeOutListaBrani=200000;
+    private int AttesaControlloEsistenzaMP3=5000;
+    private int TimeOutImmagini=15000;
+    private int TipoSegnale=1;
+    private int AttesaSecondiBranoSuccessivo=3;
+
     public void SalvaDati() {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
 
@@ -482,6 +489,50 @@ public class StrutturaConfig {
 
     public void setMostraOperazioni(boolean mostraOperazioni) {
         MostraOperazioni = mostraOperazioni;
+    }
+
+    public int getAttesaSecondiBranoSuccessivo() {
+        return AttesaSecondiBranoSuccessivo;
+    }
+
+    public int getAttesaControlloEsistenzaMP3() {
+        return AttesaControlloEsistenzaMP3;
+    }
+
+    public void setAttesaControlloEsistenzaMP3(int attesaControlloEsistenzaMP3) {
+        AttesaControlloEsistenzaMP3 = attesaControlloEsistenzaMP3;
+    }
+
+    public int getTimeOutDownloadMP3() {
+        return TimeOutDownloadMP3;
+    }
+
+    public void setTimeOutDownloadMP3(int timeOutDownloadMP3) {
+        TimeOutDownloadMP3 = timeOutDownloadMP3;
+    }
+
+    public int getTimeOutListaBrani() {
+        return TimeOutListaBrani;
+    }
+
+    public void setTimeOutListaBrani(int timeOutListaBrani) {
+        TimeOutListaBrani = timeOutListaBrani;
+    }
+
+    public int getTimeOutImmagini() {
+        return TimeOutImmagini;
+    }
+
+    public void setTimeOutImmagini(int timeOutImmagini) {
+        TimeOutImmagini = timeOutImmagini;
+    }
+
+    public int getTipoSegnale() {
+        return TipoSegnale;
+    }
+
+    public void setTipoSegnale(int tipoSegnale) {
+        TipoSegnale = tipoSegnale;
     }
 
     public boolean isPuliziaPerFiles() {

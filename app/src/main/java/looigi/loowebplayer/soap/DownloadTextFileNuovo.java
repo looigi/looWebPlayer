@@ -310,9 +310,13 @@ public class DownloadTextFileNuovo {
                                             char ccc = ((char) v);
                                             testoFinale += "**A CAPO**" + ccc;
                                         } else {
-                                            int v = Integer.parseInt(cc);
-                                            char ccc = ((char) v);
-                                            testoFinale += ccc;
+                                            try {
+                                                int v = Integer.parseInt(cc);
+                                                char ccc = ((char) v);
+                                                testoFinale += ccc;
+                                            } catch (Exception ignored) {
+
+                                            }
                                         }
                                     }
                                 }

@@ -98,15 +98,17 @@ public class DettagliBrano {
             txtAnno.setText("Anno: " + Anno);
             txtArtista.setText("Artista: " + Artista);
 
-            long dime = sb.getDimensioni();
+            float dime = sb.getDimensioni();
             String tipo[] = {"b.", "kb.", "mb."};
             int qualeTipo = 0;
             while (dime > 1024) {
                 dime /= 1024;
                 qualeTipo++;
             }
+            long ldime = (long) dime * 100;
+            dime = ldime / 100F;
 
-            txtDime.setText("Dim.: " + Long.toString(dime) + " " + tipo[qualeTipo]);
+            txtDime.setText("Dim.: " + Float.toString(dime) + " " + tipo[qualeTipo]);
             txtStelle.setText("Stelle: " + Integer.toString(sb.getStelle()));
 
             String Mp3 = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBrano();

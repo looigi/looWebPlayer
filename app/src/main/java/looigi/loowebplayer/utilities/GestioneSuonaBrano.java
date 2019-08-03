@@ -13,6 +13,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.db_locale.db_dati;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
+import looigi.loowebplayer.dialog.DialogMessaggio;
 
 // import looigi.loowebplayer.maschere.Equalizer;
 
@@ -94,6 +95,13 @@ public class GestioneSuonaBrano {
             vh.getTxtTitoloBackground().setText("");
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);
 
+            int perc2 = 0;
+            if (vh.getMediaPlayer() != null) {
+                int durata = vh.getMediaPlayer().getDuration();
+                perc2 = durata * 75 / 100;
+            }
+            final int percFine = perc2;
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");
             vh.setHandlerSeekBar(new Handler(Looper.getMainLooper()));
@@ -153,7 +161,7 @@ public class GestioneSuonaBrano {
 
                             // if (!vh.getMediaPlayer().isPlaying()) {
                             // int perc2 = vh.getMediaPlayer().getDuration() * 50 / 100;
-                            if (!vh.getMediaPlayer().isPlaying()) {
+                            if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= percFine) {
                                 // hNuovoMP3 = new Handler();
                                 // hNuovoMP3.postDelayed(NuovoMp3 = new Runnable() {
                                 // @Override
@@ -180,6 +188,12 @@ public class GestioneSuonaBrano {
                                 //      }
                                 //  }, 50);
                             } else {
+                                if (!vh.getMediaPlayer().isPlaying()) {
+                                    DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                                            "Brano terminato ma barra non arrivata al 75%",
+                                            true,
+                                            VariabiliStaticheGlobali.NomeApplicazione);
+                                }
                                 String seconds = String.valueOf((mCurrentPosition % 60000) / 1000);
                                 String minutes = String.valueOf(mCurrentPosition / 60000);
 
