@@ -193,9 +193,15 @@ public class GestioneTesti {
                 "Ritorna dettaglio brano. Scarico testo");
 
         String sNomeBrano = sb.getNomeBrano();
+        String ssArtista = "";
         if (sNomeBrano.contains("-")) {
             String[] A = sNomeBrano.split("-");
             sNomeBrano = A[1].trim();
+            if (!Utility.getInstance().isNumeric(A[0])) {
+                ssArtista = A[0].trim();
+            }
+            sNomeBrano = sNomeBrano.toUpperCase().replace(".MP3", "");
+            sNomeBrano = sNomeBrano.toUpperCase().replace(".WMA", "");
         }
         if (sNomeBrano.contains(".")) {
             sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
@@ -211,7 +217,12 @@ public class GestioneTesti {
         }
         sNomeBrano = sNomeBrano.trim();
         int idArtista = sb.getIdArtista();
-        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+        String Artista = "";
+        if (ssArtista.isEmpty()) {
+            Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+        } else {
+            Artista = ssArtista;
+        }
 
         DownloadTextFileNuovo d = new DownloadTextFileNuovo();
         d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR);

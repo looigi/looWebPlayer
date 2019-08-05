@@ -85,20 +85,30 @@ public class Utenza extends android.support.v4.app.Fragment {
             ImageView imgUtenza = view.findViewById(R.id.imgUtente);
             String PathImmagine = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Utente";
             StrutturaUtenti s = VariabiliStaticheGlobali.getInstance().getUtente();
-            String Utente = s.getUtente();
+            String Utente = "";
+            if (s!=null) {
+                Utente = s.getUtente();
+            }
+
             imgUtenza.setImageBitmap(BitmapFactory.decodeFile(PathImmagine + "/" + Utente + ".jpg"));
 
             TextView txtUtente = view.findViewById(R.id.txtUtente);
             txtUtente.setText(Utente);
 
             TextView txtCartella = view.findViewById(R.id.txtCartella);
-            txtCartella.setText(s.getCartellaBase());
+            if (s!=null) {
+                txtCartella.setText(s.getCartellaBase());
+            } else {
+                txtCartella.setText("");
+            }
 
             TextView txtTipoUtente = view.findViewById(R.id.txtTipoUtente);
-            if (s.isAmministratore()) {
-                txtTipoUtente.setText("Amministratore");
-            } else {
-                txtTipoUtente.setText("Utente");
+            if (s!=null) {
+                if (s.isAmministratore()) {
+                    txtTipoUtente.setText("Amministratore");
+                } else {
+                    txtTipoUtente.setText("Utente");
+                }
             }
 
             Button btnOk = view.findViewById(R.id.btnOk);

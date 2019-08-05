@@ -341,7 +341,7 @@ public class VariabiliStaticheHome {
             if (txtOperazioneWEB != null)
                 txtOperazioneWEB.setText(t2);
         } else {
-            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+            if (this.layOperazionWEB != null && this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
                 this.layOperazionWEB.setVisibility(LinearLayout.GONE);
             }
         }
@@ -402,7 +402,7 @@ public class VariabiliStaticheHome {
                 }, 3000);
             }
         } else {
-            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+            if (this.layOperazionWEB != null && this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
                 this.layOperazionWEB.setVisibility(LinearLayout.GONE);
             }
         }
@@ -471,7 +471,7 @@ public class VariabiliStaticheHome {
 
             return n;
         } else {
-            if (this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
+            if (this.layOperazionWEB != null && this.layOperazionWEB.getVisibility() != LinearLayout.GONE) {
                 this.layOperazionWEB.setVisibility(LinearLayout.GONE);
             }
 

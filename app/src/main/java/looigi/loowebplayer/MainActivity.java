@@ -392,10 +392,10 @@ public class MainActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
 
-        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-                "Richiamata funzione onStop",
-                true,
-                VariabiliStaticheGlobali.NomeApplicazione);
+        // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+        //         "Richiamata funzione onStop",
+        //         true,
+        //         VariabiliStaticheGlobali.NomeApplicazione);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onStop");
     }
@@ -404,10 +404,10 @@ public class MainActivity extends AppCompatActivity
     public void onLowMemory() {
         super.onLowMemory();
 
-        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-                "Richiamata funzione onLowMemory",
-                true,
-                VariabiliStaticheGlobali.NomeApplicazione);
+        // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+        //         "Richiamata funzione onLowMemory",
+        //         true,
+        //         VariabiliStaticheGlobali.NomeApplicazione);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onLowMemory");
     }
@@ -424,10 +424,10 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
 
-        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-                "Richiamata funzione onDestroy",
-                true,
-                VariabiliStaticheGlobali.NomeApplicazione);
+        // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+        //         "Richiamata funzione onDestroy",
+        //         true,
+        //         VariabiliStaticheGlobali.NomeApplicazione);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onDestroy");
     }
@@ -452,10 +452,10 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-                "Richiamata funzione onPause",
-                true,
-                VariabiliStaticheGlobali.NomeApplicazione);
+        // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+        //         "Richiamata funzione onPause",
+        //         true,
+        //         VariabiliStaticheGlobali.NomeApplicazione);
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onPause");
     }

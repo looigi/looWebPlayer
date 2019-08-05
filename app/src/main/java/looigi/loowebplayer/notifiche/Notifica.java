@@ -112,7 +112,7 @@ public class Notifica {
 
     public void AggiornaNotifica() {
         setListeners(contentView);
-        if (notificationManager!=null) {
+        if (notificationManager!=null && notificationBuilder != null) {
             notificationManager.notify(NOTIF_ID, notificationBuilder.build());
         }
     }
@@ -161,8 +161,10 @@ public class Notifica {
                     .setContent(contentView);
         }
 
-        Notification notification = notificationBuilder.build();
-        notificationManager.notify(NOTIF_ID, notification);
+        if (notificationBuilder != null) {
+            Notification notification = notificationBuilder.build();
+            notificationManager.notify(NOTIF_ID, notification);
+        }
     }
 
     private void setListeners(RemoteViews view){
