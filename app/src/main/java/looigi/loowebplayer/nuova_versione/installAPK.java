@@ -23,9 +23,11 @@ public class installAPK extends Activity {
             myuri = Uri.parse("file://"+outapk);
         } else {
             File o = new File(outapk);
-            myuri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", o);
+            myuri = FileProvider.getUriForFile(this,
+                    this.getApplicationContext().getPackageName() + ".provider", o);
         }
-        Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(myuri,"application/vnd.android.package-archive");
+        Intent promptInstall = new Intent(Intent.ACTION_VIEW).setDataAndType(myuri,
+                "application/vnd.android.package-archive");
         promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         this.startActivity(promptInstall);
     }

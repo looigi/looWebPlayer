@@ -291,7 +291,7 @@ public class wsRitornoNuovo {
             NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
         }
 
-        String Brano[] = Ritorno.split("\\\\", -1);
+        String[] Brano = Ritorno.split("\\\\", -1);
 
         ScaricoBranoEAttesa s = new ScaricoBranoEAttesa();
         s.ScaricaBrano(NumeroBrano, Brano, NumeroOperazione, inBackGround);

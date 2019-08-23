@@ -216,7 +216,11 @@ public class DownloadMP3Nuovo {
                     "Scarico del MP3: "+sUrl[0]);
 
             try {
-                URL url = new URL(sUrl[0]);
+                String uu = sUrl[0].replace(" ", "%20");
+                uu = uu.replace("#", "%23");
+                uu = uu.replace("&", "%26");
+
+                URL url = new URL(uu);
                 HttpURLConnection c = (HttpURLConnection) url.openConnection();
                 c.setRequestMethod("GET");
                 c.setConnectTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3());
@@ -388,15 +392,15 @@ public class DownloadMP3Nuovo {
             VariabiliStaticheGlobali.getInstance().setgMP3(null);
             VariabiliStaticheGlobali.getInstance().setStaScaricandoMP3(false);
 
-            if (NumeroBrano>-1 &&
-                    NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
-                    VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
-                NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-                        "DL MP3: Cambio brano");
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(), "DL MP3: Cambio brano");
-
-            } else {
+            // if (NumeroBrano>-1 &&
+            //         NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+            //         VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+            //     NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+            //             "DL MP3: Cambio brano");
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     }.getClass().getEnclosingMethod().getName(), "DL MP3: Cambio brano");
+//
+            // } else {
                 if (!messErrore.equals("ESCI")) {
                     ChiudeDialog();
 
@@ -424,9 +428,19 @@ public class DownloadMP3Nuovo {
                             //     NetThread.getInstance().setCaroselloBloccato(false);
                             //     // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
                             // }
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                            }.getClass().getEnclosingMethod().getName(), "Scarico del MP3. ImpostaBrano in Home");
-                            GestioneImpostazioneBrani.getInstance().ImpostaBrano(Path + "/" + NomeBrano);
+                            if (NumeroBrano>-1 &&
+                                    NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                    VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+                                NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+                                        "DL MP3: Cambio brano");
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(), "DL MP3: Cambio brano");
+//
+                            } else {
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                }.getClass().getEnclosingMethod().getName(), "Scarico del MP3. ImpostaBrano in Home");
+                                GestioneImpostazioneBrani.getInstance().ImpostaBrano(Path + "/" + NomeBrano);
+                            }
                         } else {
                             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
 
@@ -536,7 +550,7 @@ public class DownloadMP3Nuovo {
                     wsRitornoNuovoPerErrore rRit = new wsRitornoNuovoPerErrore();
                     rRit.RitornaBranoConAttesa("", NumeroOperazione, Automatico);
                 }
-            }
+            // }
 
             VariabiliStaticheHome.getInstance().setQuanteScaricate(VariabiliStaticheHome.getInstance().getQuanteScaricate() + 1);
             Utility.getInstance().ScriveScaricateAscoltate();
