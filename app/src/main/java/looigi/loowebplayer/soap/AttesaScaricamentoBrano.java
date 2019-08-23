@@ -348,11 +348,14 @@ public class AttesaScaricamentoBrano {
             try {
 				// VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 				// 		"Inizio chiamata compressione e download");
+				String uu = UrlConvertito.replace(" ", "%20");
+				uu = uu.replace("#", "%23");
+				uu = uu.replace("&", "%26");
 
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(UrlConvertito, 120000);
+                aht = new HttpTransportSE(uu, 120000);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);

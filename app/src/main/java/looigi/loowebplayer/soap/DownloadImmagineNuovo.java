@@ -181,7 +181,11 @@ public class DownloadImmagineNuovo {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Inizio lo scarico dell'immagine: "+sUrl[0]+". TIMEOUT: "+Integer.toString(TIMEOUT));
             try {
-                bitmap = BitmapFactory.decodeStream((InputStream) new URL(sUrl[0]).getContent());
+                String uu = sUrl[0].replace(" ", "%20");
+                uu = uu.replace("#", "%23");
+                uu = uu.replace("&", "%26");
+
+                bitmap = BitmapFactory.decodeStream((InputStream) new URL(uu).getContent());
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Scarico dell'immagine. Effettuato");
             } catch (IOException e) {

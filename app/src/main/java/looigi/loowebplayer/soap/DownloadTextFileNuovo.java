@@ -182,7 +182,11 @@ public class DownloadTextFileNuovo {
             }.getClass().getEnclosingMethod().getName(), "Scarico del testo: " + sUrl[0]);
 
             try {
-                URL url = new URL(sUrl[0]);
+                String uu = sUrl[0].replace(" ", "%20");
+                uu = uu.replace("#", "%23");
+                uu = uu.replace("&", "%26");
+
+                URL url = new URL(uu);
                 HttpURLConnection c = (HttpURLConnection) url.openConnection();
                 String redirect = c.getHeaderField("Location");
                 if (redirect != null){

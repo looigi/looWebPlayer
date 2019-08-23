@@ -310,10 +310,14 @@ public class GestioneWEBServiceSOAPNuovo {
             HttpTransportSE aht = null;
             messErrore="";
             try {
-                soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+				String uu = UrlConvertito.replace(" ", "%20");
+				uu = uu.replace("#", "%23");
+				uu = uu.replace("&", "%26");
+
+				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(UrlConvertito, Timeout);
+                aht = new HttpTransportSE(uu, Timeout);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled()){
