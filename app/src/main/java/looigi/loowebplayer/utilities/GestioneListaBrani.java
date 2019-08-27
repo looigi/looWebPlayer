@@ -252,9 +252,11 @@ public class GestioneListaBrani {
 
         VecchioStaSuonando =  VariabiliStaticheGlobali.getInstance().getStaSuonando();
 
-        if (vh.getMediaPlayer() != null) {
-            vh.getMediaPlayer().stop();
-            VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+            if (vh.getMediaPlayer() != null) {
+                vh.getMediaPlayer().stop();
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+            }
         }
 
         GestioneImmagini.getInstance().StoppaTimerCarosello();
@@ -303,24 +305,24 @@ public class GestioneListaBrani {
                             } else {
                                 hSfumaOutMP3.removeCallbacks(SfumaOutMp3);
 
-                                VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+                                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
 
                                 GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
                             }
                         }
                     }, 100);
                 } else {
-                    VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+                    VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
 
                     GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
                 }
             } else {
-                VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
 
                 GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+            VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
         }
     }
 
