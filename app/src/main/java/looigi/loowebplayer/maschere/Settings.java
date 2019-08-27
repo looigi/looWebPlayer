@@ -154,6 +154,8 @@ public class Settings extends Fragment {
             Switch chkScaricaTesti = view.findViewById(R.id.chkScaricaTesto);
             Switch chkMostraTitolo = view.findViewById(R.id.chkMostraTitolo);
 
+            Switch chkSuonaAttesa = view.findViewById(R.id.chkSuonaAttessa);
+
             optNessuno = view.findViewById(R.id.optNessuno);
             optData = view.findViewById(R.id.optData);
             optAlfabetico= view.findViewById(R.id.optAlfabetico);
@@ -290,7 +292,7 @@ public class Settings extends Fragment {
                 }
             });
 
-            // Switch scarica testo
+            // Switch Mostra Titolo
             boolean bMostraTitolo = vg.isMostraSempreTitolo();
             chkMostraTitolo.setChecked(bMostraTitolo);
             chkMostraTitolo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -300,6 +302,21 @@ public class Settings extends Fragment {
                             "Selezionato switch mostra titolo "+isChecked);
 
                     vg.setMostraSempreTitolo(isChecked);
+
+                    vg.SalvaDati();
+                }
+            });
+
+            // Switch Suona Attesa
+            boolean bSuonaAttesa = vg.isSuonaAttesa();
+            chkSuonaAttesa.setChecked(bSuonaAttesa);
+            chkSuonaAttesa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch suona attesa "+isChecked);
+
+                    vg.setSuonaAttesa(isChecked);
 
                     vg.SalvaDati();
                 }
@@ -412,7 +429,7 @@ public class Settings extends Fragment {
             // Switch pulizia per mega
 
             // Switch stelle
-            Boolean bStelle = vg.isStelle();
+            boolean bStelle = vg.isStelle();
             chkBellezza.setChecked(bStelle);
             chkBellezza.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -444,7 +461,7 @@ public class Settings extends Fragment {
             // Switch stelle
 
             // Switch superiore
-            Boolean bSuperiore = vg.isSuperiore();
+            boolean bSuperiore = vg.isSuperiore();
             chkSuperiore.setChecked(bSuperiore);
             chkSuperiore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -469,7 +486,7 @@ public class Settings extends Fragment {
             // Switch superiore
 
             // Switch random
-            Boolean bRandom = vg.isRandom();
+            boolean bRandom = vg.isRandom();
             chkRandom.setChecked(bRandom);
             chkRandom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -491,7 +508,7 @@ public class Settings extends Fragment {
             });
 
             // Switch compressione
-            Boolean bCompressione = vg.isCompressioneMP3();
+            boolean bCompressione = vg.isCompressioneMP3();
             chkCompressione.setChecked(bCompressione);
             chkCompressione.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -513,7 +530,7 @@ public class Settings extends Fragment {
             }
 
             // Switch usa scaricati
-            Boolean bUsaScaricati = vg.getUsaScaricati();
+            boolean bUsaScaricati = vg.getUsaScaricati();
             chkUsaScaricati.setChecked(bUsaScaricati);
             chkUsaScaricati.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -528,7 +545,7 @@ public class Settings extends Fragment {
             });
 
             // Switch download immagini
-            Boolean bdownloadImmagini = vg.getDownloadImmagini();
+            boolean bdownloadImmagini = vg.getDownloadImmagini();
             chkDownloadImmagini.setChecked(bdownloadImmagini);
             chkDownloadImmagini.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -540,7 +557,7 @@ public class Settings extends Fragment {
             });
 
             // Switch mostra traffico
-            Boolean bMostraTraffico = vg.getVisualizzaTraffico();
+            boolean bMostraTraffico = vg.getVisualizzaTraffico();
             chkMostraTraffico.setChecked(bMostraTraffico);
             chkMostraTraffico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -552,7 +569,7 @@ public class Settings extends Fragment {
             });
 
             // Switch sfuma
-            Boolean bSfumaBrano = vg.getSfumaBrano();
+            boolean bSfumaBrano = vg.getSfumaBrano();
             chkSfumaBrano.setChecked(bSfumaBrano);
             chkSfumaBrano.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -564,7 +581,7 @@ public class Settings extends Fragment {
             });
 
             // Switch mostra bellezza
-            Boolean bMostraBellezza = vg.getVisualizzaBellezza();
+            boolean bMostraBellezza = vg.getVisualizzaBellezza();
             chkMostraBellezza.setChecked(bMostraBellezza);
             chkMostraBellezza.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -576,7 +593,7 @@ public class Settings extends Fragment {
             });
 
             // Switch reload automatico
-            Boolean bReload = vg.getReloadAutomatico();
+            boolean bReload = vg.getReloadAutomatico();
             if (bReload) {
                 cmdMeno.setEnabled(true);
                 cmdPiu.setEnabled(true);
@@ -627,7 +644,7 @@ public class Settings extends Fragment {
             });
 
             // Switch caricamento anticipato
-            Boolean bCaricamentoAnticipato = vg.getCaricamentoAnticipato();
+            boolean bCaricamentoAnticipato = vg.getCaricamentoAnticipato();
             chkCaricamentoAnticipato.setChecked(bCaricamentoAnticipato);
             chkCaricamentoAnticipato.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -638,7 +655,7 @@ public class Settings extends Fragment {
             });
 
             // Switch annuncio brano
-            Boolean bAnnuncio = vg.getAnnuncioBrano();
+            boolean bAnnuncio = vg.getAnnuncioBrano();
             chkAnnuncio.setChecked(bAnnuncio);
             chkAnnuncio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -649,7 +666,7 @@ public class Settings extends Fragment {
             });
 
             // Switch salvataggio oggetti
-            Boolean bSalvatggio = vg.isSalvataggioOggetti();
+            boolean bSalvatggio = vg.isSalvataggioOggetti();
             chkSalvataggio.setChecked(bSalvatggio);
             chkSalvataggio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -661,7 +678,7 @@ public class Settings extends Fragment {
             });
 
             // Switch scarico dettagli
-            Boolean bScaricoDettagli = vg.isScaricoDettagli();
+            boolean bScaricoDettagli = vg.isScaricoDettagli();
             chkScaricoDettagli.setChecked(bScaricoDettagli);
             chkScaricoDettagli.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -673,7 +690,7 @@ public class Settings extends Fragment {
             });
 
             // Switch schermo acceso
-            Boolean bSchermoAcceso = vg.getSchermoSempreAcceso();
+            boolean bSchermoAcceso = vg.getSchermoSempreAcceso();
             chkSchermoAcceso.setChecked(bSchermoAcceso);
             chkSchermoAcceso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -687,7 +704,7 @@ public class Settings extends Fragment {
             });
 
             // Switch ricorda ultimo brano
-            Boolean bRiprendiUltimo = vg.getRicordaUltimoBrano();
+            boolean bRiprendiUltimo = vg.getRicordaUltimoBrano();
             chkRiprendiUltimo.setChecked(bRiprendiUltimo);
             chkRiprendiUltimo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -699,7 +716,7 @@ public class Settings extends Fragment {
             });
 
             // Switch testo in inglese
-            Boolean bTestoInglese = vg.getTestoInInglese();
+            boolean bTestoInglese = vg.getTestoInInglese();
             chkTestoInglese.setChecked(bTestoInglese);
             chkTestoInglese.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -711,7 +728,7 @@ public class Settings extends Fragment {
             });
 
             // Switch log
-            Boolean bLog = vg.getScriveLog();
+            boolean bLog = vg.getScriveLog();
             chkLog.setChecked(bLog);
             chkLog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -723,7 +740,7 @@ public class Settings extends Fragment {
             });
 
             // Membri
-            Boolean bMembri = vg.getMembri();
+            boolean bMembri = vg.getMembri();
             chkMembri.setChecked(bMembri);
             chkMembri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -743,7 +760,7 @@ public class Settings extends Fragment {
             });
 
             // Pronuncia
-            Boolean bPronuncia = vg.getPronunciaOperazioni();
+            boolean bPronuncia = vg.getPronunciaOperazioni();
             chkPronuncia.setChecked(bPronuncia);
             chkPronuncia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -827,7 +844,7 @@ public class Settings extends Fragment {
             });
 
             // Switch ascendente
-            Boolean bAscendente = vg.getCrescente();
+            boolean bAscendente = vg.getCrescente();
             chkAscendente.setChecked(bAscendente);
             chkAscendente.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -927,7 +944,7 @@ public class Settings extends Fragment {
             final RadioButton optPresente = view.findViewById(R.id.optPresente);
 
             // Controllo rete
-            Boolean bControlloRete = vg.getControlloRete();
+            boolean bControlloRete = vg.getControlloRete();
             chkControlloRete.setChecked(bControlloRete);
             chkControlloRete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

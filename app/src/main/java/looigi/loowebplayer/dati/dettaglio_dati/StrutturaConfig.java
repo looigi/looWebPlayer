@@ -23,28 +23,28 @@ public class StrutturaConfig {
     private String Filtro=""; // ARTISTA_Pippo_§BRANO_W la pippa_§
     private int QualeCanzoneStaSuonando;
     private int Ordinamento=0;
-    private Boolean Crescente = true;
+    private boolean Crescente = true;
     private int NumeroBranoInAscolto;
-    private Boolean MascheraTestoAperta=false;
-    private Boolean SchermoSempreAcceso=true;
-    private Boolean RicordaUltimoBrano=true;
-    private Boolean TestoInInglese=true;
-    private Boolean ScriveLog=true;
-    private Boolean Membri=false;
-    private Boolean DownloadImmagini=true;
-    private Boolean ReloadAutomatico=true;
-    private Boolean CaricamentoAnticipato=true;
-    private Boolean AnnuncioBrano=true;
-    private Boolean VisualizzaTraffico=true;
-    private Boolean SfumaBrano=true;
-    private Boolean ControlloRete=true;
-    private Boolean VisualizzaBellezza=true;
-    private Boolean UsaScaricati=false;
+    private boolean MascheraTestoAperta=false;
+    private boolean SchermoSempreAcceso=true;
+    private boolean RicordaUltimoBrano=true;
+    private boolean TestoInInglese=true;
+    private boolean ScriveLog=true;
+    private boolean Membri=false;
+    private boolean DownloadImmagini=true;
+    private boolean ReloadAutomatico=true;
+    private boolean CaricamentoAnticipato=true;
+    private boolean AnnuncioBrano=true;
+    private boolean VisualizzaTraffico=true;
+    private boolean SfumaBrano=true;
+    private boolean ControlloRete=true;
+    private boolean VisualizzaBellezza=true;
+    private boolean UsaScaricati=false;
     private boolean ScaricoDettagli=true;
     private boolean Stelle=false;
     private boolean Superiore=true;
     private String ValoreBellezza="0";
-    private Boolean PronunciaOperazioni=true;
+    private boolean PronunciaOperazioni=true;
     private int QuantiTentativi=3;
     private boolean PuliziaPerFiles = false;
     private boolean MostraOperazioni = false;
@@ -53,6 +53,7 @@ public class StrutturaConfig {
     private int QuantiMBAlMassimo = 500;
     private boolean ScaricaTestoBrano = true;
     private boolean MostraSempreTitolo = true;
+    private boolean SuonaAttesa = false;
 
     private int TimeOutDownloadMP3=45000;
     private int TimeOutListaBrani=200000;
@@ -102,6 +103,7 @@ public class StrutturaConfig {
         String sMostraOperazioni = "S"; if (!MostraOperazioni) sMostraOperazioni="N";
         String sScaricaTesto = "S"; if (!ScaricaTestoBrano) sScaricaTesto="N";
         String sMostraTitolo = "S"; if (!MostraSempreTitolo) sMostraTitolo="N";
+        String sSuonaAttesa = "S"; if (!SuonaAttesa) sSuonaAttesa="N";
 
         String Stringona = 
                 sRandom + ";" +
@@ -145,7 +147,8 @@ public class StrutturaConfig {
                 QuantiMegaPulizia+';'+
                 sMostraOperazioni+';'+
                 sScaricaTesto+';'+
-                sMostraTitolo+';'
+                sMostraTitolo+';'+
+                sSuonaAttesa+';'
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -248,6 +251,8 @@ public class StrutturaConfig {
                     String sMostraTitolo = Campi[41];
                     MostraSempreTitolo = sMostraTitolo.equals("S");
 
+                    String sSuonaAttesa = Campi[42];
+                    SuonaAttesa = sSuonaAttesa.equals("S");
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
                 } catch (Exception e) {
@@ -289,7 +294,7 @@ public class StrutturaConfig {
                     String Cosa = "";
                     if (TipoFiltro.length>1) {
                         Cosa = TipoFiltro[1].replace("***UNDERLINE***", "_").toUpperCase().trim();
-                        Boolean Ok = false;
+                        boolean Ok = false;
 
                         switch (TipoFiltro[0]) {
                             case "ARTISTA":
@@ -374,7 +379,7 @@ public class StrutturaConfig {
                     for (StrutturaBrani b1 : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati()) {
                         for (StrutturaBrani b2 : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati()) {
                             if (b1.getIdBrano() != (b2.getIdBrano())) {
-                                Boolean Ok = true;
+                                boolean Ok = true;
                                 Date d1 = null;
                                 Date d2 = null;
 
@@ -392,7 +397,7 @@ public class StrutturaConfig {
 
                                     if (Ok) {
                                         int o = d1.compareTo(d2);
-                                        if (Crescente.equals("S")) {
+                                        if (Crescente) {
                                             if (o > 0) {
                                                 app = b1;
                                                 b1 = b2;
@@ -417,7 +422,7 @@ public class StrutturaConfig {
                         for (StrutturaBrani b2 : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati()) {
                             if (b1.getIdBrano() != (b2.getIdBrano())) {
                                 int o = b1.getNomeBrano().compareTo(b2.getNomeBrano());
-                                if (Crescente.equals("S")) {
+                                if (Crescente) {
                                     if (o > 0) {
                                         app = b1;
                                         b1 = b2;
@@ -448,7 +453,7 @@ public class StrutturaConfig {
             for (StrutturaBrani s : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBraniFiltrati()) {
                 int Bellezza = s.getStelle();
 
-                Boolean Ok = false;
+                boolean Ok = false;
                 if (Superiore) {
                     if (Bellezza>Integer.parseInt(ValoreBellezza)-1) {
                         Ok=true;
@@ -465,6 +470,14 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isSuonaAttesa() {
+        return SuonaAttesa;
+    }
+
+    public void setSuonaAttesa(boolean suonaAttesa) {
+        SuonaAttesa = suonaAttesa;
     }
 
     public boolean isMostraSempreTitolo() {
@@ -567,20 +580,20 @@ public class StrutturaConfig {
         QuantiFilesMemorizzati = quantiFilesMemorizzati;
     }
 
-    public Boolean getMembri() {
+    public boolean getMembri() {
         return Membri;
     }
 
-    public void setMembri(Boolean membri) {
+    public void setMembri(boolean membri) {
         Membri = membri;
         SalvaDati();
     }
 
-    public Boolean getPronunciaOperazioni() {
+    public boolean getPronunciaOperazioni() {
         return PronunciaOperazioni;
     }
 
-    public void setPronunciaOperazioni(Boolean pronunciaOperazioni) {
+    public void setPronunciaOperazioni(boolean pronunciaOperazioni) {
         PronunciaOperazioni = pronunciaOperazioni;
         SalvaDati();
     }
@@ -630,128 +643,128 @@ public class StrutturaConfig {
         SalvaDati();
     }
 
-    public Boolean getUsaScaricati() {
+    public boolean getUsaScaricati() {
         return UsaScaricati;
     }
 
-    public void setUsaScaricati(Boolean usaScaricati) {
+    public void setUsaScaricati(boolean usaScaricati) {
         UsaScaricati = usaScaricati;
         SalvaDati();
     }
 
-    public Boolean getVisualizzaTraffico() {
+    public boolean getVisualizzaTraffico() {
         return VisualizzaTraffico;
     }
 
-    public void setVisualizzaTraffico(Boolean visualizzaTraffico) {
+    public void setVisualizzaTraffico(boolean visualizzaTraffico) {
         VisualizzaTraffico = visualizzaTraffico;
         SalvaDati();
     }
 
-    public Boolean getSfumaBrano() {
+    public boolean getSfumaBrano() {
         return SfumaBrano;
     }
 
-    public void setSfumaBrano(Boolean sfumaBrano) {
+    public void setSfumaBrano(boolean sfumaBrano) {
         SfumaBrano = sfumaBrano;
         SalvaDati();
     }
 
-    public Boolean getControlloRete() {
+    public boolean getControlloRete() {
         return ControlloRete;
     }
 
-    public void setControlloRete(Boolean controlloRete) {
+    public void setControlloRete(boolean controlloRete) {
         ControlloRete = controlloRete;
         SalvaDati();
     }
 
-    public Boolean getVisualizzaBellezza() {
+    public boolean getVisualizzaBellezza() {
         return VisualizzaBellezza;
     }
 
-    public void setVisualizzaBellezza(Boolean visualizzaBellezza) {
+    public void setVisualizzaBellezza(boolean visualizzaBellezza) {
         VisualizzaBellezza = visualizzaBellezza;
         SalvaDati();
     }
 
-    public Boolean getDownloadImmagini() {
+    public boolean getDownloadImmagini() {
         return DownloadImmagini;
     }
 
-    public void setDownloadImmagini(Boolean downloadImmagini) {
+    public void setDownloadImmagini(boolean downloadImmagini) {
         DownloadImmagini = downloadImmagini;
         SalvaDati();
     }
 
-    public Boolean getReloadAutomatico() {
+    public boolean getReloadAutomatico() {
         return ReloadAutomatico;
     }
 
-    public void setReloadAutomatico(Boolean reloadAutomatico) {
+    public void setReloadAutomatico(boolean reloadAutomatico) {
         ReloadAutomatico = reloadAutomatico;
         SalvaDati();
     }
 
-    public Boolean getCaricamentoAnticipato() {
+    public boolean getCaricamentoAnticipato() {
         return CaricamentoAnticipato;
     }
 
-    public void setCaricamentoAnticipato(Boolean caricamentoAnticipato) {
+    public void setCaricamentoAnticipato(boolean caricamentoAnticipato) {
         CaricamentoAnticipato = caricamentoAnticipato;
         SalvaDati();
     }
 
-    public Boolean getAnnuncioBrano() {
+    public boolean getAnnuncioBrano() {
         return AnnuncioBrano;
     }
 
-    public void setAnnuncioBrano(Boolean annuncioBrano) {
+    public void setAnnuncioBrano(boolean annuncioBrano) {
         AnnuncioBrano = annuncioBrano;
         SalvaDati();
     }
 
-    public Boolean getScriveLog() {
+    public boolean getScriveLog() {
         return ScriveLog;
     }
 
-    public void setScriveLog(Boolean scriveLog) {
+    public void setScriveLog(boolean scriveLog) {
         ScriveLog = scriveLog;
         SalvaDati();
     }
 
-    public Boolean getTestoInInglese() {
+    public boolean getTestoInInglese() {
         return TestoInInglese;
     }
 
-    public void setTestoInInglese(Boolean testoInInglese) {
+    public void setTestoInInglese(boolean testoInInglese) {
         TestoInInglese = testoInInglese;
         SalvaDati();
     }
 
-    public Boolean getRicordaUltimoBrano() {
+    public boolean getRicordaUltimoBrano() {
         return RicordaUltimoBrano;
     }
 
-    public void setRicordaUltimoBrano(Boolean ricordaUltimoBrano) {
+    public void setRicordaUltimoBrano(boolean ricordaUltimoBrano) {
         RicordaUltimoBrano = ricordaUltimoBrano;
         SalvaDati();
     }
 
-    public Boolean getSchermoSempreAcceso() {
+    public boolean getSchermoSempreAcceso() {
         return SchermoSempreAcceso;
     }
 
-    public void setSchermoSempreAcceso(Boolean schermoSempreAcceso) {
+    public void setSchermoSempreAcceso(boolean schermoSempreAcceso) {
         SchermoSempreAcceso = schermoSempreAcceso;
         SalvaDati();
     }
 
-    public Boolean getMascheraTestoAperta() {
+    public boolean getMascheraTestoAperta() {
         return MascheraTestoAperta;
     }
 
-    public void setMascheraTestoAperta(Boolean mascheraTestoAperta) {
+    public void setMascheraTestoAperta(boolean mascheraTestoAperta) {
         MascheraTestoAperta = mascheraTestoAperta;
         SalvaDati();
     }
@@ -774,11 +787,11 @@ public class StrutturaConfig {
         SalvaDati();
     }
 
-    public Boolean getCrescente() {
+    public boolean getCrescente() {
         return Crescente;
     }
 
-    public void setCrescente(Boolean crescente) {
+    public void setCrescente(boolean crescente) {
         Crescente = crescente;
         SalvaDati();
     }

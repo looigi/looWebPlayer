@@ -32,6 +32,7 @@ public class GestioneListaBrani {
     private float vol;
     private Runnable SfumaOutMp3 =null;
     private Handler hSfumaOutMP3;
+    private boolean VecchioStaSuonando;
     // private Boolean StavaSuonando;
     // private int BranoSuccessivo;
     // private int chiacchiera=0;
@@ -247,65 +248,79 @@ public class GestioneListaBrani {
     }
 
     public void SuonaMusicaDiAttesa() {
-        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-            VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
+        VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
-            if (vh.getMediaPlayer() != null) {
-                vh.getMediaPlayer().stop();
-                // VariabiliStaticheGlobali.getInstance().setStaSuonandoAttesa(true);
-            }
+        VecchioStaSuonando =  VariabiliStaticheGlobali.getInstance().getStaSuonando();
 
-            GestioneImmagini.getInstance().StoppaTimerCarosello();
-            Drawable icona_attesa = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.attendere);
-            GestioneImmagini.getInstance().getImgBrano().setImageDrawable(icona_attesa);
+        if (vh.getMediaPlayer() != null) {
+            vh.getMediaPlayer().stop();
+            VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+        }
 
-            int min = 1;
-            int max = 7;
-            int random = new Random().nextInt((max - min) + 1) + min;
+        GestioneImmagini.getInstance().StoppaTimerCarosello();
+        Drawable icona_attesa = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.attendere);
+        GestioneImmagini.getInstance().getImgBrano().setImageDrawable(icona_attesa);
 
-            int resID = VariabiliStaticheGlobali.getInstance().getContext().getResources().getIdentifier("m" + Integer.toString(random), "raw",
-                    VariabiliStaticheGlobali.getInstance().getContext().getPackageName());
-            if (vh.getMediaPlayer() != null) {
-                vh.getMediaPlayer().setVolume(100, 100);
-                vh.setMediaPlayer(MediaPlayer.create(vh.getContext(), resID));
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSuonaAttesa()) {
+            if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                int min = 1;
+                int max = 7;
+                int random = new Random().nextInt((max - min) + 1) + min;
+
+                int resID = VariabiliStaticheGlobali.getInstance().getContext().getResources().getIdentifier("m" + Integer.toString(random), "raw",
+                        VariabiliStaticheGlobali.getInstance().getContext().getPackageName());
                 if (vh.getMediaPlayer() != null) {
-                    vh.getMediaPlayer().setLooping(true);
-                    vh.getMediaPlayer().start();
-                    // VariabiliStaticheGlobali.getInstance().setStaSuonandoAttesa(true);
+                    vh.getMediaPlayer().setVolume(100, 100);
+                    vh.setMediaPlayer(MediaPlayer.create(vh.getContext(), resID));
+                    if (vh.getMediaPlayer() != null) {
+                        vh.getMediaPlayer().setLooping(true);
+                        vh.getMediaPlayer().start();
+                        // VariabiliStaticheGlobali.getInstance().setStaSuonandoAttesa(true);
+                    }
                 }
             }
         }
     }
 
     public void TerminaMusicaDiAttesa(final String Mp3) {
-        final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSuonaAttesa()) {
+            final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
-        if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-            // Drawable icona_nessuna = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.nessuna);
-            // VariabiliStaticheHome.getInstance().getImgBrano().setImageDrawable(icona_nessuna);
+            if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                // Drawable icona_nessuna = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.nessuna);
+                // VariabiliStaticheHome.getInstance().getImgBrano().setImageDrawable(icona_nessuna);
 
-            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
-                vol = 1;
-                hSfumaOutMP3 = new Handler(Looper.getMainLooper());
-                hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
-                    @Override
-                    public void run() {
-                        vol -= .03;
-                        if (vol > .03) {
-                            vh.getMediaPlayer().setVolume(vol, vol);
-                            hSfumaOutMP3.postDelayed(SfumaOutMp3, 100);
-                        } else {
-                            hSfumaOutMP3.removeCallbacks(SfumaOutMp3);
+                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
+                    vol = 1;
+                    hSfumaOutMP3 = new Handler(Looper.getMainLooper());
+                    hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
+                        @Override
+                        public void run() {
+                            vol -= .03;
+                            if (vol > .03) {
+                                vh.getMediaPlayer().setVolume(vol, vol);
+                                hSfumaOutMP3.postDelayed(SfumaOutMp3, 100);
+                            } else {
+                                hSfumaOutMP3.removeCallbacks(SfumaOutMp3);
 
-                            GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                                VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+
+                                GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                            }
                         }
-                    }
-                }, 100);
+                    }, 100);
+                } else {
+                    VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+
+                    GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                }
             } else {
+                VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
+
                 GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
             }
         } else {
-            GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+            VariabiliStaticheGlobali.getInstance().setStaSuonando(VecchioStaSuonando);
         }
     }
 
