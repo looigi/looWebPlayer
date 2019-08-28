@@ -264,7 +264,7 @@ public class GestioneListaBrani {
         GestioneImmagini.getInstance().getImgBrano().setImageDrawable(icona_attesa);
 
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSuonaAttesa()) {
-            if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+            // if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                 int min = 1;
                 int max = 7;
                 int random = new Random().nextInt((max - min) + 1) + min;
@@ -280,12 +280,11 @@ public class GestioneListaBrani {
                         // VariabiliStaticheGlobali.getInstance().setStaSuonandoAttesa(true);
                     }
                 }
-            }
+            // }
         }
     }
 
     public void TerminaMusicaDiAttesa(final String Mp3) {
-
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSuonaAttesa()) {
             final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
@@ -293,37 +292,39 @@ public class GestioneListaBrani {
                 // Drawable icona_nessuna = ContextCompat.getDrawable(VariabiliStaticheGlobali.getInstance().getContext(), R.drawable.nessuna);
                 // VariabiliStaticheHome.getInstance().getImgBrano().setImageDrawable(icona_nessuna);
 
-                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
-                    vol = 1;
-                    hSfumaOutMP3 = new Handler(Looper.getMainLooper());
-                    hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
-                        @Override
-                        public void run() {
-                            vol -= .03;
-                            if (vol > .03) {
-                                vh.getMediaPlayer().setVolume(vol, vol);
-                                hSfumaOutMP3.postDelayed(SfumaOutMp3, 100);
-                            } else {
-                                hSfumaOutMP3.removeCallbacks(SfumaOutMp3);
-
-                                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
-
-                                GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
-                            }
-                        }
-                    }, 100);
-                } else {
-                    VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
-
-                    GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
-                }
+                // if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getSfumaBrano()) {
+                    // vol = 1;
+                    // hSfumaOutMP3 = new Handler(Looper.getMainLooper());
+                    // hSfumaOutMP3.postDelayed(SfumaOutMp3 = new Runnable() {
+                    //     @Override
+                    //     public void run() {
+                    //         vol -= .03;
+                    //         if (vol > .03) {
+                    //             vh.getMediaPlayer().setVolume(vol, vol);
+                    //             hSfumaOutMP3.postDelayed(SfumaOutMp3, 100);
+                    //         } else {
+                    //             hSfumaOutMP3.removeCallbacks(SfumaOutMp3);
+//
+                    //              VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+//
+                                 GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                    //         }
+                    //     }
+                    // }, 100);
+                // } else {
+                //     VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+//
+                //     GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                // }
             } else {
-                VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+                // VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
 
-                GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
+                // GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+            // VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+
+            GestioneSuonaBrano.getInstance().SuonaBranoCompleto(Mp3);
         }
     }
 

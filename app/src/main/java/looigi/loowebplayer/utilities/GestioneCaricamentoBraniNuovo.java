@@ -91,17 +91,17 @@ public class GestioneCaricamentoBraniNuovo {
         if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
             GestioneListaBrani.getInstance().SuonaMusicaDiAttesa();
         }
-        VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
+        // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
 
         // final int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
         ImpostaProssimaCanzone();
 
-        secondi = 0;
+        // secondi = 0;
 
-        hAttesaProssimo = new Handler(Looper.getMainLooper());
-        hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
-            @Override
-            public void run() {
+        // hAttesaProssimo = new Handler(Looper.getMainLooper());
+        // hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
+        //     @Override
+        //     public void run() {
                     if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                         VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
@@ -165,52 +165,52 @@ public class GestioneCaricamentoBraniNuovo {
                     } else {
                         int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                         if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
-                            if (hAttesaProssimo != null && rAttesaProssimo != null) {
-                                hAttesaProssimo.removeCallbacks(rAttesaProssimo);
-                                hAttesaProssimo = null;
-                            }
+                            // if (hAttesaProssimo != null && rAttesaProssimo != null) {
+                            //     hAttesaProssimo.removeCallbacks(rAttesaProssimo);
+                            //     hAttesaProssimo = null;
+                            // }
 
                             // CaricaBrano2();
                             VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
                                     false, "Attesa termine download automatico. QUI NON DEVE PASSARE!!!"));
                         } else {
-                            secondi++;
-                            int ss = VariabiliStaticheGlobali.getInstance().getAttesaSecondiBranoSuccessivo();
-                            numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(numOperazione, true,
-                                    "Attesa brano successivo. Secondi: " + Integer.toString(ss - secondi));
-                            if (secondi > ss || VariabiliStaticheGlobali.getInstance().isEsciDallAttesa()) {
-                                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
+                            // secondi++;
+                            // int ss = VariabiliStaticheGlobali.getInstance().getAttesaSecondiBranoSuccessivo();
+                            // numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(numOperazione, true,
+                            //         "Attesa brano successivo. Secondi: " + Integer.toString(ss - secondi));
+                            // if (secondi > ss || VariabiliStaticheGlobali.getInstance().isEsciDallAttesa()) {
+                            //     VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
                                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(numOperazione, true);
 
                                 CaricaBrano2();
-                            } else {
-                                hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
-                            }
+                            // } else {
+                            //     hAttesaProssimo.postDelayed(rAttesaProssimo, 1000);
+                            // }
                         }
                     }
             }
-        }, 1000);
+        // }, 1000);
         // Attesa fra un brano ed un altro per permettere lo skip senza effettuare caricamenti multipli
 
-    }
+    // }
 
-    private void waitNull(final Object classe) {
-        hAttesaDownload.add(new Handler(Looper.getMainLooper()));
-        rAttesaDownload.add(new Runnable() {
-            @Override
-            public void run() {
-                if (classe==null) {
-                    stopCounter++;
-
-                    hAttesaDownload.get(hAttesaDownload.size()-1).removeCallbacks(rAttesaDownload.get(rAttesaDownload.size()-1));
-                    hAttesaDownload.set(hAttesaDownload.size()-1, null);
-                } else {
-                    hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
-                }
-            }
-        });
-        hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
-    }
+    // private void waitNull(final Object classe) {
+    //     hAttesaDownload.add(new Handler(Looper.getMainLooper()));
+    //     rAttesaDownload.add(new Runnable() {
+    //         @Override
+    //         public void run() {
+    //             if (classe==null) {
+    //                 stopCounter++;
+//
+    //                 hAttesaDownload.get(hAttesaDownload.size()-1).removeCallbacks(rAttesaDownload.get(rAttesaDownload.size()-1));
+    //                 hAttesaDownload.set(hAttesaDownload.size()-1, null);
+    //             } else {
+    //                 hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
+    //             }
+    //         }
+    //     });
+    //     hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
+    // }
 
     private void CaricaBrano2() {
         stopCounter = 0;

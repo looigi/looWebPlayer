@@ -63,7 +63,7 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
         } else {
             if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+                // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
                 VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
                 int NumeroBrano;
@@ -112,7 +112,7 @@ public class GestioneOggettiVideo {
         VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
         if (vh.getPuoAvanzare()) {
-            VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+            // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
             if (Acceso) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Play");
@@ -157,7 +157,7 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
         } else {
             if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-                VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+                // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
                 VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
                 GestioneImmagini.getInstance().StoppaTimerCarosello();

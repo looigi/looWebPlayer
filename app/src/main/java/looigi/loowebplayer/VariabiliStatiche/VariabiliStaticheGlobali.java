@@ -144,7 +144,7 @@ public class VariabiliStaticheGlobali {
 
     private String UltimaOperazioneSOAP = "";
     private long lastTimePressed = 0;
-    private boolean EsciDallAttesa = false;
+    // private boolean EsciDallAttesa = false;
 
     private Drawable play;
     private Drawable play_dis;
@@ -178,13 +178,13 @@ public class VariabiliStaticheGlobali {
         this.ctxPassaggio = ctxPassaggio;
     }
 
-    public boolean isEsciDallAttesa() {
+    /* public boolean isEsciDallAttesa() {
         return EsciDallAttesa;
     }
 
     public void setEsciDallAttesa(boolean esciDallAttesa) {
         EsciDallAttesa = esciDallAttesa;
-    }
+    } */
 
     public long getLastTimePressed() {
         return lastTimePressed;

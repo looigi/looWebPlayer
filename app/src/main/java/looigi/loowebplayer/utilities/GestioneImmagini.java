@@ -386,50 +386,54 @@ public class GestioneImmagini {
     private void ControllaEsistenzaProssimaImmagine(String Immagine) {
         int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
 
-        int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().get(NumeroBrano).getIdArtista();
-        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
-        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+        if (NumeroBrano<VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().size()) {
+            int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().get(NumeroBrano).getIdArtista();
+            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
-        StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-        String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
 
-        String NomeImm = Immagine.replace("\\ZZZ-ImmaginiArtista\\", "");
-        // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Mp3/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
-        String sUrl = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/ZZZ-ImmaginiArtista/" +
-                NomeImm;
-        String PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ImmaginiArtista/" +
-                NomeImm.replace(".dat", "");
+            String NomeImm = Immagine.replace("\\ZZZ-ImmaginiArtista\\", "");
+            // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Mp3/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
+            String sUrl = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/ZZZ-ImmaginiArtista/" +
+                    NomeImm;
+            String PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ImmaginiArtista/" +
+                    NomeImm.replace(".dat", "");
 
-        File f = new File(PathFile.replace(".dat", ""));
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Carosello: cambio immagine: "+Immagine);
-        if (f.exists()) {
-            ImmagineDaCambiare = PathFile;
+            File f = new File(PathFile.replace(".dat", ""));
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), "Carosello: cambio immagine: " + Immagine);
+            if (f.exists()) {
+                ImmagineDaCambiare = PathFile;
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Carosello: inizio sfuma immagine. Immagine: "+VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
-            SfumaImmagine(true);
-        } else {
-            // if (NetThreadNuovo.getInstance().isScreenOn()) {
-            if (VariabiliStaticheGlobali.getInstance().getScreenON()) {
-                boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                }.getClass().getEnclosingMethod().getName(), "Carosello: inizio sfuma immagine. Immagine: " + VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
+                SfumaImmagine(true);
+            } else {
+                // if (NetThreadNuovo.getInstance().isScreenOn()) {
+                if (VariabiliStaticheGlobali.getInstance().getScreenON()) {
+                    boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-                if (ceRete) {
-                    int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine artista");
+                    if (ceRete) {
+                        int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download immagine artista");
 
-                    SfumaImmagine(false);
+                        SfumaImmagine(false);
 
-                    // Ci troviamo in caso di immagine non ancora scaricata. La scarico
-                    DownloadImmagineNuovo d = new DownloadImmagineNuovo();
-                    d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-                    d.setPath(PathFile);
-                    d.setNumeroBrano(NumeroBrano);
-                    d.setNumeroOperazione(NumeroOperazione);
-                    d.setInSfuma(true);
-                    d.startDownload(sUrl, "Download Immagine", VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
+                        // Ci troviamo in caso di immagine non ancora scaricata. La scarico
+                        DownloadImmagineNuovo d = new DownloadImmagineNuovo();
+                        d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+                        d.setPath(PathFile);
+                        d.setNumeroBrano(NumeroBrano);
+                        d.setNumeroOperazione(NumeroOperazione);
+                        d.setInSfuma(true);
+                        d.startDownload(sUrl, "Download Immagine", VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
+                    } else {
+                        CreaCarosello();
+                    }
                 } else {
                     CreaCarosello();
                 }
-            } else {
-                CreaCarosello();
             }
         }
     }
