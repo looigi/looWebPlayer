@@ -88,10 +88,16 @@ public class ScaricoBranoEAttesa {
                 d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
                 d.startDownload(url, NumeroOperazione);
             } else {
-                DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
+
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Struttura brano vuota. Numero brano: "+Integer.toString(NumeroBrano));
+
+               /* DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
                         "Struttura vuota in ScaricaBrano. Numero Brano: " + NumeroBrano,
                         true,
-                        VariabiliStaticheGlobali.NomeApplicazione);
+                        VariabiliStaticheGlobali.NomeApplicazione); */
             }
         } else {
             String bb = "";
