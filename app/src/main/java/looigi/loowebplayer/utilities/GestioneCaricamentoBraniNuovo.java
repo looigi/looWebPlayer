@@ -102,7 +102,8 @@ public class GestioneCaricamentoBraniNuovo {
         // hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
         //     @Override
         //     public void run() {
-                    if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                         VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
@@ -495,7 +496,7 @@ public class GestioneCaricamentoBraniNuovo {
             // Testo brano
 
             // Multimedia artista
-            if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
+            // if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
                 int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
@@ -513,7 +514,7 @@ public class GestioneCaricamentoBraniNuovo {
                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nMultimedia, false);
                     VariabiliStaticheNuove.getInstance().setGm(null);
                 }
-            }
+            // }
             // Multimedia artista
 
             this.pathBase = pathBase;

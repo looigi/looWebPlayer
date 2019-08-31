@@ -121,10 +121,12 @@ public class GestioneOggettiVideo {
                 if (!GestioneCaricamentoBraniNuovo.getInstance().isHaCaricatoBrano()) {
                     vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
                     vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
+                    VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
                     GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano3();
                 } else {
                     vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay_dis());
                     vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop());
+                    VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
                     try {
                         vh.getMediaPlayer().start();
                     } catch (Exception e) {
