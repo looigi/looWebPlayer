@@ -495,22 +495,24 @@ public class GestioneCaricamentoBraniNuovo {
             // Testo brano
 
             // Multimedia artista
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-            }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
-            int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
-            String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-            String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
-            File f = new File(PathListaImm);
-            if (!f.exists()) {
-                DBRemotoNuovo dbr = new DBRemotoNuovo();
-                VariabiliStaticheNuove.getInstance().setGm(dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
-                        Artista, nMultimedia));
-            } else {
-                String Ritorno = GestioneFiles.getInstance().LeggeFileDiTesto(PathListaImm);
-                wsRitornoNuovo w = new wsRitornoNuovo();
-                w.RitornaMultimediaArtista(Ritorno);
-                VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nMultimedia, false);
-                VariabiliStaticheNuove.getInstance().setGm(null);
+            if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
+                int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
+                String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+                String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
+                File f = new File(PathListaImm);
+                if (!f.exists()) {
+                    DBRemotoNuovo dbr = new DBRemotoNuovo();
+                    VariabiliStaticheNuove.getInstance().setGm(dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
+                            Artista, nMultimedia));
+                } else {
+                    String Ritorno = GestioneFiles.getInstance().LeggeFileDiTesto(PathListaImm);
+                    wsRitornoNuovo w = new wsRitornoNuovo();
+                    w.RitornaMultimediaArtista(Ritorno);
+                    VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nMultimedia, false);
+                    VariabiliStaticheNuove.getInstance().setGm(null);
+                }
             }
             // Multimedia artista
 

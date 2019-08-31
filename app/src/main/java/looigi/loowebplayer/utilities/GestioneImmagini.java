@@ -386,7 +386,7 @@ public class GestioneImmagini {
     private void ControllaEsistenzaProssimaImmagine(String Immagine) {
         int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
 
-        if (NumeroBrano<VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().size()) {
+        if (NumeroBrano<VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().size() && NumeroBrano>-1) {
             int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani().get(NumeroBrano).getIdArtista();
             String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
