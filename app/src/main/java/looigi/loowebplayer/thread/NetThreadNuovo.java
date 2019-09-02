@@ -33,7 +33,7 @@ public class NetThreadNuovo {
     // private int signalStrengthValue;
     // private TelephonyManager manager;
     // private PhoneStateListener phoneListener;
-    // private SignalStrength LivelloSegnale;
+    private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
     private int SecondiDiAttesa = 5000;
@@ -122,6 +122,9 @@ public class NetThreadNuovo {
         }
 
         OkNet = haveConnectedWifi || haveConnectedMobile;
+        if (OkNet && !haveConnectedWifi) {
+            getGsmLevel();
+        }
 
         /* switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
             case 1:
@@ -187,8 +190,8 @@ public class NetThreadNuovo {
     }
 
     private void getGsmLevel() {
-        /* if (LivelloSegnale!=null) {
-            int level;
+        if (LivelloSegnale!=null) {
+            // int level;
             // ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
             // asu = 0 (-113dB or less) is very weak
             // signal, its better to show 0 bars to the user in such cases.
@@ -196,23 +199,23 @@ public class NetThreadNuovo {
             int asu = LivelloSegnale.getGsmSignalStrength();
             if (asu <= 1 || asu == 99) {
                 OkNet = false;
-                level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                // level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
             } else if (asu >= 12) {
                 OkNet = true;
-                level = SIGNAL_STRENGTH_GREAT;
+                // level = SIGNAL_STRENGTH_GREAT;
             } else if (asu >= 8) {
                 OkNet = true;
-                level = SIGNAL_STRENGTH_GOOD;
+                // level = SIGNAL_STRENGTH_GOOD;
             } else if (asu >= 5) {
                 OkNet = true;
-                level = SIGNAL_STRENGTH_MODERATE;
+                // level = SIGNAL_STRENGTH_MODERATE;
             } else {
-                OkNet = true;
-                level = SIGNAL_STRENGTH_POOR;
+                OkNet = false;
+                // level = SIGNAL_STRENGTH_POOR;
             }
         } else {
-            OkNet = false;
-        } */
+            OkNet = true;
+        }
     }
 
     // private void setupSignalStrength() {

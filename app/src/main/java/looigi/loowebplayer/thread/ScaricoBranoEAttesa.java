@@ -14,6 +14,7 @@ import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.PronunciaFrasi;
+import looigi.loowebplayer.utilities.RiempieListaInBackground;
 import looigi.loowebplayer.utilities.Utility;
 
 public class ScaricoBranoEAttesa {
@@ -67,6 +68,14 @@ public class ScaricoBranoEAttesa {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
             StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+
+            if (s == null) {
+                RiempieListaInBackground r = new RiempieListaInBackground();
+                r.RiempieStrutture(true);
+
+                s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+            }
+
             if (s != null) {
                 String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
                 String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
