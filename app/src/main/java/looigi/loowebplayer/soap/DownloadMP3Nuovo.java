@@ -25,6 +25,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.ritorno_ws.RitornoDaWSIntermedioAttesa;
 import looigi.loowebplayer.ritorno_ws.wsRitornoNuovoPerErrore;
+import looigi.loowebplayer.thread.NetThreadNuovo;
 import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
@@ -292,11 +293,13 @@ public class DownloadMP3Nuovo {
                                     publishProgress((int) (lenF * 100 / sizeMP3));
                                     if (NumeroBrano>-1 &&
                                             NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
-                                            VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+                                            VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1 ||
+                                            VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
                                         messErrore = "ESCI";
                                         break;
                                     }
                                     if (isCancelled()) {
+                                        messErrore = "ESCI";
                                         break;
                                     }
 

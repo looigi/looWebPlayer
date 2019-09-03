@@ -44,6 +44,7 @@ public class NetThreadNuovo {
     private PowerManager pm;
     private Integer conta=0;
     private Integer quanti=-1;
+    private Integer QuantiSecondiSenzaRete = 0;
     // private Boolean RetePresente=true;
     private ConnectivityManager connectivityManager;
 
@@ -189,6 +190,10 @@ public class NetThreadNuovo {
         }
     }
 
+    public Integer getQuantiSecondiSenzaRete() {
+        return QuantiSecondiSenzaRete;
+    }
+
     private void getGsmLevel() {
         if (LivelloSegnale!=null) {
             // int level;
@@ -199,15 +204,19 @@ public class NetThreadNuovo {
             int asu = LivelloSegnale.getGsmSignalStrength();
             if (asu <= 1 || asu == 99) {
                 OkNet = false;
+                QuantiSecondiSenzaRete ++;
                 // level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
             } else if (asu >= 12) {
                 OkNet = true;
+                QuantiSecondiSenzaRete = 0;
                 // level = SIGNAL_STRENGTH_GREAT;
             } else if (asu >= 8) {
                 OkNet = true;
+                QuantiSecondiSenzaRete = 0;
                 // level = SIGNAL_STRENGTH_GOOD;
             } else if (asu >= 5) {
                 OkNet = true;
+                QuantiSecondiSenzaRete = 0;
                 // level = SIGNAL_STRENGTH_MODERATE;
             } else {
                 OkNet = false;
@@ -215,6 +224,7 @@ public class NetThreadNuovo {
             }
         } else {
             OkNet = true;
+            QuantiSecondiSenzaRete = 0;
         }
     }
 
