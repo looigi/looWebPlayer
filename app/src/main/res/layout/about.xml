@@ -48,6 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textColor="@color/bianco"
                 android:text="by LooigiSoft" />
 
             <TextView
@@ -65,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="@color/bianco"
                 android:text="by LooigiSoft" />
         </LinearLayout>
     </LinearLayout>
@@ -76,7 +78,7 @@
         android:padding="5dp"
         android:orientation="vertical"
         android:gravity="center_vertical|center_horizontal"
-        android:background="@drawable/bordo_arrotondato_bianco_sfumato"
+        android:background="@drawable/bordo_arrotondato_bianco_sf_tr_sb"
         android:layout_height="wrap_content">
 
         <TextView

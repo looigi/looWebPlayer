@@ -223,12 +223,16 @@ public class DownloadTextFileNuovo {
                     byte[] buffer = new byte[1024];
                     int len1 = 0;
                     while ((len1 = is.read(buffer)) != -1) {
-                        if (NumeroBrano>-1 && NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                        if ((NumeroBrano>-1 &&
+                                NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) ||
+                                VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1
+                        ) {
                             messErrore = "ESCI";
                             break;
                         }
                         fos.write(buffer, 0, len1);
                         if (isCancelled()) {
+                            messErrore = "ESCI";
                             break;
                         }
                     }

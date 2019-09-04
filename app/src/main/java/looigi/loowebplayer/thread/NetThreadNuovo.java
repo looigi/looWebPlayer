@@ -90,7 +90,7 @@ public class NetThreadNuovo {
                 // } else {
                 //     SecondiDiAttesa = 5000;
                 // }
-                SecondiDiAttesa = 5000;
+                // SecondiDiAttesa = 5000;
                 // StaGirando = true;
 
                 ControlloRete();
@@ -202,6 +202,7 @@ public class NetThreadNuovo {
             // signal, its better to show 0 bars to the user in such cases.
             // asu = 99 is a special case, where the signal strength is unknown.
             int asu = LivelloSegnale.getGsmSignalStrength();
+
             if (asu <= 1 || asu == 99) {
                 OkNet = false;
                 QuantiSecondiSenzaRete ++;
@@ -220,6 +221,7 @@ public class NetThreadNuovo {
                 // level = SIGNAL_STRENGTH_MODERATE;
             } else {
                 OkNet = false;
+                QuantiSecondiSenzaRete ++;
                 // level = SIGNAL_STRENGTH_POOR;
             }
         } else {
