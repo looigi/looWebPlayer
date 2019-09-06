@@ -93,12 +93,21 @@ public class VariabiliStaticheHome {
     private TextView txtQuanteAscoltate;
     private TextView txtQuanteScaricate;
     private ImageView imgScaricaTesto;
+    private TextView txtLivelloSegnaled;
 
     // private Handler hCambioImmagine;
     // private Runnable rCambioImmagine;
 
     public Context getContext() {
         return context;
+    }
+
+    public TextView getTxtLivelloSegnale() {
+        return txtLivelloSegnaled;
+    }
+
+    public void setTxtLivelloSegnale(TextView txtLivelloSegnaled) {
+        this.txtLivelloSegnaled = txtLivelloSegnaled;
     }
 
     public ImageView getImgScaricaTesto() {

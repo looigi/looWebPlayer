@@ -204,6 +204,8 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setTxtQuanteScaricate((TextView) view.findViewById(R.id.txtQuanteScaricate));
             vh.setTxtTitoloBackground((TextView) view.findViewById(R.id.txtTitoloBackground));
             vh.setImgScaricaTesto((ImageView) view.findViewById(R.id.imgScaricoTesto));
+            vh.setTxtLivelloSegnale((TextView) view.findViewById(R.id.txtLivelloSegnale));
+            vh.getTxtLivelloSegnale().setText("");
 
             vh.getImgScaricaTesto().setVisibility(LinearLayout.GONE);
             vh.getRltListaBrani().setVisibility(LinearLayout.GONE);

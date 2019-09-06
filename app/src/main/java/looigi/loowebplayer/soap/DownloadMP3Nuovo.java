@@ -465,6 +465,9 @@ public class DownloadMP3Nuovo {
                             // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
                             // NetThread.getInstance().setCaroselloBloccato(false);
                             // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(false);
+
+                            VariabiliStaticheHome.getInstance().setQuanteScaricate(VariabiliStaticheHome.getInstance().getQuanteScaricate() + 1);
+                            Utility.getInstance().ScriveScaricateAscoltate();
                         }
                     } else {
                         // Errore... Riprovo ad eseguire la funzione
@@ -556,9 +559,6 @@ public class DownloadMP3Nuovo {
                     rRit.RitornaBranoConAttesa("", NumeroOperazione, Automatico);
                 }
             // }
-
-            VariabiliStaticheHome.getInstance().setQuanteScaricate(VariabiliStaticheHome.getInstance().getQuanteScaricate() + 1);
-            Utility.getInstance().ScriveScaricateAscoltate();
 
             VariabiliStaticheHome.getInstance().getpMP3().setVisibility(LinearLayout.GONE);
             VariabiliStaticheHome.getInstance().getpMP3().setProgress(0);

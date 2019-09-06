@@ -203,6 +203,8 @@ public class NetThreadNuovo {
             // asu = 99 is a special case, where the signal strength is unknown.
             int asu = LivelloSegnale.getGsmSignalStrength();
 
+            VariabiliStaticheHome.getInstance().getTxtLivelloSegnale().setText("Liv.Segnale: " + Integer.toString(asu));
+
             if (asu <= 1 || asu == 99) {
                 OkNet = false;
                 QuantiSecondiSenzaRete ++;
