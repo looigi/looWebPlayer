@@ -41,8 +41,8 @@ public class DownloadMP3Nuovo {
     private String Path;
     private String NomeBrano;
     private static String messErrore="";
-    private Boolean Compresso=false;
-    private Boolean Automatico=false;
+    private boolean Compresso=false;
+    private boolean Automatico=false;
     private int sizeMP3=0;
     private static DownloadFileMP3 downloadFile;
     private int NumeroBrano;
@@ -67,11 +67,11 @@ public class DownloadMP3Nuovo {
         NomeBrano = nb;
     }
 
-    public void setCompresso(Boolean i) {
+    public void setCompresso(boolean i) {
         Compresso = i;
     }
 
-    public void setAutomatico(Boolean i) {
+    public void setAutomatico(boolean i) {
         Automatico = i;
     }
 
@@ -618,7 +618,7 @@ public class DownloadMP3Nuovo {
 
                 String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
                 String PathFile = "";
-                Boolean MP3Organizzati = false;
+                boolean MP3Organizzati = false;
                 if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
                     PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/" + Album + ".jpg";
                     GestioneFiles.getInstance().CreaCartelle(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/");

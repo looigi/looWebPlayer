@@ -74,32 +74,32 @@ public class VariabiliStaticheGlobali {
     private Window windowBackground;
     private StrutturaUtenti Utente;
     private DatiGenerali DatiGenerali=new DatiGenerali();
-    // private Boolean bloccaCarosello=false;
-    private Boolean StaSuonando=false;
-    private Boolean ScrittaAscoltata=false;
-    private Boolean MusicaTerminata=false;
-    // private Boolean StaSuonandoAttesa=false;
+    // private boolean bloccaCarosello=false;
+    private boolean StaSuonando=false;
+    private boolean ScrittaAscoltata=false;
+    private boolean MusicaTerminata=false;
+    // private boolean StaSuonandoAttesa=false;
     private Log log = new Log();
     private Long bytesScaricati=0L;
     // private ImageView ivPassaggio;
     private Context ctxPassaggio;
     private GestoreCuffie myReceiverCuffie;
     // private GestioneTastoCuffie myReceiverGTC;
-    private Boolean CuffieInserite;
-    private Boolean GiaEntrato=false;
+    private boolean CuffieInserite=false;
+    private boolean GiaEntrato=false;
     private TextView txtBraniInLista;
-    private Boolean HaCaricatoTuttiIDettagliDelBrano=false;
+    private boolean HaCaricatoTuttiIDettagliDelBrano=false;
     private Date UltimaDataCaricamento=null;
     private String UltimaCosaPronunciata="";
     private int UltimaCanzoneSuonata=-2;
-    private Boolean HaScaricatoAutomaticamente=false;
-    private Boolean StaScaricandoAutomaticamente =false;
-    // private Boolean StaAttendendoConMusichetta=false;
-    // private Boolean NonFermareDownload;
+    private boolean HaScaricatoAutomaticamente=false;
+    private boolean StaScaricandoAutomaticamente =false;
+    // private boolean StaAttendendoConMusichetta=false;
+    // private boolean NonFermareDownload;
     private int BranoAutomatico;
     private String UltimaImmagineVisualizzata="";
-    // private Boolean MessaImmagineVuota;
-    private Boolean DisegnaMascheraHomeCompleta;
+    // private boolean MessaImmagineVuota;
+    private boolean DisegnaMascheraHomeCompleta;
     private String sUltimaCanzoneSuonata="";
     private TextView txtTraffico;
     private String RitornoCheckFileURL="";
@@ -127,7 +127,7 @@ public class VariabiliStaticheGlobali {
     // private String ChiaveCheckURL = "";
 
     private String lastRitorno = "";
-    private Boolean ScreenON = true;
+    private boolean ScreenON = true;
     private Intent iServizio;
     private ScaricoBranoEAttesa sbea;
     private Integer BranoImpostatoSenzaRete=-1;
@@ -267,11 +267,11 @@ public class VariabiliStaticheGlobali {
         NumeroProssimoBrano = numeroProssimoBrano;
     }
 
-    public Boolean getScrittaAscoltata() {
+    public boolean getScrittaAscoltata() {
         return ScrittaAscoltata;
     }
 
-    public void setScrittaAscoltata(Boolean scrittaAscoltata) {
+    public void setScrittaAscoltata(boolean scrittaAscoltata) {
         ScrittaAscoltata = scrittaAscoltata;
     }
 
@@ -323,11 +323,11 @@ public class VariabiliStaticheGlobali {
         this.iServizio = iServizio;
     }
 
-    public Boolean getScreenON() {
+    public boolean getScreenON() {
         return ScreenON;
     }
 
-    public void setScreenON(Boolean screenON) {
+    public void setScreenON(boolean screenON) {
         ScreenON = screenON;
     }
 
@@ -538,19 +538,19 @@ public class VariabiliStaticheGlobali {
         EsciDaCheckFile = esciDaCheckFile;
     }
 
-    /* public Boolean getStaAttendendoConMusichetta() {
+    /* public boolean getStaAttendendoConMusichetta() {
         return StaAttendendoConMusichetta;
     }
 
-    public void setStaAttendendoConMusichetta(Boolean staAttendendoConMusichetta) {
+    public void setStaAttendendoConMusichetta(boolean staAttendendoConMusichetta) {
         StaAttendendoConMusichetta = staAttendendoConMusichetta;
     } */
 
-    public Boolean getMusicaTerminata() {
+    public boolean getMusicaTerminata() {
         return MusicaTerminata;
     }
 
-    public void setMusicaTerminata(Boolean musicaTerminata) {
+    public void setMusicaTerminata(boolean musicaTerminata) {
         MusicaTerminata = musicaTerminata;
     }
 
@@ -594,19 +594,19 @@ public class VariabiliStaticheGlobali {
         TipoSegnale = tipoSegnale;
     }
 
-    /* public Boolean getStaSuonandoAttesa() {
+    /* public boolean getStaSuonandoAttesa() {
         return StaSuonandoAttesa;
     }
 
-    public void setStaSuonandoAttesa(Boolean staSuonandoAttesa) {
+    public void setStaSuonandoAttesa(boolean staSuonandoAttesa) {
         StaSuonandoAttesa = staSuonandoAttesa;
     } */
 
-    public Boolean getStaScaricandoAutomaticamente() {
+    public boolean getStaScaricandoAutomaticamente() {
         return StaScaricandoAutomaticamente;
     }
 
-    public void setStaScaricandoAutomaticamente(Boolean staScaricandoAutomaticamente) {
+    public void setStaScaricandoAutomaticamente(boolean staScaricandoAutomaticamente) {
         StaScaricandoAutomaticamente = staScaricandoAutomaticamente;
     }
 
@@ -626,19 +626,19 @@ public class VariabiliStaticheGlobali {
         this.sUltimaCanzoneSuonata = sUltimaCanzoneSuonata;
     }
 
-    public Boolean getDisegnaMascheraHomeCompleta() {
+    public boolean getDisegnaMascheraHomeCompleta() {
         return DisegnaMascheraHomeCompleta;
     }
 
-    public void setDisegnaMascheraHomeCompleta(Boolean disegnaMascheraHomeCompleta) {
+    public void setDisegnaMascheraHomeCompleta(boolean disegnaMascheraHomeCompleta) {
         DisegnaMascheraHomeCompleta = disegnaMascheraHomeCompleta;
     }
 
-    // public Boolean getMessaImmagineVuota() {
+    // public boolean getMessaImmagineVuota() {
     //     return MessaImmagineVuota;
     // }
 //
-    // public void setMessaImmagineVuota(Boolean messaImmagineVuota) {
+    // public void setMessaImmagineVuota(boolean messaImmagineVuota) {
     //     MessaImmagineVuota = messaImmagineVuota;
     // }
 
@@ -658,19 +658,19 @@ public class VariabiliStaticheGlobali {
         BranoAutomatico = branoAutomatico;
     }
 
-    // public Boolean getNonFermareDownload() {
+    // public boolean getNonFermareDownload() {
     //     return NonFermareDownload;
     // }
 
-    // public void setNonFermareDownload(Boolean nonFermareDownload) {
+    // public void setNonFermareDownload(boolean nonFermareDownload) {
     //     NonFermareDownload = nonFermareDownload;
     // }
 
-    public Boolean getHaScaricatoAutomaticamente() {
+    public boolean getHaScaricatoAutomaticamente() {
         return HaScaricatoAutomaticamente;
     }
 
-    public void setHaScaricatoAutomaticamente(Boolean haScaricatoAutomaticamente) {
+    public void setHaScaricatoAutomaticamente(boolean haScaricatoAutomaticamente) {
         HaScaricatoAutomaticamente = haScaricatoAutomaticamente;
     }
 
@@ -698,11 +698,11 @@ public class VariabiliStaticheGlobali {
         UltimaDataCaricamento = ultimaDataCaricamento;
     }
 
-    public Boolean getHaCaricatoTuttiIDettagliDelBrano() {
+    public boolean getHaCaricatoTuttiIDettagliDelBrano() {
         return HaCaricatoTuttiIDettagliDelBrano;
     }
 
-    public void setHaCaricatoTuttiIDettagliDelBrano(Boolean haCaricatoTuttiIDettagliDelBrano) {
+    public void setHaCaricatoTuttiIDettagliDelBrano(boolean haCaricatoTuttiIDettagliDelBrano) {
         HaCaricatoTuttiIDettagliDelBrano = haCaricatoTuttiIDettagliDelBrano;
     }
 
@@ -722,19 +722,19 @@ public class VariabiliStaticheGlobali {
         this.txtTraffico = txtTraffico;
     }
 
-    public Boolean getGiaEntrato() {
+    public boolean getGiaEntrato() {
         return GiaEntrato;
     }
 
-    public void setGiaEntrato(Boolean giaEntrato) {
+    public void setGiaEntrato(boolean giaEntrato) {
         GiaEntrato = giaEntrato;
     }
 
-    public Boolean getCuffieInserite() {
+    public boolean getCuffieInserite() {
         return CuffieInserite;
     }
 
-    public void setCuffieInserite(Boolean cuffieInserite) {
+    public void setCuffieInserite(boolean cuffieInserite) {
         CuffieInserite = cuffieInserite;
     }
 
@@ -778,11 +778,11 @@ public class VariabiliStaticheGlobali {
         this.log = l;
     }
 
-    public Boolean getStaSuonando() {
+    public boolean getStaSuonando() {
         return StaSuonando;
     }
 
-    public void setStaSuonando(Boolean staSuonando) {
+    public void setStaSuonando(boolean staSuonando) {
         StaSuonando = staSuonando;
     }
 
@@ -794,11 +794,11 @@ public class VariabiliStaticheGlobali {
         CaroselloBloccatoDaAutomatico = caroselloBloccatoDaAutomatico;
     }
 
-    public Boolean getBloccaCarosello() {
+    public boolean getBloccaCarosello() {
         return bloccaCarosello;
     } */
 
-    /* public void setBloccaCarosello(Boolean bloccaCarosello) {
+    /* public void setBloccaCarosello(boolean bloccaCarosello) {
         this.bloccaCarosello = bloccaCarosello;
         NetThread.getInstance().setCaroselloBloccato(bloccaCarosello);
 

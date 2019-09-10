@@ -24,7 +24,7 @@ import static android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNO
 import static android.telephony.CellSignalStrength.SIGNAL_STRENGTH_POOR;
 
 public class NetThreadNuovo {
-    private Boolean stopNet;
+    private boolean stopNet;
     private Timer tTmrBattery = null;
 
     private boolean OkNet = true;
@@ -45,7 +45,7 @@ public class NetThreadNuovo {
     private Integer conta=0;
     private Integer quanti=-1;
     private Integer QuantiSecondiSenzaRete = 0;
-    // private Boolean RetePresente=true;
+    // private boolean RetePresente=true;
     private ConnectivityManager connectivityManager;
 
     // private NetThreadNuovo() {

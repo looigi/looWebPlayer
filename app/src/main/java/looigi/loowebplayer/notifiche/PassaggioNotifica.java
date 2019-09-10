@@ -27,7 +27,7 @@ public class PassaggioNotifica extends Activity {
 		}
 
 		if (action!=null) {
-			Boolean Chiude=true;
+			boolean Chiude=true;
 
 			switch (action) {
 				case "apre":

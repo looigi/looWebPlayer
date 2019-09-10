@@ -220,7 +220,8 @@ public class MainActivity extends AppCompatActivity
 
         VariabiliStaticheHome.getInstance().ScriveOperazioniWEB();
 
-        if (VariabiliStaticheGlobali.getInstance().getGiaEntrato() == null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
+        if (!VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
+        // if (VariabiliStaticheGlobali.getInstance().getGiaEntrato() == null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
             Fragment fragment = new Splash();
             FragmentTransaction ft = vg.getFragmentActivityPrincipale().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);

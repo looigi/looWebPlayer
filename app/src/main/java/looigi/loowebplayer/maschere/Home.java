@@ -55,8 +55,8 @@ import looigi.loowebplayer.utilities.Utility;
 public class Home extends android.support.v4.app.Fragment {
     // private Context context;
     private static String TAG = NomiMaschere.getInstance().getHome();
-    private Boolean TestoMostrato=false;
-    private Boolean DettagliMostrati=false;
+    private boolean TestoMostrato=false;
+    private boolean DettagliMostrati=false;
     private boolean haCliccatoSuBackground=false;
 
     @Override

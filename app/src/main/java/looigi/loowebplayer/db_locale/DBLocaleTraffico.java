@@ -183,7 +183,7 @@ public class DBLocaleTraffico {
                     id
             };
 
-            Boolean r = myDB.update(DATABASE_TABELLA, args, "id=?", whereArgs) > 0;
+            boolean r = myDB.update(DATABASE_TABELLA, args, "id=?", whereArgs) > 0;
 
             return r;
         } else {

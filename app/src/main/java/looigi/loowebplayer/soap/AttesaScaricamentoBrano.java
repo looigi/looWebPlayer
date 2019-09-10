@@ -160,7 +160,7 @@ public class AttesaScaricamentoBrano {
 		private String[] Parametri;
 		private Integer Timeout;
 		private String SOAP_ACTION;
-		private Boolean Errore;
+		private boolean Errore;
 		private String result="";
 		private int NumeroBrano;
 		private int NumeroOperazione;

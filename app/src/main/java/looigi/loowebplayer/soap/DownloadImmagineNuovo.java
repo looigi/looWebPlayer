@@ -27,8 +27,8 @@ import looigi.loowebplayer.utilities.Utility;
 public class DownloadImmagineNuovo {
     private String Path;
     private int NumBrano;
-    private Boolean inSfuma=false;
-    private Boolean ImmagineUtente =false;
+    private boolean inSfuma=false;
+    private boolean ImmagineUtente =false;
     private static DownloadImageFile downloadFile;
     private String Url;
     private long lastTimePressed = 0;
@@ -51,11 +51,11 @@ public class DownloadImmagineNuovo {
         NumBrano = numeroBrano;
     }
 
-    public void setInSfuma(Boolean i) {
+    public void setInSfuma(boolean i) {
         inSfuma = i;
     }
 
-    public void setImmagineUtente(Boolean i) {
+    public void setImmagineUtente(boolean i) {
         ImmagineUtente = i;
     }
 

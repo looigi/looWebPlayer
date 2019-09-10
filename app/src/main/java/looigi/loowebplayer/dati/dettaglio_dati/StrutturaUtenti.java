@@ -4,9 +4,9 @@ public class StrutturaUtenti {
     private int idUtente;
     private String Utente;
     private String Password;
-    private Boolean Amministratore;
+    private boolean Amministratore;
     private String CartellaBase;
-    // private Boolean CompressioneMP3=true;
+    // private boolean CompressioneMP3=true;
     // private String Qualita="96";
 
     // public String getQualita() {
@@ -17,11 +17,11 @@ public class StrutturaUtenti {
     //     Qualita = qualita;
     // }
 //
-    // public Boolean getCompressioneMP3() {
+    // public boolean getCompressioneMP3() {
     //     return CompressioneMP3;
     // }
 //
-    // public void setCompressioneMP3(Boolean compressioneMP3) {
+    // public void setCompressioneMP3(boolean compressioneMP3) {
     //     CompressioneMP3 = compressioneMP3;
     // }
 
@@ -41,11 +41,11 @@ public class StrutturaUtenti {
         Password = password;
     }
 
-    public Boolean isAmministratore() {
+    public boolean isAmministratore() {
         return Amministratore;
     }
 
-    public void setAmministratore(Boolean amministratore) {
+    public void setAmministratore(boolean amministratore) {
         Amministratore = amministratore;
     }
 

@@ -18,7 +18,7 @@ public class VariabiliStaticheEqualizzatore {
 
     private int[] Valori=new int[8];
     private int BassBoost=0;
-    private Boolean Abilitato=true;
+    private boolean Abilitato=true;
     private android.media.audiofx.Equalizer eq;
     private android.media.audiofx.BassBoost bb = null;
 
@@ -50,11 +50,11 @@ public class VariabiliStaticheEqualizzatore {
         BassBoost = bassBoost;
     }
 
-    public Boolean getAbilitato() {
+    public boolean getAbilitato() {
         return Abilitato;
     }
 
-    public void setAbilitato(Boolean abilitato) {
+    public void setAbilitato(boolean abilitato) {
         Abilitato = abilitato;
     }
 

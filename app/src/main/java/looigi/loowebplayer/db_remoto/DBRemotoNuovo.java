@@ -275,7 +275,7 @@ public class DBRemotoNuovo {
 	}
 
 	public void RitornaBranoBackground(Context context, String Dire, String Artista, String Album,
-							String Brano, String Converte, String Qualita, int NumeroBrano, Boolean NonFernmareDownload,
+							String Brano, String Converte, String Qualita, int NumeroBrano, boolean NonFernmareDownload,
 									   final int NumeroOperazione) {
 		// if (!VariabiliStaticheGlobali.getInstance().isStaScaricandoBrano()) {
 			VariabiliStaticheGlobali.getInstance().setStaScaricandoBrano(true);

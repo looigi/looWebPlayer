@@ -33,7 +33,7 @@ public class GestioneListaBrani {
     private Runnable SfumaOutMp3 =null;
     private Handler hSfumaOutMP3;
     private boolean VecchioStaSuonando;
-    // private Boolean StavaSuonando;
+    // private boolean StavaSuonando;
     // private int BranoSuccessivo;
     // private int chiacchiera=0;
     // private int SecondiDiAttesa;
@@ -49,7 +49,7 @@ public class GestioneListaBrani {
         return instance;
     }
 
-    // public void setStavaSuonando(Boolean stavaSuonando) {
+    // public void setStavaSuonando(boolean stavaSuonando) {
     //     StavaSuonando = stavaSuonando;
     // }
 
@@ -102,7 +102,7 @@ public class GestioneListaBrani {
         ModalitaAvanzamento = modalitaAvanzamento;
     }
 
-    private int ControllaProssimoBrano(Boolean Avanza) {
+    private int ControllaProssimoBrano(boolean Avanza) {
         int Brano = -1;
 
         if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() != -1) {
@@ -328,7 +328,7 @@ public class GestioneListaBrani {
         }
     }
 
-    public int RitornaNumeroProssimoBranoNuovo(final Boolean Avanza) {
+    public int RitornaNumeroProssimoBranoNuovo(final boolean Avanza) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         // ceRete = false;

@@ -10,7 +10,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAlbum;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaConfig;
 
 public class DatiGenerali {
-    private Boolean ValoriCaricati=false;
+    private boolean ValoriCaricati=false;
     private List<StrutturaBrani> Brani=new ArrayList<>();
     private List<StrutturaAlbum> Album =new ArrayList<>();
     private List<StrutturaArtisti> Artisti=new ArrayList<>();
@@ -50,11 +50,11 @@ public class DatiGenerali {
         Configurazione = configurazione;
     }
 
-    public Boolean getValoriCaricati() {
+    public boolean getValoriCaricati() {
         return ValoriCaricati;
     }
 
-    public void setValoriCaricati(Boolean valoriCaricati) {
+    public void setValoriCaricati(boolean valoriCaricati) {
         ValoriCaricati = valoriCaricati;
     }
 

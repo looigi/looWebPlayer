@@ -16,9 +16,9 @@ public class GestoreCuffie extends BroadcastReceiver {
             switch (state) {
             case 0:
                 // Log.d(TAG, "Headset is unplugged");
-            	if (VariabiliStaticheGlobali.getInstance().getCuffieInserite()==null) {
-                	VariabiliStaticheGlobali.getInstance().setCuffieInserite(false);
-            	}
+            	// if (VariabiliStaticheGlobali.getInstance().getCuffieInserite()==null) {
+                // 	VariabiliStaticheGlobali.getInstance().setCuffieInserite(false);
+            	// }
             	
             	if (VariabiliStaticheGlobali.getInstance().getCuffieInserite()) {
                     GestioneOggettiVideo.getInstance().PlayBrano(false);

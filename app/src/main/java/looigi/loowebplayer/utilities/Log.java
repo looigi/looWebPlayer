@@ -125,7 +125,7 @@ public class Log {
 		}
 
 		private void Ciclo() {
-			Boolean Cont=true;
+			boolean Cont=true;
 
 			while (Cont) {
 				String s;

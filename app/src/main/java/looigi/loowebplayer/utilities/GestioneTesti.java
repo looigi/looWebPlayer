@@ -44,7 +44,7 @@ public class GestioneTesti {
                 Bellezza);
     }
 
-    public void SettaTesto(Boolean Pulisce) {
+    public void SettaTesto(boolean Pulisce) {
         String sTesto = "";
 
         VariabiliStaticheHome.getInstance().getImgLinguettaTesto().setVisibility(LinearLayout.GONE);
@@ -72,7 +72,7 @@ public class GestioneTesti {
         VariabiliStaticheHome.getInstance().getTxtTesto().setText(sTesto);
     }
 
-    // public String RitornaTestoDaSD(String Artista, String Album, String Brano, Boolean Refresh, int NumeroOperazione) {
+    // public String RitornaTestoDaSD(String Artista, String Album, String Brano, boolean Refresh, int NumeroOperazione) {
     public String RitornaTestoDaSD(String Artista, String Album, String Brano, int NumeroOperazione) {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna testo da SD. "+Artista+" "+Album+" "+Brano);

@@ -85,7 +85,7 @@ public class VariabiliStaticheHome {
     private ImageView imgBackground;
     private ImageView imgRefresh;
     // private ImageView imgLoadBrano;
-    private Boolean PuoAvanzare;
+    private boolean PuoAvanzare;
     private TextView txtTitoloBackground;
     private LinearLayout layStelle;
     private int QuanteAscoltate=0;
@@ -214,7 +214,7 @@ public class VariabiliStaticheHome {
         this.txtTitoloBackground = txtTitoloBackground;
     }
 
-    public Boolean getPuoAvanzare() {
+    public boolean getPuoAvanzare() {
         return PuoAvanzare;
     }
 
@@ -226,7 +226,7 @@ public class VariabiliStaticheHome {
         this.imgRefresh = imgRefresh;
     }
 
-    public void setPuoAvanzare(Boolean puoAvanzare) {
+    public void setPuoAvanzare(boolean puoAvanzare) {
         PuoAvanzare = puoAvanzare;
     }
 
@@ -395,7 +395,7 @@ public class VariabiliStaticheHome {
         }
     }
 
-    public void EliminaOperazioneWEB(final int Numero, Boolean Immediato)  {
+    public void EliminaOperazioneWEB(final int Numero, boolean Immediato)  {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
             Runnable runEliminaBarra;
             Handler hEliminaBarra = new Handler(Looper.getMainLooper());
@@ -417,7 +417,7 @@ public class VariabiliStaticheHome {
         }
     }
 
-    synchronized public int AggiungeOperazioneWEB(int NumeroOperazione, Boolean Errore, String Operazione) {
+    synchronized public int AggiungeOperazioneWEB(int NumeroOperazione, boolean Errore, String Operazione) {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
             if (Operazione == null) {
                 return -1;

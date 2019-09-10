@@ -29,7 +29,7 @@ public class GestioneOggettiVideo {
         return instance;
     }
 
-    public void ControllaAvantiBrano(int NumeroBrano, Boolean VisualizzaMessaggio) {
+    public void ControllaAvantiBrano(int NumeroBrano, boolean VisualizzaMessaggio) {
         if (NumeroBrano>-1) {
             if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali()
@@ -79,7 +79,7 @@ public class GestioneOggettiVideo {
         }
     }
 
-    public void AccendeSpegneTastiAvantiIndietro(Boolean Accende) {
+    public void AccendeSpegneTastiAvantiIndietro(boolean Accende) {
         if (Accende) {
             VariabiliStaticheHome.getInstance().getImgAvanti().setImageDrawable(VariabiliStaticheGlobali.getInstance().getAvanti());
             VariabiliStaticheHome.getInstance().getImgIndietro().setImageDrawable(VariabiliStaticheGlobali.getInstance().getIndietro());
@@ -108,7 +108,7 @@ public class GestioneOggettiVideo {
         }
     }
 
-    public void PlayBrano(Boolean Acceso) {
+    public void PlayBrano(boolean Acceso) {
         VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
         if (vh.getPuoAvanzare()) {

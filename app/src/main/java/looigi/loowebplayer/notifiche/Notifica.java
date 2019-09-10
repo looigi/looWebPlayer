@@ -40,10 +40,10 @@ public class Notifica {
     private String Immagine;
     private String Artista;
     private String Album;
-    private Boolean inDownload=false;
+    private boolean inDownload=false;
     private static final int NOTIF_ID = 272727;
 
-    public void setInDownload(Boolean inDownload) {
+    public void setInDownload(boolean inDownload) {
         this.inDownload = inDownload;
     }
 

@@ -52,7 +52,7 @@ public class Traffico {
     }
 
     public void SalvaDBTraffico() {
-        Boolean Ok = true;
+        boolean Ok = true;
 
         Date todayDate = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
