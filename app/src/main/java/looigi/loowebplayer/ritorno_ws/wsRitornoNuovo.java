@@ -244,7 +244,7 @@ public class wsRitornoNuovo {
                 GestioneTesti gt = new GestioneTesti();
                 gt.SettaTesto(true);
             } else {
-                String t[] = Appoggio.split(";", -1);
+                String[] t = Appoggio.split(";", -1);
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna dettaglio brano. Oggetti: " + Integer.toString(t.length));
 

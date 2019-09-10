@@ -49,10 +49,13 @@ public class ScaricoBranoEAttesa {
             url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
         }
 
-        if (Brano.length > 2) {
+        if (Brano.length > 1) {
             String sBrano = Brano[campi];
             String sAlbum = Brano[campi - 1];
-            String sArtista = Brano[campi - 2];
+            String sArtista = "";
+            if (Brano.length > 2) {
+                sArtista = Brano[campi - 2];
+            }
 
             if (!url.contains(sArtista) && !url.contains(sAlbum)) {
                 url += sArtista + "/" + sAlbum + "/" + sBrano;

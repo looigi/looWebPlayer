@@ -526,6 +526,10 @@ public class GestioneListaBrani {
         } else {
             int N = BranoSenzarete();
 
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Impostato brano senza rete: " + Integer.toString(N));
+
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
         }
     }
