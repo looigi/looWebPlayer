@@ -425,7 +425,7 @@ public class Home extends android.support.v4.app.Fragment {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Riempio strutture per valori non caricati");
                         RiempieListaInBackground r = new RiempieListaInBackground();
-                        r.RiempieStrutture(false);
+                        r.RiempieStrutture(false, false);
                     } else {
                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Carica brano");

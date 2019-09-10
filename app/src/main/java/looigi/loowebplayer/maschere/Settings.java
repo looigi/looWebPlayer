@@ -235,7 +235,7 @@ public class Settings extends Fragment {
                         vg.setValoreBellezza(Stelle.get(position));
 
                         RiempieListaInBackground r = new RiempieListaInBackground();
-                        r.RiempieStrutture(true);
+                        r.RiempieStrutture(true, false);
                     }
                 }
 
@@ -448,7 +448,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                 }
             });
             if (bStelle) {
@@ -473,7 +473,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                 }
             });
             if (bStelle) {
@@ -503,7 +503,7 @@ public class Settings extends Fragment {
                     ImpostaMascheraOrdinamento(vg.getOrdinamento());
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                 }
             });
 
@@ -540,7 +540,7 @@ public class Settings extends Fragment {
                     vg.setUsaScaricati(isChecked);
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                 }
             });
 
@@ -821,7 +821,7 @@ public class Settings extends Fragment {
                     vg.setFiltro("");
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                     GestioneOggettiVideo.getInstance().ScriveFiltro();
 
                     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
@@ -854,7 +854,7 @@ public class Settings extends Fragment {
                     vg.setCrescente(isChecked);
 
                     RiempieListaInBackground r = new RiempieListaInBackground();
-                    r.RiempieStrutture(true);
+                    r.RiempieStrutture(true, false);
                 }
             });
 
@@ -1097,7 +1097,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(0);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture(true);
+            r.RiempieStrutture(true, false);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);
@@ -1113,7 +1113,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(1);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture(true);
+            r.RiempieStrutture(true, false);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);
@@ -1129,7 +1129,7 @@ public class Settings extends Fragment {
             ImpostaMascheraOrdinamento(2);
 
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture(true);
+            r.RiempieStrutture(true, false);
 
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                     "Impostato ordinamento e sistemata lista brani", false, VariabiliStaticheGlobali.NomeApplicazione);

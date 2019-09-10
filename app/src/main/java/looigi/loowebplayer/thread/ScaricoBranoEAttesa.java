@@ -71,7 +71,7 @@ public class ScaricoBranoEAttesa {
 
             if (s == null) {
                 RiempieListaInBackground r = new RiempieListaInBackground();
-                r.RiempieStrutture(true);
+                r.RiempieStrutture(true, true);
 
                 s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
             }
@@ -100,7 +100,8 @@ public class ScaricoBranoEAttesa {
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
                 VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Struttura vuota in scarica brano. Numero brano: " + Integer.toString(NumeroBrano));
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Struttura vuota in scarica brano. Numero brano: " + Integer.toString(NumeroBrano));
                 // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
                 //         "Struttura vuota in ScaricaBrano. Numero Brano: " + NumeroBrano,
                 //         true,

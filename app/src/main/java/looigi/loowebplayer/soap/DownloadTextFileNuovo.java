@@ -361,7 +361,7 @@ public class DownloadTextFileNuovo {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Scarico del testo. Richiamo RiempieStrutture in Home");
                         RiempieListaInBackground r = new RiempieListaInBackground();
-                        r.RiempieStrutture(true);
+                        r.RiempieStrutture(true, false);
                         // MainActivity.ScriveBraniInLista();
                     }
                 } else {

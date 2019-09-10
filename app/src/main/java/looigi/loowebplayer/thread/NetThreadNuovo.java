@@ -30,9 +30,9 @@ public class NetThreadNuovo {
     private boolean OkNet = true;
     private boolean ScreenOn = true;
     // private static NetThreadNuovo instance = null;
-    // private int signalStrengthValue;
-    // private TelephonyManager manager;
-    // private PhoneStateListener phoneListener;
+    private int signalStrengthValue;
+    private TelephonyManager manager;
+    private PhoneStateListener phoneListener;
     private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
@@ -78,12 +78,12 @@ public class NetThreadNuovo {
 
                 this.stopNet = false;
 
-                // phoneListener = new myPhoneStateListener();
-                // manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                //         .getSystemService(Context.TELEPHONY_SERVICE);
-                // manager.listen(phoneListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                phoneListener = new myPhoneStateListener();
+                manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+                manager.listen(phoneListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-                // setupSignalStrength();
+                setupSignalStrength();
 
                 // if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() == 2) {
                 //     SecondiDiAttesa = 1000;
@@ -195,6 +195,7 @@ public class NetThreadNuovo {
     }
 
     private void getGsmLevel() {
+        String Level ="";
         if (LivelloSegnale!=null) {
             // int level;
             // ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
@@ -203,52 +204,60 @@ public class NetThreadNuovo {
             // asu = 99 is a special case, where the signal strength is unknown.
             int asu = LivelloSegnale.getGsmSignalStrength();
 
-            VariabiliStaticheHome.getInstance().getTxtLivelloSegnale().setText("Liv.Segnale: " + Integer.toString(asu));
-
             if (asu <= 1 || asu == 99) {
                 OkNet = false;
                 QuantiSecondiSenzaRete ++;
+                Level = Integer.toString(asu) + "/1";
                 // level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
             } else if (asu >= 12) {
                 OkNet = true;
                 QuantiSecondiSenzaRete = 0;
+                Level = Integer.toString(asu) + "/5";
                 // level = SIGNAL_STRENGTH_GREAT;
             } else if (asu >= 8) {
                 OkNet = true;
                 QuantiSecondiSenzaRete = 0;
+                Level = Integer.toString(asu) + "/4";
                 // level = SIGNAL_STRENGTH_GOOD;
             } else if (asu >= 5) {
                 OkNet = true;
                 QuantiSecondiSenzaRete = 0;
+                Level = Integer.toString(asu) + "/3";
                 // level = SIGNAL_STRENGTH_MODERATE;
             } else {
-                OkNet = false;
-                QuantiSecondiSenzaRete ++;
+                OkNet = true;
+                QuantiSecondiSenzaRete = 0;
+                Level = Integer.toString(asu) + "/2";
                 // level = SIGNAL_STRENGTH_POOR;
             }
         } else {
             OkNet = true;
             QuantiSecondiSenzaRete = 0;
+            Level = "?/6";
+        }
+
+        if (VariabiliStaticheHome.getInstance().getTxtLivelloSegnale()!=null) {
+            VariabiliStaticheHome.getInstance().getTxtLivelloSegnale().setText("Liv.Segnale: " + Level);
         }
     }
 
-    // private void setupSignalStrength() {
-    //     manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
-    //     phoneListener = new PhoneStateListener() {
-    //         @Override
-    //         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-    //             if (manager!=null && manager.getNetworkOperator().equals("")) {
-    //                 // signalIcon.setVisibility(View.GONE);
-    //             } else {
-    //                 // signalIcon.setVisibility(View.VISIBLE);
-    //                 if (signalStrength!=null) {
-    //                     LivelloSegnale = signalStrength;
-    //                 }
-    //             }
-    //         }
-    //     };
-    //     manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-    // }
+    private void setupSignalStrength() {
+        manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        phoneListener = new PhoneStateListener() {
+            @Override
+            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                if (manager!=null && manager.getNetworkOperator().equals("")) {
+                    // signalIcon.setVisibility(View.GONE);
+                } else {
+                    // signalIcon.setVisibility(View.VISIBLE);
+                    if (signalStrength!=null) {
+                        LivelloSegnale = signalStrength;
+                    }
+                }
+            }
+        };
+        manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+    }
 
   public boolean isOk() {
       return OkNet;
@@ -266,17 +275,17 @@ public class NetThreadNuovo {
         }
     }
 
-    // private class myPhoneStateListener extends PhoneStateListener {
-    //     public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-    //         super.onSignalStrengthsChanged(signalStrength);
-    //         if (signalStrength.isGsm()) {
-    //             if (signalStrength.getGsmSignalStrength() != 99)
-    //                 signalStrengthValue = signalStrength.getGsmSignalStrength() * 2 - 113;
-    //             else
-    //                 signalStrengthValue = signalStrength.getGsmSignalStrength();
-    //         } else {
-    //             signalStrengthValue = signalStrength.getCdmaDbm();
-    //         }
-    //     }
-    // }
+    private class myPhoneStateListener extends PhoneStateListener {
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+            if (signalStrength.isGsm()) {
+                if (signalStrength.getGsmSignalStrength() != 99)
+                    signalStrengthValue = signalStrength.getGsmSignalStrength() * 2 - 113;
+                else
+                    signalStrengthValue = signalStrength.getGsmSignalStrength();
+            } else {
+                signalStrengthValue = signalStrength.getCdmaDbm();
+            }
+        }
+    }
 }

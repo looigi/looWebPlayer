@@ -106,7 +106,7 @@ public class DialogFiltro
 
             GestioneOggettiVideo.getInstance().ScriveFiltro();
             RiempieListaInBackground r = new RiempieListaInBackground();
-            r.RiempieStrutture(true);
+            r.RiempieStrutture(true, false);
 
             // Libreria.ReimpostaListe();
             VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);
@@ -121,7 +121,7 @@ public class DialogFiltro
         @Override
         public void onClick(DialogInterface dialog, int which)
         {
-            Boolean Ok = true;
+            boolean Ok = true;
             String f = edtBrano.getText().toString();
 
             if (Cosa.equals("BRANO")) {
@@ -136,7 +136,7 @@ public class DialogFiltro
                 // ARTISTA_Pippo_§BRANO_W la pippa_§
                 String Filtro = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getFiltro();
                 if (Filtro.contains("§")) {
-                    String Campi[] = Filtro.split("§");
+                    String[] Campi = Filtro.split("§");
                     for (String c : Campi) {
                         if (c.contains(Cosa)) {
                             c = Tipo + "_" + Cosa.replace("_","***UNDERLINE***") + "_§";
@@ -158,7 +158,7 @@ public class DialogFiltro
 
                 GestioneOggettiVideo.getInstance().ScriveFiltro();
                 RiempieListaInBackground r = new RiempieListaInBackground();
-                r.RiempieStrutture(true);
+                r.RiempieStrutture(true, false);
 
                 // Libreria.ReimpostaListe();
                 VariabiliStaticheGlobali.getInstance().setGiaEntrato(true);
