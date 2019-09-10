@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
@@ -27,6 +29,8 @@ public class NetThreadNuovo {
     private boolean stopNet;
     private Timer tTmrBattery = null;
 
+    private Runnable runRiga;
+    private Handler hSelezionaRiga;
     private boolean OkNet = true;
     private boolean ScreenOn = true;
     // private static NetThreadNuovo instance = null;
@@ -78,12 +82,14 @@ public class NetThreadNuovo {
 
                 this.stopNet = false;
 
-                phoneListener = new myPhoneStateListener();
-                manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                        .getSystemService(Context.TELEPHONY_SERVICE);
-                manager.listen(phoneListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+                    phoneListener = new myPhoneStateListener();
+                    manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                            .getSystemService(Context.TELEPHONY_SERVICE);
+                    manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-                setupSignalStrength();
+                    setupSignalStrength();
+                }
 
                 // if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() == 2) {
                 //     SecondiDiAttesa = 1000;
@@ -124,7 +130,9 @@ public class NetThreadNuovo {
 
         OkNet = haveConnectedWifi || haveConnectedMobile;
         if (OkNet && !haveConnectedWifi) {
-            getGsmLevel();
+            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+                getGsmLevel();
+            }
         }
 
         /* switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
@@ -236,8 +244,15 @@ public class NetThreadNuovo {
             Level = "?/6";
         }
 
+        final String sLevel = Level;
+
         if (VariabiliStaticheHome.getInstance().getTxtLivelloSegnale()!=null) {
-            VariabiliStaticheHome.getInstance().getTxtLivelloSegnale().setText("Liv.Segnale: " + Level);
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    VariabiliStaticheHome.getInstance().getTxtLivelloSegnale().setText("Liv.Segnale: " + sLevel);
+                }
+            });
         }
     }
 

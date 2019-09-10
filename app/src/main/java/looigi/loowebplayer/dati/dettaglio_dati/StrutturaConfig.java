@@ -90,7 +90,7 @@ public class StrutturaConfig {
         String sPronuncia = "S"; if (!PronunciaOperazioni) sPronuncia="N";
         String sMembri = "S"; if (!Membri) sMembri="N";
         String sSfumaBrano = "S"; if (!SfumaBrano) sSfumaBrano="S";
-        String sControlloRete = "S"; if (!ControlloRete) sControlloRete="S";
+        String sControlloRete = "S"; if (!ControlloRete) sControlloRete="N";
         String toMP3 = Integer.toString(VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3());
         String toLB = Integer.toString(VariabiliStaticheGlobali.getInstance().getTimeOutListaBrani());
         String toAMP3 = Integer.toString(VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3());
