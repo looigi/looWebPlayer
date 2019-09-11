@@ -228,7 +228,7 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);
 
-            // vh.getpMP3().setVisibility(LinearLayout.GONE);
+            vh.getpMP3().setVisibility(LinearLayout.GONE);
             // vh.getImgLinguettaTesto().setVisibility(LinearLayout.GONE);
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
@@ -248,16 +248,21 @@ public class Home extends android.support.v4.app.Fragment {
             //     layTraffico.setVisibility(LinearLayout.GONE);
             // }
             Traffico.getInstance().ModificaTraffico(VariabiliStaticheGlobali.getInstance().getBytesScaricati());
+            vh.getLayTesto().setVisibility(LinearLayout.GONE);
 
-            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMascheraTestoAperta()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Apro maschera testo per config");
+            /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMascheraTestoAperta()) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                        .getEnclosingMethod().getName(),
+                        "Apro maschera testo per config");
                 TestoMostrato=true;
                 vh.getLayTesto().setVisibility(LinearLayout.VISIBLE);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Chiudo maschera testo per config");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                        .getEnclosingMethod().getName(),
+                        "Chiudo maschera testo per config");
                 TestoMostrato=false;
                 vh.getLayTesto().setVisibility(LinearLayout.GONE);
-            }
+            } */
 
             ImageView imgInglese = view.findViewById(R.id.imgInglese);
             imgInglese.setOnClickListener(new View.OnClickListener() {
