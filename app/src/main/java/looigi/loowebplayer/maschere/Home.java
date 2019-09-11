@@ -228,7 +228,7 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
             vh.getTxtTitoloBackground().setVisibility(LinearLayout.GONE);
 
-            // vh.getpMP3().setVisibility(LinearLayout.GONE);
+            vh.getpMP3().setVisibility(LinearLayout.GONE);
             // vh.getImgLinguettaTesto().setVisibility(LinearLayout.GONE);
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
