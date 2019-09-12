@@ -53,49 +53,52 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
-        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-        //     }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
-        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-        //     return;
-        // }
-        // lastTimePressed = System.currentTimeMillis();
+            // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
+            //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+            //     return;
+            // }
+            // lastTimePressed = System.currentTimeMillis();
 
-        this.Url=sUrl;
-        // this.ApriDialog=ApriDialog;
-        this.NumeroOperazione=NOperazione;
-        this.Tentativo = 0;
+            this.Url = sUrl;
+            // this.ApriDialog=ApriDialog;
+            this.NumeroOperazione = NOperazione;
+            this.Tentativo = 0;
 
-        // String Chiave = this.Url;
-        // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
-        //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
-        //         !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
-        //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
+            // String Chiave = this.Url;
+            // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
+            //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() &&
+            //         !VariabiliStaticheGlobali.getInstance().getChiaveDLText().equals(Chiave))) {
+            //     VariabiliStaticheGlobali.getInstance().setChiaveDLText(Chiave);
 
             // ApriDialog();
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-        GestioneCPU.getInstance().AttivaCPU();
+            GestioneCPU.getInstance().AttivaCPU();
 
-        downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
-        if (ceRete) {
-            downloadFile.execute(Url);
-        } else {
-            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Download testo mancanza di rete");
-            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+            downloadFile = new DownloadTxtFile(NumeroOperazione, Path, PathNomeFile, ApriDialog, tOperazione, Url);
+            if (ceRete) {
+                downloadFile.execute(Url);
+            } else {
+                VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Download testo mancanza di rete");
+                VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "DL Text mancanza di rete");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "DL Text mancanza di rete");
 
-            StoppaEsecuzione();
+                StoppaEsecuzione();
+            }
+            // } else {
+            //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //             "Skippata operazione DL Text uguale: "+Chiave);
+            // }
         }
-        // } else {
-        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-        //             "Skippata operazione DL Text uguale: "+Chiave);
-        // }
     }
 
     public void StoppaEsecuzione() {

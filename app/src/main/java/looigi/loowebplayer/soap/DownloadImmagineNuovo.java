@@ -60,54 +60,57 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
-        // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-        //     }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
-        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
-        //     return;
-        // }
-        // lastTimePressed = System.currentTimeMillis();
-        this.Tentativo = 0;
+            // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
+            //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
+            //     return;
+            // }
+            // lastTimePressed = System.currentTimeMillis();
+            this.Tentativo = 0;
 
-        this.Url=sUrl;
-        // this.TIMEOUT = TO;
+            this.Url = sUrl;
+            // this.TIMEOUT = TO;
 
-        // this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
-        // this.Tentativo = 0;
+            // this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            // this.Tentativo = 0;
 
-        // String Chiave = this.Url+";"+sOperazione;
-        // if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
-        //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
-        //         !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
-        //     VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
+            // String Chiave = this.Url+";"+sOperazione;
+            // if (VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() ||
+            //         (!VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().isEmpty() &&
+            //         !VariabiliStaticheGlobali.getInstance().getChiaveDLImmagine().equals(Chiave))) {
+            //     VariabiliStaticheGlobali.getInstance().setChiaveDLImmagine(Chiave);
 
-        //    ApriDialog();
+            //    ApriDialog();
 
             String sUrl2 = Url.substring(9, Url.length());
             Url = Url.substring(0, 9);
             sUrl2 = sUrl2.replace("//", "/");
             Url += sUrl2;
 
-        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-        GestioneCPU.getInstance().AttivaCPU();
+            GestioneCPU.getInstance().AttivaCPU();
 
-        downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url, ImmagineUtente);
-        if (ceRete) {
-            downloadFile.execute(Url);
-        } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                    "DL Immagine mancanza di rete");
+            downloadFile = new DownloadImageFile(NumOperazione, NumBrano, TO, inSfuma, Path, Url, ImmagineUtente);
+            if (ceRete) {
+                downloadFile.execute(Url);
+            } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "DL Immagine mancanza di rete");
 
-            StoppaEsecuzione();
+                StoppaEsecuzione();
+            }
+            // } else {
+            //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //             "Skippata operazione DL Immagine uguale: "+Chiave);
+            // }
         }
-        // } else {
-        //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-        //             "Skippata operazione DL Immagine uguale: "+Chiave);
-        // }
     }
 
     public void StoppaEsecuzione() {

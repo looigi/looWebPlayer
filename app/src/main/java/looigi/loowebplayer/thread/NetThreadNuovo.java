@@ -129,10 +129,8 @@ public class NetThreadNuovo {
         }
 
         OkNet = haveConnectedWifi || haveConnectedMobile;
-        if (OkNet && !haveConnectedWifi) {
-            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
-                getGsmLevel();
-            }
+        if (OkNet && !haveConnectedWifi && ScreenOn && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+            getGsmLevel();
         }
 
         /* switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {

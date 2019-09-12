@@ -188,61 +188,64 @@ public class GestioneTesti {
     }
 
     public void ScaricaTestoDaWeb(StrutturaBrani sb) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(),
-                "Ritorna dettaglio brano. Scarico testo");
+        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Ritorna dettaglio brano. Scarico testo");
 
-        String sNomeBrano = sb.getNomeBrano();
-        String ssArtista = "";
-        if (sNomeBrano.contains("-")) {
-            String[] A = sNomeBrano.split("-");
-            sNomeBrano = A[1].trim();
-            if (!Utility.getInstance().isNumeric(A[0])) {
-                ssArtista = A[0].trim();
+            String sNomeBrano = sb.getNomeBrano();
+            String ssArtista = "";
+            if (sNomeBrano.contains("-")) {
+                String[] A = sNomeBrano.split("-");
+                sNomeBrano = A[1].trim();
+                if (!Utility.getInstance().isNumeric(A[0])) {
+                    ssArtista = A[0].trim();
+                }
+                sNomeBrano = sNomeBrano.toUpperCase().replace(".MP3", "");
+                sNomeBrano = sNomeBrano.toUpperCase().replace(".WMA", "");
             }
-            sNomeBrano = sNomeBrano.toUpperCase().replace(".MP3", "");
-            sNomeBrano = sNomeBrano.toUpperCase().replace(".WMA", "");
-        }
-        if (sNomeBrano.contains(".")) {
-            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
-        }
-        if (sNomeBrano.contains("(")) {
-            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("("));
-        }
-        if (sNomeBrano.contains("[")) {
-            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("["));
-        }
-        if (sNomeBrano.contains(",")) {
-            sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf(","));
-        }
-        sNomeBrano = sNomeBrano.trim();
-        int idArtista = sb.getIdArtista();
-        String Artista = "";
-        if (ssArtista.isEmpty()) {
-            Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
-        } else {
-            Artista = ssArtista;
-        }
+            if (sNomeBrano.contains(".")) {
+                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
+            }
+            if (sNomeBrano.contains("(")) {
+                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("("));
+            }
+            if (sNomeBrano.contains("[")) {
+                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("["));
+            }
+            if (sNomeBrano.contains(",")) {
+                sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf(","));
+            }
+            sNomeBrano = sNomeBrano.trim();
+            int idArtista = sb.getIdArtista();
+            String Artista = "";
+            if (ssArtista.isEmpty()) {
+                Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
+            } else {
+                Artista = ssArtista;
+            }
 
-        DownloadTextFileNuovo d = new DownloadTextFileNuovo();
-        d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR);
-        d.setPathNomeFile("Testo.dat");
-        d.setOperazione("Scarico testo brano");
-        d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
+            DownloadTextFileNuovo d = new DownloadTextFileNuovo();
+            d.setPath(VariabiliStaticheGlobali.getInstance().PercorsoDIR);
+            d.setPathNomeFile("Testo.dat");
+            d.setOperazione("Scarico testo brano");
+            d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
 
-        String sArtista = Utility.getInstance().ConverteStringaInUrl(Artista);
-        String NomeBrano = Utility.getInstance().ConverteStringaInUrl(sNomeBrano);
+            String sArtista = Utility.getInstance().ConverteStringaInUrl(Artista);
+            String NomeBrano = Utility.getInstance().ConverteStringaInUrl(sNomeBrano);
 
-        String url = "http://lyrics.wikia.com/wiki/" + sArtista + ":" + NomeBrano;
+            String url = "http://lyrics.wikia.com/wiki/" + sArtista + ":" + NomeBrano;
 
-        int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Scarico testo");
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
-                new Object(){}.getClass().getEnclosingMethod().getName(),
-                "Scarico testo brano: " + url);
-        d.startDownload(
-                url,
-                true,
-                n);
+            int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Scarico testo");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Scarico testo brano: " + url);
+            d.startDownload(
+                    url,
+                    false,
+                    n);
 
+        }
     }
 }
