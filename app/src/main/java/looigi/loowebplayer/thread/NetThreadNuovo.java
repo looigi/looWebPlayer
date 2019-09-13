@@ -73,16 +73,16 @@ public class NetThreadNuovo {
 
     public void start() {
         // if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
-            if (tTmrBattery == null) {
+        this.stopNet = false;
+
+        if (tTmrBattery == null) {
                 act = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale();
                 connectivityManager = (ConnectivityManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                         .getSystemService(Context.CONNECTIVITY_SERVICE);
-                pm = (PowerManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
-                        getSystemService(Context.POWER_SERVICE);
-
-                this.stopNet = false;
-
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+                    pm = (PowerManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
+                            getSystemService(Context.POWER_SERVICE);
+
                     phoneListener = new myPhoneStateListener();
                     manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
                             .getSystemService(Context.TELEPHONY_SERVICE);
@@ -129,7 +129,8 @@ public class NetThreadNuovo {
         }
 
         OkNet = haveConnectedWifi || haveConnectedMobile;
-        if (OkNet && !haveConnectedWifi && ScreenOn && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+        if (OkNet && !haveConnectedWifi && ScreenOn &&
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
             getGsmLevel();
         }
 

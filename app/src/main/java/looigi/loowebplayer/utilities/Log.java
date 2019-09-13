@@ -99,20 +99,22 @@ public class Log {
 	}
 
 	public void ScriveLog(String DaDove, String Messaggio) {
-		CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR);
+		if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getScriveLog()) {
+			CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR);
 
-		String Datella="";
-		Datella=PrendeDataAttuale()+";"+PrendeOraAttuale()+";***DataScrittura***;***Differenza***;" + DaDove.replace(";", "_") +";";
+			String Datella = "";
+			Datella = PrendeDataAttuale() + ";" + PrendeOraAttuale() + ";***DataScrittura***;***Differenza***;" + DaDove.replace(";", "_") + ";";
 
-		String sBody=Datella+Messaggio.replace(";", "_");
+			String sBody = Datella + Messaggio.replace(";", "_");
 
-		synchronized (listaCompleta) {
-			listaCompleta.add(sBody);
+			synchronized (listaCompleta) {
+				listaCompleta.add(sBody);
 
-			if (tScoda == null) {
-				tScoda = new ScodaMessaggiDebug();
-				tScoda.setPriority(Thread.MIN_PRIORITY);
-				tScoda.start();
+				if (tScoda == null) {
+					tScoda = new ScodaMessaggiDebug();
+					tScoda.setPriority(Thread.MIN_PRIORITY);
+					tScoda.start();
+				}
 			}
 		}
 	}

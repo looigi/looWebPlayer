@@ -98,6 +98,8 @@ public class DownloadTextFileNuovo {
             //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Text uguale: "+Chiave);
             // }
+        } else {
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
         }
     }
 

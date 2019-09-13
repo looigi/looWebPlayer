@@ -216,8 +216,10 @@ public class AttesaScaricamentoBrano {
 		}
 
 		private void TerminaTimerDiProsecuzione() {
-			hAttesaTermine.removeCallbacks(rAttesaTermine);
-			hAttesaTermine = null;
+			if (hAttesaTermine!=null && rAttesaTermine!=null) {
+				hAttesaTermine.removeCallbacks(rAttesaTermine);
+				hAttesaTermine = null;
+			}
 		}
 
 		private String SplittaCampiUrletto(String Cosa) {
@@ -530,7 +532,8 @@ public class AttesaScaricamentoBrano {
 							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 									"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-							}.getClass().getEnclosingMethod().getName(), "SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
+							}.getClass().getEnclosingMethod().getName(),
+									"SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
 									Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
 							SecondiAttesa = 0;
@@ -551,9 +554,9 @@ public class AttesaScaricamentoBrano {
 											VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 											}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Richiamata");
 
-											// TerminaTimerDiProsecuzione();
+											TerminaTimerDiProsecuzione();
 
-											FaiPartireTimerDiProsecuzione();
+											// FaiPartireTimerDiProsecuzione();
 
 											bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
 													inBackground, ApriDialog, Urletto);

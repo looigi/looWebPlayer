@@ -110,6 +110,8 @@ public class DownloadImmagineNuovo {
             //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Immagine uguale: "+Chiave);
             // }
+        } else {
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, true);
         }
     }
 

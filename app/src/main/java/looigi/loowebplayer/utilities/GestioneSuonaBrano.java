@@ -142,18 +142,22 @@ public class GestioneSuonaBrano {
                                 if (mCurrentPosition >= perc10 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro
-                                    if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
-                                        // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
-                                        //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
-                                        // } else {
-                                        //     GestioneImmagini.getInstance().ImpostaImmagineVuota();
-                                        // }
-                                        // GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
-                                        VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
-                                        if (GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale() >= GestioneListaBrani.getInstance().RitornaQuantiBraniInLista()) {
-                                            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
-                                            GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
+                                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                                        if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
+                                            // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
+                                            //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
+                                            // } else {
+                                            //     GestioneImmagini.getInstance().ImpostaImmagineVuota();
+                                            // }
+                                            // GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
+                                            VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
+                                            if (GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale() >= GestioneListaBrani.getInstance().RitornaQuantiBraniInLista()) {
+                                                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
+                                                GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
+                                            }
                                         }
+                                    // } else {
+                                        // VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
                                     }
                                 }
                             }

@@ -272,7 +272,8 @@ public class Home extends android.support.v4.app.Fragment {
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Impostata lingua inglese");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                            .getEnclosingMethod().getName(), "Impostata lingua inglese");
                     String sTesto="";
 
                     int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
