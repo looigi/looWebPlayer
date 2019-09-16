@@ -454,7 +454,7 @@ public class Home extends android.support.v4.app.Fragment {
                 String Mp3 = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBrano();
                 String Durata = GestioneImpostazioneBrani.getInstance().setDurata(Mp3);
                 if (!Durata.isEmpty()) {
-                    String d[] = Durata.split(";", -1);
+                    String[] d = Durata.split(";", -1);
                     String minutes = "";
                     String seconds = "";
 

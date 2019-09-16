@@ -112,6 +112,14 @@ public class DownloadImmagineNuovo {
             // }
         } else {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, true);
+
+            if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                    VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+            } else {
+                GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                GestioneImmagini.getInstance().CreaCarosello();
+            }
         }
     }
 

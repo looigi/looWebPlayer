@@ -77,10 +77,6 @@ public class DialogMessaggio
 
         txtLog.setText(Message);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                }.getClass().getEnclosingMethod().getName(),
-                "Messaggio: " + Message + " - " + titleDialog + " - Errore: " + Error);
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
         builder.setView(inflate);

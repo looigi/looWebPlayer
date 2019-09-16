@@ -39,20 +39,18 @@ public class CustomAcraSender implements ReportSenderFactory {
 			String body = parseLog(errorContent);
 			String recipients = TextUtils.join(",", RECIPIENTS);
 
-			MailSender sender = new MailSender("looigi@gmail.com", "Piripacchio227!");
+			MailSender sender = new MailSender("looigi@gmail.com", "pippuzzettello227!");
 			try {
 				sender.sendMail(subject, body, "looigi@gmail.com", recipients);
 			} catch(Exception e) {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
-						.getEnclosingMethod().getName(), "Invio messaggio di errore ACRA non riuscito");
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Invio messaggio di errore ACRA non riuscito");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
 				// e.printStackTrace();
 			}
 			try {
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), recipients);
 			} catch (Exception e) {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
-						.getEnclosingMethod().getName(), "Scrittura messaggio di errore ACRA non riuscito");
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scrittura messaggio di errore ACRA non riuscito");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
 			}
 		}

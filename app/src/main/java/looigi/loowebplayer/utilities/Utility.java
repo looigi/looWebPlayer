@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -250,6 +251,23 @@ public class Utility {
 		}
 
 		return NumeroBrano;
+	}
+
+	public int RitornaLunghezzaBrano(String filePath) {
+		MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+		mmr.setDataSource(filePath);
+
+		int duration = 0;
+		String dur = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+		if (dur != null) {
+			duration = Integer.parseInt(dur);
+		}
+		int mDuration = duration;
+		/* long h = duration / 3600;
+		long m = (duration - h * 3600) / 60;
+		long s = duration - (h * 3600 + m * 60); */
+
+		return mDuration;
 	}
 
 	public void ScriveScaricateAscoltate() {

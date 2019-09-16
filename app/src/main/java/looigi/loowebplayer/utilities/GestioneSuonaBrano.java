@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import org.kobjects.util.Util;
+
 import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
@@ -79,12 +81,15 @@ public class GestioneSuonaBrano {
         }
 
         if (vh.getMediaPlayer()!=null) {
+            final int lunghezzaBrano = Utility.getInstance().RitornaLunghezzaBrano(Mp3);
+
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(-1);
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
                 vh.getMediaPlayer().seekTo(0);
             }
-            vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
+            // vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
+            vh.getSeekBar1().setMax(lunghezzaBrano);
             vh.getSeekBar1().setProgress(0);
             VariabiliStaticheGlobali.getInstance().setMusicaTerminata(false);
 
@@ -97,10 +102,18 @@ public class GestioneSuonaBrano {
 
             int perc2 = 0;
             if (vh.getMediaPlayer() != null) {
-                int durata = vh.getMediaPlayer().getDuration();
-                perc2 = durata * 75 / 100;
+                // int durata = vh.getMediaPlayer().getDuration();
+                // perc2 = durata * 75 / 100;
+                perc2 = lunghezzaBrano * 75 / 100;
             }
             final int percFine = perc2;
+
+            long h = lunghezzaBrano / 3600;
+		    long m = h / 1000;
+            // long s = lunghezzaBrano - (h * 3600 + m * 60);
+		    if (m<1) {
+                VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(false);
+            }
 
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");
@@ -115,7 +128,8 @@ public class GestioneSuonaBrano {
                         if (vh.getMediaPlayer() != null) {
                             int mCurrentPosition = vh.getMediaPlayer().getCurrentPosition();
 
-                            int perc75 = vh.getMediaPlayer().getDuration() * 75 / 100;
+                            // int perc75 = vh.getMediaPlayer().getDuration() * 75 / 100;
+                            int perc75 = lunghezzaBrano * 75 / 100;
                             if (mCurrentPosition >= perc75 && !VariabiliStaticheGlobali.getInstance().getScrittaAscoltata()) {
                                 VariabiliStaticheGlobali.getInstance().setScrittaAscoltata(true);
 
@@ -138,7 +152,8 @@ public class GestioneSuonaBrano {
                             }
 
                             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getCaricamentoAnticipato()) {
-                                int perc10 = vh.getMediaPlayer().getDuration() * 10 / 100;
+                                // int perc10 = vh.getMediaPlayer().getDuration() * 10 / 100;
+                                int perc10 = lunghezzaBrano * 10 / 100;
                                 if (mCurrentPosition >= perc10 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro
@@ -165,7 +180,8 @@ public class GestioneSuonaBrano {
 
                             // if (!vh.getMediaPlayer().isPlaying()) {
                             // int perc2 = vh.getMediaPlayer().getDuration() * 50 / 100;
-                            if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= percFine) {
+                            // if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= percFine) {
+                            if (!vh.getMediaPlayer().isPlaying()) {
                                 // hNuovoMP3 = new Handler();
                                 // hNuovoMP3.postDelayed(NuovoMp3 = new Runnable() {
                                 // @Override

@@ -46,7 +46,8 @@ public class GestioneImpostazioneBrani {
     }
 
     public void ImpostaBrano(final String Mp3) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Entrata imposta brano");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                .getEnclosingMethod().getName(), "Entrata imposta brano");
         final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
         vh.setBranoDaCaricare("");
@@ -59,14 +60,15 @@ public class GestioneImpostazioneBrani {
             // VariabiliStaticheHome.getInstance().getImgLoadBrano().setVisibility(LinearLayout.VISIBLE);
             // VariabiliStaticheHome.getInstance().getImgLoadBrano().setImageDrawable(down);
 
-            VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
-            vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
-            vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
+            // VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+            // vh.getImgPlay().setImageDrawable(VariabiliStaticheGlobali.getInstance().getPlay());
+            // vh.getImgStop().setImageDrawable(VariabiliStaticheGlobali.getInstance().getStop_dis());
             // vh.getImgPlay().setEnabled(false);
 
             // vh.getLayOperazionWEB().setVisibility(LinearLayout.VISIBLE);
             // vh.getTxtOperazioneWEB().setText();
-            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,true, "MP3 non valido");
+            VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,true,
+                    "MP3 non valido");
 
             File f = new File(Mp3);
             f.delete();
@@ -74,8 +76,13 @@ public class GestioneImpostazioneBrani {
             PronunciaFrasi pf =new PronunciaFrasi();
             pf.PronunciaFrase("Brano non valido", "ITALIANO");
 
-            // Tento di prendere il brano non compresso
-            if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                    .getEnclosingMethod().getName(), "Durata 0: Brano non valido -> Prendo il successivo");
+
+            // Tento di prendere il brano successivo
+            GestioneOggettiVideo.getInstance().AvantiBrano();
+
+            /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setCompressioneMP3(false);
                 GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
             }
@@ -83,13 +90,13 @@ public class GestioneImpostazioneBrani {
             DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
                     "Brano non valido...",
                     true,
-                    VariabiliStaticheGlobali.NomeApplicazione);
+                    VariabiliStaticheGlobali.NomeApplicazione); */
         } else {
             // VariabiliStaticheHome.getInstance().getImgLoadBrano().setVisibility(LinearLayout.GONE);
 
             // vh.getLayOperazionWEB().setVisibility(LinearLayout.GONE);
             // vh.getImgPlay().setEnabled(true);
-            String d[] = Durata.split(";", -1);
+            String[] d= Durata.split(";", -1);
             String minutes=d[0];
             String seconds=d[1];
 

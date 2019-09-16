@@ -18,8 +18,7 @@ public abstract class GestioneChiamate extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod()
-                .getName(), "onReceive Gestione Chiamate");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "onReceive Gestione Chiamate");
 
         try {
             savedContext = context;
