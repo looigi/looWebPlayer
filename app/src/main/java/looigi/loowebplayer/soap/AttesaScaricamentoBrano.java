@@ -25,6 +25,7 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class AttesaScaricamentoBrano {
+	private static HttpTransportSE aht = null;
 	private static BackgroundAsyncTask bckAsyncTask;
 	private static String messErrore="";
 	private long lastTimePressed = 0;
@@ -144,6 +145,12 @@ public class AttesaScaricamentoBrano {
 		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 				"Blocco compressione e download per cambio brano");
 		VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+		if (aht!=null) {
+			aht.reset();
+		}
+
+		messErrore="ESCI";
 
 		bckAsyncTask.cancel(true);
 
@@ -345,7 +352,6 @@ public class AttesaScaricamentoBrano {
             }
 
             SoapSerializationEnvelope soapEnvelope = null;
-            HttpTransportSE aht = null;
             messErrore="";
             try {
 				// VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
@@ -357,13 +363,14 @@ public class AttesaScaricamentoBrano {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(uu, 120000);
+                aht = new HttpTransportSE(uu, 75000);
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 				if(isCancelled()){
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+									.getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
 				} else {
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -603,6 +610,5 @@ public class AttesaScaricamentoBrano {
 		protected void onCancelled(){
 	    	messErrore="ESCI";
 		}
-   
 	}
 }
