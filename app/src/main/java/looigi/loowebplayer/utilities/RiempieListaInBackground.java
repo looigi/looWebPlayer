@@ -200,7 +200,8 @@ public class RiempieListaInBackground {
             }
 
             // Riempie la struttura con eventuali files dat contenenti testo e stelle
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi alla bellezza e al testo");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                    .getEnclosingMethod().getName(), "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi alla bellezza e al testo");
             for (StrutturaBrani s : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani()) {
                 String NomeBrano = s.getNomeBrano();
                 String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
@@ -212,7 +213,7 @@ public class RiempieListaInBackground {
                     File f = new File(PathMP3);
                     if (f.exists()) {
                         String riga = GestioneFiles.getInstance().LeggeFileDiTesto(PathMP3);
-                        String Campi[] = riga.split(";");
+                        String[] Campi = riga.split(";");
                         if (Campi.length > 3) {
                             s.setTesto(Campi[0]);
                             s.setTestoTradotto(Campi[1]);
