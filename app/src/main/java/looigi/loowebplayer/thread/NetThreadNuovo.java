@@ -27,10 +27,10 @@ import static android.telephony.CellSignalStrength.SIGNAL_STRENGTH_POOR;
 
 public class NetThreadNuovo {
     private boolean stopNet;
-    private Timer tTmrBattery = null;
+    // private Timer tTmrBattery = null;
 
-    private Runnable runRiga;
-    private Handler hSelezionaRiga;
+    // private Runnable runRiga;
+    // private Handler hSelezionaRiga;
     private boolean OkNet = true;
     private boolean ScreenOn = true;
     // private static NetThreadNuovo instance = null;
@@ -51,7 +51,8 @@ public class NetThreadNuovo {
     private Integer QuantiSecondiSenzaRete = 0;
     // private boolean RetePresente=true;
     private ConnectivityManager connectivityManager;
-
+    private Runnable rTimerEsecuzione;
+    private Handler hTimerEsecuzione;
     // private NetThreadNuovo() {
     // }
 //
@@ -75,7 +76,7 @@ public class NetThreadNuovo {
         // if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
         this.stopNet = false;
 
-        if (tTmrBattery == null) {
+        if (hTimerEsecuzione == null) {
                 act = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale();
                 connectivityManager = (ConnectivityManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -184,8 +185,22 @@ public class NetThreadNuovo {
     }
 
     private void InternalThread() {
-        if (tTmrBattery == null) {
-            tTmrBattery = new Timer();
+        if (hTimerEsecuzione == null) {
+			
+			hTimerEsecuzione = new Handler(Looper.getMainLooper());
+			rTimerEsecuzione = (new Runnable() {
+				@Override
+				public void run() {
+                    if (!stopNet) {
+                        ControlloRete();
+						
+						hTimerEsecuzione.postDelayed(rTimerEsecuzione, SecondiDiAttesa);
+                    }
+				}
+			});				
+			hTimerEsecuzione.postDelayed(rTimerEsecuzione, SecondiDiAttesa);
+
+            /* tTmrBattery = new Timer();
             tTmrBattery.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
@@ -193,7 +208,8 @@ public class NetThreadNuovo {
                         ControlloRete();
                     }
                 }
-            }, 0, SecondiDiAttesa);
+            }, 0, SecondiDiAttesa); */
+			
         }
     }
 
@@ -278,14 +294,16 @@ public class NetThreadNuovo {
   }
 
     public void StopNetThread() {
-        if (tTmrBattery!=null) {
+        if (hTimerEsecuzione!=null) {
             stopNet = true;
 
-            if (tTmrBattery != null) {
-                tTmrBattery.cancel();
-                tTmrBattery.purge();
-                tTmrBattery = null;
-            }
+            if (hTimerEsecuzione != null) {
+                // tTmrBattery.cancel();
+                // tTmrBattery.purge();
+                // tTmrBattery = null;
+				hTimerEsecuzione.removeCallbacks(rTimerEsecuzione);
+				hTimerEsecuzione = null;
+           }
         }
     }
 

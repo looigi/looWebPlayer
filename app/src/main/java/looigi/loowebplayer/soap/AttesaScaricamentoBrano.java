@@ -368,7 +368,7 @@ public class AttesaScaricamentoBrano {
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-				if(isCancelled()){
+				if(isCancelled() || messErrore.equals("ESCI")) {
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
 									.getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
@@ -517,81 +517,89 @@ public class AttesaScaricamentoBrano {
 
 				rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
 			} else {
-				if (!messErrore.equals("ESCI")) {
+				if (!messErrore.equals("ESCI") && !messErrore.contains("ERROR")) {
 					rr.ChiamaRoutinesInCasoDiOK(result, messErrore, NumeroOperazione, NumeroBrano, Errore, tOperazione, inBackground);
 				} else {
-					// Errore... Riprovo ad eseguire la funzione
-					boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+					if (!messErrore.equals("ESCI")) {
+						// Errore... Riprovo ad eseguire la funzione
+						boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-					if (!ceRete) {
-						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-						}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete");
-
-						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
-					} else {
-						if (Tentativo < QuantiTentativi &&
-							VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
-							!tOperazione.equals("RitornaDatiUtente")) {
-							Tentativo++;
-
-							final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo)) / 1000;
-
-							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-									"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+						if (!ceRete) {
 							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-							}.getClass().getEnclosingMethod().getName(),
-									"SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
-									Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-
-							SecondiAttesa = 0;
-							hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
-							rAttesaNuovoTentativo = (new Runnable() {
-								@Override
-								public void run() {
-									SecondiAttesa++;
-									NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
-											"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
-													" Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
-									if (SecondiAttesa >= TempoAttesa) {
-										// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-
-										boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-
-										if (ceRete) {
-											VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-											}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Richiamata");
-
-											TerminaTimerDiProsecuzione();
-
-											// FaiPartireTimerDiProsecuzione();
-
-											bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-													inBackground, ApriDialog, Urletto);
-											bckAsyncTask.execute(Urletto);
-										} else {
-											VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-											}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete 2");
-
-											rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
-										}
-										// }
-
-										hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
-										hAttesaNuovoTentativo = null;
-									} else {
-										hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
-									}
-								}
-							});
-							hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
-							// Errore... Riprovo ad eseguire la funzione
-						} else {
-							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-							}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
+							}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete");
 
 							rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+						} else {
+							if (Tentativo < QuantiTentativi &&
+								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
+								!tOperazione.equals("RitornaDatiUtente")) {
+								Tentativo++;
+
+								final int TempoAttesa = (VariabiliStaticheGlobali.getInstance().getAttesaControlloEsistenzaMP3() * (Tentativo)) / 1000;
+
+								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+										"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								}.getClass().getEnclosingMethod().getName(),
+										"SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
+										Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
+
+								SecondiAttesa = 0;
+								hAttesaNuovoTentativo = new Handler(Looper.getMainLooper());
+								rAttesaNuovoTentativo = (new Runnable() {
+									@Override
+									public void run() {
+										SecondiAttesa++;
+										NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+												"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi) +
+														" Secondi " + Integer.toString(SecondiAttesa) + "/" + Integer.toString(TempoAttesa));
+										if (SecondiAttesa >= TempoAttesa) {
+											// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+											boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+											if (ceRete) {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Richiamata");
+
+												TerminaTimerDiProsecuzione();
+
+												// FaiPartireTimerDiProsecuzione();
+
+												bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
+														inBackground, ApriDialog, Urletto);
+												bckAsyncTask.execute(Urletto);
+											} else {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete 2");
+
+												rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+											}
+											// }
+
+											hAttesaNuovoTentativo.removeCallbacks(rAttesaNuovoTentativo);
+											hAttesaNuovoTentativo = null;
+										} else {
+											hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
+										}
+									}
+								});
+								hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
+								// Errore... Riprovo ad eseguire la funzione
+							} else {
+								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
+
+								rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+							}
 						}
+					} else {
+						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+						}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa timeout");
+
+						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
 					}
 				}
 			}
