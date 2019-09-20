@@ -59,22 +59,39 @@ public class GestioneOggettiVideo {
     }
 
     public void AvantiBrano() {
-        if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
-            VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+            VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
+            VariabiliStaticheGlobali.getInstance().setSkippataAttesaFineCaricamento(true);
+            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         } else {
-            if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-                // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+            if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgWSoap().StoppaEsecuzione();
+                }
+                if (VariabiliStaticheGlobali.getInstance().getgMP3() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgMP3().StoppaEsecuzione();
+                }
+                if (VariabiliStaticheGlobali.getInstance().getgAttesa() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
+                }
+            }
+                // if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
+            //     VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+            // } else {
+                if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                    // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
-                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
-                int NumeroBrano;
+                    VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                    int NumeroBrano;
 
-                // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
-                //     NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
-                //     VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
-                // } else {
-                     NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                    // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
+                    //     NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                    //     VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+                    // } else {
+                    NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                    // }
+                    ControllaAvantiBrano(NumeroBrano, false);
                 // }
-                ControllaAvantiBrano(NumeroBrano, false);
             }
         }
     }
@@ -155,9 +172,26 @@ public class GestioneOggettiVideo {
     }
 
     public void IndietroBrano() {
-        if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
-            VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
+            VariabiliStaticheGlobali.getInstance().setSkippataAttesaFineCaricamento(true);
+            VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         } else {
+            if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgWSoap().StoppaEsecuzione();
+                }
+                if (VariabiliStaticheGlobali.getInstance().getgMP3() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgMP3().StoppaEsecuzione();
+                }
+                if (VariabiliStaticheGlobali.getInstance().getgAttesa() !=null) {
+                    VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
+                }
+            }
+
+            // if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
+        //     VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        // } else {
             if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
                 // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 

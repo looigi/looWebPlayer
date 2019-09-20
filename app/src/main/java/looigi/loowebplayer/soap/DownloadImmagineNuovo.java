@@ -60,7 +60,8 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {

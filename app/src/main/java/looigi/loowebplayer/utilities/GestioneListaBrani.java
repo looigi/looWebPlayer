@@ -377,7 +377,7 @@ public class GestioneListaBrani {
        }
     }
 
-    private int BranoSenzarete() {
+    public int BranoSenzarete() {
         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         int NumeroBrano=CercaBranoGiaScaricato(false);
         VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
@@ -467,7 +467,19 @@ public class GestioneListaBrani {
 
                 VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
 
-                if (f.exists() || fc.exists()) {
+                boolean ok;
+
+                if (VariabiliStaticheGlobali.ScaricaSempreIBrani) {
+                    ok = false;
+                } else {
+                    if (f.exists() || fc.exists()) {
+                        ok = true;
+                    } else {
+                        ok = false;
+                    }
+                }
+
+                if (ok) {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Brano già esistente... Non faccio niente");
@@ -489,7 +501,7 @@ public class GestioneListaBrani {
                     int numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
                             "Download automatico: " + NomeBrano);
 
-                    String c[] = Brano.split(";", -1);
+                    String[] c = Brano.split(";", -1);
                     String Converte = "N";
                     String Qualita = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getRapportoCompressione();
                     if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {

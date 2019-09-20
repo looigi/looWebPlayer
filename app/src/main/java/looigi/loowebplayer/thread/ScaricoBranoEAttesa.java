@@ -35,6 +35,8 @@ public class ScaricoBranoEAttesa {
     }
 
     public void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione, boolean inBackground) {
+        VariabiliStaticheGlobali.getInstance().setStaScaricandoNormalmente(true);
+
         int campi = Brano.length - 1;
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
         boolean compresso = false;
@@ -102,7 +104,7 @@ public class ScaricoBranoEAttesa {
             } else {
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-                VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+                // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Struttura vuota in scarica brano. Numero brano: " + Integer.toString(NumeroBrano));
                 // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),

@@ -58,7 +58,7 @@ public class GestioneCaricamentoBraniNuovo {
         return HaCaricatoBrano;
     }
 
-    private void ImpostaProssimaCanzone() {
+    public void ImpostaProssimaCanzone() {
         GestioneImmagini.getInstance().StoppaTimerCarosello();
         GestioneImmagini.getInstance().setImmagineDaCambiare("");
         GestioneImmagini.getInstance().setImmNumber(-1);
@@ -102,9 +102,9 @@ public class GestioneCaricamentoBraniNuovo {
         // hAttesaProssimo.postDelayed(rAttesaProssimo = new Runnable() {
         //     @Override
         //     public void run() {
-        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+        // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
         if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
-                        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
+                        // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance()
                                 .AggiungeOperazioneWEB(-1,
                             false, "Attesa termine download automatico"));
@@ -112,18 +112,31 @@ public class GestioneCaricamentoBraniNuovo {
                         hAttesaDownloadS.postDelayed(rAttesaDownloadS = new Runnable() {
                             @Override
                             public void run() {
+                                if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
+                                    VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(true);
+                                }
                                 int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                                 if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
-                                    || !VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()
-                                    || secondi > VariabiliStaticheGlobali.TempoAttesaFineDownload) {
+                                        || secondi > VariabiliStaticheGlobali.TempoAttesaFineDownload) {
+                                // if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
+                                //     || !VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()
+                                //     || secondi > VariabiliStaticheGlobali.TempoAttesaFineDownload) {
                                     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(), false);
                                     VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(-1);
                                     hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                     hAttesaDownloadS = null;
 
-                                    boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                                    if (VariabiliStaticheGlobali.getInstance().isSkippataAttesaFineCaricamento()) {
+                                        VariabiliStaticheGlobali.getInstance().setSkippataAttesaFineCaricamento(false);
+                                        secondi = 0;
+                                    }
 
-                                    if (!VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento() || secondi > 44) {
+                                    VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(false);
+
+                                    // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+
+                                    // if (secondi > 44) {
+                                    // if (!VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento() || secondi > 44) {
                                         if (secondi>44) {
                                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
@@ -144,7 +157,16 @@ public class GestioneCaricamentoBraniNuovo {
                                             VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
                                         }
 
-                                        if (ceRete) {
+                                    boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                                    // ceRete = false;
+                                    int NumeroBranoProssimo = -1;
+                                    if (ceRete) {
+                                        NumeroBranoProssimo = GestioneListaBrani.getInstance()
+                                                .RitornaNumeroProssimoBranoNuovo(false);
+                                    } else {
+                                        NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+                                    }
+                                    /*     if (ceRete) {
                                             NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
 
                                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
@@ -156,12 +178,13 @@ public class GestioneCaricamentoBraniNuovo {
                                             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "NON c'è rete. Prendo il prossimo brano già scaricato: " + Integer.toString(NumeroBrano));
-                                        }
-                                    } else {
-                                        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-                                        NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
-                                    }
+                                        } */
+                                    // } else {
+                                        // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+                                    //    NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+                                    // }
                                     // VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
+                                    NumeroBrano = NumeroBranoProssimo;
                                     VariabiliStaticheGlobali.getInstance().getDatiGenerali()
                                             .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
                                     ImpostaProssimaCanzone();
@@ -183,10 +206,12 @@ public class GestioneCaricamentoBraniNuovo {
                                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
                                                 false, "Bloccata attesa fine download. NO BUONO!!!"));
 
+                                        VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(false);
+
                                         hAttesaDownloadS.removeCallbacks(rAttesaDownloadS);
                                         hAttesaDownloadS = null;
 
-                                        VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
+                                        // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
                                     } else {
                                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
                                                 false, "Attesa termine download automatico. Secondi: " + Integer.toString(secondi)));
@@ -197,6 +222,8 @@ public class GestioneCaricamentoBraniNuovo {
                             }
                         }, 1000);
                     } else {
+                        VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(false);
+
                         int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                         if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                             // if (hAttesaProssimo != null && rAttesaProssimo != null) {
@@ -251,7 +278,9 @@ public class GestioneCaricamentoBraniNuovo {
     //     hAttesaDownload.get(hAttesaDownload.size()-1).postDelayed(rAttesaDownload.get(rAttesaDownload.size()-1), 100);
     // }
 
-    private void CaricaBrano2() {
+    public void CaricaBrano2() {
+        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+
         stopCounter = 0;
         qualeWait = -1;
 
@@ -577,7 +606,7 @@ public class GestioneCaricamentoBraniNuovo {
         } else {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),
-                    "ERORE Dati utente vuoti. Problema grosso...");
+                    "ERRORE Dati utente vuoti. Problema grosso...");
 
         }
     }

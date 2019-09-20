@@ -64,6 +64,7 @@ public class VariabiliStaticheGlobali {
     private int TimeOutListaBrani=200000;
     private int AttesaControlloEsistenzaMP3=5000;
     private int TimeOutImmagini=15000;
+    private int TimeOutAttesaSoap=75000;
     private int TipoSegnale=1;
     private int AttesaSecondiBranoSuccessivo=3;
 
@@ -94,6 +95,7 @@ public class VariabiliStaticheGlobali {
     private int UltimaCanzoneSuonata=-2;
     private boolean HaScaricatoAutomaticamente=false;
     private boolean StaScaricandoAutomaticamente =false;
+    private boolean StaScaricandoNormalmente =false;
     // private boolean StaAttendendoConMusichetta=false;
     // private boolean NonFermareDownload;
     private int BranoAutomatico;
@@ -118,7 +120,12 @@ public class VariabiliStaticheGlobali {
     private int NumeroBranoNuovo;
     private int NumeroProssimoBrano=-1;
     private AttesaScaricamentoBrano asb;
-    private boolean AttendeFineScaricamento = false;
+    private boolean SkippataAttesaFineCaricamento = false;
+    private boolean StaAttendendoFineDownload = false;
+
+    public static boolean ScaricaSempreIBrani = false;
+    public static boolean RitardaDownload = false;
+    public static boolean RitardaDownloadAutomatico = false;
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";
@@ -175,11 +182,38 @@ public class VariabiliStaticheGlobali {
         return ctxPassaggio;
     }
 
+    public int getTimeOutAttesaSoap() {
+        return TimeOutAttesaSoap;
+    }
+
     public void setCtxPassaggio(Context ctxPassaggio) {
         this.ctxPassaggio = ctxPassaggio;
     }
 
-    /* public boolean isEsciDallAttesa() {
+    public boolean isStaScaricandoNormalmente() {
+        return StaScaricandoNormalmente;
+    }
+
+    public void setStaScaricandoNormalmente(boolean staScaricandoNormalmente) {
+        StaScaricandoNormalmente = staScaricandoNormalmente;
+    }
+
+    public boolean isStaAttendendoFineDownload() {
+        return StaAttendendoFineDownload;
+    }
+
+    public void setStaAttendendoFineDownload(boolean staAttendendoFineDownload) {
+        StaAttendendoFineDownload = staAttendendoFineDownload;
+    }
+
+    public boolean isSkippataAttesaFineCaricamento() {
+        return SkippataAttesaFineCaricamento;
+    }
+
+    public void setSkippataAttesaFineCaricamento(boolean skippataAttesaFineCaricamento) {
+        SkippataAttesaFineCaricamento = skippataAttesaFineCaricamento;
+    }
+/* public boolean isEsciDallAttesa() {
         return EsciDallAttesa;
     }
 
@@ -243,13 +277,13 @@ public class VariabiliStaticheGlobali {
         this.gWSoap = gWSoap;
     }
 
-    public boolean isAttendeFineScaricamento() {
-        return AttendeFineScaricamento;
-    }
-
-    public void setAttendeFineScaricamento(boolean attendeFineScaricamento) {
-        AttendeFineScaricamento = attendeFineScaricamento;
-    }
+    // public boolean isAttendeFineScaricamento() {
+    //     return AttendeFineScaricamento;
+    // }
+//
+    // public void setAttendeFineScaricamento(boolean attendeFineScaricamento) {
+    //     AttendeFineScaricamento = attendeFineScaricamento;
+    // }
 
     public AttesaScaricamentoBrano getAsb() {
         return asb;

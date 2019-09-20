@@ -295,11 +295,12 @@ public class DownloadMP3Nuovo {
 
                                     // numeroPassaggi++;
 
-                                    if (NumeroBrano>-1 &&
+                                    if (VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
+                                    /* if (NumeroBrano>-1 &&
                                             NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
                                             VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1 ||
                                             VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL
-                                    ) {
+                                    ) { */
                                         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                                         }.getClass().getEnclosingMethod().getName(), "Scarico del MP3. Problema di rete o cambio brano");
 
@@ -309,6 +310,22 @@ public class DownloadMP3Nuovo {
                                     if (isCancelled()) {
                                         messErrore = "ESCI";
                                         break;
+                                    }
+
+                                    if (Automatico && VariabiliStaticheGlobali.RitardaDownloadAutomatico) {
+                                        try {
+                                            Thread.sleep(50);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    if (!Automatico && VariabiliStaticheGlobali.RitardaDownload) {
+                                        try {
+                                            Thread.sleep(50);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
 
                                     Thread.yield();
@@ -565,6 +582,10 @@ public class DownloadMP3Nuovo {
 
             if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+            }
+
+            if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                VariabiliStaticheGlobali.getInstance().setStaScaricandoNormalmente(false);
             }
 
             GestioneCPU.getInstance().DisattivaCPU();

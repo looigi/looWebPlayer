@@ -16,6 +16,7 @@ import looigi.loowebplayer.maschere.Utenza;
 import looigi.loowebplayer.nuova_versione.ControlloVersioneApplicazione;
 import looigi.loowebplayer.soap.DownloadTextFileNuovo;
 import looigi.loowebplayer.thread.ScaricoBranoEAttesa;
+import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
@@ -103,8 +104,17 @@ public class wsRitornoNuovoPerErrore {
     }
 
     public void RitornaBranoConAttesa(String Ritorno, int NumeroOperazione, boolean inBackGround) {
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-        //         "ERRORE Ritorna brano. Prendo il successivo da quelli già scaricati");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "ERRORE Ritorna brano. Prendo il successivo senza rete");
+
+        int NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+
+        VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
+        VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+        GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
+        // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+        GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
 
         // int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
         // if (brano > -1) {

@@ -122,7 +122,7 @@ public class AttesaScaricamentoBrano {
 		VariabiliStaticheGlobali.getInstance().setgAttesa(this);
 
 		bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-				inBackGround, ApriDialog, Urletto);
+				inBackGround, ApriDialog, Urletto, this);
 		if (ceRete) {
 			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 					"Chiamata compressione e download");
@@ -143,7 +143,7 @@ public class AttesaScaricamentoBrano {
 
 	public void StoppaEsecuzione() {
 		VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
-				"Blocco compressione e download per cambio brano");
+				"Blocco compressione e download per cambio brano o errore di rete");
 		VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 		if (aht!=null) {
@@ -185,10 +185,12 @@ public class AttesaScaricamentoBrano {
 		private Handler hAttesaTermine;
 		private Runnable rAttesaTermine;
 		private int secondi;
+		private AttesaScaricamentoBrano asb;
 
 		private BackgroundAsyncTask(String NAMESPACE, int TimeOut,
 									String SOAP_ACTION, int NumeroOperazione, String tOperazione,
-									boolean inBackground, boolean ApriDialog, String Urletto) {
+									boolean inBackground, boolean ApriDialog, String Urletto,
+									AttesaScaricamentoBrano asb) {
 			this.NAMESPACE = NAMESPACE;
 			// this.METHOD_NAME = METHOD_NAME;
 			// this.Parametri = Parametri;
@@ -199,6 +201,7 @@ public class AttesaScaricamentoBrano {
 			this.ApriDialog = ApriDialog;
 			this.Urletto = Urletto;
 			this.inBackground = inBackground;
+			this.asb = asb;
 
 			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
@@ -214,10 +217,24 @@ public class AttesaScaricamentoBrano {
 			hAttesaTermine.postDelayed(rAttesaTermine = new Runnable() {
 				@Override
 				public void run() {
-					secondi++;
-					VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
-							"Chiamata compressione e download: secondi " + secondi);
-                    hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+					if (VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
+						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+								"ERRORE Rete down. Blocco download");
+
+						asb.StoppaEsecuzione();
+					} else {
+						secondi++;
+						if (secondi<=(VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap()/1000)) {
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+									"Chiamata compressione e download: secondi " + secondi);
+							hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+						} else {
+							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+									"ERRORE Chiamata compressione e download: timeout");
+
+							asb.StoppaEsecuzione();
+						}
+					}
 				}
 			}, 1000);
 		}
@@ -363,7 +380,7 @@ public class AttesaScaricamentoBrano {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(uu, 75000);
+                aht = new HttpTransportSE(uu, VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap());
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
@@ -446,6 +463,10 @@ public class AttesaScaricamentoBrano {
 					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
 					// }
 
+					if (result.contains("ERROR")) {
+						messErrore = result;
+					}
+
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP: OK anche il result");
 	            } catch (SoapFault e) {
@@ -498,7 +519,8 @@ public class AttesaScaricamentoBrano {
 
 			TerminaTimerDiProsecuzione();
 
-			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Termine download / compressione");
+			NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione,
+					false, "Termine download / compressione");
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 			VariabiliStaticheGlobali.getInstance().setAsb(null);
@@ -510,7 +532,8 @@ public class AttesaScaricamentoBrano {
 			if (NumeroBrano>-1 &&
 					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
 					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
-				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
+				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione,
+						true,
 						"SOAP: Cambio brano");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 				}.getClass().getEnclosingMethod().getName(), "SOAP: Cambio brano");
@@ -567,7 +590,7 @@ public class AttesaScaricamentoBrano {
 												// FaiPartireTimerDiProsecuzione();
 
 												bckAsyncTask = new AttesaScaricamentoBrano.BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-														inBackground, ApriDialog, Urletto);
+														inBackground, ApriDialog, Urletto, asb);
 												bckAsyncTask.execute(Urletto);
 											} else {
 												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

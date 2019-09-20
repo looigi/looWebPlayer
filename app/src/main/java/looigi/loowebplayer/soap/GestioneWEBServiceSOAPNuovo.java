@@ -402,6 +402,10 @@ public class GestioneWEBServiceSOAPNuovo {
 					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
 					// }
 
+					if (result.contains("ERROR")) {
+						messErrore = result;
+					}
+
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP: OK anche il result");
 	            } catch (SoapFault e) {
