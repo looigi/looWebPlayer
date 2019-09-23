@@ -149,6 +149,8 @@ public class MainActivity extends AppCompatActivity
         ImageView imgRefreshCanzone = findViewById(R.id.imgRefreshCanzone);
         imgRefreshCanzone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                GestioneOggettiVideo.getInstance().PlayBrano(false);
+
                 int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
                 int n = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
                 if (NumeroBrano > n) {

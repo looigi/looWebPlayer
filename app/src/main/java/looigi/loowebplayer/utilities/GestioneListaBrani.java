@@ -129,11 +129,22 @@ public class GestioneListaBrani {
                 if (IndiceSuonati<BraniSuonati.size()) {
                     Brano = BraniSuonati.get(IndiceSuonati);
                 } else {
-                    DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-                            "Non riesco a prendere il brano successivo.\nIndice suonati più grande del vettore contenitore: " +
-                                    Integer.toString(IndiceSuonati) + "/" + Integer.toString(BraniSuonati.size()-1),
-                            true,
-                            VariabiliStaticheGlobali.NomeApplicazione);
+                    boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                    // ceRete = false;
+                    if (ceRete) {
+                        Brano = GestioneListaBrani.getInstance()
+                                .RitornaNumeroProssimoBranoNuovo(false);
+                    } else {
+                        Brano = GestioneListaBrani.getInstance().BranoSenzarete();
+                    }
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "PRoblemi sull'indice dei brani. Impostato il brano: "+Integer.toString(Brano));
+
+                    // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    //         "Non riesco a prendere il brano successivo.\nIndice suonati più grande del vettore contenitore: " +
+                    //                 Integer.toString(IndiceSuonati) + "/" + Integer.toString(BraniSuonati.size()-1),
+                    //         true,
+                    //         VariabiliStaticheGlobali.NomeApplicazione);
                 }
                 Avanza = false;
             } else {
