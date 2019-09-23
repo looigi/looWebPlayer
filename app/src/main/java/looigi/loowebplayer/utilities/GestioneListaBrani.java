@@ -232,8 +232,17 @@ public class GestioneListaBrani {
                     CompattazioneMP3 = "";
                 }
                 String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-                String PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
-                String PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
+                if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
+                    pathBase = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/";
+                } else {
+                    pathBase = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
+                }
+
+                // /storage/emulated/0/LooigiSoft/looWebPlayer/Dati/Mp3Mica/Mp3Mica/Mp3Mica/Marracash - In Radio.mp3
+                String PathMP3 = pathBase + NomeBrano;
+                String PathMP3_Compresso = pathBase + CompattazioneMP3 + NomeBrano;
+
+
                 File f = new File(PathMP3);
                 File fc = new File(PathMP3_Compresso);
                 if (f.exists() || fc.exists()) {
