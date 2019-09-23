@@ -201,7 +201,8 @@ public class RiempieListaInBackground {
 
             // Riempie la struttura con eventuali files dat contenenti testo e stelle
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
-                    .getEnclosingMethod().getName(), "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi alla bellezza e al testo");
+                    .getEnclosingMethod().getName(),
+                    "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi alla bellezza e al testo");
             for (StrutturaBrani s : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani()) {
                 String NomeBrano = s.getNomeBrano();
                 String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();

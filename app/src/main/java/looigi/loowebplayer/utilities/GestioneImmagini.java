@@ -397,7 +397,7 @@ public class GestioneImmagini {
             String NomeImm = Immagine.replace("\\ZZZ-ImmaginiArtista\\", "");
             // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Mp3/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
             String sUrl = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/ZZZ-ImmaginiArtista/" +
-                    NomeImm;
+                    NomeImm.replace(".dat", "");
             String PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ImmaginiArtista/" +
                     NomeImm.replace(".dat", "");
 

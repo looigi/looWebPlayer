@@ -46,7 +46,7 @@ public class EliminazioneVecchiFiles {
                                     f.delete();
                                 }
                             }
-                            f = new File(sf.getNomeFile() + ".dat");
+                            f = new File(sf.getNomeFile());
                             if (f.exists()) {
                                 if (CancellaVeramente) {
                                     f.delete();
