@@ -225,9 +225,16 @@ public class AttesaScaricamentoBrano {
 					} else {
 						secondi++;
 						if (secondi<=(VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap()/1000)) {
-							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
-									"Chiamata compressione e download: secondi " + secondi);
-							hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+
+							if (NumeroBrano>-1 &&
+									NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+									VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+								asb.StoppaEsecuzione();
+							} else {
+								VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
+										"Chiamata compressione e download: secondi " + secondi);
+								hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+							}
 						} else {
 							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 									"ERRORE Chiamata compressione e download: timeout");

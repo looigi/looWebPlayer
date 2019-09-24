@@ -392,7 +392,7 @@ public class GestioneImmagini {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
             StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-            String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+            // String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
 
             String NomeImm = Immagine.replace("\\ZZZ-ImmaginiArtista\\", "");
             // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Mp3/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
