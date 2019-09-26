@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Random;
 
@@ -326,7 +327,7 @@ public class VariabiliStaticheHome {
         }
     }
 
-    public void ScriveOperazioniWEB() {
+    public synchronized void ScriveOperazioniWEB() {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
             String tt = "";
 
@@ -361,22 +362,26 @@ public class VariabiliStaticheHome {
             int i = 0;
             // int q = 0;
 
-            for (StrutturaOperazioneWEB ii : OperazioniWeb) {
-                if (ii.getNumeroOperazione() == Numero) {
-                    //if (!ii.getOperazione().toUpperCase().contains("COMPRESS")) {
-                    OperazioniWeb.remove(i);
-                    // q++;
-                    break;
-                    //}
-                } else {
-                    long diff = System.currentTimeMillis() - ii.getOraIniziale();
-                    if (diff > 120000) {
-                        OperazioniWeb.remove(i);
+            try {
+                for (StrutturaOperazioneWEB ii : OperazioniWeb) {
+                    if (ii.getNumeroOperazione() == Numero) {
+                        //if (!ii.getOperazione().toUpperCase().contains("COMPRESS")) {
+                            OperazioniWeb.remove(i);
                         // q++;
-                        break;
+                        // break;
+                        //}
+                    } else {
+                        long diff = System.currentTimeMillis() - ii.getOraIniziale();
+                        if (diff > 3000) {
+                            OperazioniWeb.remove(i);
+                            // q++;
+                            // break;
+                        }
                     }
+                    i++;
                 }
-                i++;
+            } catch (ConcurrentModificationException ignored) {
+
             }
 
             if (OperazioniWeb.size() == 0) {
@@ -395,7 +400,7 @@ public class VariabiliStaticheHome {
         }
     }
 
-    public void EliminaOperazioneWEB(final int Numero, boolean Immediato)  {
+    public synchronized void EliminaOperazioneWEB(final int Numero, boolean Immediato)  {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraOperazioni()) {
             Runnable runEliminaBarra;
             Handler hEliminaBarra = new Handler(Looper.getMainLooper());

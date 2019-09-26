@@ -21,6 +21,7 @@ import looigi.loowebplayer.dialog.DialogMessaggio;
 
 public class GestioneSuonaBrano {
     private static final GestioneSuonaBrano ourInstance = new GestioneSuonaBrano();
+    private boolean BranoValido;
 
     public static GestioneSuonaBrano getInstance() {
         return ourInstance;
@@ -115,6 +116,49 @@ public class GestioneSuonaBrano {
                 VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(false);
             }
 
+		    // Check Brano
+            BranoValido = false;
+            if (vh.getMediaPlayer() != null) {
+                int lunghezzaBrano2 = lunghezzaBrano * 95 / 100;
+                if (!VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                    vh.getMediaPlayer().start();
+                }
+                vh.getMediaPlayer().seekTo(lunghezzaBrano2);
+                if (!vh.getMediaPlayer().isPlaying()) {
+                    // Brano non valido
+                    vh.getMediaPlayer().stop();
+                    // vh.getMediaPlayer().release();
+                    GestioneFiles.getInstance().EliminaFile(Mp3);
+                    if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(), "Brano non valido. Prendo il successivo.");
+
+                        VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
+                        boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                        // ceRete = false;
+                        int NumeroBranoProssimo = -1;
+                        if (ceRete) {
+                            NumeroBranoProssimo = GestioneListaBrani.getInstance()
+                                    .RitornaNumeroProssimoBranoNuovo(false);
+                        } else {
+                            NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+                        }
+                        VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                                .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
+                        GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
+                        // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+                        GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
+                    }
+                } else {
+                    BranoValido = true;
+                    vh.getMediaPlayer().seekTo(0);
+                    if (!VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
+                        vh.getMediaPlayer().stop();
+                    }
+                }
+            }
+            // Check Brano
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");
             vh.setHandlerSeekBar(new Handler(Looper.getMainLooper()));
@@ -125,8 +169,14 @@ public class GestioneSuonaBrano {
                         vh.setrSeekBar(rSeekBar);
                     }
                     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                        if (vh.getMediaPlayer() != null) {
-                            int mCurrentPosition = vh.getMediaPlayer().getCurrentPosition();
+                        if (vh.getMediaPlayer() != null && BranoValido) {
+                            int mCurrentPosition = -1;
+
+                            // try {
+                                mCurrentPosition = vh.getMediaPlayer().getCurrentPosition();
+                            // } catch (Exception ignored) {
+
+                            // }
 
                             // int perc75 = vh.getMediaPlayer().getDuration() * 75 / 100;
                             int perc75 = lunghezzaBrano * 75 / 100;

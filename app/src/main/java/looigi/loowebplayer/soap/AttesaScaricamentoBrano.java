@@ -156,7 +156,7 @@ public class AttesaScaricamentoBrano {
 
 		bckAsyncTask.ChiudeDialog();
 
-		messErrore ="ESCI";
+		// messErrore ="ESCI";
 
 		bckAsyncTask.ControllaFineCiclo();
 	}
@@ -555,6 +555,9 @@ public class AttesaScaricamentoBrano {
 
 				rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
 			} else {
+				// if (inBackground) {
+				// 	messErrore = "ESCI";
+				// }
 				if (!messErrore.equals("ESCI") && !messErrore.contains("ERROR")) {
 					rr.ChiamaRoutinesInCasoDiOK(result, messErrore, NumeroOperazione, NumeroBrano, Errore, tOperazione, inBackground);
 				} else {

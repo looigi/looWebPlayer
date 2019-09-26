@@ -6,6 +6,7 @@ import android.os.Looper;
 import java.util.ArrayList;
 import java.util.List;
 
+import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
@@ -104,31 +105,43 @@ public class wsRitornoNuovoPerErrore {
     }
 
     public void RitornaBranoConAttesa(String Ritorno, int NumeroOperazione, boolean inBackGround) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-                "ERRORE Ritorna brano. Prendo il successivo senza rete");
+        if (!inBackGround) {
+            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-        int NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "ERRORE Ritorna brano. Prendo il successivo senza rete");
 
-        VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-                .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
-        VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
-        GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
-        // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
-        GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
+            int NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
 
-        // int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
-        // if (brano > -1) {
-        //     StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(brano);
-        //     final String NomeBrano = s.getNomeBrano();
-        //     String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                    .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
+            VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+            GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
+            // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
+            GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
+
+            // int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
+            // if (brano > -1) {
+            //     StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(brano);
+            //     final String NomeBrano = s.getNomeBrano();
+            //     String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
 //
-        //     VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
-        // } else {
-        //     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-        //             "Errore nel ritorno brano:\n" + Ritorno,
-        //             true,
-        //             VariabiliStaticheGlobali.NomeApplicazione);
-        // }
+            //     VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
+            // } else {
+            //     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+            //             "Errore nel ritorno brano:\n" + Ritorno,
+            //             true,
+            //             VariabiliStaticheGlobali.NomeApplicazione);
+            // }
+        } else {
+            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
+            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "ERRORE Ritorna brano. Skippo brano");
+        }
     }
 
     public void RitornaModificaBellezza(final String Ritorno, int NumeroOperazione) {
