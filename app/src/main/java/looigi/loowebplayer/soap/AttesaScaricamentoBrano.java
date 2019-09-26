@@ -387,7 +387,11 @@ public class AttesaScaricamentoBrano {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(uu, VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap());
+                if (!VariabiliStaticheGlobali.TimeoutCortissimo) {
+					aht = new HttpTransportSE(uu, VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap());
+				} else {
+					aht = new HttpTransportSE(uu, 50);
+				}
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
@@ -502,6 +506,10 @@ public class AttesaScaricamentoBrano {
             }
             if (isCancelled()) {
             	messErrore="ESCI";
+			}
+
+            if (VariabiliStaticheGlobali.GeneraSempreErroreSOAP) {
+            	messErrore = "ERROR: Errore fatto apposta";
 			}
 
 			return null;

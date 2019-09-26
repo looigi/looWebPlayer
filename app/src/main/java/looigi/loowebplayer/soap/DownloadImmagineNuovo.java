@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,6 +122,7 @@ public class DownloadImmagineNuovo {
                 GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
                 GestioneImmagini.getInstance().CreaCarosello();
             }
+            GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
         }
     }
 

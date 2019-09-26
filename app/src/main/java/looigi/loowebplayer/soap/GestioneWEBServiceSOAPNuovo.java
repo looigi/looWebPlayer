@@ -322,7 +322,11 @@ public class GestioneWEBServiceSOAPNuovo {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                aht = new HttpTransportSE(uu, Timeout);
+                if (!VariabiliStaticheGlobali.TimeoutCortissimo) {
+					aht = new HttpTransportSE(uu, Timeout);
+				} else {
+					aht = new HttpTransportSE(uu, 50);
+				}
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled() && messErrore.equals("ESCI")){
@@ -434,6 +438,10 @@ public class GestioneWEBServiceSOAPNuovo {
             }
             if (isCancelled()) {
             	messErrore="ESCI";
+			}
+
+			if (VariabiliStaticheGlobali.GeneraSempreErroreSOAP) {
+				messErrore = "ERROR: Errore fatto apposta";
 			}
 
 			return null;

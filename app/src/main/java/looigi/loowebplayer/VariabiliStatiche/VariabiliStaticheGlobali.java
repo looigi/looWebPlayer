@@ -123,9 +123,13 @@ public class VariabiliStaticheGlobali {
     private boolean SkippataAttesaFineCaricamento = false;
     private boolean StaAttendendoFineDownload = false;
 
+    // DEBUG
     public static boolean ScaricaSempreIBrani = false;
     public static boolean RitardaDownload = false;
     public static boolean RitardaDownloadAutomatico = false;
+    public static boolean TimeoutCortissimo = false;
+    public static boolean GeneraSempreErroreSOAP = false;
+    // DEBUG
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";

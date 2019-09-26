@@ -20,6 +20,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.utilities.GestioneCPU;
 import looigi.loowebplayer.utilities.GestioneFiles;
+import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneTesti;
 import looigi.loowebplayer.utilities.RiempieListaInBackground;
 import looigi.loowebplayer.utilities.Traffico;
@@ -53,7 +54,8 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
@@ -100,6 +102,14 @@ public class DownloadTextFileNuovo {
             // }
         } else {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+            if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
+                    VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
+                GestioneImmagini.getInstance().ImpostaImmagineVuota();
+            } else {
+                GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
+                GestioneImmagini.getInstance().CreaCarosello();
+            }
+            GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
         }
     }
 
@@ -203,6 +213,7 @@ public class DownloadTextFileNuovo {
                 c.setRequestMethod("GET");
                 c.setConnectTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
                 c.setReadTimeout(VariabiliStaticheGlobali.getInstance().getTimeOutImmagini());
+                // c.setReadTimeout(50);
                 c.connect();
 
                 if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
