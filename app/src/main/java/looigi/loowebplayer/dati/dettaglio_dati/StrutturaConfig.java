@@ -53,6 +53,7 @@ public class StrutturaConfig {
     private int QuantiMBAlMassimo = 500;
     private boolean ScaricaTestoBrano = true;
     private boolean MostraSempreTitolo = true;
+    private boolean MostraReteAssente = false;
     private boolean SuonaAttesa = false;
 
     private int TimeOutDownloadMP3=45000;
@@ -104,6 +105,7 @@ public class StrutturaConfig {
         String sScaricaTesto = "S"; if (!ScaricaTestoBrano) sScaricaTesto="N";
         String sMostraTitolo = "S"; if (!MostraSempreTitolo) sMostraTitolo="N";
         String sSuonaAttesa = "S"; if (!SuonaAttesa) sSuonaAttesa="N";
+        String sReteAssente = "S"; if (!MostraReteAssente) sReteAssente="N";
 
         String Stringona = 
                 sRandom + ";" +
@@ -148,7 +150,8 @@ public class StrutturaConfig {
                 sMostraOperazioni+';'+
                 sScaricaTesto+';'+
                 sMostraTitolo+';'+
-                sSuonaAttesa+';'
+                sSuonaAttesa+';'+
+                sReteAssente+";"
         ;
         GestioneFiles.getInstance().CreaFileDiTesto(pathConfig, NomeFileConfig, Stringona);
     }
@@ -253,6 +256,10 @@ public class StrutturaConfig {
 
                     String sSuonaAttesa = Campi[42];
                     SuonaAttesa = sSuonaAttesa.equals("S");
+
+                    String sReteAssente = Campi[43];
+                    MostraReteAssente = sReteAssente.equals("S");
+
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
                 } catch (Exception e) {
@@ -470,6 +477,14 @@ public class StrutturaConfig {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setBraniFiltrati(b);
         }
+    }
+
+    public boolean isMostraReteAssente() {
+        return MostraReteAssente;
+    }
+
+    public void setMostraReteAssente(boolean mostraReteAssente) {
+        MostraReteAssente = mostraReteAssente;
     }
 
     public boolean isSuonaAttesa() {

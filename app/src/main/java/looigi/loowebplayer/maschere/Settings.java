@@ -153,6 +153,7 @@ public class Settings extends Fragment {
             Switch chkMostraOperazioni = view.findViewById(R.id.chkMostraOperazioni);
             Switch chkScaricaTesti = view.findViewById(R.id.chkScaricaTesto);
             Switch chkMostraTitolo = view.findViewById(R.id.chkMostraTitolo);
+            Switch chkMostraReteAssente = view.findViewById(R.id.chkMostraReteAssente);
 
             Switch chkSuonaAttesa = view.findViewById(R.id.chkSuonaAttessa);
 
@@ -302,6 +303,21 @@ public class Settings extends Fragment {
                             "Selezionato switch mostra titolo "+isChecked);
 
                     vg.setMostraSempreTitolo(isChecked);
+
+                    vg.SalvaDati();
+                }
+            });
+
+            // Switch Mostra Rete Assente
+            boolean bMostraReteAssente = vg.isMostraReteAssente();
+            chkMostraReteAssente.setChecked(bMostraReteAssente);
+            chkMostraReteAssente.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // Gestito - Funzionante
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            "Selezionato switch mostra rete assente "+isChecked);
+
+                    vg.setMostraReteAssente(isChecked);
 
                     vg.SalvaDati();
                 }

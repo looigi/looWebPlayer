@@ -372,7 +372,7 @@ public class VariabiliStaticheHome {
                         //}
                     } else {
                         long diff = System.currentTimeMillis() - ii.getOraIniziale();
-                        if (diff > 3000) {
+                        if (diff > 10000) {
                             OperazioniWeb.remove(i);
                             // q++;
                             // break;

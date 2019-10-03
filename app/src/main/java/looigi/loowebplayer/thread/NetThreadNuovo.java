@@ -168,7 +168,9 @@ public class NetThreadNuovo {
                 @Override
                 public void run() {
                     if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraReteAssente()) {
+                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.VISIBLE);
+                        }
                     }
                 }
             });
@@ -177,7 +179,9 @@ public class NetThreadNuovo {
                 @Override
                 public void run() {
                     if (VariabiliStaticheHome.getInstance().getImgOffline() != null) {
-                        VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isMostraReteAssente()) {
+                            VariabiliStaticheHome.getInstance().getImgOffline().setVisibility(LinearLayout.GONE);
+                        }
                     }
                 }
             });
@@ -228,7 +232,7 @@ public class NetThreadNuovo {
             int asu = LivelloSegnale.getGsmSignalStrength();
 
             if (asu <= 1 || asu == 99) {
-                OkNet = false;
+                OkNet = true;
                 QuantiSecondiSenzaRete ++;
                 Level = Integer.toString(asu) + "/1";
                 // level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
