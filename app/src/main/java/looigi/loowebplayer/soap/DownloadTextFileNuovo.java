@@ -54,8 +54,8 @@ public class DownloadTextFileNuovo {
     }
 
     public void startDownload(String sUrl, boolean ApriDialog, int NOperazione) {
-        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+//        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+//                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
@@ -100,7 +100,7 @@ public class DownloadTextFileNuovo {
             //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Text uguale: "+Chiave);
             // }
-        } else {
+/*        } else {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
             if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
                     VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
@@ -110,7 +110,7 @@ public class DownloadTextFileNuovo {
                 GestioneImmagini.getInstance().CreaCarosello();
             }
             GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
-        }
+        } */
     }
 
     public void StoppaEsecuzione() {

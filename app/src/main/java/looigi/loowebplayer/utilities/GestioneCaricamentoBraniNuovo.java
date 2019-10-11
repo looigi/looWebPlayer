@@ -157,15 +157,23 @@ public class GestioneCaricamentoBraniNuovo {
                                             VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
                                         }
 
-                                    boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
-                                    // ceRete = false;
-                                    int NumeroBranoProssimo = -1;
-                                    if (ceRete) {
-                                        NumeroBranoProssimo = GestioneListaBrani.getInstance()
-                                                .RitornaNumeroProssimoBranoNuovo(false);
-                                    } else {
-                                        NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
-                                    }
+                                        int NumeroBranoProssimo = -1;
+                                        if (!VariabiliStaticheGlobali.getInstance().isPremutoAvantiDuranteDLAutomatico()) {
+                                            boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+                                            // ceRete = false;
+                                            if (ceRete) {
+                                                NumeroBranoProssimo = GestioneListaBrani.getInstance()
+                                                        .RitornaNumeroProssimoBranoNuovo(false);
+                                            } else {
+                                                NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+                                            }
+                                            NumeroBrano = NumeroBranoProssimo;
+                                            VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                                                    .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+                                        } else {
+                                            // NumeroBranoProssimo = VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
+                                            VariabiliStaticheGlobali.getInstance().setPremutoAvantiDuranteDLAutomatico(false);
+                                        }
                                     /*     if (ceRete) {
                                             NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
 
@@ -184,9 +192,6 @@ public class GestioneCaricamentoBraniNuovo {
                                     //    NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
                                     // }
                                     // VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
-                                    NumeroBrano = NumeroBranoProssimo;
-                                    VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-                                            .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
                                     ImpostaProssimaCanzone();
                                     // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
                                     CaricaBrano2();

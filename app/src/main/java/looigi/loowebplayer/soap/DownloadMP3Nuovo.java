@@ -314,7 +314,7 @@ public class DownloadMP3Nuovo {
 
                                     if (Automatico && VariabiliStaticheGlobali.RitardaDownloadAutomatico) {
                                         try {
-                                            Thread.sleep(50);
+                                            Thread.sleep(VariabiliStaticheGlobali.ritardoDownloadAutomatico);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -322,7 +322,7 @@ public class DownloadMP3Nuovo {
 
                                     if (!Automatico && VariabiliStaticheGlobali.RitardaDownload) {
                                         try {
-                                            Thread.sleep(50);
+                                            Thread.sleep(VariabiliStaticheGlobali.ritardoDownload);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }

@@ -61,8 +61,8 @@ public class DownloadImmagineNuovo {
     }
 
     public void startDownload(String sUrl, String sOperazione, int TO) {
-        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+//        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+//                !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
@@ -112,7 +112,7 @@ public class DownloadImmagineNuovo {
             //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Immagine uguale: "+Chiave);
             // }
-        } else {
+/*        } else {
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, true);
 
             if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
@@ -123,7 +123,7 @@ public class DownloadImmagineNuovo {
                 GestioneImmagini.getInstance().CreaCarosello();
             }
             GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
-        }
+        } */
     }
 
     public void StoppaEsecuzione() {

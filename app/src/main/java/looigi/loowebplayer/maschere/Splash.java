@@ -2,10 +2,12 @@ package looigi.loowebplayer.maschere;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,7 +117,26 @@ public class Splash extends android.support.v4.app.Fragment {
         Intent i= new Intent(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(), bckService.class);
         VariabiliStaticheGlobali.getInstance().setiServizio(i);
         // i.putExtra("KEY1", "Value to be used by the service");
-        VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().startService(
-                VariabiliStaticheGlobali.getInstance().getiServizio());
+        if (VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()!=null) {
+            VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().startService(
+                    VariabiliStaticheGlobali.getInstance().getiServizio());
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "ERROR: Fragment principale nullo");
+        }
+
+        /* if (VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()!=null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ContextCompat.startForegroundService(
+                        VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
+                        VariabiliStaticheGlobali.getInstance().getiServizio());
+            } else {
+                VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().startService(
+                        VariabiliStaticheGlobali.getInstance().getiServizio());
+            }
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "ERROR: Fragment principale nullo");
+        } */
     }
 }

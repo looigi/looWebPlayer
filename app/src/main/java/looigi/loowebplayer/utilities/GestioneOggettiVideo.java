@@ -65,6 +65,20 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         } else {
             if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                VariabiliStaticheGlobali.getInstance().setPremutoAvantiDuranteDLAutomatico(true);
+                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                GestioneImmagini.getInstance().StoppaTimerCarosello();
+                int NumeroBrano;
+
+                // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
+                //     NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
+                //     VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+                // } else {
+                NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(false);
+                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+                // }
+                ControllaAvantiBrano(NumeroBrano, false);
+           /* if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
                 if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
                     VariabiliStaticheGlobali.getInstance().getgWSoap().StoppaEsecuzione();
                 }
@@ -74,10 +88,10 @@ public class GestioneOggettiVideo {
                 if (VariabiliStaticheGlobali.getInstance().getgAttesa() !=null) {
                     VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
                 }
-            }
+            } */
                 // if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
             //     VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-            // } else {
+            } else {
                 if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
                     // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
@@ -91,7 +105,7 @@ public class GestioneOggettiVideo {
                     NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
                     // }
                     ControllaAvantiBrano(NumeroBrano, false);
-                // }
+                }
             }
         }
     }
@@ -178,7 +192,10 @@ public class GestioneOggettiVideo {
             VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         } else {
             if (VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
-                if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
+                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                GestioneImmagini.getInstance().StoppaTimerCarosello();
+
+        /*        if (VariabiliStaticheGlobali.getInstance().getgWSoap() !=null) {
                     VariabiliStaticheGlobali.getInstance().getgWSoap().StoppaEsecuzione();
                 }
                 if (VariabiliStaticheGlobali.getInstance().getgMP3() !=null) {
@@ -187,30 +204,31 @@ public class GestioneOggettiVideo {
                 if (VariabiliStaticheGlobali.getInstance().getgAttesa() !=null) {
                     VariabiliStaticheGlobali.getInstance().getgAttesa().StoppaEsecuzione();
                 }
-            }
+            } */
 
             // if (VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()) {
         //     VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-        // } else {
-            if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
-                // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
+            } else {
+                if (VariabiliStaticheHome.getInstance().getPuoAvanzare()) {
+                    // VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(true);
 
-                VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
-                GestioneImmagini.getInstance().StoppaTimerCarosello();
-                VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
+                    VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
+                    GestioneImmagini.getInstance().StoppaTimerCarosello();
+                    VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
 
-                int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
-                if (NumeroBrano > -1) {
-                    VariabiliStaticheGlobali.getInstance().getDatiGenerali()
-                            .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
+                    int NumeroBrano = GestioneListaBrani.getInstance().RitornaBranoPrecedente();
+                    if (NumeroBrano > -1) {
+                        VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+                                .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
 
-                    // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(), "Indietro. Brano precedente: " + Integer.toString(NumeroBrano));
-                    GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+                        // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(), "Indietro. Brano precedente: " + Integer.toString(NumeroBrano));
+                        GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
+                    }
+
+                    VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
                 }
-
-                VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
             }
         }
     }

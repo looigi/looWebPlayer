@@ -125,6 +125,8 @@ public class VariabiliStaticheGlobali {
 
     // DEBUG
     public static boolean ScaricaSempreIBrani = false;
+    public static int ritardoDownload = 10;
+    public static int ritardoDownloadAutomatico = 10;
     public static boolean RitardaDownload = false;
     public static boolean RitardaDownloadAutomatico = false;
     public static boolean TimeoutCortissimo = false;
@@ -143,6 +145,7 @@ public class VariabiliStaticheGlobali {
     private ScaricoBranoEAttesa sbea;
     private Integer BranoImpostatoSenzaRete=-1;
     private boolean StaScaricandoMP3=false;
+    private boolean PremutoAvantiDuranteDLAutomatico = false;
 
     private GestioneWEBServiceSOAPNuovo gWSoap = null;
     // private DownloadImmagine gImmC = null;
@@ -184,6 +187,14 @@ public class VariabiliStaticheGlobali {
 
     public Context getCtxPassaggio() {
         return ctxPassaggio;
+    }
+
+    public boolean isPremutoAvantiDuranteDLAutomatico() {
+        return PremutoAvantiDuranteDLAutomatico;
+    }
+
+    public void setPremutoAvantiDuranteDLAutomatico(boolean premutoAvantiDuranteDLAutomatico) {
+        PremutoAvantiDuranteDLAutomatico = premutoAvantiDuranteDLAutomatico;
     }
 
     public int getTimeOutAttesaSoap() {

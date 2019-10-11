@@ -207,8 +207,11 @@ public class GestioneSuonaBrano {
                                 if (mCurrentPosition >= perc10 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro
-                                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
-                                        if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
+                                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                                            !VariabiliStaticheGlobali.getInstance().isPremutoAvantiDuranteDLAutomatico() &&
+                                            !VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                                        // if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
                                             // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
                                             //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
                                             // } else {
@@ -220,18 +223,21 @@ public class GestioneSuonaBrano {
                                                 VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
                                                 GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
                                             }
-                                        }
-                                    // } else {
+                                        // }
+                                    } else {
+                                        VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setCaricamentoAnticipato(true);
+                                        // } else {
                                         // VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
                                     }
                                 }
-                            }
+                           }
                             vh.getSeekBar1().setProgress(mCurrentPosition);
 
                             // if (!vh.getMediaPlayer().isPlaying()) {
                             // int perc2 = vh.getMediaPlayer().getDuration() * 50 / 100;
                             // if (!vh.getMediaPlayer().isPlaying() && mCurrentPosition >= percFine) {
-                            if (!vh.getMediaPlayer().isPlaying()) {
+                            if (!vh.getMediaPlayer().isPlaying() &&
+                                !VariabiliStaticheGlobali.getInstance().isPremutoAvantiDuranteDLAutomatico()) {
                                 // hNuovoMP3 = new Handler();
                                 // hNuovoMP3.postDelayed(NuovoMp3 = new Runnable() {
                                 // @Override

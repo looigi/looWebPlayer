@@ -18,6 +18,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.BuildConfig;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -53,6 +54,7 @@ import looigi.loowebplayer.utilities.EliminazioneVecchiFiles;
 import looigi.loowebplayer.utilities.GestioneCaricamentoBraniNuovo;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
+import looigi.loowebplayer.utilities.MemoryBoss;
 import looigi.loowebplayer.utilities.Permessi;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private PhoneUnlockedReceiver receiver;
     private boolean CiSonoPermessi;
     // private NetThreadNuovo ntn;
+    private MemoryBoss mMemoryBoss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,11 @@ public class MainActivity extends AppCompatActivity
         CiSonoPermessi = p.ControllaPermessi(this);
         if (CiSonoPermessi) {
             EsegueEntrata();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                mMemoryBoss = new MemoryBoss();
+                registerComponentCallbacks(mMemoryBoss);
+            }
         }
     }
 
@@ -223,7 +231,6 @@ public class MainActivity extends AppCompatActivity
         VariabiliStaticheHome.getInstance().ScriveOperazioniWEB();
 
         if (!VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
-        // if (VariabiliStaticheGlobali.getInstance().getGiaEntrato() == null || !VariabiliStaticheGlobali.getInstance().getGiaEntrato()) {
             Fragment fragment = new Splash();
             FragmentTransaction ft = vg.getFragmentActivityPrincipale().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
@@ -394,6 +401,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+
+        unregisterComponentCallbacks(mMemoryBoss);
 
         // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
         //         "Richiamata funzione onStop",

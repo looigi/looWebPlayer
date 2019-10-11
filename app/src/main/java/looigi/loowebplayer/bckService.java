@@ -1,10 +1,15 @@
 package looigi.loowebplayer;
 
+import android.app.Notification;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.widget.LinearLayout;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
@@ -20,10 +25,24 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.S
 
 public class bckService extends Service {
     @Override
+    public void onCreate() {
+        super.onCreate();
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                        .getEnclosingMethod().getName(),
+                "onCreate in bckService");
+
+        int NOTIFICATION_ID = (int) (System.currentTimeMillis()%10000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(NOTIFICATION_ID, new Notification.Builder(this).build());
+        }
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
                         .getEnclosingMethod().getName(),
-                "Entro nell'app");
+                "Entro in bckService");
         boolean CeUtente=false;
 
         if (VariabiliStaticheGlobali.getInstance().getContext()!=null) {
@@ -86,13 +105,15 @@ public class bckService extends Service {
             Utility.getInstance().CambiaMaschera(R.id.utenza);
         }
 
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        }.getClass().getEnclosingMethod().getName(), "Destroy bckservice");
         // Intent dialogIntent = new Intent(this, MainActivity.class);
         // dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         // startActivity(dialogIntent);

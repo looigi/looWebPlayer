@@ -352,7 +352,6 @@ public class GestioneListaBrani {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         // ceRete = false;
-
         if (ceRete) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),

@@ -541,7 +541,11 @@ public class Home extends android.support.v4.app.Fragment {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // moveTaskToBack(true);
                     if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        try {
+                            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        } catch (Exception ignored) {
+
+                        }
                         return true;
                     }
                     return false;
