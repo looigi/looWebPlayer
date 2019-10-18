@@ -210,7 +210,8 @@ public class GestioneSuonaBrano {
                                     if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
                                             !VariabiliStaticheGlobali.getInstance().isPremutoAvantiDuranteDLAutomatico() &&
                                             !VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente() &&
+                                            !VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
                                         // if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
                                             // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
                                             //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);

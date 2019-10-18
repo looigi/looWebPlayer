@@ -322,6 +322,8 @@ public class DownloadTextFileNuovo {
                                 testo = testo.substring(testo.indexOf("<div class='lyricbox'>") + 22, testo.length());
                                 testo = testo.substring(0, testo.indexOf("<div class='lyricsbreak'>"));
                                 testo = testo.replace("<i>", "");
+                                testo = testo.replace("<b>", "");
+                                testo = testo.replace("</b>", "");
                                 testo = testo.replace("</i>", "");
                                 testo = testo.replace("<br />", "**A CAPO**");
                                 testo = testo.replace("&#", "");
@@ -330,7 +332,13 @@ public class DownloadTextFileNuovo {
                                 for (String cc : c) {
                                     if (!cc.isEmpty()) {
                                         if (cc.contains("**A CAPO**")) {
-                                            int v = Integer.parseInt(cc.replace("**A CAPO**", ""));
+                                            String n = cc.replace("**A CAPO**", "");
+                                            int v = -1;
+                                            if (Utility.getInstance().isNumeric(n)) {
+                                                v = Integer.parseInt((n));
+                                            } else {
+                                                v = 32;
+                                            }
                                             char ccc = ((char) v);
                                             testoFinale += "**A CAPO**" + ccc;
                                         } else {

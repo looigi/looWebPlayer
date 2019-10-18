@@ -1,5 +1,6 @@
 package looigi.loowebplayer;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
