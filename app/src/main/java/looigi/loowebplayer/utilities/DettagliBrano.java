@@ -25,6 +25,7 @@ import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaMembri;
+import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.soap.DownloadTextFileNuovo;
 
@@ -57,7 +58,7 @@ public class DettagliBrano {
             String sAlbum = Album;
             String Anno = "";
             if (sAlbum.contains("-")) {
-                String A[] = sAlbum.split("-");
+                String[] A = sAlbum.split("-");
                 if (A.length > 1) {
                     if (!A[0].isEmpty() && !A[0].equals("0000")) {
                         Anno = A[0];
@@ -86,6 +87,7 @@ public class DettagliBrano {
             ImageView img = (ImageView) view.findViewById(R.id.imgDettagliMP3);
             ImageView imgCondividi = view.findViewById(R.id.imgCondividi);
             ImageView imgScaricoTesto = view.findViewById(R.id.imgScaricoTesto);
+            ImageView imgElimina = view.findViewById(R.id.imgElimina);
             // if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricaTestoBrano()) {
             //     imgScaricoTesto.setVisibility(LinearLayout.GONE);
             // } else {
@@ -99,7 +101,7 @@ public class DettagliBrano {
             txtArtista.setText("Artista: " + Artista);
 
             float dime = sb.getDimensioni();
-            String tipo[] = {"b.", "kb.", "mb."};
+            String[] tipo = {"b.", "kb.", "mb."};
             int qualeTipo = 0;
             while (dime > 1024) {
                 dime /= 1024;
@@ -114,7 +116,7 @@ public class DettagliBrano {
             String Mp3 = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBrano();
             String Durata = GestioneImpostazioneBrani.getInstance().setDurata(Mp3);
             if (!Durata.isEmpty()) {
-                String d[] = Durata.split(";", -1);
+                String[] d = Durata.split(";", -1);
                 String minutes = "";
                 String seconds = "";
 
@@ -162,15 +164,43 @@ public class DettagliBrano {
             }
             txtMembri.setText(ss);
 
+            imgElimina.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String PathCanzone = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBranoDaSplittare();
+                    String[] PathFiles = PathCanzone.split("§", -1);
+                    String[] PathNormale = PathFiles[0].split("/", -1);
+
+                    int numOperazione=VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(
+                            -1, true,
+                            "Eliminazione brano");
+
+                    DBRemotoNuovo dbr = new DBRemotoNuovo();
+                    dbr.EliminaCanzone(
+                            VariabiliStaticheGlobali.getInstance().getContext(),
+                            PathNormale[0], PathNormale[1], PathNormale[2], PathNormale[3],
+                            numOperazione);
+                }
+            });
+
             imgCondividi.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     String fileUri = GestioneCaricamentoBraniNuovo.getInstance().RitornaNomeBrano();
 
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                    File f = new File(fileUri);
+                    if (f.exists()) {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
-                    intent.setType("audio/mpeg");
-                    VariabiliStaticheGlobali.getInstance().getContext().startActivity(Intent.createChooser(intent, "Share MP3:"));
+                        intent.setType("audio/*");
+                        VariabiliStaticheGlobali.getInstance().getContext().startActivity(
+                                Intent.createChooser(intent, "Share MP3:"));
+                    } else {
+                        DialogMessaggio.getInstance().show(
+                                VariabiliStaticheGlobali.getInstance().getContext(),
+                                "Canzone non trovata sulla memoria del telefono",
+                                true,
+                                VariabiliStaticheGlobali.NomeApplicazione);
+                    }
                 }
             });
 

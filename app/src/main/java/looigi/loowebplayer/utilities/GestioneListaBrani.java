@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -216,11 +217,22 @@ public class GestioneListaBrani {
             Brano = n;
         }
 
+        int inizio = Brano;
+        boolean puoTerminare = false;
+
         while (!Ok) {
             if (NumeroBrani > -1) {
                 Brano++;
                 if (Brano > NumeroBrani) {
                     Brano = 0;
+                    puoTerminare = true;
+                }
+                if (puoTerminare) {
+                    if (Brano > inizio) {
+                        // Basta cercare... Non ho trovato niente...
+                        Brano = -1;
+                        break;
+                    }
                 }
 
                 StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(Brano);
@@ -228,9 +240,9 @@ public class GestioneListaBrani {
                 String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
                 String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
                 String CompattazioneMP3 = VariabiliStaticheGlobali.EstensioneCompressione;
-                if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
-                    CompattazioneMP3 = "";
-                }
+                // if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
+                //     CompattazioneMP3 = "";
+                // }
                 String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
                 if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
                     pathBase = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/";
@@ -241,7 +253,6 @@ public class GestioneListaBrani {
                 // /storage/emulated/0/LooigiSoft/looWebPlayer/Dati/Mp3Mica/Mp3Mica/Mp3Mica/Marracash - In Radio.mp3
                 String PathMP3 = pathBase + NomeBrano;
                 String PathMP3_Compresso = pathBase + CompattazioneMP3 + NomeBrano;
-
 
                 File f = new File(PathMP3);
                 File fc = new File(PathMP3_Compresso);
@@ -262,6 +273,15 @@ public class GestioneListaBrani {
             // }
             // BraniSuonati.set(IndiceSuonati, Brano);
             AggiungeBrano(Brano);
+        } else {
+            if (Brano == -1) {
+                DialogMessaggio.getInstance().show(
+                        VariabiliStaticheGlobali.getInstance().getContext(),
+                        "Nessun brano disponibile",
+                        true,
+                        VariabiliStaticheGlobali.NomeApplicazione
+                );
+            }
         }
 
         return Brano;
@@ -400,7 +420,7 @@ public class GestioneListaBrani {
         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         int NumeroBrano=CercaBranoGiaScaricato(false);
         VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
-        VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
+        // VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
         VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
 
         StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
@@ -488,7 +508,7 @@ public class GestioneListaBrani {
 
                 boolean ok;
 
-                if (VariabiliStaticheGlobali.ScaricaSempreIBrani) {
+                if (VariabiliStaticheDebug.ScaricaSempreIBrani) {
                     ok = false;
                 } else {
                     if (f.exists() || fc.exists()) {

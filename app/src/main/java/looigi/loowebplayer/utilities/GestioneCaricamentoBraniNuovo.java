@@ -640,6 +640,30 @@ public class GestioneCaricamentoBraniNuovo {
         return Ritorno;
     }
 
+    public String RitornaNomeBranoDaSplittare() {
+        String Ritorno = "";
+        String CompattazioneMP3 = VariabiliStaticheGlobali.EstensioneCompressione;
+        // if (VariabiliStaticheGlobali.getInstance().getUtente() != null && !VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
+        //     CompattazioneMP3 = "";
+        // }
+
+        String PathMP3 = pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
+        String PathMP3_Compresso = pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        // }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
+        // File f = new File(PathMP3);
+        // File fc = new File(PathMP3_Compresso);
+        // if (f.exists() || fc.exists()) {
+        //     if (f.exists()) {
+                Ritorno = PathMP3 + "§";
+        //     } else {
+                Ritorno += PathMP3_Compresso + "§";
+        //     }
+        // }
+
+        return Ritorno;
+    }
+
     public void CaricaBrano3() {
         if (System.currentTimeMillis() - lastTimePressed < 1000) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {

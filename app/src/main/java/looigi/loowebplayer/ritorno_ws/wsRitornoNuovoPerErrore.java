@@ -104,6 +104,19 @@ public class wsRitornoNuovoPerErrore {
         gt.SettaTesto(false);
     }
 
+    public void EliminaCanzone(String Ritorno, int NumeroOperazione) {
+        String Appoggio=ToglieTag(Ritorno);
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "ERRORE Elimina canzone: " + Appoggio);
+
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                "Errore nell'eliminazione del brano",
+                true, VariabiliStaticheGlobali.NomeApplicazione);
+    }
+
     public void RitornaBranoConAttesa(String Ritorno, int NumeroOperazione, boolean inBackGround) {
         if (!inBackGround) {
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
@@ -117,30 +130,38 @@ public class wsRitornoNuovoPerErrore {
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali()
                     .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
-            VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
+            // VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
             GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
-            // if (NumeroBrano == VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
             GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
-
-            // int brano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(false);
-            // if (brano > -1) {
-            //     StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(brano);
-            //     final String NomeBrano = s.getNomeBrano();
-            //     String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-//
-            //     VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
-            // } else {
-            //     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
-            //             "Errore nel ritorno brano:\n" + Ritorno,
-            //             true,
-            //             VariabiliStaticheGlobali.NomeApplicazione);
-            // }
+            VariabiliStaticheGlobali.getInstance().setImpostatoBranoPerProblemiDiRete(true);
         } else {
-            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
+            GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+            // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
+            // ceRete = false;
+            int NumeroBranoProssimo = -1;
+            // if (ceRete) {
+            //     NumeroBranoProssimo = GestioneListaBrani.getInstance()
+            //             .RitornaNumeroProssimoBranoNuovo(false);
+            // } else {
+                NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+            // }
+            // VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
+            VariabiliStaticheGlobali.getInstance().setImpostatoBranoPerProblemiDiRete(true);
+
+            // int NumeroBrano = NumeroBranoProssimo;
+            // VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+            //         .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
+
+            // VariabiliStaticheGlobali.getInstance().getDatiGenerali()
+            //         .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
+            // GestioneCaricamentoBraniNuovo.getInstance().ImpostaProssimaCanzone();
+            // GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano2();
+
             VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
                     }.getClass().getEnclosingMethod().getName(),
-                    "ERRORE Ritorna brano. Skippo brano");
+                    "ERRORE Ritorna brano. Imposto brano successivo senza rete");
         }
     }
 

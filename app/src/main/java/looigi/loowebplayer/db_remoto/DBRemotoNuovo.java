@@ -468,4 +468,23 @@ public class DBRemotoNuovo {
                 false);
         g.Esegue();
     }
+
+	public void EliminaCanzone(Context context, String pathBase, String Artista, String Album,
+							   String Canzone, int NumeroOperazione) {
+		String Urletto="EliminaCanzone?";
+		Urletto+="PathBase=" + pathBase;
+		Urletto+="&Artista=" + ToglieCaratteriStrani(Artista);
+		Urletto+="&Album=" + ToglieCaratteriStrani(Album);
+		Urletto+="&Canzone=" + ToglieCaratteriStrani(Canzone);
+
+		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"EliminaCanzone",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutImmagini(),
+				NumeroOperazione,
+				false);
+		g.Esegue();
+	}
 }

@@ -27,6 +27,10 @@ public class RitornoDaWSIntermedioSOAP {
         if (!Errore || NumeroBrano == -1) {
             while (Ancora) {
                 switch (tOperazione) {
+                    case "EliminaCanzone":
+                        rRit.EliminaCanzone(Ritorno, NumeroOperazione);
+                        Ancora = false;
+                        break;
                     case "ModificaBellezza":
                         rRit.RitornaModificaBellezza(Ritorno, NumeroOperazione);
                         Ancora = false;
@@ -71,6 +75,10 @@ public class RitornoDaWSIntermedioSOAP {
 
         while (Ancora) {
             switch (tOperazione) {
+                case "EliminaCanzone":
+                    rRit.EliminaCanzone(Ritorno, NumeroOperazione);
+                    Ancora = false;
+                    break;
                 case "ModificaBellezza":
                     rRit.RitornaModificaBellezza(Ritorno, NumeroOperazione);
                     Ancora = false;

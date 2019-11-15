@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.List;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -47,9 +48,14 @@ public class DownloadMP3Nuovo {
     private static DownloadFileMP3 downloadFile;
     private int NumeroBrano;
     private int NumeroOperazione;
+    // private int NumeroOperazione2;
     private String Url;
     private long lastTimePressed = 0;
     private static int Tentativo;
+
+    private Handler hAttesaTermine;
+    private Runnable rAttesaTermine;
+    private int secondi;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -109,8 +115,10 @@ public class DownloadMP3Nuovo {
         VariabiliStaticheGlobali.getInstance().setgMP3(this);
 
         downloadFile = new DownloadFileMP3(NumeroOperazione, Path, Compresso, NomeBrano,
-                NumeroBrano, Automatico, Url);
+                NumeroBrano, Automatico, Url, this);
         if (ceRete) {
+            FaiPartireTimerDiProsecuzione();
+
             downloadFile.execute(Url);
         } else {
             VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Download mp3 mancanza di rete");
@@ -129,7 +137,54 @@ public class DownloadMP3Nuovo {
         // }
     }
 
+    private void FaiPartireTimerDiProsecuzione() {
+        secondi = 0;
+        // NumeroOperazione2 = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download mp3");
+
+        hAttesaTermine = new Handler(Looper.getMainLooper());
+        hAttesaTermine.postDelayed(rAttesaTermine = new Runnable() {
+            @Override
+            public void run() {
+                if (VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
+                    // VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione2, false,
+                    //         "ERRORE Rete down. Blocco download");
+
+                    StoppaEsecuzione();
+                } else {
+                    secondi++;
+                    if (secondi<=(VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3()/1000)) {
+
+                        if (NumeroBrano>-1 &&
+                                NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
+                                VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
+                            StoppaEsecuzione();
+                        } else {
+                            // VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione2, false,
+                            //         "Download brano: secondi " + secondi);
+                            hAttesaTermine.postDelayed(rAttesaTermine, 1000);
+                        }
+                    } else {
+                        // VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione2, false,
+                        //         "ERRORE Download brano: timeout");
+
+                        StoppaEsecuzione();
+                    }
+                }
+            }
+        }, 1000);
+    }
+
+    public void TerminaTimerDiProsecuzione() {
+        // VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione2, true);
+        if (hAttesaTermine!=null && rAttesaTermine!=null) {
+            hAttesaTermine.removeCallbacks(rAttesaTermine);
+            hAttesaTermine = null;
+        }
+    }
+
     public void StoppaEsecuzione() {
+        TerminaTimerDiProsecuzione();
+
         downloadFile.ChiudeDialog();
 
         if (downloadFile != null) {
@@ -163,9 +218,10 @@ public class DownloadMP3Nuovo {
         private int SecondiAttesa;
         private Handler hAttesaNuovoTentativo;
         private Runnable rAttesaNuovoTentativo;
+        private DownloadMP3Nuovo dmp3n;
 
         public DownloadFileMP3(int NumeroOperazione, String Path, boolean Compresso, String NomeBrano,
-                               int NumeroBrano, boolean Automatico, String Url) {
+                               int NumeroBrano, boolean Automatico, String Url, final DownloadMP3Nuovo dmp3n) {
             this.NumeroOperazione = NumeroOperazione;
             this.Path = Path;
             this.NomeBrano = NomeBrano;
@@ -173,6 +229,7 @@ public class DownloadMP3Nuovo {
             this.NumeroBrano = NumeroBrano;
             this.Automatico = Automatico;
             this.Url = Url;
+            this.dmp3n = dmp3n;
 
             QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
             NumeroOper = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download in corso");
@@ -312,17 +369,17 @@ public class DownloadMP3Nuovo {
                                         break;
                                     }
 
-                                    if (Automatico && VariabiliStaticheGlobali.RitardaDownloadAutomatico) {
+                                    if (Automatico && VariabiliStaticheDebug.RitardaDownloadAutomatico) {
                                         try {
-                                            Thread.sleep(VariabiliStaticheGlobali.ritardoDownloadAutomatico);
+                                            Thread.sleep(VariabiliStaticheDebug.ritardoDownloadAutomatico);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
                                     }
 
-                                    if (!Automatico && VariabiliStaticheGlobali.RitardaDownload) {
+                                    if (!Automatico && VariabiliStaticheDebug.RitardaDownload) {
                                         try {
-                                            Thread.sleep(VariabiliStaticheGlobali.ritardoDownload);
+                                            Thread.sleep(VariabiliStaticheDebug.ritardoDownload);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -345,6 +402,8 @@ public class DownloadMP3Nuovo {
                                 } catch (Exception e) {
                                     VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
                                 }
+                            } else {
+                                dmp3n.TerminaTimerDiProsecuzione();
                             }
 
                             // if (!isCancelled()) {
@@ -525,7 +584,7 @@ public class DownloadMP3Nuovo {
                                                 ApriDialog();
 
                                                 downloadFile = new DownloadFileMP3(NumeroOperazione, Path, Compresso, NomeBrano,
-                                                        NumeroBrano, Automatico, Url);
+                                                        NumeroBrano, Automatico, Url, dmp3n);
                                                 downloadFile.execute(Url);
                                             } else {
                                                 wsRitornoNuovoPerErrore rRit = new wsRitornoNuovoPerErrore();

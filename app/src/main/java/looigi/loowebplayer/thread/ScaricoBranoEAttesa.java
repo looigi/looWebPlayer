@@ -41,17 +41,17 @@ public class ScaricoBranoEAttesa {
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
         boolean compresso = false;
         // if (Brano[campi].toUpperCase().contains("COMPRESSI")) {
-        if (Brano[1].toUpperCase().contains("COMPRESSI")) {
-            compresso = true;
-            url += "Compressi/";
-        } else {
-            url += "Dati/";
-        }
-        if (!VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase().isEmpty()) {
-            url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
-        }
+        if (Brano.length > 0) {
+            if (Brano[1].toUpperCase().contains("COMPRESSI")) {
+                compresso = true;
+                url += "Compressi/";
+            } else {
+                url += "Dati/";
+            }
+            if (!VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase().isEmpty()) {
+                url += VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + "/";
+            }
 
-        if (Brano.length > 1) {
             String sBrano = Brano[campi];
             String sAlbum = Brano[campi - 1];
             String sArtista = "";

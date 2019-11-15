@@ -3,13 +3,19 @@ package looigi.loowebplayer.cuffie;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.maschere.Home;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 
 public class GestioneTastoCuffie extends BroadcastReceiver {
+    private Runnable runRiga;
+    private Handler hSelezionaRiga;
 
     // Constructor is mandatory
     public GestioneTastoCuffie ()
@@ -32,6 +38,25 @@ public class GestioneTastoCuffie extends BroadcastReceiver {
                 return;
             }
             VariabiliStaticheGlobali.getInstance().setLastTimePressed(System.currentTimeMillis());
+
+            if (event.getKeyCode() == 127) {
+                Toast toast = Toast.makeText(
+                        VariabiliStaticheGlobali.getInstance().getContext(),
+                        "Premuto tasto cuffie looWP",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+
+                hSelezionaRiga = new Handler();
+                hSelezionaRiga.postDelayed(runRiga=new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent it = new Intent("com.looigi.detector.scattafoto");
+                        VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().sendBroadcast(it);
+
+                        hSelezionaRiga.removeCallbacks(runRiga);
+                    }
+                }, 50);
+            }
 
             /* if (event.getKeyCode() == 126) {
                 if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {

@@ -23,6 +23,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -68,6 +69,15 @@ public class GestioneImmagini {
     private Runnable rAttesaDownload;
     private Handler hCambioImmagine2;
     private Runnable rCambioImmagine2;
+    private RelativeLayout relGenerale;
+
+    public RelativeLayout getRelGenerale() {
+        return relGenerale;
+    }
+
+    public void setRelGenerale(RelativeLayout relGenerale) {
+        this.relGenerale = relGenerale;
+    }
 
     public ImageView getImgBrano() {
         return imgBrano;
@@ -263,11 +273,14 @@ public class GestioneImmagini {
                 @Override
                 public void run() {
                 if (VariabiliStaticheHome.getInstance().getImms().size()>1) {
-                    Random r = new Random();
-                    int s = VariabiliStaticheHome.getInstance().getImms().size() - 1;
-                    immNumber = r.nextInt((s) + 1) + 0;
+                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                        Random r = new Random();
+                        int s = VariabiliStaticheHome.getInstance().getImms().size() - 1;
+                        immNumber = r.nextInt((s) + 1) + 0;
 
-                    ControllaEsistenzaProssimaImmagine(VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
+                        ControllaEsistenzaProssimaImmagine(VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
+                    }
                 }
 
                 StoppaTimerCarosello();
@@ -693,9 +706,10 @@ public class GestioneImmagini {
             @Override
             public void run() {
                 imgBrano.setVisibility(LinearLayout.VISIBLE);
+
                 String t = VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata();
                 if (!t.isEmpty()) {
-                    String tt[] = t.split(";",-1);
+                    String[] tt= t.split(";",-1);
                     if (tt[0].equals("ICONA")) {
                         imgBrano.setImageResource(Integer.parseInt(tt[1]));
                     } else {

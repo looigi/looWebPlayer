@@ -65,6 +65,25 @@ public class wsRitornoNuovo {
         }
     }
 
+    public void EliminaCanzone(String Ritorno, int NumeroOperazione) {
+        String Appoggio=ToglieTag(Ritorno);
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Elimina canzone: " + Appoggio);
+
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        if (Appoggio.toUpperCase().contains("ERROR:")) {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(), Appoggio,
+                    true, VariabiliStaticheGlobali.NomeApplicazione);
+        } else {
+            DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
+                    "Brano eliminato",
+                    true, VariabiliStaticheGlobali.NomeApplicazione);
+            // ControlloVersioneApplicazione.ControlloVersione(Appoggio);
+        }
+    }
+
     public void RitornaListaBrani(final String Ritorno) {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna lista brani");
@@ -121,7 +140,7 @@ public class wsRitornoNuovo {
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
         String Appoggio = ToglieTag(Ritorno);
 
-        String Oggetti[] = Appoggio.split("ç", -1);
+        String[] Oggetti = Appoggio.split("ç", -1);
 
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista. Oggetti: " + Integer.toString(Oggetti.length));
         String tipologia = "";
@@ -130,11 +149,11 @@ public class wsRitornoNuovo {
 
         for (String oggetto : Oggetti) {
             if (!oggetto.isEmpty()) {
-                String righe[] = oggetto.split("§", -1);
+                String[] righe = oggetto.split("§", -1);
                 tipologia = righe[0].replace("***", "");
                 for (String riga : righe) {
                     if (!riga.isEmpty() && !riga.contains("***")) {
-                        String campi[] = riga.split(";", -1);
+                        String[] campi = riga.split(";", -1);
                         switch (tipologia) {
                             case "IMMAGINI":
                                 StrutturaImmagini i = new StrutturaImmagini();

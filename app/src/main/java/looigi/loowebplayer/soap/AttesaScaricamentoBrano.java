@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -387,7 +388,7 @@ public class AttesaScaricamentoBrano {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                if (!VariabiliStaticheGlobali.TimeoutCortissimo) {
+                if (!VariabiliStaticheDebug.TimeoutCortissimo) {
 					aht = new HttpTransportSE(uu, VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap());
 				} else {
 					aht = new HttpTransportSE(uu, 50);
@@ -508,7 +509,7 @@ public class AttesaScaricamentoBrano {
             	messErrore="ESCI";
 			}
 
-            if (VariabiliStaticheGlobali.GeneraSempreErroreSOAP) {
+            if (VariabiliStaticheDebug.GeneraSempreErroreSOAP) {
             	messErrore = "ERROR: Errore fatto apposta";
 			}
 
@@ -559,7 +560,13 @@ public class AttesaScaricamentoBrano {
 				// 	messErrore = "ESCI";
 				// }
 				if (!messErrore.equals("ESCI") && !messErrore.contains("ERROR")) {
-					rr.ChiamaRoutinesInCasoDiOK(result, messErrore, NumeroOperazione, NumeroBrano, Errore, tOperazione, inBackground);
+					if (VariabiliStaticheDebug.EsceDaAttesaScaricamentoBranoPerErrore) {
+						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
+								tOperazione, inBackground);
+					} else {
+						rr.ChiamaRoutinesInCasoDiOK(result, messErrore, NumeroOperazione, NumeroBrano, Errore,
+								tOperazione, inBackground);
+					}
 				} else {
 					if (!messErrore.equals("ESCI")) {
 						// Errore... Riprovo ad eseguire la funzione
@@ -614,7 +621,8 @@ public class AttesaScaricamentoBrano {
 												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 												}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete 2");
 
-												rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+												rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
+														tOperazione, inBackground);
 											}
 											// }
 
@@ -632,7 +640,8 @@ public class AttesaScaricamentoBrano {
 								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 								}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
 
-								rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+								rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
+										tOperazione, inBackground);
 							}
 						}
 					} else {
@@ -640,7 +649,8 @@ public class AttesaScaricamentoBrano {
 						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
 						}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa timeout");
 
-						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
+						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
+								tOperazione, inBackground);
 					}
 				}
 			}

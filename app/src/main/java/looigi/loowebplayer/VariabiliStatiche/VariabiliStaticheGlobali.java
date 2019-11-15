@@ -60,11 +60,11 @@ public class VariabiliStaticheGlobali {
     final public static int TempoAttesaFineDownload = 30;
     final public static int SecondiSenzaRetePerAnnullareIlDL = 2;
 
-    private int TimeOutDownloadMP3=45000;
+    private int TimeOutDownloadMP3=30000;
     private int TimeOutListaBrani=200000;
     private int AttesaControlloEsistenzaMP3=5000;
     private int TimeOutImmagini=15000;
-    private int TimeOutAttesaSoap=75000;
+    private int TimeOutAttesaSoap=45000;
     private int TipoSegnale=1;
     private int AttesaSecondiBranoSuccessivo=3;
 
@@ -122,16 +122,7 @@ public class VariabiliStaticheGlobali {
     private AttesaScaricamentoBrano asb;
     private boolean SkippataAttesaFineCaricamento = false;
     private boolean StaAttendendoFineDownload = false;
-
-    // DEBUG
-    public static boolean ScaricaSempreIBrani = false;
-    public static int ritardoDownload = 10;
-    public static int ritardoDownloadAutomatico = 10;
-    public static boolean RitardaDownload = false;
-    public static boolean RitardaDownloadAutomatico = false;
-    public static boolean TimeoutCortissimo = false;
-    public static boolean GeneraSempreErroreSOAP = false;
-    // DEBUG
+    private boolean ImpostatoBranoPerProblemiDiRete = false;
 
     // private String ChiaveDLSoap = "";
     // private String ChiaveDLImmagine = "";
@@ -143,7 +134,7 @@ public class VariabiliStaticheGlobali {
     private boolean ScreenON = true;
     private Intent iServizio;
     private ScaricoBranoEAttesa sbea;
-    private Integer BranoImpostatoSenzaRete=-1;
+    // private Integer BranoImpostatoSenzaRete=-1;
     private boolean StaScaricandoMP3=false;
     private boolean PremutoAvantiDuranteDLAutomatico = false;
 
@@ -191,6 +182,14 @@ public class VariabiliStaticheGlobali {
 
     public boolean isPremutoAvantiDuranteDLAutomatico() {
         return PremutoAvantiDuranteDLAutomatico;
+    }
+
+    public boolean isImpostatoBranoPerProblemiDiRete() {
+        return ImpostatoBranoPerProblemiDiRete;
+    }
+
+    public void setImpostatoBranoPerProblemiDiRete(boolean impostatoBranoPerProblemiDiRete) {
+        ImpostatoBranoPerProblemiDiRete = impostatoBranoPerProblemiDiRete;
     }
 
     public void setPremutoAvantiDuranteDLAutomatico(boolean premutoAvantiDuranteDLAutomatico) {
@@ -332,13 +331,13 @@ public class VariabiliStaticheGlobali {
         StaScaricandoMP3 = staScaricandoMP3;
     }
 
-    public Integer getBranoImpostatoSenzaRete() {
+    /* public Integer getBranoImpostatoSenzaRete() {
         return BranoImpostatoSenzaRete;
     }
 //
     public void setBranoImpostatoSenzaRete(Integer branoImpostatoSenzaRete) {
         BranoImpostatoSenzaRete = branoImpostatoSenzaRete;
-    }
+    } */
 
     public int getNumeroBranoNuovo() {
         return NumeroBranoNuovo;

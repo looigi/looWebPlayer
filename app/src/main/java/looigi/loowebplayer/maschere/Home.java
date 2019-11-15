@@ -128,6 +128,7 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setImgPlay((ImageView) view.findViewById(R.id.imgPlay));
             vh.setImgStop((ImageView) view.findViewById(R.id.imgStop));
             GestioneImmagini.getInstance().setImgBrano((PhotoView) view.findViewById(R.id.imgBrano));
+            GestioneImmagini.getInstance().setRelGenerale((RelativeLayout) view.findViewById(R.id.relGenerale));
             vh.setGifView((GifImageView) view.findViewById(R.id.GifImageView));
             vh.setImgBackground((ImageView) view.findViewById(R.id.imgBackground));
             vh.getImgBackground().setOnClickListener(new View.OnClickListener() {
@@ -343,6 +344,12 @@ public class Home extends android.support.v4.app.Fragment {
             });
 
             GestioneImmagini.getInstance().getImgBrano().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    GestioneLayout.getInstance().VisualizzaLayout(500);
+                }
+            });
+
+            GestioneImmagini.getInstance().getRelGenerale().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     GestioneLayout.getInstance().VisualizzaLayout(500);
                 }

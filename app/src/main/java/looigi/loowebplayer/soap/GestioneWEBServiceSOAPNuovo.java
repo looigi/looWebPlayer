@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -322,11 +323,12 @@ public class GestioneWEBServiceSOAPNuovo {
 				soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
     			soapEnvelope.dotNet = true;
                 soapEnvelope.setOutputSoapObject(Request);
-                if (!VariabiliStaticheGlobali.TimeoutCortissimo) {
+                if (!VariabiliStaticheDebug.TimeoutCortissimo) {
 					aht = new HttpTransportSE(uu, Timeout);
 				} else {
 					aht = new HttpTransportSE(uu, 50);
 				}
+                aht.reset();
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled() && messErrore.equals("ESCI")){
@@ -440,7 +442,7 @@ public class GestioneWEBServiceSOAPNuovo {
             	messErrore="ESCI";
 			}
 
-			if (VariabiliStaticheGlobali.GeneraSempreErroreSOAP) {
+			if (VariabiliStaticheDebug.GeneraSempreErroreSOAP) {
 				messErrore = "ERROR: Errore fatto apposta";
 			}
 
