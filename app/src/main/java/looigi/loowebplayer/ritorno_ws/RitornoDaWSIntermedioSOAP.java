@@ -60,6 +60,10 @@ public class RitornoDaWSIntermedioSOAP {
                         rRit.RitornaVersioneApplicazione(Ritorno, NumeroOperazione);
                         Ancora = false;
                         break;
+                    case "RitornaSeDeveAggiornare":
+                        rRit.RitornaSeDeveAggiornare(Ritorno, NumeroOperazione);
+                        Ancora = false;
+                        break;
                 }
             }
         }

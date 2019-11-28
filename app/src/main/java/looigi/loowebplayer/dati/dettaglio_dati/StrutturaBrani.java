@@ -11,6 +11,15 @@ public class StrutturaBrani {
     private int Stelle;
     private int QuanteVolteAscoltato;
     private String DataCreazione;
+    private boolean Escluso;
+
+    public boolean isEscluso() {
+        return Escluso;
+    }
+
+    public void setEscluso(boolean escluso) {
+        Escluso = escluso;
+    }
 
     public int getIdBrano() {
         return idBrano;

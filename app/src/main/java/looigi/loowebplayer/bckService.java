@@ -2,18 +2,16 @@ package looigi.loowebplayer;
 
 import android.app.Notification;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.v4.app.JobIntentService;
 import android.widget.LinearLayout;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
+import looigi.loowebplayer.db_locale.DBLocaleEsclusi;
 import looigi.loowebplayer.db_locale.DBLocaleUtenti;
 import looigi.loowebplayer.utilities.EliminazioneVecchiFiles;
 import looigi.loowebplayer.utilities.GestioneCPU;
@@ -89,6 +87,9 @@ public class bckService extends Service {
             c.close();
         }
         // db.close();
+
+        DBLocaleEsclusi dbe = new DBLocaleEsclusi();
+        dbe.CreazioneTabellaEsclusione();
 
         VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
         }.getClass().getEnclosingMethod().getName(), "Vado in Home");

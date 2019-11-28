@@ -4,6 +4,15 @@ public class StrutturaAlbum {
     private int idArtista;
     private int idAlbum;
     private String NomeAlbum;
+    private boolean Escluso;
+
+    public boolean isEscluso() {
+        return Escluso;
+    }
+
+    public void setEscluso(boolean escluso) {
+        Escluso = escluso;
+    }
 
     public int getIdAlbum() {
         return idAlbum;

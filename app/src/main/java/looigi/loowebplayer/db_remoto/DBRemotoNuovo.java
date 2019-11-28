@@ -469,6 +469,20 @@ public class DBRemotoNuovo {
         g.Esegue();
     }
 
+	public void RitornaSeDeveAggiornare(Context context, int NumeroOperazione) {
+		String Urletto="RitornaSeDeveAggiornare";
+
+		GestioneWEBServiceSOAPNuovo g = new GestioneWEBServiceSOAPNuovo(
+				VariabiliStaticheGlobali.RadiceWS + ws + Urletto,
+				"RitornaSeDeveAggiornare",
+				NS,
+				SA,
+				VariabiliStaticheGlobali.getInstance().getTimeOutImmagini(),
+				NumeroOperazione,
+				false);
+		g.Esegue();
+	}
+
 	public void EliminaCanzone(Context context, String pathBase, String Artista, String Album,
 							   String Canzone, int NumeroOperazione) {
 		String Urletto="EliminaCanzone?";

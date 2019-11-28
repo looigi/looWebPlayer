@@ -1,7 +1,10 @@
 package looigi.loowebplayer.utilities;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
@@ -300,5 +304,21 @@ public class Utility {
 		}
 
 		return sRitorno;
+	}
+
+	public void RiavviaApplicazione(String Messaggio) {
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+				new Object(){}.getClass().getEnclosingMethod().getName(),
+				Messaggio);
+
+		Context context = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale();
+		Intent mStartActivity = new Intent(context,
+				MainActivity.class);
+		int mPendingIntentId = 123456;
+		PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,
+				mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+		AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+		System.exit(0);
 	}
 }

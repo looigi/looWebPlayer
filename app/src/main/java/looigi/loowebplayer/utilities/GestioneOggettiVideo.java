@@ -68,13 +68,19 @@ public class GestioneOggettiVideo {
                 VariabiliStaticheGlobali.getInstance().setPremutoAvantiDuranteDLAutomatico(true);
                 VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
                 GestioneImmagini.getInstance().StoppaTimerCarosello();
-                int NumeroBrano;
 
                 // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1) {
                 //     NumeroBrano = VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
                 //     VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(-1);
                 // } else {
-                NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(false);
+
+                int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
+                int NumeroBrano = numeroAttuale;
+                while (NumeroBrano == numeroAttuale) {
+                    NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(false);
+                }
+                // }
+
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
                 // }
                 ControllaAvantiBrano(NumeroBrano, false);
@@ -105,7 +111,11 @@ public class GestioneOggettiVideo {
                     if (!VariabiliStaticheGlobali.getInstance().isImpostatoBranoPerProblemiDiRete()) {
                         NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
                     } else {
-                        NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(false);
+                        int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
+                        NumeroBrano = numeroAttuale;
+                        while (NumeroBrano == numeroAttuale) {
+                            NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(false);
+                        }
                     }
                     // }
                     ControllaAvantiBrano(NumeroBrano, false);

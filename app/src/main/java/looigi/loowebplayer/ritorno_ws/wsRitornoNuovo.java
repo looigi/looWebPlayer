@@ -1,9 +1,14 @@
 package looigi.loowebplayer.ritorno_ws;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
@@ -20,6 +26,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaMembri;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
+import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 import looigi.loowebplayer.maschere.Utenza;
 // import looigi.loowebplayer.soap.CheckURLFile;
@@ -32,6 +39,7 @@ import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneImmagini;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
+import looigi.loowebplayer.utilities.GestioneSuonaBrano;
 import looigi.loowebplayer.utilities.GestioneTesti;
 import looigi.loowebplayer.utilities.PronunciaFrasi;
 import looigi.loowebplayer.utilities.Utility;
@@ -39,15 +47,59 @@ import looigi.loowebplayer.utilities.Utility;
 public class wsRitornoNuovo {
     private Runnable runRiga;
     private Handler hSelezionaRiga;
-    private Runnable rAttendeRispostaCheckURL;
-    private Handler hAttendeRispostaCheckURL;
-    private int Secondi;
-    private int Conta;
-    private int PerPronuncia;
-    private int nn;
 
     private String ToglieTag(String Cosa) {
         return Cosa;
+    }
+
+    public void RitornaSeDeveAggiornare(String Ritorno, int NumeroOperazione) {
+        final String Appoggio=ToglieTag(Ritorno);
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Ritorna se deve aggiornare: " + Appoggio);
+
+        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
+
+        if (Appoggio.toUpperCase().contains("ERROR:")) {
+            //DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(), Appoggio, true, "Cv Calcio");
+        } else {
+            boolean deveAggiornare = false;
+            final String pathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/";
+            final String nomeFile = "VersioneLibreria.txt";
+            if (GestioneFiles.getInstance().fileExistsInSD(nomeFile, pathFile)) {
+                String ver = GestioneFiles.getInstance().LeggeFileDiTesto(pathFile + nomeFile);
+                if (!ver.equals(Appoggio)) {
+                    deveAggiornare = true;
+                }
+            } else {
+                deveAggiornare = true;
+            }
+
+            if (deveAggiornare) {
+                hSelezionaRiga = new Handler(Looper.getMainLooper());
+                hSelezionaRiga.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hSelezionaRiga.removeCallbacks(runRiga);
+                        runRiga = null;
+
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                                new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Deve Aggiornare Libreria");
+
+                        String path=VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/Lista.dat";
+                        File f = new File(path);
+                        if (f.exists()) {
+                            f.delete();
+                        }
+
+                        GestioneFiles.getInstance().CreaFileDiTesto(pathFile, nomeFile, Appoggio);
+
+                        Utility.getInstance().RiavviaApplicazione("Riavvio per aggiornamento libreria");
+                    }
+                }, 100);
+            }
+        }
     }
 
     public void RitornaVersioneApplicazione(String Ritorno, int NumeroOperazione) {

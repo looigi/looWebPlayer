@@ -78,8 +78,16 @@ public class DatiGenerali {
         }
     }
 
+    public void ImpostaBrano(int indice, StrutturaBrani sb) {
+        BraniFiltrati.set(indice, sb);
+    }
+
     public StrutturaAlbum RitornaAlbum(int Indice) {
         return Album.get(Indice);
+    }
+
+    public void ImpostaAlbum(int indice, StrutturaAlbum sa) {
+        Album.set(indice, sa);
     }
 
     public int RitornaQuantiAlbum() {
@@ -137,6 +145,10 @@ public class DatiGenerali {
 
     public StrutturaArtisti RitornaArtista(int Indice) {
         return Artisti.get(Indice);
+    }
+
+    public void ImpostaArtista(int indice, StrutturaArtisti sa) {
+        Artisti.set(indice, sa);
     }
 
     // public StrutturaArtisti RitornaArtistaFiltrato(int Indice) {

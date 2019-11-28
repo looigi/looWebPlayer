@@ -1,5 +1,8 @@
 package looigi.loowebplayer.nuova_versione;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.io.File;
 
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
@@ -9,6 +12,8 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class ControlloVersioneApplicazione {
     private static String verAttuale = "";
+    private static Runnable runRiga;
+    private static Handler hSelezionaRiga;
 
     public void ControllaVersione() {
         verAttuale = Utility.getInstance().getVersion(VariabiliStaticheGlobali.getInstance().getContext());
@@ -33,6 +38,20 @@ public class ControlloVersioneApplicazione {
             if (f.exists()) {
                 f.delete();
             }
+
+            hSelezionaRiga = new Handler(Looper.getMainLooper());
+            hSelezionaRiga.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hSelezionaRiga.removeCallbacks(runRiga);
+                    runRiga = null;
+
+                    int NumeroOperazione2 = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1,
+                            false, "Controllo aggiornamenti libreria");
+                    DBRemotoNuovo dbr = new DBRemotoNuovo();
+                    dbr.RitornaSeDeveAggiornare(VariabiliStaticheGlobali.getInstance().getContext(),NumeroOperazione2);
+                }
+            }, 100);
         }
     }
 }

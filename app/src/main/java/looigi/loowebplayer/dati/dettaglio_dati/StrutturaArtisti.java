@@ -9,6 +9,15 @@ public class StrutturaArtisti {
     private List<StrutturaMembri> Membri=new ArrayList<>();
     private List<StrutturaVideo> Video=new ArrayList<>();
     private List<StrutturaImmagini> Immagini=new ArrayList<>();
+    private boolean Escluso;
+
+    public boolean isEscluso() {
+        return Escluso;
+    }
+
+    public void setEscluso(boolean escluso) {
+        Escluso = escluso;
+    }
 
     public int getIdArtista() {
         return idArtista;

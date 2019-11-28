@@ -1,5 +1,8 @@
 package looigi.loowebplayer.utilities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -425,7 +428,9 @@ public class GestioneCaricamentoBraniNuovo {
         //     VariabiliStaticheGlobali.getInstance().setiServizio(i);
         // }
 
-        if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
+        if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
+            Utility.getInstance().RiavviaApplicazione("Riavvio per utenza nulla");
+        } else {
             VariabiliStaticheHome.getInstance().setQuanteAscoltate(VariabiliStaticheHome.getInstance().getQuanteAscoltate() + 1);
             Utility.getInstance().ScriveScaricateAscoltate();
 
@@ -466,7 +471,7 @@ public class GestioneCaricamentoBraniNuovo {
                 String sNomeBrano = NomeBrano;
                 String Traccia = "";
                 if (sNomeBrano.contains("-")) {
-                    String A[] = sNomeBrano.split("-");
+                    String[] A = sNomeBrano.split("-");
                     if (!A[0].isEmpty() && !A[0].equals("00")) {
                         Traccia = "\nTraccia " + A[0].trim();
                     }
@@ -479,7 +484,7 @@ public class GestioneCaricamentoBraniNuovo {
                 String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
                 String sAlbum = Album;
                 if (sAlbum.contains("-")) {
-                    String A[] = sAlbum.split("-");
+                    String[] A = sAlbum.split("-");
                     if (A.length > 1) {
                         if (!A[0].isEmpty() && !A[0].equals("0000")) {
                             sAlbum = A[1] + " (Anno " + A[0] + ")";
@@ -604,15 +609,9 @@ public class GestioneCaricamentoBraniNuovo {
 
                     VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
                 } else {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(), "Utente non valido: null");
+                    Utility.getInstance().RiavviaApplicazione("Riavvio per utenza nulla");
                 }
             }
-        } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(),
-                    "ERRORE Dati utente vuoti. Problema grosso...");
-
         }
     }
 

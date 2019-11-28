@@ -41,7 +41,7 @@ public class ScaricoBranoEAttesa {
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
         boolean compresso = false;
         // if (Brano[campi].toUpperCase().contains("COMPRESSI")) {
-        if (Brano.length > 0) {
+        if (Brano.length > 1) {
             if (Brano[1].toUpperCase().contains("COMPRESSI")) {
                 compresso = true;
                 url += "Compressi/";

@@ -28,14 +28,14 @@ import looigi.loowebplayer.utilities.Utility;
 // import looigi.loowebplayer.soap.CheckURLFile;
 
 public class wsRitornoNuovoPerErrore {
-    private Runnable runRiga;
+    /* private Runnable runRiga;
     private Handler hSelezionaRiga;
     private Runnable rAttendeRispostaCheckURL;
     private Handler hAttendeRispostaCheckURL;
     private int Secondi;
     private int Conta;
     private int PerPronuncia;
-    private int nn;
+    private int nn; */
 
     private String ToglieTag(String Cosa) {
         return Cosa;
@@ -126,7 +126,11 @@ public class wsRitornoNuovoPerErrore {
                     }.getClass().getEnclosingMethod().getName(),
                     "ERRORE Ritorna brano. Prendo il successivo senza rete");
 
-            int NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+            int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
+            int NumeroBranoProssimo = numeroAttuale;
+            while (NumeroBranoProssimo == numeroAttuale) {
+                NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+            }
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali()
                     .getConfigurazione().setQualeCanzoneStaSuonando(NumeroBranoProssimo);
@@ -140,14 +144,18 @@ public class wsRitornoNuovoPerErrore {
 
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
             // ceRete = false;
-            int NumeroBranoProssimo = -1;
+            // int NumeroBranoProssimo = -1;
             // if (ceRete) {
             //     NumeroBranoProssimo = GestioneListaBrani.getInstance()
             //             .RitornaNumeroProssimoBranoNuovo(false);
             // } else {
+            int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
+            int NumeroBranoProssimo = numeroAttuale;
+            while (NumeroBranoProssimo == numeroAttuale) {
                 NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
+            }
             // }
-            // VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
+            VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
             VariabiliStaticheGlobali.getInstance().setImpostatoBranoPerProblemiDiRete(true);
 
             // int NumeroBrano = NumeroBranoProssimo;

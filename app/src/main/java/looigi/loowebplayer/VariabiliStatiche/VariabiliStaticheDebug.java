@@ -44,7 +44,7 @@ public class VariabiliStaticheDebug {
 
     public static boolean ScaricaSempreIBrani = false;
     public static int ritardoDownload = 10;
-    public static int ritardoDownloadAutomatico = 10;
+    public static int ritardoDownloadAutomatico = 30;
     public static boolean RitardaDownload = false;
     public static boolean RitardaDownloadAutomatico = false;
     public static boolean TimeoutCortissimo = false;

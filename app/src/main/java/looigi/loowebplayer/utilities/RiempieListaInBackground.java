@@ -2,6 +2,7 @@ package looigi.loowebplayer.utilities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import looigi.loowebplayer.dati.dettaglio_dati.StrutturaConfig;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaImmagini;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaMembri;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaVideo;
+import looigi.loowebplayer.db_locale.DBLocaleEsclusi;
 import looigi.loowebplayer.db_locale.db_dati;
 
 public class RiempieListaInBackground {
@@ -128,7 +130,11 @@ public class RiempieListaInBackground {
                                     Brano.setIdAlbum(Integer.parseInt(campi[0]));
                                     Brano.setIdArtista(Integer.parseInt(campi[1]));
                                     Brano.setNomeBrano(campi[2]);
-                                    Brano.setDimensioni(Long.parseLong(campi[3]));
+                                    if (Utility.getInstance().isNumeric(campi[3])) {
+                                        Brano.setDimensioni(Long.parseLong(campi[3]));
+                                    } else {
+                                        Brano.setDimensioni(0);
+                                    }
                                     Brano.setTesto(campi[4].replace("**PV**",";").replace("**A CAPO**","§"));
                                     Brano.setTestoTradotto(campi[5].replace("**PV**",";").replace("**A CAPO**","§"));
                                     if (!campi[6].isEmpty()) {
@@ -313,6 +319,50 @@ public class RiempieListaInBackground {
                 }
             }
             // Aggiorna i dati caricati da remoto con quelli in locale
+
+            // Aggiorna le esclusioni
+            DBLocaleEsclusi dbe = new DBLocaleEsclusi();
+            Cursor c = dbe.ottieniTutteEsclusioni();
+            if (c.moveToFirst()) {
+                do {
+                    String Artista = c.getString(1);
+                    String Album = c.getString(2);
+                    String Brano = c.getString(3);
+
+                    for (StrutturaBrani s : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani()) {
+                        String sBrano = s.getNomeBrano();
+                        String sArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                        String sAlbum = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+                        int idArt = s.getIdArtista();
+                        int idAlb = s.getIdAlbum();
+                        int idBra = s.getIdBrano();
+
+                        if (!Artista.isEmpty() && !Album.isEmpty() && !Brano.isEmpty()) {
+                            if (Artista.equals(sArtista) && Album.equals(sAlbum) && Brano.equals(sBrano)) {
+                                s.setEscluso(true);
+                                VariabiliStaticheGlobali.getInstance().getDatiGenerali().ImpostaBrano(idBra, s);
+                            }
+                        } else {
+                            if (!Artista.isEmpty() && !Album.isEmpty()) {
+                                if (Artista.equals(sArtista) && Album.equals(sAlbum)) {
+                                    StrutturaAlbum sa = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(idAlb);
+                                    sa.setEscluso(true);
+                                    VariabiliStaticheGlobali.getInstance().getDatiGenerali().ImpostaAlbum(idAlb, sa);
+                                }
+                            } else {
+                                if (!Artista.isEmpty()) {
+                                    if (Artista.equals(sArtista)) {
+                                        StrutturaArtisti sa = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArt);
+                                        sa.setEscluso(true);
+                                        VariabiliStaticheGlobali.getInstance().getDatiGenerali().ImpostaArtista(idArt, sa);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } while (c.moveToNext());
+            }
+            // Aggiorna le esclusioni
 
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().setValoriCaricati(true);
 

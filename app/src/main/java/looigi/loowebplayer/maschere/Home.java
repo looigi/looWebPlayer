@@ -476,7 +476,9 @@ public class Home extends android.support.v4.app.Fragment {
                 } else {
                     vh.getTxtMax().setText("");
                 }
-                vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
+                if (vh.getMediaPlayer() != null) {
+                    vh.getSeekBar1().setMax(vh.getMediaPlayer().getDuration());
+                }
 
                 StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
                 if (s!=null) {

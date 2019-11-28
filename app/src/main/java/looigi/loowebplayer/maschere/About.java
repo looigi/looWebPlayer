@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
+import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
@@ -68,7 +69,7 @@ public class About extends android.support.v4.app.Fragment {
             t.setText("Versione "+ Utility.getInstance().getVersion(context));
 
             String tr = Traffico.getInstance().LeggeTrafficoTotale();
-            String tt[] = tr.split(";",-1);
+            String[] tt = tr.split(";",-1);
 
             TextView trr = view.findViewById(R.id.txtTrafficoTotale);
             TextView trm = view.findViewById(R.id.txtTrafficoMax);
@@ -111,6 +112,19 @@ public class About extends android.support.v4.app.Fragment {
             } else {
                 trm.setVisibility(LinearLayout.INVISIBLE);
             }
+
+            String pathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/";
+            String nomeFile = "VersioneLibreria.txt";
+            String ver = "";
+            if (GestioneFiles.getInstance().fileExistsInSD(nomeFile, pathFile)) {
+                ver = GestioneFiles.getInstance().LeggeFileDiTesto(pathFile + nomeFile);
+            } else {
+                ver = "Versione non disponibile";
+            }
+
+            TextView t2 = view.findViewById(R.id.txtVersioneLibreria);
+            t2.setText("Versione libreria " + ver);
+
         }
     }
 }
