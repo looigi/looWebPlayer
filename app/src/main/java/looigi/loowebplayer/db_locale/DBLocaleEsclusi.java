@@ -8,12 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.utilities.Utility;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class DBLocaleEsclusi {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("DBLocaleEsclusi");;
     private String PathDB = VariabiliStaticheGlobali.getInstance().PercorsoDIR +"/DB/";
     private String NomeDB = "esclusi.db";
 
@@ -55,7 +57,7 @@ public class DBLocaleEsclusi {
             db = VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
                     PathDB + NomeDB, MODE_PRIVATE, null);
         } catch (Exception e) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Problemi nell'apertura del db: " + Utility.getInstance().PrendeErroreDaException(e));
         }
         return  db;

@@ -11,6 +11,7 @@ import org.kobjects.util.Util;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.db_locale.db_dati;
@@ -20,6 +21,7 @@ import looigi.loowebplayer.dialog.DialogMessaggio;
 // import looigi.loowebplayer.maschere.Equalizer;
 
 public class GestioneSuonaBrano {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneSuonaBrano");;
     private static final GestioneSuonaBrano ourInstance = new GestioneSuonaBrano();
     private boolean BranoValido;
 
@@ -130,7 +132,7 @@ public class GestioneSuonaBrano {
                     // vh.getMediaPlayer().release();
                     GestioneFiles.getInstance().EliminaFile(Mp3);
                     if (VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Brano non valido. Prendo il successivo.");
 
                         VariabiliStaticheGlobali.getInstance().setStaSuonando(false);
@@ -139,7 +141,7 @@ public class GestioneSuonaBrano {
                         int NumeroBranoProssimo = -1;
                         if (ceRete) {
                             NumeroBranoProssimo = GestioneListaBrani.getInstance()
-                                    .RitornaNumeroProssimoBranoNuovo(false);
+                                    .RitornaNumeroProssimoBranoNuovo(false, true);
                         } else {
                             NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
                         }
@@ -159,8 +161,11 @@ public class GestioneSuonaBrano {
             }
             // Check Brano
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Parte l'handler della barra di avanzamento brano");
+
+            GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
+
             vh.setHandlerSeekBar(new Handler(Looper.getMainLooper()));
             vh.getHandlerSeekBar().postDelayed(rSeekBar = new Runnable() {
                 @Override
@@ -207,11 +212,10 @@ public class GestioneSuonaBrano {
                                 if (mCurrentPosition >= perc10 && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
                                     // Tenta di scaricare il brano successivo se non esiste sul disco per diminuire i ritardi fra
                                     // un brano e l'altro
-                                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
+                                    if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload() &&
                                             !VariabiliStaticheGlobali.getInstance().isPremutoAvantiDuranteDLAutomatico() &&
-                                            !VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente() &&
-                                            !VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
+                                            !VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente() &&
+                                            lunghezzaBrano > 60000) {
                                         // if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
                                             // if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata() != null) {
                                             //     GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata(), "IMMAGINE", -1, null);
@@ -220,10 +224,10 @@ public class GestioneSuonaBrano {
                                             // }
                                             // GestioneImmagini.getInstance().getImgBrano().setVisibility(LinearLayout.VISIBLE);
                                             VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
-                                            if (GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale() >= GestioneListaBrani.getInstance().RitornaQuantiBraniInLista()) {
-                                                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
+                                            // if (GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale() >= GestioneListaBrani.getInstance().RitornaQuantiBraniInLista()) {
+                                            //     VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(true);
                                                 GestioneListaBrani.getInstance().ScaricaBranoSuccessivoInBackground();
-                                            }
+                                            // }
                                         // }
                                     } else {
                                         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setCaricamentoAnticipato(true);
@@ -260,7 +264,7 @@ public class GestioneSuonaBrano {
                                 // VariabiliStaticheGlobali.getInstance().setBloccaCarosello(true);
                                 VariabiliStaticheGlobali.getInstance().setMusicaTerminata(true);
                                 // int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBrano(true, "AVANTI BRANO CON ATTESA");
-                                int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                                int NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true, false);
                                 GestioneOggettiVideo.getInstance().ControllaAvantiBrano(NumeroBrano, false);
                                 //      }
                                 //  }, 50);
@@ -316,7 +320,7 @@ public class GestioneSuonaBrano {
                         VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
                         VariabiliStaticheGlobali.getInstance().setScrittaAscoltata(true);
 
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Spostato brano tramite barra. Progress: " + Integer.toString(progress));
                         vh.getMediaPlayer().seekTo(progress);
 

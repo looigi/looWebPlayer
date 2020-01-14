@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.widget.LinearLayout;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaUtenti;
 import looigi.loowebplayer.db_locale.DBLocaleEsclusi;
@@ -22,11 +23,13 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.R
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
 
 public class bckService extends Service {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("bckService");;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                         .getEnclosingMethod().getName(),
                 "onCreate in bckService");
 
@@ -38,7 +41,7 @@ public class bckService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                         .getEnclosingMethod().getName(),
                 "Entro in bckService");
         boolean CeUtente=false;
@@ -48,7 +51,7 @@ public class bckService extends Service {
         }
 
         GestioneCPU.getInstance().ImpostaValori(this);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(),
                 "Ottiene utente attuale");
         DBLocaleUtenti db = new DBLocaleUtenti();
@@ -91,7 +94,7 @@ public class bckService extends Service {
         DBLocaleEsclusi dbe = new DBLocaleEsclusi();
         dbe.CreazioneTabellaEsclusione();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
         }.getClass().getEnclosingMethod().getName(), "Vado in Home");
         VariabiliStaticheGlobali.getInstance().getContextPrincipale().getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         VariabiliStaticheGlobali.getInstance().getAppBar().setVisibility(LinearLayout.VISIBLE);
@@ -113,7 +116,7 @@ public class bckService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
         }.getClass().getEnclosingMethod().getName(), "Destroy bckservice");
         // Intent dialogIntent = new Intent(this, MainActivity.class);
         // dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

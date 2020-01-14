@@ -3,11 +3,13 @@ package looigi.loowebplayer.utilities;
 import android.content.Context;
 import android.os.PowerManager;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 import static android.content.Context.POWER_SERVICE;
 
 public class GestioneCPU {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneCPU");;
     private Context ctx;
     private static final GestioneCPU ourInstance = new GestioneCPU();
     private PowerManager powerManager;
@@ -28,7 +30,7 @@ public class GestioneCPU {
     }
 
     public void AttivaCPU() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(),
                 "Attiva CPU");
 
@@ -45,23 +47,23 @@ public class GestioneCPU {
                 wakeLock.acquire(60000);
                 GiaAttivo = true;
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "Attivata");
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "NON Attivata");
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Già Attivata");
         }
     }
 
     public void DisattivaCPU() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(),
                 "Interrompo CPU");
 
@@ -70,18 +72,18 @@ public class GestioneCPU {
                 if (wakeLock.isHeld()) {
                     wakeLock.release();
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Interrotta");
                 } else {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "NON Held");
                 }
             } catch (Exception ignored) {
                 String e = Utility.getInstance().PrendeErroreDaException(ignored);
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "ERRORE: " + e);
             }

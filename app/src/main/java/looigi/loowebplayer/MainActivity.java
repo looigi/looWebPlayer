@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.chiamate.CallReceiver;
@@ -62,6 +63,8 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("MainActivity");
+
     private AudioManager mAudioManager;
     private ComponentName mReceiverComponent;
     private PhoneUnlockedReceiver receiver;
@@ -172,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 if (NumeroBrano != -1) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Eliminazione files per refresh");
                     StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
                     if (s != null) {
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity
                             fc.delete();
                         }
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Ritornata struttura brano nulla");
                     }
@@ -224,7 +227,7 @@ public class MainActivity extends AppCompatActivity
 
         GestioneFiles.getInstance().CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/");
 
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lettura configurazione valori");
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Lettura configurazione valori");
         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().LeggeValori();
 
         filterHeadset = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
@@ -370,7 +373,7 @@ public class MainActivity extends AppCompatActivity
                 Notifica.getInstance().RimuoviNotifica();
 
                 if (VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie()!=null) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Tolgo registrazione receiver cuffie");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Tolgo registrazione receiver cuffie");
 
                     try {
                         unregisterReceiver(VariabiliStaticheGlobali.getInstance().getMyReceiverCuffie());
@@ -379,7 +382,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Tolgo il receiver delle cuffie dal manager audio");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Tolgo il receiver delle cuffie dal manager audio");
                 try {
                     mAudioManager.unregisterMediaButtonEventReceiver(mReceiverComponent);
                 } catch (Exception e) {
@@ -414,7 +417,7 @@ public class MainActivity extends AppCompatActivity
         //         "Richiamata funzione onStop",
         //         true,
         //         VariabiliStaticheGlobali.NomeApplicazione);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onStop");
     }
 
@@ -426,7 +429,7 @@ public class MainActivity extends AppCompatActivity
         //         "Richiamata funzione onLowMemory",
         //         true,
         //         VariabiliStaticheGlobali.NomeApplicazione);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onLowMemory");
     }
 
@@ -434,7 +437,7 @@ public class MainActivity extends AppCompatActivity
     protected void onPostResume() {
         super.onPostResume();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onPostResume");
     }
 
@@ -446,7 +449,7 @@ public class MainActivity extends AppCompatActivity
         //         "Richiamata funzione onDestroy",
         //         true,
         //         VariabiliStaticheGlobali.NomeApplicazione);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onDestroy");
     }
 
@@ -454,7 +457,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onResume");
     }
 
@@ -462,7 +465,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResumeFragments() {
         super.onResumeFragments();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onResumeFragments");
     }
 
@@ -474,7 +477,7 @@ public class MainActivity extends AppCompatActivity
         //         "Richiamata funzione onPause",
         //         true,
         //         VariabiliStaticheGlobali.NomeApplicazione);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Richiamata funzione onPause");
     }
 }

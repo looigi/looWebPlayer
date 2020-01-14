@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheLibreria;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAlbum;
@@ -29,6 +30,7 @@ import looigi.loowebplayer.db_locale.DBLocaleEsclusi;
 import looigi.loowebplayer.dialog.DialogFiltro;
 
 public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.MyViewHolder> {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("AdapterAlbum");;
     private List<StrutturaAlbum> horizontalList = Collections.emptyList();
     private Context context;
     private boolean Escluso;
@@ -150,7 +152,7 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.MyViewHolder
             @Override
             public boolean onLongClick(View v) {
                 String Album=horizontalList.get(position).getNomeAlbum();
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lungo click su album "+Album);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Lungo click su album "+Album);
 
                 DialogFiltro.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                         "Si vuole impostare il filtro sull'album\n\n"+Album, "ALBUM",

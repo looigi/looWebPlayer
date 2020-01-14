@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheLibreria;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAlbum;
@@ -31,6 +32,7 @@ import looigi.loowebplayer.dialog.DialogFiltro;
 import looigi.loowebplayer.utilities.GestioneFiles;
 
 public class AdapterArtisti extends RecyclerView.Adapter<AdapterArtisti.MyViewHolder> {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("AdapterArtisti");;
     private List<StrutturaArtisti> horizontalList = Collections.emptyList();
     private Context context;
     private boolean Escluso;
@@ -118,7 +120,7 @@ public class AdapterArtisti extends RecyclerView.Adapter<AdapterArtisti.MyViewHo
                 }
             }
         } catch (Exception e) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "AdapterArtisti. Riempimento immagini");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "AdapterArtisti. Riempimento immagini");
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             holder.layer.setBackgroundResource(R.drawable.ic_launcher);
         }
@@ -195,7 +197,7 @@ public class AdapterArtisti extends RecyclerView.Adapter<AdapterArtisti.MyViewHo
             @Override
             public boolean onLongClick(View v) {
                 String Artista=horizontalList.get(position).getArtista();
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Lungo click su artista "+Artista);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Lungo click su artista "+Artista);
 
                 DialogFiltro.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                         "Si vuole impostare il filtro sull'artista\n\n"+Artista, "ARTISTA",

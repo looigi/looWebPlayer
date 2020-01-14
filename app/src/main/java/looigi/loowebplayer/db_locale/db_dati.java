@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAscoltate;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
@@ -16,6 +17,7 @@ import looigi.loowebplayer.utilities.Utility;
 import static android.content.Context.MODE_PRIVATE;
 
 public class db_dati {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("db_dati");;
     private String PathDB = VariabiliStaticheGlobali.getInstance().PercorsoDIR +"/DB/";
     private String NomeDB = "dati.db";
 
@@ -34,7 +36,7 @@ public class db_dati {
             db = VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
                     PathDB + NomeDB, MODE_PRIVATE, null);
         } catch (Exception e) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Problemi nell'apertura del db: " + Utility.getInstance().PrendeErroreDaException(e));
         }
         return  db;

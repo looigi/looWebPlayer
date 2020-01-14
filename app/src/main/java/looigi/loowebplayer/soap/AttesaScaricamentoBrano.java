@@ -26,9 +26,9 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class AttesaScaricamentoBrano {
-	private static HttpTransportSE aht = null;
-	private static BackgroundAsyncTask bckAsyncTask;
-	private static String messErrore="";
+	private boolean effettuaLogQui = false;
+	private BackgroundAsyncTask bckAsyncTask;
+	private String messErrore="";
 	private long lastTimePressed = 0;
 
 	private String NAMESPACE;
@@ -38,7 +38,7 @@ public class AttesaScaricamentoBrano {
 	private String tOperazione;
 	private boolean ApriDialog;
 	private String Urletto;
-	private static int Tentativo;
+	// private static int Tentativo;
 	private boolean inBackGround;
 
 	public AttesaScaricamentoBrano(String urletto, String TipoOperazione,
@@ -52,13 +52,13 @@ public class AttesaScaricamentoBrano {
 		this.ApriDialog = ApriDialog;
 		this.Urletto = urletto;
 		this.inBackGround = inBackGround;
-		this.Tentativo = 0;
+		// this.Tentativo = 0;
 
 		// boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
 		// if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
 		// 	try {
-		// 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+		// 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 		// 		}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");
 		// 	} catch (Exception ignored) {
 //
@@ -93,7 +93,7 @@ public class AttesaScaricamentoBrano {
 			// 		funzione = new Object() {
 			// 		}.getClass().getEnclosingMethod().getName();
 			// 	}
-			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 			// 			funzione,
 			// 			"Skippata operazione SOAP uguale: " + Chiave);
 			// }
@@ -106,7 +106,7 @@ public class AttesaScaricamentoBrano {
 				funzione = new Object() {
 				}.getClass().getEnclosingMethod().getName();
 			}
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 					funzione,
 					"Skippata operazione. URL Vuoto.");
 		}
@@ -123,7 +123,7 @@ public class AttesaScaricamentoBrano {
 		VariabiliStaticheGlobali.getInstance().setgAttesa(this);
 
 		bckAsyncTask = new BackgroundAsyncTask(NAMESPACE, Timeout, SOAP_ACTION, NumeroOperazione, tOperazione,
-				inBackGround, ApriDialog, Urletto, this);
+				inBackGround, ApriDialog, Urletto);
 		if (ceRete) {
 			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 					"Chiamata compressione e download");
@@ -133,7 +133,7 @@ public class AttesaScaricamentoBrano {
 			VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Attesa scaricamento mancanza di rete");
 			VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 					"Attesa scaricamento mancanza di rete");
 
 			StoppaEsecuzione();
@@ -147,9 +147,9 @@ public class AttesaScaricamentoBrano {
 				"Blocco compressione e download per cambio brano o errore di rete");
 		VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-		if (aht!=null) {
-			aht.reset();
-		}
+		// if (aht!=null) {
+		// 	aht.reset();
+		// }
 
 		messErrore="ESCI";
 
@@ -162,7 +162,7 @@ public class AttesaScaricamentoBrano {
 		bckAsyncTask.ControllaFineCiclo();
 	}
 
-	private static class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
+	private class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
 		private String NAMESPACE;
 		private String METHOD_NAME = "";
 		private String[] Parametri;
@@ -173,7 +173,7 @@ public class AttesaScaricamentoBrano {
 		private int NumeroBrano;
 		private int NumeroOperazione;
 		private String tOperazione;
-		private int QuantiTentativi;
+		// private int QuantiTentativi;
 		private Handler hAttesaNuovoTentativo;
 		private Runnable rAttesaNuovoTentativo;
 		private int SecondiAttesa;
@@ -186,12 +186,11 @@ public class AttesaScaricamentoBrano {
 		private Handler hAttesaTermine;
 		private Runnable rAttesaTermine;
 		private int secondi;
-		private AttesaScaricamentoBrano asb;
+		// private AttesaScaricamentoBrano asb;
 
 		private BackgroundAsyncTask(String NAMESPACE, int TimeOut,
 									String SOAP_ACTION, int NumeroOperazione, String tOperazione,
-									boolean inBackground, boolean ApriDialog, String Urletto,
-									AttesaScaricamentoBrano asb) {
+									boolean inBackground, boolean ApriDialog, String Urletto) {
 			this.NAMESPACE = NAMESPACE;
 			// this.METHOD_NAME = METHOD_NAME;
 			// this.Parametri = Parametri;
@@ -202,11 +201,12 @@ public class AttesaScaricamentoBrano {
 			this.ApriDialog = ApriDialog;
 			this.Urletto = Urletto;
 			this.inBackground = inBackground;
-			this.asb = asb;
+			// this.asb = asb;
 
+			VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(true);
 			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-			this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+			// this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
 
 			FaiPartireTimerDiProsecuzione();
 		}
@@ -218,19 +218,19 @@ public class AttesaScaricamentoBrano {
 			hAttesaTermine.postDelayed(rAttesaTermine = new Runnable() {
 				@Override
 				public void run() {
-					if (VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
+					/* if (VariabiliStaticheGlobali.getInstance().getNtn().getQuantiSecondiSenzaRete() > VariabiliStaticheGlobali.SecondiSenzaRetePerAnnullareIlDL) {
 						VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 								"ERRORE Rete down. Blocco download");
 
-						asb.StoppaEsecuzione();
-					} else {
+						StoppaEsecuzione();
+					} else { */
 						secondi++;
 						if (secondi<=(VariabiliStaticheGlobali.getInstance().getTimeOutAttesaSoap()/1000)) {
 
 							if (NumeroBrano>-1 &&
 									NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
 									VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
-								asb.StoppaEsecuzione();
+								StoppaEsecuzione();
 							} else {
 								VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 										"Chiamata compressione e download: secondi " + secondi);
@@ -240,9 +240,9 @@ public class AttesaScaricamentoBrano {
 							VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 									"ERRORE Chiamata compressione e download: timeout");
 
-							asb.StoppaEsecuzione();
+							StoppaEsecuzione();
 						}
-					}
+					// }
 				}
 			}, 1000);
 		}
@@ -351,7 +351,7 @@ public class AttesaScaricamentoBrano {
 
 			// if (!ceRete) {
 			// 	messErrore="ERROR: Assenza di rete";
-			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
 			// 	return null;
 			// }
 
@@ -360,7 +360,7 @@ public class AttesaScaricamentoBrano {
             String Parametro="";
             String Valore="";
 
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 					"SOAP: "+sUrl[0]);
 			
             if (Parametri!=null) {
@@ -377,7 +377,9 @@ public class AttesaScaricamentoBrano {
             }
 
             SoapSerializationEnvelope soapEnvelope = null;
-            messErrore="";
+			HttpTransportSE aht = null;
+
+			messErrore="";
             try {
 				// VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false,
 				// 		"Inizio chiamata compressione e download");
@@ -393,16 +395,19 @@ public class AttesaScaricamentoBrano {
 				} else {
 					aht = new HttpTransportSE(uu, 50);
 				}
-                aht.call(SOAP_ACTION, soapEnvelope);
+				aht.reset();
+				aht.call(SOAP_ACTION, soapEnvelope);
 
 				// VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
 				if(isCancelled() || messErrore.equals("ESCI")) {
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+					// aht.reset();
+
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
 									.getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
 				} else {
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 							}.getClass().getEnclosingMethod().getName(),
 							"SOAP:  OK");
 				}
@@ -410,7 +415,7 @@ public class AttesaScaricamentoBrano {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  SocketTimeOutException: "+messErrore);
             	if (messErrore!=null) {
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -419,23 +424,29 @@ public class AttesaScaricamentoBrano {
             	}
             	result="ERROR: "+messErrore;
             	messErrore = result;
+
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+				}.getClass().getEnclosingMethod().getName(), "Errore SocketTimeoutException: " + messErrore);
 				//Utility.getInstance().VisualizzaPOPUP(context, "Errore di socket sul DB:\n" + messErrore, false, 0, false);
 			} catch (IOException e) {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  IOException: "+messErrore);
             	if (messErrore!=null)
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
             	result="ERROR: "+messErrore;
 				messErrore = result;
+
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+				}.getClass().getEnclosingMethod().getName(), "Errore IOException: " + messErrore);
 				//Utility.getInstance().VisualizzaPOPUP(context, "Errore di I/O dal DB:\n" + messErrore, false, 0, false);
             } catch (XmlPullParserException e) {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  XmlPullParserException: "+messErrore);
             	if (messErrore!=null) {
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -444,23 +455,30 @@ public class AttesaScaricamentoBrano {
             	}
             	result="ERRORE: "+messErrore;
 				messErrore = result;
+
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+				}.getClass().getEnclosingMethod().getName(), "Errore XmlPullParserException: " + messErrore);
+
 				//Utility.getInstance().VisualizzaPOPUP(context, "Errore di parsing XML:\n" + messErrore, false, 0, false);
             } catch (Exception e) {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  Exception: "+messErrore);
             	if (messErrore!=null)
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
             	result="ERROR: "+messErrore;
 				messErrore = result;
+
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+				}.getClass().getEnclosingMethod().getName(), "Errore Exception: " + messErrore);
 				//Utility.getInstance().VisualizzaPOPUP(context, "Errore generico di lettura sul DB:\n" + messErrore, false, 0, false);
             }
             if (!Errore && !isCancelled()) {
 	            try {
 	                result = ""+soapEnvelope.getResponse();
-					// VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP result: "+result);
+					// VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP result: "+result);
 
 	                // if (!isCancelled()) {
 						// Traffico
@@ -472,20 +490,24 @@ public class AttesaScaricamentoBrano {
 						}
 						// Traffico
 					// } else {
-					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
+					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
 					// }
 
 					if (result.contains("ERROR")) {
 						messErrore = result;
-					}
 
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
-							"SOAP: OK anche il result");
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+						}.getClass().getEnclosingMethod().getName(), "Errore: " + messErrore);
+					} else {
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+								}.getClass().getEnclosingMethod().getName(),
+								"SOAP: OK anche il result");
+					}
 	            } catch (SoapFault e) {
 	            	Errore=true;
 					messErrore = Utility.getInstance().PrendeErroreDaException(e);
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 							new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP: SoapFault: "+messErrore);
 	            	if (messErrore!=null) {
@@ -495,6 +517,9 @@ public class AttesaScaricamentoBrano {
 	            	}
 	            	result="ERROR: "+messErrore;
 					messErrore = result;
+
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+					}.getClass().getEnclosingMethod().getName(), "Errore SoapFault: " + messErrore);
 	            }
             } else {
             	int a = 0;
@@ -545,13 +570,16 @@ public class AttesaScaricamentoBrano {
 
 			final RitornoDaWSIntermedioAttesa rr = new RitornoDaWSIntermedioAttesa();
 
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+			}.getClass().getEnclosingMethod().getName(), "Fine esecuzione: " + messErrore);
+
 			if (NumeroBrano>-1 &&
 					(NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) &&
 					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
 				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione,
 						true,
 						"SOAP: Cambio brano");
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 				}.getClass().getEnclosingMethod().getName(), "SOAP: Cambio brano");
 
 				rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
@@ -561,6 +589,9 @@ public class AttesaScaricamentoBrano {
 				// }
 				if (!messErrore.equals("ESCI") && !messErrore.contains("ERROR")) {
 					if (VariabiliStaticheDebug.EsceDaAttesaScaricamentoBranoPerErrore) {
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+						}.getClass().getEnclosingMethod().getName(), "Errore. Esce da attesa brano per errore");
+
 						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
 								tOperazione, inBackground);
 					} else {
@@ -573,12 +604,12 @@ public class AttesaScaricamentoBrano {
 						boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 						if (!ceRete) {
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 							}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete");
 
 							rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano, tOperazione, inBackground);
 						} else {
-							if (Tentativo < QuantiTentativi &&
+							/* if (Tentativo < QuantiTentativi &&
 								VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
 								!tOperazione.equals("RitornaDatiUtente")) {
 								Tentativo++;
@@ -587,7 +618,7 @@ public class AttesaScaricamentoBrano {
 
 								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 										"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 								}.getClass().getEnclosingMethod().getName(),
 										"SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
 										Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
@@ -607,7 +638,7 @@ public class AttesaScaricamentoBrano {
 											boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 											if (ceRete) {
-												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 												}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Richiamata");
 
 												TerminaTimerDiProsecuzione();
@@ -618,7 +649,7 @@ public class AttesaScaricamentoBrano {
 														inBackground, ApriDialog, Urletto, asb);
 												bckAsyncTask.execute(Urletto);
 											} else {
-												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 												}.getClass().getEnclosingMethod().getName(), "SOAP Attesa: Mancanza di rete 2");
 
 												rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
@@ -635,18 +666,18 @@ public class AttesaScaricamentoBrano {
 								});
 								hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
 								// Errore... Riprovo ad eseguire la funzione
-							} else {
+							} else { */
 								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 								}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
 
 								rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,
 										tOperazione, inBackground);
-							}
+							// }
 						}
 					} else {
 						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 						}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa timeout");
 
 						rr.ChiamaRoutinesInCasoDiErrore(result, NumeroOperazione, NumeroBrano,

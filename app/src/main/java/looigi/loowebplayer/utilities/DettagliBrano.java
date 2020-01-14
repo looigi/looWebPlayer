@@ -43,7 +43,7 @@ public class DettagliBrano {
             String sNomeBrano = sb.getNomeBrano();
             String Traccia = "";
             if (sNomeBrano.contains("-")) {
-                String A[] = sNomeBrano.split("-");
+                String[] A = sNomeBrano.split("-");
                 if (!A[0].isEmpty() && !A[0].equals("00")) {
                     Traccia = "\nTraccia " + A[0].trim();
                 }

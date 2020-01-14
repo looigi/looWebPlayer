@@ -6,11 +6,13 @@ import android.net.Uri;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dialog.DialogMessaggio;
 
 public class GestioneImpostazioneBrani {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneImpostazioneBrani");;
     private static final GestioneImpostazioneBrani ourInstance = new GestioneImpostazioneBrani();
 
     public static GestioneImpostazioneBrani getInstance() {
@@ -46,7 +48,7 @@ public class GestioneImpostazioneBrani {
     }
 
     public void ImpostaBrano(final String Mp3) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                 .getEnclosingMethod().getName(), "Entrata imposta brano");
         final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
 
@@ -55,6 +57,7 @@ public class GestioneImpostazioneBrani {
         vh.getTxtMin().setText("00:00");
 
         String Durata = setDurata(Mp3);
+        // Durata = "";
         if (Durata.isEmpty()) {
             // down = ContextCompat.getDrawable(VariabiliStaticheHome.getInstance().getContext(), R.drawable.error);
             // VariabiliStaticheHome.getInstance().getImgLoadBrano().setVisibility(LinearLayout.VISIBLE);
@@ -76,11 +79,13 @@ public class GestioneImpostazioneBrani {
             PronunciaFrasi pf =new PronunciaFrasi();
             pf.PronunciaFrase("Brano non valido", "ITALIANO");
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                     .getEnclosingMethod().getName(), "Durata 0: Brano non valido -> Prendo il successivo");
 
             // Tento di prendere il brano successivo
+            GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
             GestioneOggettiVideo.getInstance().AvantiBrano();
+            GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
 
             /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isCompressioneMP3()) {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setCompressioneMP3(false);

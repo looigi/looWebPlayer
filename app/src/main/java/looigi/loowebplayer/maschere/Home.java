@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
@@ -53,6 +54,7 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class Home extends android.support.v4.app.Fragment {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("Home");;
     // private Context context;
     private static String TAG = NomiMaschere.getInstance().getHome();
     private boolean TestoMostrato=false;
@@ -115,7 +117,7 @@ public class Home extends android.support.v4.app.Fragment {
 
         if (view != null) {
             final VariabiliStaticheHome vh = VariabiliStaticheHome.getInstance();
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Entrato in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Entrato in Home");
 
             Notifica.getInstance().setContext(context);
             Notifica.getInstance().setIcona(R.drawable.ic_launcher);
@@ -134,7 +136,7 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getImgBackground().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto background");
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto background");
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
@@ -205,8 +207,8 @@ public class Home extends android.support.v4.app.Fragment {
             vh.setTxtQuanteScaricate((TextView) view.findViewById(R.id.txtQuanteScaricate));
             vh.setTxtTitoloBackground((TextView) view.findViewById(R.id.txtTitoloBackground));
             vh.setImgScaricaTesto((ImageView) view.findViewById(R.id.imgScaricoTesto));
-            vh.setTxtLivelloSegnale((TextView) view.findViewById(R.id.txtLivelloSegnale));
-            vh.getTxtLivelloSegnale().setText("");
+            // vh.setTxtLivelloSegnale((TextView) view.findViewById(R.id.txtLivelloSegnale));
+            // vh.getTxtLivelloSegnale().setText("");
 
             vh.getImgScaricaTesto().setVisibility(LinearLayout.GONE);
             vh.getRltListaBrani().setVisibility(LinearLayout.GONE);
@@ -252,13 +254,13 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getLayTesto().setVisibility(LinearLayout.GONE);
 
             /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMascheraTestoAperta()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                         .getEnclosingMethod().getName(),
                         "Apro maschera testo per config");
                 TestoMostrato=true;
                 vh.getLayTesto().setVisibility(LinearLayout.VISIBLE);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                         .getEnclosingMethod().getName(),
                         "Chiudo maschera testo per config");
                 TestoMostrato=false;
@@ -269,11 +271,11 @@ public class Home extends android.support.v4.app.Fragment {
             imgInglese.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Inglese");
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Inglese");
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                             .getEnclosingMethod().getName(), "Impostata lingua inglese");
                     String sTesto="";
 
@@ -296,11 +298,11 @@ public class Home extends android.support.v4.app.Fragment {
             imgItaliano.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Italiano");
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Italiano");
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Impostata lingua italiana");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Impostata lingua italiana");
                     String sTesto="";
                     int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
                     if (NumeroBrano>-1) {
@@ -317,7 +319,7 @@ public class Home extends android.support.v4.app.Fragment {
                 }
             });
 
-            VariabiliStaticheHome.getInstance().getImgListaBrani().setOnClickListener(new View.OnClickListener() {
+            /* VariabiliStaticheHome.getInstance().getImgListaBrani().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
                     List<Integer> ll = new ArrayList<>();
@@ -335,7 +337,7 @@ public class Home extends android.support.v4.app.Fragment {
                     }
                     vh.getRltListaBrani().setVisibility(LinearLayout.VISIBLE);
                 }
-            });
+            });*/
 
             VariabiliStaticheHome.getInstance().getImgChiudeListaBrani().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -362,18 +364,18 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getImgLinguettaTesto().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Linguetta Testo");
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Linguetta Testo");
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
                     if (!TestoMostrato) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Apro maschera testo");
                         TestoMostrato=true;
                         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setMascheraTestoAperta(true);
                         vh.getLayTesto().setVisibility(LinearLayout.VISIBLE);
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Chiudo maschera testo");
                         TestoMostrato=false;
                         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setMascheraTestoAperta(false);
@@ -386,19 +388,19 @@ public class Home extends android.support.v4.app.Fragment {
             vh.getImgLinguettaDettagli().setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // if (!NetThread.getInstance().isScreenOn() && VariabiliStaticheGlobali.getInstance().getStaSuonando()) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Linguetta Testo");
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riattivato carosello con tasto Linguetta Testo");
                     //     NetThread.getInstance().SbloccoCarosello();
                     // }
 
                     if (!DettagliMostrati) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Apro maschera dettagli");
                         DettagliMostrati=true;
                         DettagliBrano db = new DettagliBrano();
                         db.RitornaDettagliBrano(view);
                         vh.getLayDettagli().setVisibility(LinearLayout.VISIBLE);
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Chiudo maschera dettagli");
                         DettagliMostrati=false;
                         vh.getLayDettagli().setVisibility(LinearLayout.GONE);
@@ -431,21 +433,21 @@ public class Home extends android.support.v4.app.Fragment {
             });
 
             if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
-                GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
+                GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
                 if (GestioneFiles.getInstance().fileExistsInSD("Lista.dat",
                         VariabiliStaticheGlobali.getInstance().PercorsoDIR)) {
                     if (!VariabiliStaticheGlobali.getInstance().getDatiGenerali().getValoriCaricati()) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Riempio strutture per valori non caricati");
                         RiempieListaInBackground r = new RiempieListaInBackground();
                         r.RiempieStrutture(false, false);
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Carica brano");
                         GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
                     }
                 } else {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Interpello il ws per la lista brani");
                     int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download Lista Brani");
                     DBRemotoNuovo dbr = new DBRemotoNuovo();

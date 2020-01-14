@@ -16,10 +16,12 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 public class DialogMessaggio
 {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("DialogMessaggio");;
     //-------- Singleton ----------//
     private static DialogMessaggio instance = null;
     private String Message;
@@ -100,7 +102,7 @@ public class DialogMessaggio
                         Toast.makeText(VariabiliStaticheGlobali.getInstance().getContext(),
                                 Message, Toast.LENGTH_LONG).show();
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Dialog messaggio. Errore: " + Message);
                     }
                 }

@@ -13,9 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 public class Notifica {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("Notifica");;
     //-------- Singleton ----------//
     private static Notifica instance = null;
 
@@ -257,7 +259,7 @@ public class Notifica {
 
     public void RimuoviNotifica() {
         // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Rimuovi notifica");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Rimuovi notifica");
         if (notificationManager!=null) {
             try {
                 notificationManager.cancel(NOTIF_ID);

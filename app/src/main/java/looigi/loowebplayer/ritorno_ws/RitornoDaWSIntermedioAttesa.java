@@ -1,5 +1,6 @@
 package looigi.loowebplayer.ritorno_ws;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 
@@ -8,8 +9,8 @@ public class RitornoDaWSIntermedioAttesa {
                                          int NumeroBrano, boolean Errore, String tOperazione, boolean inBackground) {
         String Ritorno = result;
 
-        if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug().isEmpty()) {
-            messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug();
+        if (!VariabiliStaticheDebug.getInstance().getMessErrorePerDebug().isEmpty()) {
+            messErrore = VariabiliStaticheDebug.getInstance().getMessErrorePerDebug();
             Ritorno = messErrore;
         }
 

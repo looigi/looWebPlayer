@@ -9,12 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.utilities.Utility;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class DBLocaleTraffico {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("DBLocaleTraffico");;
     private String PathDB = VariabiliStaticheGlobali.getInstance().PercorsoDIR +"/DB/";
     private String NomeDB = "traffico.db";
 
@@ -87,8 +89,9 @@ public class DBLocaleTraffico {
         try {
             db = VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
                     PathDB + NomeDB, MODE_PRIVATE, null);
+            // CreazioneTabellaTraffico();
         } catch (Exception e) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Problemi nell'apertura del db: " + Utility.getInstance().PrendeErroreDaException(e));
         }
         return  db;
@@ -150,6 +153,8 @@ public class DBLocaleTraffico {
     {
         SQLiteDatabase myDB = ApreDB();
         if (myDB != null) {
+            CreazioneTabellaTraffico();
+
             String[] tableColumns = new String[]{
                     "id",
                     "Traffico"

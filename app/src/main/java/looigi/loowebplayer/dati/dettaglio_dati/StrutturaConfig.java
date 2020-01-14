@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.utilities.GestioneFiles;
 import looigi.loowebplayer.utilities.GestioneListaBrani;
@@ -16,6 +17,7 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.R
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
 
 public class StrutturaConfig {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("StrutturaConfig");;
     private boolean Random=true;
     private boolean CompressioneMP3=true;
     private String RapportoCompressione="96";
@@ -64,7 +66,7 @@ public class StrutturaConfig {
     private int AttesaSecondiBranoSuccessivo=3;
 
     public void SalvaDati() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva dati config");
 
         String pathConfig = VariabiliStaticheGlobali.getInstance().PercorsoDIR;
         String NomeFileConfig = "config.dat";
@@ -157,7 +159,7 @@ public class StrutturaConfig {
     }
 
     public void LeggeValori() {
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config");
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config");
 
         String pathConfig = VariabiliStaticheGlobali.getInstance().PercorsoDIR +"/";
         String NomeFileConfig = "config.dat";
@@ -166,7 +168,7 @@ public class StrutturaConfig {
         if (f.exists()) {
             String Stringona = GestioneFiles.getInstance().LeggeFileDiTesto(pathConfig+NomeFileConfig);
             if (!Stringona.trim().isEmpty()) {
-                String Campi[] = Stringona.split(";", -1);
+                String[] Campi = Stringona.split(";", -1);
 
                 try {
                     String sRandom = Campi[0];
@@ -265,21 +267,21 @@ public class StrutturaConfig {
                 } catch (Exception e) {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nella struttura del file, la ricreo");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nella struttura del file, la ricreo");
                     SalvaDati();
 
                     // NetThread.getInstance().StopNetThread();
                     // NetThread.getInstance().start();
                 }
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nella stringa vuota del file, lo ricreo");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nella stringa vuota del file, lo ricreo");
                 SalvaDati();
 
                 // NetThread.getInstance().StopNetThread();
                 // NetThread.getInstance().start();
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nel file non esistente, lo ricreo");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge dati config. Errore nel file non esistente, lo ricreo");
             SalvaDati();
 
             // NetThread.getInstance().StopNetThread();
@@ -344,7 +346,7 @@ public class StrutturaConfig {
 
     public void PrendeSoloBraniScaricati() {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getUsaScaricati()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende brani scaricati");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Prende brani scaricati");
 
             List<StrutturaBrani> b = new ArrayList<>();
 
@@ -372,7 +374,7 @@ public class StrutturaConfig {
 
     public void OrdinaListaBrani() {
         if (GestioneListaBrani.getInstance().getModalitaAvanzamento()==GestioneListaBrani.ModiAvanzamento.SEQUENZIALE) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ordina lista brani");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ordina lista brani");
 
             StrutturaBrani app = new StrutturaBrani();
             SimpleDateFormat dateForm = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -447,13 +449,13 @@ public class StrutturaConfig {
                     }
                     break;
             }
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ordina lista brani. Fine");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ordina lista brani. Fine");
         }
     }
 
     public void FiltraInBaseAlleStelle(){
         if (Stelle) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Prende brani filtrati per bellezza");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Prende brani filtrati per bellezza");
 
             List<StrutturaBrani> b = new ArrayList<>();
 

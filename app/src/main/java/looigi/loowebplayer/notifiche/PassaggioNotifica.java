@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.utilities.GestioneOggettiVideo;
 import looigi.loowebplayer.utilities.Utility;
 
 public class PassaggioNotifica extends Activity {
-    Context context;
+	private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("PassaggioNotifica");;
+    private Context context;
    
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +21,7 @@ public class PassaggioNotifica extends Activity {
 		context=this;
 		String action="";
 
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "onCreate PassaggioNotifica");
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "onCreate PassaggioNotifica");
 		try {
 			action = (String)getIntent().getExtras().get("DO");
 		} catch (Exception e) {

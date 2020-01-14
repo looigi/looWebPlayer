@@ -167,7 +167,7 @@ public class Equalizer extends android.support.v4.app.Fragment implements SeekBa
     }
 
     public void ImpostaValoriMaschera() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Imposta valori Maschera Equalizer");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Imposta valori Maschera Equalizer");
         ve.getEq().setEnabled(ve.getAbilitato());
         if (enabled!=null) {
             enabled.setChecked(ve.getAbilitato());
@@ -322,7 +322,7 @@ public class Equalizer extends android.support.v4.app.Fragment implements SeekBa
                     ve.setBb(new BassBoost (0, 0));
                 }
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Carica valori equalizer");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Carica valori equalizer");
                 try {
                     String sAbilitato = Campi[0];
                     ve.setAbilitato(sAbilitato.equals("S"));

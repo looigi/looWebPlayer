@@ -8,9 +8,11 @@ import android.telephony.TelephonyManager;
 
 import java.util.Date;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 public abstract class GestioneChiamate extends BroadcastReceiver {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneChiamate");;
     //The receiver will be recreated whenever android feels like it.  We need a static variable to remember data between instantiations
     static PhonecallStartEndDetector listener;
     String outgoingSavedNumber;
@@ -18,7 +20,7 @@ public abstract class GestioneChiamate extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "onReceive Gestione Chiamate");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "onReceive Gestione Chiamate");
 
         try {
             savedContext = context;
@@ -58,7 +60,7 @@ public abstract class GestioneChiamate extends BroadcastReceiver {
 
         //The outgoing number is only sent via a separate intent, so we need to store it out of band
         public void setOutgoingNumber(String number){
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "setOutgoing number");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "setOutgoing number");
         	try {
                 savedNumber = number;
         	} catch (Exception e) {
@@ -72,7 +74,7 @@ public abstract class GestioneChiamate extends BroadcastReceiver {
         public void onCallStateChanged(int state, String incomingNumber) {
             super.onCallStateChanged(state, incomingNumber);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "onCallStateChanged Gestione Chiamate");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "onCallStateChanged Gestione Chiamate");
             try {
                 if(lastState == state){
                     //No change, debounce extras

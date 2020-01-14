@@ -1,14 +1,10 @@
 package looigi.loowebplayer.utilities;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 
 import java.io.File;
-import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,8 +13,6 @@ import looigi.loowebplayer.R;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
-import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
-import looigi.loowebplayer.bckService;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBrani;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.dialog.DialogMessaggio;
@@ -27,7 +21,12 @@ import looigi.loowebplayer.dialog.DialogMessaggio;
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.RANDOM;
 
 public class GestioneListaBrani {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneListaBrani");;
     private static GestioneListaBrani instance = null;
+
+    private List<Integer> ListaBraniAscoltati = new ArrayList<>();
+    private int indiceAscoltati = 0;
+
     // private Runnable runAttesaBackground =null;
     // private Handler hAttesaBackground;
     // private float vol;
@@ -58,11 +57,15 @@ public class GestioneListaBrani {
     }
 
     private ModiAvanzamento ModalitaAvanzamento;
-    private List<Integer> BraniSuonati=new ArrayList<>();
-    private int IndiceSuonati=0;
+    // private List<Integer> BraniSuonati=new ArrayList<>();
+    // private int IndiceSuonati=0;
 
-    public void AggiungeBrano(int idBrano) {
+    /* public void AggiungeBrano(int idBrano) {
         boolean Ultimo = false;
+
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Aggiungo brano a lista brani. Brano: " + idBrano);
 
         if (IndiceSuonati==BraniSuonati.size()) {
             Ultimo = true;
@@ -71,13 +74,18 @@ public class GestioneListaBrani {
         if (Ultimo) {
             IndiceSuonati++;
         }
-    }
 
-    public int RitornaIndiceBranoAttuale() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Aggiunto brano a lista brani. Brani suonati: " + BraniSuonati.size() + " - Indice suonati: " + IndiceSuonati);
+
+    } */
+
+    /* public int RitornaIndiceBranoAttuale() {
         return IndiceSuonati;
-    }
+    } */
 
-    public int RitornaIdInBaseAllIndice(int indice) {
+    /* public int RitornaIdInBaseAllIndice(int indice) {
         if (indice<BraniSuonati.size()) {
             return BraniSuonati.get(indice);
         } else {
@@ -91,7 +99,7 @@ public class GestioneListaBrani {
 
     public List<Integer> RitornaListaBrani() {
         return BraniSuonati;
-    }
+    } */
 
     public ModiAvanzamento getModalitaAvanzamento() {
         return ModalitaAvanzamento;
@@ -105,7 +113,11 @@ public class GestioneListaBrani {
         int Brano = -1;
 
         if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() != -1) {
-            int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione()
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                    new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Numero prossimo brano diverso da -1:" + VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() );
+
+            /* int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione()
                     .getQualeCanzoneStaSuonando();
 
             if (IndiceSuonati < BraniSuonati.size()) {
@@ -119,17 +131,25 @@ public class GestioneListaBrani {
                 }
             } else {
                 AggiungeBrano(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano());
-            }
+            } */
 
             Brano = VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione()
                     .setQualeCanzoneStaSuonando(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano());
             VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(-1);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Avanti. Impostato brano da background: "+Integer.toString(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano()));
         } else {
-            if (IndiceSuonati < BraniSuonati.size()) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                    new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Numero prossimo brano = -1");
+
+            /* if (IndiceSuonati < BraniSuonati.size()) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Indice inferiore al totale dei brani suonati. Indice: " + IndiceSuonati + " - Totale: " + BraniSuonati.size());
+
                 IndiceSuonati++;
                 if (IndiceSuonati<BraniSuonati.size()) {
                     Brano = BraniSuonati.get(IndiceSuonati);
@@ -138,11 +158,19 @@ public class GestioneListaBrani {
                     // ceRete = false;
                     if (ceRete) {
                         Brano = GestioneListaBrani.getInstance()
-                                .RitornaNumeroProssimoBranoNuovo(false);
+                                .RitornaNumeroProssimoBranoNuovo(false, false);
+
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                                new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Ritorno Numero prossimo brano:" + Brano);
                     } else {
                         Brano = GestioneListaBrani.getInstance().BranoSenzarete();
+
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                                new Object(){}.getClass().getEnclosingMethod().getName(),
+                                "Ritorno Numero prossimo brano SENZA RETE:" + Brano);
                     }
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Problemi sull'indice dei brani. Impostato il brano: "+Integer.toString(Brano));
 
                     // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
@@ -153,6 +181,11 @@ public class GestioneListaBrani {
                 }
                 Avanza = false;
             } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Indice uguale o superiore al totale dei brani suonati. Indice: " + IndiceSuonati + " - Totale: " + BraniSuonati.size());
+*/
+
                 int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
                 Brano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
                 // boolean ceRete = NetThreadNuovo.getInstance().isOk();
@@ -161,7 +194,7 @@ public class GestioneListaBrani {
                 switch (ModalitaAvanzamento) {
                     case RANDOM:
                         int n = Brano;
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(), "Cerco brano in modalità random");
                         StrutturaBrani b = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(n);
                         boolean escluso = true;
@@ -186,7 +219,7 @@ public class GestioneListaBrani {
                             }
                         }
                         Brano = n;
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Cerco brano in modalità random. Fatto: " + Integer.toString(Brano));
                         break;
                     case SEQUENZIALE:
@@ -213,20 +246,24 @@ public class GestioneListaBrani {
                         break;
                 }
                 // } else {
-                //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Non c'è rete, avanzo verso il primo brano già scaricato");
+                //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Non c'è rete, avanzo verso il primo brano già scaricato");
                 //     Brano = CercaBranoGiaScaricato(false);
                 // }
 
-                if (Brano > -1 && Avanza) {
-                    AggiungeBrano(Brano);
-                }
-            }
+                // if (Brano > -1 && Avanza) {
+                //     AggiungeBrano(Brano);
+                // }
+            // }
         }
 
         return Brano;
     }
 
     public int CercaBranoGiaScaricato(boolean DaEsterno) {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                new Object(){}.getClass().getEnclosingMethod().getName(),
+                "Cerco brano già scaricato: " + DaEsterno);
+
         int NumeroBrani = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani();
         int Brano = -1;
 
@@ -312,11 +349,14 @@ public class GestioneListaBrani {
         }
 
         if (Brano>-1 && DaEsterno) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                    new Object(){}.getClass().getEnclosingMethod().getName(),
+                    "Cerco brano già scaricato. Trovato: " + Brano);
             // if (IndiceSuonati == BraniSuonati.size()) {
             //     IndiceSuonati--;
             // }
             // BraniSuonati.set(IndiceSuonati, Brano);
-            AggiungeBrano(Brano);
+            // AggiungeBrano(Brano);
         } else {
             if (Brano == -1) {
                 DialogMessaggio.getInstance().show(
@@ -412,27 +452,55 @@ public class GestioneListaBrani {
         }
     }
 
-    public int RitornaNumeroProssimoBranoNuovo(final boolean Avanza) {
+    public int RitornaNumeroProssimoBranoNuovo(final boolean Avanza, boolean branoGiaScaricato) {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
         // ceRete = false;
         if (ceRete) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                    }.getClass().getEnclosingMethod().getName(),
-                    "Controllo numero prossimo brano");
+            if (branoGiaScaricato) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Controllo numero prossimo brano senza rete. Cerco già scaricato");
 
-            return ControllaProssimoBrano(Avanza);
+                int idBrano = CercaBranoGiaScaricato(true);
+                if (idBrano == -1) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                            }.getClass().getEnclosingMethod().getName(),
+                            "NON Trovato. Lo cerco in quelli da scaricare");
+
+                    int brano = ControllaProssimoBrano(Avanza);
+                    AggiungeBranoAgliAscoltati(brano);
+                    return brano;
+                } else {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                            }.getClass().getEnclosingMethod().getName(),
+                            "Trovato:" + idBrano);
+
+                    AggiungeBranoAgliAscoltati(idBrano);
+                    return idBrano;
+                }
+            } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Controllo numero prossimo brano senza rete");
+
+                int brano = ControllaProssimoBrano(Avanza);
+                AggiungeBranoAgliAscoltati(brano);
+                return brano;
+            }
        } else {
             if (!VariabiliStaticheGlobali.getInstance().getHaScaricatoAutomaticamente()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
-                        "Non c'è rete, evito il download in background del successivo brano e ne prendo uno già scaricato");
-                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                        "Non ha scaricato automaticamente. Ne prendo uno già scaricato");
+                // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
 
-                return CercaBranoGiaScaricato(true);
+                int brano = CercaBranoGiaScaricato(true);
+                AggiungeBranoAgliAscoltati(brano);
+                return brano;
             } else {
                 // if (VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete() > -1){
-                //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 //             }.getClass().getEnclosingMethod().getName(),
                 //             "Non c'è rete, imposto il brano impostato senza rete 1");
 //
@@ -440,14 +508,14 @@ public class GestioneListaBrani {
                 //     return n; // VariabiliStaticheGlobali.getInstance().getBranoImpostatoSenzaRete();
                 // } else {
                     // if (VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() > -1) {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     //             }.getClass().getEnclosingMethod().getName(),
                     //             "Non c'è rete, imposto il brano impostato senza rete 2");
 //
                     //     int n = BranoSenzarete();
                     //     return n; // VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
                     // } else {
-                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     //             }.getClass().getEnclosingMethod().getName(),
                     //             "Non c'è rete, imposto il brano impostato senza rete 3");
 //
@@ -455,28 +523,48 @@ public class GestioneListaBrani {
                     //     return n; // -1;
                     // }
                 // }
-                return VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Cerco prossimo brano. Già scaricato: " + branoGiaScaricato);
+
+                if (branoGiaScaricato) {
+                    int brano = CercaBranoGiaScaricato(true);
+                    AggiungeBranoAgliAscoltati(brano);
+                    return brano;
+                } else {
+                    int brano = VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano();
+                    AggiungeBranoAgliAscoltati(brano);
+                    return brano;
+                }
             }
        }
     }
 
     public int BranoSenzarete() {
-        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+        // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
         int NumeroBrano=CercaBranoGiaScaricato(false);
         VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBrano);
         // VariabiliStaticheGlobali.getInstance().setBranoImpostatoSenzaRete(NumeroBrano);
         VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
 
         StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-        final String NomeBrano = s.getNomeBrano();
-        String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+        if (s != null) {
+            final String NomeBrano = s.getNomeBrano();
+            String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
 
-        VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista +")");
+            VariabiliStaticheHome.getInstance().getTxtTitoloBackground().setText(NomeBrano + " (" + Artista + ")");
 
-        return NumeroBrano;
+            return NumeroBrano;
+        } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "ERRORE: struttura nulla su brano senza rete");
+
+            return -1;
+        }
     }
 
-    public int RitornaBranoPrecedente() {
+    /* public int RitornaBranoPrecedente() {
         int oldBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
         int Brano = oldBrano;
 
@@ -498,11 +586,11 @@ public class GestioneListaBrani {
         }
 
         return Brano;
-    }
+    } */
 
-    public void SettaIndice(int indice) {
+    /* public void SettaIndice(int indice) {
         IndiceSuonati=indice;
-    }
+    } */
 
     public void ScaricaBranoSuccessivoInBackground() {
         boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
@@ -510,25 +598,37 @@ public class GestioneListaBrani {
         if (ceRete) {
             int numeroAttuale = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
             int NumeroBranoProssimo = numeroAttuale;
-            while (numeroAttuale == NumeroBranoProssimo) {
-                NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);
-            }
+            // while (numeroAttuale == NumeroBranoProssimo) {
+                NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false, false);
+            // }
+            VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(NumeroBranoProssimo);
+
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Numero prossimo brano con rete: " + NumeroBranoProssimo);
+
             StrutturaBrani s = null;
             int conta = 0;
-            while (s == null) {
+            if (s == null) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Struttura nulla del brano. Ne cerco un altro che abbia la struttura");
+            }
+            // while (s == null) {
                 s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBranoProssimo);
                 if (s == null) {
-                    NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false);
-                    conta++;
-                    if (conta==5) {
-                        break;
-                    }
+                    NumeroBranoProssimo = RitornaNumeroProssimoBranoNuovo(false, false);
+                    s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBranoProssimo);
+                    // conta++;
+                    // if (conta==5) {
+                    //     break;
+                    // }
                 }
-            }
+            // }
             if (s==null) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Brano non rilevato in ScaricaBranoSuccessivoInBackground");
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Brano: " + Integer.toString(NumeroBranoProssimo) +
                                 " - Lunghezza struttura brani: " + Integer.toString(VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaQuantiBrani()));
                 DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
@@ -536,6 +636,10 @@ public class GestioneListaBrani {
                         true,
                         VariabiliStaticheGlobali.NomeApplicazione);
             } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                        }.getClass().getEnclosingMethod().getName(),
+                        "Trovato numero prossimo: " + NumeroBranoProssimo);
+
                 VariabiliStaticheGlobali.getInstance().setNumeroProssimoBrano(NumeroBranoProssimo);
                 final String NomeBrano = s.getNomeBrano();
                 String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
@@ -547,7 +651,7 @@ public class GestioneListaBrani {
                 String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
                 String PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
                 String PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Controllo esistenza file: " + PathMP3);
                 File f = new File(PathMP3);
                 File fc = new File(PathMP3_Compresso);
@@ -567,7 +671,7 @@ public class GestioneListaBrani {
                 }
 
                 if (ok) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Brano già esistente... Non faccio niente");
 
@@ -575,14 +679,14 @@ public class GestioneListaBrani {
                     GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.ok);
                     // VariabiliStaticheNuove.getInstance().setDb(null);
 
-                    if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+                    /* if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
                         VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
-                    }
+                    } */
                     VariabiliStaticheGlobali.getInstance().setHaScaricatoAutomaticamente(true);
                 } else {
                     final String Brano = Artista + ";" + Album + ";" + NomeBrano;
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Scarico brano");
                     int numOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false,
@@ -595,7 +699,7 @@ public class GestioneListaBrani {
                         Converte = "S";
                     }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Ritorna dettaglio brano. Ritorna brano: " +
                                     VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase() + " " +
@@ -623,13 +727,33 @@ public class GestioneListaBrani {
                 // VariabiliStaticheNuove.getInstance().setDb(null);
             }
         } else {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "Cerco brano senza rete");
+
             int N = BranoSenzarete();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Impostato brano senza rete: " + Integer.toString(N));
 
             GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.folder);
         }
+    }
+
+    public void AggiungeBranoAgliAscoltati(int Brano) {
+        ListaBraniAscoltati.add(Brano);
+        indiceAscoltati = ListaBraniAscoltati.size()-1;
+    }
+
+    public int RitornaNumeroBranoPrecedente() {
+        int ritorno = -1;
+
+        if (indiceAscoltati > 0) {
+            indiceAscoltati--;
+            ritorno = ListaBraniAscoltati.get(indiceAscoltati);
+        }
+
+        return ritorno;
     }
 }

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -18,6 +19,7 @@ import looigi.loowebplayer.utilities.PronunciaFrasi;
 import looigi.loowebplayer.utilities.Utility;
 
 public class DBRemotoNuovo {
+	private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("DBRemotoNuovo");;
 	private String ws = "looWPlayer.asmx/";
 	private String NS="http://looWebPlayer.org/";
 	private String SA="http://looWebPlayer.org/";
@@ -102,12 +104,12 @@ public class DBRemotoNuovo {
 			public void run() {
 				if (NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {
 					if (cuf !=null) {
-						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+						VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 								"Stoppo CUF controllo esec. per numero brano diverso dall'attuale");
 
 						cuf.StoppaEsecuzione(true);
 					}
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 							"CUF Controllo esecuzione. Cambio brano");
 					hAttendeRispostaCheckURL.removeCallbacks(rAttendeRispostaCheckURL);
 					rAttendeRispostaCheckURL=null;
@@ -117,7 +119,7 @@ public class DBRemotoNuovo {
 
 					if (VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL().contains("OK")) {
 						if (cuf!=null) {
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 									"Stoppo CUF normale per OK");
 
 							cuf.StoppaEsecuzione(false);
@@ -157,13 +159,13 @@ public class DBRemotoNuovo {
 
 	private void EsegueChiamataMP3(String Dire, String Artista, String Album, String Brano, String Qualita,
 								   String Converte, final int NumeroOperazione) {
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 				"Controllo esec.: " + VariabiliStaticheGlobali.getInstance().getRitornoCheckFileURL());
 		VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("");
 
 		hAttendeRispostaCheckURL = null;
 		// if (cuf!=null) {
-		// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+		// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 		// 			"Stoppo CUF normale per ESECUZIONE TERMINATA CON ESITO NEGATIVO");
 //
 		// 	cuf.StoppaEsecuzione(false);
@@ -314,7 +316,7 @@ public class DBRemotoNuovo {
 			// 		NS, SA, messaggio, VariabiliStaticheGlobali.getInstance().getTimeOutDownloadMP3(), NumeroBrano, NonFernmareDownload,
 			// 		n, new Date(System.currentTimeMillis()));
 		// } else {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Download Brano in background '"+Artista+ " " +Album+ " " + Brano + "'. "+
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Download Brano in background '"+Artista+ " " +Album+ " " + Brano + "'. "+
         //             "Skippato... Già ce n'è un altro in coda");
         // }
 

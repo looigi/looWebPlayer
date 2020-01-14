@@ -6,6 +6,7 @@ import org.kobjects.util.Util;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -15,19 +16,20 @@ import looigi.loowebplayer.soap.DownloadTextFileNuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 
 public class GestioneTesti {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneTesti");;
     private GestioneWEBServiceSOAPNuovo GestioneWS;
 
     public void SalvaTestoSuSD(String Artista, String Album, String Brano, String Testo, String TestoTradotto, String Ascoltata, String Bellezza) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva testo su SD: "+Artista+" "+Album+" "+Brano);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva testo su SD: "+Artista+" "+Album+" "+Brano);
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
         String pathTesto = "";
         if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/";
+            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/" + Artista + "/" + Album + "/";
         } else {
-            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
+            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/";
         }
         String NomeFile = Utility.getInstance().SistemaTesto(Brano + ".dat");
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva testo su SD. Path: "+pathTesto+"/"+NomeFile);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva testo su SD. Path: "+pathTesto+"/"+NomeFile);
 
         File f = new File(pathTesto, NomeFile);
         if (f.exists()) {
@@ -48,7 +50,7 @@ public class GestioneTesti {
         String sTesto = "";
 
         VariabiliStaticheHome.getInstance().getImgLinguettaTesto().setVisibility(LinearLayout.GONE);
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Imposta testo. Pulisce: "+Pulisce);
         if (!Pulisce) {
             int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
@@ -74,25 +76,25 @@ public class GestioneTesti {
 
     // public String RitornaTestoDaSD(String Artista, String Album, String Brano, boolean Refresh, int NumeroOperazione) {
     public String RitornaTestoDaSD(String Artista, String Album, String Brano, int NumeroOperazione) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna testo da SD. "+Artista+" "+Album+" "+Brano);
         String Testo = "";
         if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
             String pathTesto = "";
             if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/";
+                pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/" + Artista + "/" + Album + "/";
             } else {
-                pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
+                pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/";
             }
             String NomeFile = Utility.getInstance().SistemaTesto(Brano + ".dat");
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Ritorna testo da SD. Path: " + pathTesto + "/" + NomeFile);
 
             File f = new File(pathTesto, NomeFile);
             if (f.exists()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "Ritorna testo da SD. File esistente");
                 Testo = GestioneFiles.getInstance().LeggeFileDiTesto(pathTesto + NomeFile);
@@ -114,12 +116,12 @@ public class GestioneTesti {
                     VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(idBrano).setStelle(Integer.parseInt(t[3]));
                 }
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "Ritorna testo da SD. ImpostaStelleAscoltata in Home");
                 GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "Ritorna testo da SD. SettaTesto in Home");
                 SettaTesto(false);
@@ -127,7 +129,7 @@ public class GestioneTesti {
                 if (idBrano > -1) {
                     // if (Refresh && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
                     if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Ritorna testo da SD. Scarico dettaglio brano");
 
@@ -141,7 +143,7 @@ public class GestioneTesti {
                 }
             } else {
                 if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Ritorna testo da SD. Scarico dettaglio brano");
 
@@ -167,7 +169,7 @@ public class GestioneTesti {
             }
 
             // if (Testo.toUpperCase().contains("NESSUN") || Testo.trim().isEmpty()) {
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Ritorna testo da SD. Scarico dettaglio brano");
 //
             //     DBRemotoNuovo dbr = new DBRemotoNuovo();
@@ -188,8 +190,8 @@ public class GestioneTesti {
     }
 
     public void ScaricaTestoDaWeb(StrutturaBrani sb) {
-        if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Ritorna dettaglio brano. Scarico testo");
 
@@ -237,7 +239,7 @@ public class GestioneTesti {
             String url = "http://lyrics.wikia.com/wiki/" + sArtista + ":" + NomeBrano;
 
             int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Scarico testo");
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                     new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Scarico testo brano: " + url);

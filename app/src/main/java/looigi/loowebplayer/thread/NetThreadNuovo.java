@@ -35,9 +35,9 @@ public class NetThreadNuovo {
     private boolean ScreenOn = true;
     // private static NetThreadNuovo instance = null;
     private int signalStrengthValue;
-    private TelephonyManager manager;
-    private PhoneStateListener phoneListener;
-    private SignalStrength LivelloSegnale;
+    // private TelephonyManager manager;
+    // private PhoneStateListener phoneListener;
+    // private SignalStrength LivelloSegnale;
     // private int QuantiSecondi=-1;
     // private int QuantiSecondiTot=-1;
     private int SecondiDiAttesa = 5000;
@@ -45,10 +45,10 @@ public class NetThreadNuovo {
     private boolean haveConnectedWifi = false;
     private boolean haveConnectedMobile = false;
     private Activity act;
-    private PowerManager pm;
-    private Integer conta=0;
-    private Integer quanti=-1;
-    private Integer QuantiSecondiSenzaRete = 0;
+    // private PowerManager pm;
+    // private Integer conta=0;
+    // private Integer quanti=-1;
+    // private Integer QuantiSecondiSenzaRete = 0;
     // private boolean RetePresente=true;
     private ConnectivityManager connectivityManager;
     private Runnable rTimerEsecuzione;
@@ -80,17 +80,17 @@ public class NetThreadNuovo {
                 act = VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale();
                 connectivityManager = (ConnectivityManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
-                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
-                    pm = (PowerManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
-                            getSystemService(Context.POWER_SERVICE);
+                // if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+                //     pm = (PowerManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
+                //             getSystemService(Context.POWER_SERVICE);
 
-                    phoneListener = new myPhoneStateListener();
-                    manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
-                            .getSystemService(Context.TELEPHONY_SERVICE);
-                    manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                //     phoneListener = new myPhoneStateListener();
+                //     manager = (TelephonyManager) VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale()
+                //             .getSystemService(Context.TELEPHONY_SERVICE);
+                //     manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
-                    setupSignalStrength();
-                }
+                //     setupSignalStrength();
+                // }
 
                 // if (VariabiliStaticheGlobali.getInstance().getTipoSegnale() == 2) {
                 //     SecondiDiAttesa = 1000;
@@ -130,10 +130,10 @@ public class NetThreadNuovo {
         }
 
         OkNet = haveConnectedWifi || haveConnectedMobile;
-        if (OkNet && !haveConnectedWifi && ScreenOn &&
-                VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
-            getGsmLevel();
-        }
+        // if (OkNet && !haveConnectedWifi && ScreenOn &&
+        //         VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getControlloRete()) {
+        //     getGsmLevel();
+        // }
 
         /* switch(VariabiliStaticheGlobali.getInstance().getTipoSegnale()) {
             case 1:
@@ -217,11 +217,11 @@ public class NetThreadNuovo {
         }
     }
 
-    public Integer getQuantiSecondiSenzaRete() {
-        return QuantiSecondiSenzaRete;
-    }
+    // public Integer getQuantiSecondiSenzaRete() {
+    //     return QuantiSecondiSenzaRete;
+    // }
 
-    private void getGsmLevel() {
+    /* private void getGsmLevel() {
         String Level ="";
         if (LivelloSegnale!=null) {
             // int level;
@@ -233,33 +233,33 @@ public class NetThreadNuovo {
 
             if (asu <= 1 || asu == 99) {
                 OkNet = true;
-                QuantiSecondiSenzaRete ++;
+                // QuantiSecondiSenzaRete ++;
                 Level = Integer.toString(asu) + "/1";
                 // level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
             } else if (asu >= 12) {
                 OkNet = true;
-                QuantiSecondiSenzaRete = 0;
+                // QuantiSecondiSenzaRete = 0;
                 Level = Integer.toString(asu) + "/5";
                 // level = SIGNAL_STRENGTH_GREAT;
             } else if (asu >= 8) {
                 OkNet = true;
-                QuantiSecondiSenzaRete = 0;
+                // QuantiSecondiSenzaRete = 0;
                 Level = Integer.toString(asu) + "/4";
                 // level = SIGNAL_STRENGTH_GOOD;
             } else if (asu >= 5) {
                 OkNet = true;
-                QuantiSecondiSenzaRete = 0;
+                //QuantiSecondiSenzaRete = 0;
                 Level = Integer.toString(asu) + "/3";
                 // level = SIGNAL_STRENGTH_MODERATE;
             } else {
                 OkNet = true;
-                QuantiSecondiSenzaRete = 0;
+                // QuantiSecondiSenzaRete = 0;
                 Level = Integer.toString(asu) + "/2";
                 // level = SIGNAL_STRENGTH_POOR;
             }
         } else {
             OkNet = true;
-            QuantiSecondiSenzaRete = 0;
+            // QuantiSecondiSenzaRete = 0;
             Level = "?/6";
         }
 
@@ -291,7 +291,7 @@ public class NetThreadNuovo {
             }
         };
         manager.listen(phoneListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-    }
+    } */
 
   public boolean isOk() {
       return OkNet;
@@ -311,7 +311,7 @@ public class NetThreadNuovo {
         }
     }
 
-    private class myPhoneStateListener extends PhoneStateListener {
+    /* private class myPhoneStateListener extends PhoneStateListener {
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
             if (signalStrength.isGsm()) {
@@ -323,5 +323,5 @@ public class NetThreadNuovo {
                 signalStrengthValue = signalStrength.getCdmaDbm();
             }
         }
-    }
+    } */
 }

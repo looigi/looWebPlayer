@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaBellezza;
 import looigi.loowebplayer.utilities.Utility;
@@ -16,6 +17,7 @@ import looigi.loowebplayer.utilities.Utility;
 import static android.content.Context.MODE_PRIVATE;
 
 public class DBLocaleUtenti {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("DBLocaleUtenti");;
     private String PathDB = VariabiliStaticheGlobali.getInstance().PercorsoDIR +"/DB/";
     private String NomeDB = "utenti.db";
 
@@ -58,7 +60,7 @@ public class DBLocaleUtenti {
             db = VariabiliStaticheGlobali.getInstance().getContext().openOrCreateDatabase(
                     PathDB + NomeDB, MODE_PRIVATE, null);
         } catch (Exception e) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Problemi nell'apertura del db: " + Utility.getInstance().PrendeErroreDaException(e));
         }
         return  db;

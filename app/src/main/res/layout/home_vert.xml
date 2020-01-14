@@ -240,11 +240,11 @@
             android:layout_below="@id/layBarra"
             android:layout_width="match_parent"
             android:padding="3dp"
-            android:weightSum="5"
+            android:weightSum="4"
             android:baselineAligned="true"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <!-- <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal|center_vertical"
@@ -256,7 +256,7 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp" />
 
-            </LinearLayout>
+            </LinearLayout> -->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -311,7 +311,7 @@
         <LinearLayout
             android:layout_below="@+id/layBottoni"
             android:layout_width="match_parent"
-            android:weightSum="3"
+            android:weightSum="2"
             android:orientation="horizontal"
             android:layout_height="wrap_content">
 
@@ -330,7 +330,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <!-- <TextView
                 android:id="@+id/txtLivelloSegnale"
                 android:textColor="@color/bianco"
                 android:shadowColor="@color/nero"
@@ -343,7 +343,7 @@
                 android:textStyle="bold|italic"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" /> -->
 
             <TextView
                 android:id="@+id/txtQuanteScaricate"

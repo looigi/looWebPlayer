@@ -31,7 +31,7 @@ public class CheckURLFile {
         // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
         // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
         //     }.getClass().getEnclosingMethod().getName(), "CheckUrl File troppo veloce o mancanza di rete");
         //     VariabiliStaticheGlobali.getInstance().setRitornoCheckFileURL("ESECUZIONE TERMINATA CON ESITO NEGATIVO");
         //     return;
@@ -84,12 +84,12 @@ public class CheckURLFile {
 //
             // if (!ceRete) {
             //     messErrore="ERROR: Assenza di rete";
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Check File error; Assenza di rete");
             //     return null;
             // }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Check file: "+sUrl[0]);
             try {
                 HttpURLConnection.setFollowRedirects(false);
@@ -106,7 +106,7 @@ public class CheckURLFile {
                 }
             } catch (Exception e) {
                 messErrore="ERROR: "+Utility.getInstance().PrendeErroreDaException(e);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Check File error");
                 VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             }

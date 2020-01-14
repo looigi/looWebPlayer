@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import looigi.loowebplayer.MainActivity;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -26,6 +27,7 @@ import looigi.loowebplayer.soap.DownloadMP3Nuovo;
 import looigi.loowebplayer.soap.GestioneWEBServiceSOAPNuovo;
 
 public class GestioneCaricamentoBraniNuovo {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneCaricamentoBraniNuovo");
     private static final GestioneCaricamentoBraniNuovo ourInstance = new GestioneCaricamentoBraniNuovo();
 
     public static GestioneCaricamentoBraniNuovo getInstance() {
@@ -62,6 +64,8 @@ public class GestioneCaricamentoBraniNuovo {
     }
 
     public void ImpostaProssimaCanzone() {
+        GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(false);
+
         GestioneImmagini.getInstance().StoppaTimerCarosello();
         GestioneImmagini.getInstance().setImmagineDaCambiare("");
         GestioneImmagini.getInstance().setImmNumber(-1);
@@ -106,7 +110,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     @Override
         //     public void run() {
         // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-        if (VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()) {
+        if (VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
                         // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(true);
                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance()
                                 .AggiungeOperazioneWEB(-1,
@@ -119,7 +123,7 @@ public class GestioneCaricamentoBraniNuovo {
                                     VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(true);
                                 }
                                 int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-                                if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
+                                if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()
                                         || secondi > VariabiliStaticheGlobali.TempoAttesaFineDownload) {
                                 // if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente()
                                 //     || !VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento()
@@ -141,11 +145,11 @@ public class GestioneCaricamentoBraniNuovo {
                                     // if (secondi > 44) {
                                     // if (!VariabiliStaticheGlobali.getInstance().isAttendeFineScaricamento() || secondi > 44) {
                                         if (secondi>44) {
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "Termine attesa download per secondi superiori a 44");
                                         } else {
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "Termine attesa download per skip brano");
                                         }
@@ -166,7 +170,7 @@ public class GestioneCaricamentoBraniNuovo {
                                             // ceRete = false;
                                             if (ceRete) {
                                                 NumeroBranoProssimo = GestioneListaBrani.getInstance()
-                                                        .RitornaNumeroProssimoBranoNuovo(false);
+                                                        .RitornaNumeroProssimoBranoNuovo(false, false);
                                             } else {
                                                 NumeroBranoProssimo = GestioneListaBrani.getInstance().BranoSenzarete();
                                             }
@@ -180,13 +184,13 @@ public class GestioneCaricamentoBraniNuovo {
                                     /*     if (ceRete) {
                                             NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
 
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "C'è rete. Prendo il prossimo brano: " + Integer.toString(NumeroBrano));
                                         } else {
                                             NumeroBrano = GestioneListaBrani.getInstance().CercaBranoGiaScaricato(true);
 
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                                     }.getClass().getEnclosingMethod().getName(),
                                                     "NON c'è rete. Prendo il prossimo brano già scaricato: " + Integer.toString(NumeroBrano));
                                         } */
@@ -208,7 +212,7 @@ public class GestioneCaricamentoBraniNuovo {
                                                 .getQualeCanzoneStaSuonando() &&
                                         VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
 
-                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                                 "Bloccata attesa fine download. NO BUONO!!!");
 
                                         VariabiliStaticheGlobali.getInstance().setnOperazioneATOW(VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(VariabiliStaticheGlobali.getInstance().getnOperazioneATOW(),
@@ -238,7 +242,7 @@ public class GestioneCaricamentoBraniNuovo {
                             //     hAttesaProssimo.removeCallbacks(rAttesaProssimo);
                             //     hAttesaProssimo = null;
                             // }
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                     "Attesa termine download automatico. QUI NON DEVE PASSARE!!!");
 
                             // CaricaBrano2();
@@ -253,7 +257,7 @@ public class GestioneCaricamentoBraniNuovo {
                             //     VariabiliStaticheGlobali.getInstance().setEsciDallAttesa(false);
                                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(numOperazione, true);
 
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                     "Proseguo col caricamento del brano");
 
                             CaricaBrano2();
@@ -287,13 +291,13 @@ public class GestioneCaricamentoBraniNuovo {
     // }
 
     public void CaricaBrano2() {
-        VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+        // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
 
         stopCounter = 0;
         qualeWait = -1;
 
         // if (VariabiliStaticheNuove.getInstance().getSc()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Scarico Cover");
 //
         //     qualeWait++;
@@ -301,7 +305,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getSc());
         // }
         // if (VariabiliStaticheNuove.getInstance().getGt()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Gestione Testi");
 //
         //     qualeWait++;
@@ -309,7 +313,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getGt());
         // }
         // if (VariabiliStaticheNuove.getInstance().getGm()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Soap per multimedia");
 //
         //     qualeWait++;
@@ -317,7 +321,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getGm());
         // }
         // if (VariabiliStaticheNuove.getInstance().getGb()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Soap per brano");
 //
         //     qualeWait++;
@@ -325,7 +329,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getGb());
         // }
         // if (VariabiliStaticheNuove.getInstance().getCuf()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo attesa per download");
 //
         //     qualeWait++;
@@ -333,7 +337,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getCuf());
         // }
         // if (VariabiliStaticheNuove.getInstance().getD()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Download brano 1");
 //
         //     qualeWait++;
@@ -341,7 +345,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getD());
         // }
         // if (VariabiliStaticheNuove.getInstance().getDb()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Soap per download");
 //
         //     qualeWait++;
@@ -349,7 +353,7 @@ public class GestioneCaricamentoBraniNuovo {
         //     // waitNull(VariabiliStaticheNuove.getInstance().getDb());
         // }
         // if (VariabiliStaticheNuove.getInstance().getD2()!=null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stoppo Download brano 3");
 //
         //     qualeWait++;
@@ -418,7 +422,7 @@ public class GestioneCaricamentoBraniNuovo {
 
     private void CaricaBranoParteFinale() {
         // if (VariabiliStaticheGlobali.getInstance().getUtente()==null) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Dati utente persi. Provo a ricaricare il service");
         //     DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
         //             "Dati Utente persi. Ricarico il service",
@@ -435,7 +439,7 @@ public class GestioneCaricamentoBraniNuovo {
             Utility.getInstance().ScriveScaricateAscoltate();
 
             // GestioneOggettiVideo.getInstance().AccendeSpegneTastiAvantiIndietro(true);
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Inizio Carica Brano.");
 
@@ -458,7 +462,13 @@ public class GestioneCaricamentoBraniNuovo {
 
             VariabiliStaticheGlobali.getInstance().setUltimaImmagineVisualizzata("***");
 
-            int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+            int NumeroBrano;
+            if (VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo() > -1) {
+                NumeroBrano = VariabiliStaticheGlobali.getInstance().getNumeroBranoNuovo();
+            } else {
+                NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
+            }
+            // VariabiliStaticheGlobali.getInstance().setNumeroBranoNuovo(-1);
             if (NumeroBrano == -1) {
                 DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
                         "Nessun brano in archivio", true, VariabiliStaticheGlobali.NomeApplicazione);
@@ -561,7 +571,7 @@ public class GestioneCaricamentoBraniNuovo {
                 // Testo brano
                 GestioneTesti g = new GestioneTesti();
                 g.SettaTesto(true);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
                 int nTesto = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Lettura testo");
                 VariabiliStaticheNuove.getInstance().setGt(new GestioneTesti());
@@ -576,12 +586,12 @@ public class GestioneCaricamentoBraniNuovo {
 
                 // Multimedia artista
                 // if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
                 int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
                 if (VariabiliStaticheGlobali.getInstance().getUtente() != null) {
                     String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-                    String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
+                    String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
                     File f = new File(PathListaImm);
                     if (!f.exists()) {
                         DBRemotoNuovo dbr = new DBRemotoNuovo();
@@ -624,7 +634,7 @@ public class GestioneCaricamentoBraniNuovo {
 
         String PathMP3 = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
         String PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
         }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
         File f = new File(PathMP3);
         File fc = new File(PathMP3_Compresso);
@@ -648,7 +658,7 @@ public class GestioneCaricamentoBraniNuovo {
 
         String PathMP3 = pathBase + "/" + Artista + "/" + Album + "/" + NomeBrano;
         String PathMP3_Compresso = pathBase + "/" + Artista + "/" + Album + "/" + CompattazioneMP3 + NomeBrano;
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
         // }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
         // File f = new File(PathMP3);
         // File fc = new File(PathMP3_Compresso);
@@ -665,7 +675,7 @@ public class GestioneCaricamentoBraniNuovo {
 
     public void CaricaBrano3() {
         if (System.currentTimeMillis() - lastTimePressed < 1000) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Carica brano troppo veloce");
             return;
         }
@@ -687,31 +697,33 @@ public class GestioneCaricamentoBraniNuovo {
                 PathMP3_Compresso = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + CompattazioneMP3 + NomeBrano;
             }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: " + PathMP3);
             File f = new File(PathMP3);
             File fc = new File(PathMP3_Compresso);
             if (f.exists() || fc.exists()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Brano già scaricato");
                 // VariabiliStaticheHome.getInstance().setBranoDaCaricare("");
                 if (f.exists()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Imposta brano normale");
 
                     GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3);
                 } else {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Imposta brano compresso");
 
                     GestioneImpostazioneBrani.getInstance().ImpostaBrano(PathMP3_Compresso);
                 }
                 if (f.exists() && fc.exists() && !CompattazioneMP3.isEmpty()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Elimino brano non compresso. Compresso già esistente");
                     f.delete();
                 }
             } else {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                }.getClass().getEnclosingMethod().getName(), "Brano non ancora scaricato");
                 // VariabiliStaticheGlobali.getInstance().setHaCaricatoTuttiIDettagliDelBrano(false);
                 // VariabiliStaticheHome.getInstance().setBranoDaCaricare(Artista + ";" + Album + ";" + NomeBrano);
 
@@ -775,7 +787,7 @@ public class GestioneCaricamentoBraniNuovo {
                             PronunciaFrasi pf = new PronunciaFrasi();
                             pf.PronunciaFrase(nb + ", " + Artista, "INGLESE");
 
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista in caricamento brani");
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista in caricamento brani");
                             VariabiliStaticheHome.getInstance().setImms(GestioneImmagini.getInstance().RitornaImmaginiArtista(idArtista, Artista, NumeroOperazione, false));
                         }
                     }
@@ -798,7 +810,7 @@ public class GestioneCaricamentoBraniNuovo {
             String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
             String NomeBrano = s.getNomeBrano();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
             String Testo = GestioneTesti.getInstance().RitornaTestoDaSD(Artista, Album, NomeBrano, NumeroOperazione);
             if (!Testo.isEmpty()) {
                 GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();

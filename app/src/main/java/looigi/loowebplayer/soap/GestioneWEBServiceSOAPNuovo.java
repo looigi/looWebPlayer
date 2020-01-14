@@ -25,9 +25,9 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class GestioneWEBServiceSOAPNuovo {
-	private static BackgroundAsyncTask bckAsyncTask;
-	private static String messErrore="";
-    private static HttpTransportSE aht = null;
+	private boolean effettuaLogQui = false;
+	private BackgroundAsyncTask bckAsyncTask;
+	private String messErrore="";
 	private long lastTimePressed = 0;
 
 	private String NAMESPACE;
@@ -37,7 +37,7 @@ public class GestioneWEBServiceSOAPNuovo {
 	private String tOperazione;
 	private boolean ApriDialog;
 	private String Urletto;
-	private static int Tentativo;
+	// private static int Tentativo;
 
 	public GestioneWEBServiceSOAPNuovo(String urletto, String TipoOperazione,
                                        String NS, String SA, int Timeout, int NumeroOperazione,
@@ -49,7 +49,7 @@ public class GestioneWEBServiceSOAPNuovo {
 		this.tOperazione = TipoOperazione;
 		this.ApriDialog = ApriDialog;
 		this.Urletto = urletto;
-		this.Tentativo = 0;
+		// this.Tentativo = 0;
 
 		// Annulla l'ultima operazione se ne arrivano 2 uguali
 		String ope = urletto + TipoOperazione + NS + SA;
@@ -64,7 +64,7 @@ public class GestioneWEBServiceSOAPNuovo {
 //
 		// if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
 		// 	try {
-		// 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+		// 		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 		// 		}.getClass().getEnclosingMethod().getName(), "SOAP troppo veloce");
 		// 	} catch (Exception ignored) {
 //
@@ -99,7 +99,7 @@ public class GestioneWEBServiceSOAPNuovo {
 			// 		funzione = new Object() {
 			// 		}.getClass().getEnclosingMethod().getName();
 			// 	}
-			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 			// 			funzione,
 			// 			"Skippata operazione SOAP uguale: " + Chiave);
 			// }
@@ -112,7 +112,7 @@ public class GestioneWEBServiceSOAPNuovo {
 				funzione = new Object() {
 				}.getClass().getEnclosingMethod().getName();
 			}
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 					funzione,
 					"Skippata operazione. URL Vuoto.");
 		}
@@ -131,7 +131,7 @@ public class GestioneWEBServiceSOAPNuovo {
 				bckAsyncTask.execute(Urletto);
 			// }
 		} else {
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 			}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete iniziale");
 
 			StoppaEsecuzione();
@@ -143,17 +143,12 @@ public class GestioneWEBServiceSOAPNuovo {
 
 		bckAsyncTask.ChiudeDialog();
 
-		if (aht != null) {
-			aht.reset();
-			aht = null;
-		}
-		
 		messErrore ="ESCI";
 
 		bckAsyncTask.ControllaFineCiclo();
 	}
 
-	private static class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
+	private class BackgroundAsyncTask extends AsyncTask<String, Integer, String> {
 		private String NAMESPACE;
 		private String METHOD_NAME = "";
 		private String[] Parametri;
@@ -164,10 +159,10 @@ public class GestioneWEBServiceSOAPNuovo {
 		private int NumeroBrano;
 		private int NumeroOperazione;
 		private String tOperazione;
-		private int QuantiTentativi;
-		private Handler hAttesaNuovoTentativo;
-		private Runnable rAttesaNuovoTentativo;
-		private int SecondiAttesa;
+		// private int QuantiTentativi;
+		// private Handler hAttesaNuovoTentativo;
+		// private Runnable rAttesaNuovoTentativo;
+		// private int SecondiAttesa;
 		private boolean ApriDialog;
 		private ProgressDialog progressDialog;
 		private String Urletto;
@@ -188,7 +183,7 @@ public class GestioneWEBServiceSOAPNuovo {
 
 			this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-			this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+			// this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
 	    }
 
 		private String SplittaCampiUrletto(String Cosa) {
@@ -288,7 +283,7 @@ public class GestioneWEBServiceSOAPNuovo {
 
 			// if (!ceRete) {
 			// 	messErrore="ERROR: Assenza di rete";
-			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
+			// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: Assenza di rete");
 			// 	return null;
 			// }
 
@@ -297,7 +292,8 @@ public class GestioneWEBServiceSOAPNuovo {
             String Parametro="";
             String Valore="";
 
-			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+			VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+					new Object(){}.getClass().getEnclosingMethod().getName(),
 					"SOAP: "+sUrl[0]);
 			
             if (Parametri!=null) {
@@ -314,6 +310,8 @@ public class GestioneWEBServiceSOAPNuovo {
             }
 
             SoapSerializationEnvelope soapEnvelope = null;
+			HttpTransportSE aht = null;
+
             messErrore="";
             try {
 				String uu = UrlConvertito.replace(" ", "%20");
@@ -332,10 +330,10 @@ public class GestioneWEBServiceSOAPNuovo {
                 aht.call(SOAP_ACTION, soapEnvelope);
 
 				if(isCancelled() && messErrore.equals("ESCI")){
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP:  Stoppato da remoto");
 				} else {
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 							}.getClass().getEnclosingMethod().getName(),
 							"SOAP:  OK");
 				}
@@ -343,7 +341,7 @@ public class GestioneWEBServiceSOAPNuovo {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  SocketTimeOutException: "+messErrore);
             	if (messErrore!=null) {
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -357,7 +355,7 @@ public class GestioneWEBServiceSOAPNuovo {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  IOException: "+messErrore);
             	if (messErrore!=null)
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -368,7 +366,7 @@ public class GestioneWEBServiceSOAPNuovo {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  XmlPullParserException: "+messErrore);
             	if (messErrore!=null) {
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -382,7 +380,7 @@ public class GestioneWEBServiceSOAPNuovo {
             	Errore=true;
 				messErrore = Utility.getInstance().PrendeErroreDaException(e);
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"SOAP:  Exception: "+messErrore);
             	if (messErrore!=null)
             		messErrore=messErrore.toUpperCase().replace("LOOIGI.NO-IP.BIZ","Web Service");
@@ -393,7 +391,7 @@ public class GestioneWEBServiceSOAPNuovo {
             if (!Errore && !isCancelled()) {
 	            try {
 	                result = ""+soapEnvelope.getResponse();
-					// VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP result: "+result);
+					// VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP result: "+result);
 
 	                // if (!isCancelled()) {
 						// Traffico
@@ -405,20 +403,20 @@ public class GestioneWEBServiceSOAPNuovo {
 						}
 						// Traffico
 					// } else {
-					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
+					// 	VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "SOAP: isCancelled");
 					// }
 
 					if (result.contains("ERROR")) {
 						messErrore = result;
 					}
 
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP: OK anche il result");
 	            } catch (SoapFault e) {
 	            	Errore=true;
 					messErrore = Utility.getInstance().PrendeErroreDaException(e);
 					VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+					VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 							new Object(){}.getClass().getEnclosingMethod().getName(),
 							"SOAP: SoapFault: "+messErrore);
 	            	if (messErrore!=null) {
@@ -476,7 +474,7 @@ public class GestioneWEBServiceSOAPNuovo {
 					(VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1)) {
 				NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 						"SOAP: Cambio brano");
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 				}.getClass().getEnclosingMethod().getName(), "SOAP: Cambio brano");
 
 				r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
@@ -489,7 +487,7 @@ public class GestioneWEBServiceSOAPNuovo {
 						boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 						if (!ceRete) {
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 							}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete");
 
 							NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
@@ -497,7 +495,7 @@ public class GestioneWEBServiceSOAPNuovo {
 
 							r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
 						} else {
-							if (Tentativo < QuantiTentativi &&
+							/* if (Tentativo < QuantiTentativi &&
 									VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico() &&
 									!tOperazione.equals("RitornaDatiUtente")) {
 								Tentativo++;
@@ -506,7 +504,7 @@ public class GestioneWEBServiceSOAPNuovo {
 
 								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
 										"Errore SOAP. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+								VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 								}.getClass().getEnclosingMethod().getName(), "SOAP: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
 										Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
@@ -523,7 +521,7 @@ public class GestioneWEBServiceSOAPNuovo {
 											boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
 											if (ceRete) {
-												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 												}.getClass().getEnclosingMethod().getName(), "SOAP: Nuovo richiamo funzione");
 
 												VariabiliStaticheGlobali.getInstance().setUltimaOperazioneSOAP(Long.toString(System.currentTimeMillis()));
@@ -531,7 +529,7 @@ public class GestioneWEBServiceSOAPNuovo {
 														ApriDialog, Urletto);
 												bckAsyncTask.execute(Urletto);
 											} else {
-												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+												VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 												}.getClass().getEnclosingMethod().getName(), "SOAP: Uscita per mancanza di rete 2");
 
 												NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
@@ -549,17 +547,17 @@ public class GestioneWEBServiceSOAPNuovo {
 								});
 								hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
 								// Errore... Riprovo ad eseguire la funzione
-							} else {
+							} else { */
 								NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-									VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+									VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 								}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa errore");
 
 								r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);
-							}
+							// }
 						}
 					} else {
 						NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, messErrore);
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 						}.getClass().getEnclosingMethod().getName(), "SOAP: Stoppata esecuzione causa timeout");
 
 						r.ChiamaRoutinesInCasoDiErrore(result,NumeroOperazione, tOperazione);

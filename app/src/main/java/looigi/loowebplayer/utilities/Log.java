@@ -36,7 +36,7 @@ public class Log {
 			}
 
             sBody="Inizio log";
-			ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), sBody);
+			ScriveLog(true, new Object(){}.getClass().getEnclosingMethod().getName(), sBody);
     	}
     }
     
@@ -95,10 +95,14 @@ public class Log {
 
 	public void ScriveMessaggioDiErrore(Exception e) {
 		String error = Utility.getInstance().PrendeErroreDaException(e);
-		ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), error);
+		ScriveLog(true, new Object(){}.getClass().getEnclosingMethod().getName(), error);
 	}
 
-	public void ScriveLog(String DaDove, String Messaggio) {
+	public void ScriveLog(boolean effettuaLogInClasse, String DaDove, String Messaggio) {
+		if (!effettuaLogInClasse) {
+			return;
+		}
+
 		if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getScriveLog()) {
 			CreaCartella(VariabiliStaticheGlobali.getInstance().PercorsoDIR);
 

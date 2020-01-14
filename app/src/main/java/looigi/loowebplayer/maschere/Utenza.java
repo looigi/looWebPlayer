@@ -28,6 +28,7 @@ import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 import looigi.loowebplayer.utilities.Utility;
 
 public class Utenza extends android.support.v4.app.Fragment {
+    private static boolean effettuaLogQui = false;
     private Context context;
     private static String TAG = NomiMaschere.getInstance().getUtenza();
 
@@ -184,11 +185,11 @@ public class Utenza extends android.support.v4.app.Fragment {
                 if (f.exists()) {
                     f.delete();
                 }
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                         new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Interpello il ws per la lista brani");
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Interpello il ws per la lista brani");
                 int NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download Lista Brani");
                 DBRemotoNuovo dbr = new DBRemotoNuovo();

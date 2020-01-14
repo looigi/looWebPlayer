@@ -16,9 +16,11 @@ import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.Locale;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 public class CustomAcraSender implements ReportSenderFactory {
+	private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("CustomAcraSender");;
 	private final String[] RECIPIENTS = {"looigi@gmail.com"};
 	private Context ctx;
 
@@ -43,14 +45,14 @@ public class CustomAcraSender implements ReportSenderFactory {
 			try {
 				sender.sendMail(subject, body, "looigi@gmail.com", recipients);
 			} catch(Exception e) {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Invio messaggio di errore ACRA non riuscito");
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Invio messaggio di errore ACRA non riuscito");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
 				// e.printStackTrace();
 			}
 			try {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), recipients);
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), recipients);
 			} catch (Exception e) {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Scrittura messaggio di errore ACRA non riuscito");
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Scrittura messaggio di errore ACRA non riuscito");
 				VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
 			}
 		}

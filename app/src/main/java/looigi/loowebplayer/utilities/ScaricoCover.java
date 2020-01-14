@@ -2,12 +2,14 @@ package looigi.loowebplayer.utilities;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.notifiche.Notifica;
 import looigi.loowebplayer.soap.DownloadImmagineNuovo;
 
 public class ScaricoCover {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("ScaricoCover");;
     private DownloadImmagineNuovo d;
 
     public int RitornaImmagineBrano(String Artista, String Album, String Brano, int nScarico) {
@@ -17,7 +19,7 @@ public class ScaricoCover {
 
         int Ritorno=0;
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna immagine brano. Artista: "+Artista+ " Album: "+Album+" Brano: "+Brano);
         String NomeBrano = Brano;
         if (NomeBrano.contains(".")) {
@@ -31,12 +33,12 @@ public class ScaricoCover {
         } else {
             PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/"+NomeBrano+".jpg";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna immagine brano. PathFile: "+PathFile);
         PathFile = PathFile.replace("#","_");
         File f = new File(PathFile);
         if (f.exists()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Ritorna immagine brano. Già esiste. La imposto");
             GestioneImmagini.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
 
@@ -61,11 +63,11 @@ public class ScaricoCover {
             int TimeOut = VariabiliStaticheGlobali.getInstance().getTimeOutImmagini();
 
             if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/Cover_" + Artista + ".jpg");
                 d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/Cover_" + Artista + ".jpg", "Download immagine brano", TimeOut);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna immagine brano. Scarico immagine: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg");
                 d.startDownload(VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/Cover_" + Artista + ".jpg",
                         "Download immagine brano", TimeOut);

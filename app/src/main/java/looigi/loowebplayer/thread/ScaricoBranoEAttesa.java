@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -18,7 +19,8 @@ import looigi.loowebplayer.utilities.RiempieListaInBackground;
 import looigi.loowebplayer.utilities.Utility;
 
 public class ScaricoBranoEAttesa {
-    private Runnable runRiga;
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("ScaricoBranoEAttesa");;
+   /* private Runnable runRiga;
     private Handler hSelezionaRiga;
     private Runnable rAttendeRispostaCheckURL;
     private Handler hAttendeRispostaCheckURL;
@@ -32,10 +34,10 @@ public class ScaricoBranoEAttesa {
 
     public void setInBackground(boolean inBackground) {
         this.inBackground = inBackground;
-    }
+    } */
 
     public void ScaricaBrano(int NumeroBrano, String[] Brano, int NumeroOperazione, boolean inBackground) {
-        VariabiliStaticheGlobali.getInstance().setStaScaricandoNormalmente(true);
+        // VariabiliStaticheGlobali.getInstance().setStaScaricandoNormalmente(true);
 
         int campi = Brano.length - 1;
         String url = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/";
@@ -102,10 +104,12 @@ public class ScaricoBranoEAttesa {
                 d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
                 d.startDownload(url, NumeroOperazione);
             } else {
+                VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(false);
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
-                VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
+                // VariabiliStaticheGlobali.getInstance().setStaScaricandoAutomaticamente(false);
                 // VariabiliStaticheGlobali.getInstance().setAttendeFineScaricamento(false);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Struttura vuota in scarica brano. Numero brano: " + Integer.toString(NumeroBrano));
                 // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getContext(),
                 //         "Struttura vuota in ScaricaBrano. Numero Brano: " + NumeroBrano,

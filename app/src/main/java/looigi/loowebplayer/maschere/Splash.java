@@ -15,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.bckService;
 import looigi.loowebplayer.dati.NomiMaschere;
 
 public class Splash extends android.support.v4.app.Fragment {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("Splash");;
     private Context context;
     private static String TAG= NomiMaschere.getInstance().getSplash();
 
@@ -92,7 +94,7 @@ public class Splash extends android.support.v4.app.Fragment {
             ImageView img = (ImageView) view.findViewById(R.id.imgSplash);
             img.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Premuta immagine splash");
                     TastoPremuto=true;
                     Esce();
@@ -104,7 +106,7 @@ public class Splash extends android.support.v4.app.Fragment {
                 @Override
                 public void run() {
                     if (!TastoPremuto) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Fine contatore attesa splash");
                         Esce();
                     }
@@ -121,7 +123,7 @@ public class Splash extends android.support.v4.app.Fragment {
             VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().startService(
                     VariabiliStaticheGlobali.getInstance().getiServizio());
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "ERROR: Fragment principale nullo");
         }
 
@@ -135,7 +137,7 @@ public class Splash extends android.support.v4.app.Fragment {
                         VariabiliStaticheGlobali.getInstance().getiServizio());
             }
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "ERROR: Fragment principale nullo");
         } */
     }

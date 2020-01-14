@@ -27,6 +27,7 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class DownloadTextFileNuovo {
+    private static boolean effettuaLogQui = false;
     private String Path;
     private String PathNomeFile;
     private static String messErrore="";
@@ -35,7 +36,7 @@ public class DownloadTextFileNuovo {
     private String Url;
     private String tOperazione;
     private long lastTimePressed = 0;
-    private static int Tentativo;
+    // private static int Tentativo;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -59,7 +60,7 @@ public class DownloadTextFileNuovo {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             //     }.getClass().getEnclosingMethod().getName(), "DL Testo troppo veloce");
             //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
             //     return;
@@ -69,7 +70,7 @@ public class DownloadTextFileNuovo {
             this.Url = sUrl;
             // this.ApriDialog=ApriDialog;
             this.NumeroOperazione = NOperazione;
-            this.Tentativo = 0;
+            // this.Tentativo = 0;
 
             // String Chiave = this.Url;
             // if (VariabiliStaticheGlobali.getInstance().getChiaveDLText().isEmpty() ||
@@ -89,7 +90,7 @@ public class DownloadTextFileNuovo {
                 VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "Download testo mancanza di rete");
                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "DL Text mancanza di rete");
 
@@ -97,7 +98,7 @@ public class DownloadTextFileNuovo {
             }
             // } else {
             //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Text uguale: "+Chiave);
             // }
 /*        } else {
@@ -126,7 +127,7 @@ public class DownloadTextFileNuovo {
         private String PathNomeFile;
         private int NumeroBrano;
         private int NumeroOperazione;
-        private int QuantiTentativi;
+        // private int QuantiTentativi;
         private Handler hAttesaNuovoTentativo;
         private Runnable rAttesaNuovoTentativo;
         private int SecondiAttesa;
@@ -145,7 +146,7 @@ public class DownloadTextFileNuovo {
 
             this.NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-            this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            // this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
         }
 
         private void ChiudeDialog() {
@@ -189,11 +190,11 @@ public class DownloadTextFileNuovo {
 //
             // if (!ceRete) {
             //     messErrore="ERROR: Assenza di rete";
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "TEXT FIle; Assenza di rete");
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "TEXT FIle; Assenza di rete");
             //     return null;
             // }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Scarico del testo: " + sUrl[0]);
 
             try {
@@ -219,10 +220,10 @@ public class DownloadTextFileNuovo {
                 if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     messErrore = "ERROR: Server returned HTTP " + c.getResponseCode()
                             + " " + c.getResponseMessage();
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo: Errore: " + messErrore);
                 } else {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Connesso e File esistente");
                     File dirFile = new File(Path + "/");
                     File outputFile = new File(Path + "/" + PathNomeFile);
@@ -256,18 +257,20 @@ public class DownloadTextFileNuovo {
                     fos.close();
                     is.close();
                     dirFile = null;
-                    outputFile = null;
 
                     if (isCancelled() || messErrore.equals("ESCI")) {
                         try {
-                            if (outputFile.exists()) {
-                                outputFile.delete();
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
-                                }.getClass().getEnclosingMethod().getName(), "File eliminato");
+                            if (outputFile != null) {
+                                if (outputFile.exists()) {
+                                    outputFile.delete();
+                                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                                    }.getClass().getEnclosingMethod().getName(), "File eliminato");
+                                }
                             }
                         } catch (Exception e) {
                             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
                         }
+                        outputFile = null;
                     }
 
                     // Traffico
@@ -280,7 +283,7 @@ public class DownloadTextFileNuovo {
                         Traffico.getInstance().ScriveTrafficoAVideo(VariabiliStaticheGlobali.getInstance().getBytesScaricati());
                     }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Scarico del testo. Effettuato");
                 }
             } catch (Exception e) {
@@ -306,12 +309,12 @@ public class DownloadTextFileNuovo {
                     NumeroBrano != VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando() &&
                     VariabiliStaticheGlobali.getInstance().getNumeroProssimoBrano() == -1) {
                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Scarico testo. Cambio brano");
             } else {
                 if (messErrore.isEmpty()) {
                     if (tOperazione.equals("Scarico testo brano")) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Scarico testo brano. Conversione");
 
@@ -381,7 +384,7 @@ public class DownloadTextFileNuovo {
                             }
                         }
                     } else {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Scarico del testo. Richiamo RiempieStrutture in Home");
                         RiempieListaInBackground r = new RiempieListaInBackground();
@@ -393,7 +396,7 @@ public class DownloadTextFileNuovo {
                         // Errore... Riprovo ad eseguire la funzione
                         // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-                        if (Tentativo < QuantiTentativi &&
+                        /* if (Tentativo < QuantiTentativi &&
                                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                             Tentativo++;
 
@@ -401,7 +404,7 @@ public class DownloadTextFileNuovo {
 
                             NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                                     "Errore Dl Text File. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(), "DL Text File: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
                                     Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
@@ -425,7 +428,7 @@ public class DownloadTextFileNuovo {
                                             downloadFile.execute(Url);
                                         } else {
                                             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                             }.getClass().getEnclosingMethod().getName(), "Scarico testo. Errore di rete");
                                         }
 
@@ -438,14 +441,14 @@ public class DownloadTextFileNuovo {
                             });
                             hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
                             // Errore... Riprovo ad eseguire la funzione
-                        } else {
+                        } else { */
                             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(), "Scarico testo. Tentativi DL esauriti");
-                        }
+                        // }
                     } else {
                         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(), "Scarico testo. Blocco da remoto");
                     }
                 }

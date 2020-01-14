@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaAlbum;
@@ -31,6 +32,7 @@ import looigi.loowebplayer.utilities.Utility;
 
 public class AdapterAscoltati extends ArrayAdapter
 {
+	private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("AdapterAscoltati");;
 	private Context context;
 	private List<Integer> lista;
 
@@ -66,8 +68,9 @@ public class AdapterAscoltati extends ArrayAdapter
 		StrutturaArtisti sArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista);
 		String Artista = sArtista.getArtista();
 
-		int indice = GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale();
-		int id = GestioneListaBrani.getInstance().RitornaIdInBaseAllIndice(indice);
+		// int indice = GestioneListaBrani.getInstance().RitornaIndiceBranoAttuale();
+		// int id = GestioneListaBrani.getInstance().RitornaIdInBaseAllIndice(indice);
+		int id = -1;
 		if (prossimo) {
 			convertView.setBackgroundColor(Color.argb(255, 80,220, 80));
 		} else {
@@ -115,7 +118,7 @@ public class AdapterAscoltati extends ArrayAdapter
 				int idCanzone = lista.get(position);
 
 				if (idCanzone>=0) {
-					List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
+					/* List<Integer> l = new ArrayList<Integer>(GestioneListaBrani.getInstance().RitornaListaBrani());
 					int i = 0;
 					for (Integer ll : l) {
 						if (ll == idCanzone) {
@@ -130,13 +133,13 @@ public class AdapterAscoltati extends ArrayAdapter
 							VariabiliStaticheGlobali.getInstance().getDatiGenerali()
 									.getConfigurazione().setQualeCanzoneStaSuonando(NumeroBrano);
 
-							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+							VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
 									}.getClass().getEnclosingMethod().getName(),
 									"Impostazione brano esatto: " + Integer.toString(NumeroBrano));
 							GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();
 							VariabiliStaticheHome.getInstance().getRltListaBrani().setVisibility(LinearLayout.GONE);
 						}
-					}
+					} */
 				}
 			}
 		});

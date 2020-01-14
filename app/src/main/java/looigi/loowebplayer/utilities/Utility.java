@@ -22,6 +22,7 @@ import java.io.StringWriter;
 
 import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
@@ -35,6 +36,7 @@ import looigi.loowebplayer.notifiche.Notifica;
 
 @SuppressLint("SimpleDateFormat")
 public class Utility {
+	private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("Utility");;
 	//-------- Singleton ----------//
 	private static Utility instance = null;
 
@@ -65,7 +67,7 @@ public class Utility {
 	}
 
 	public void CambiaMaschera(int viewId) {
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Cambia maschera: "+Integer.toString(viewId));
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Cambia maschera: "+Integer.toString(viewId));
 
 		if (viewId!=UltimaMaschera) {
 			UltimaMaschera=viewId;
@@ -134,7 +136,7 @@ public class Utility {
 				DrawerLayout drawer = vg.getFragmentActivityPrincipale().findViewById(R.id.drawer_layout);
 				drawer.closeDrawer(GravityCompat.START);
 			} else {
-				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+				VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
 						"Perso il fragment principale");
 			}
 
@@ -192,7 +194,7 @@ public class Utility {
 	}
 
 	public void saveImageFile(Bitmap bitmap, String filename) {
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "saveImageFile: "+filename);
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "saveImageFile: "+filename);
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
@@ -231,7 +233,7 @@ public class Utility {
 
 	public String getVersion(Context context) {
 		String version = "";
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "get Version");
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "get Version");
 
 		try {
 			PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -307,7 +309,7 @@ public class Utility {
 	}
 
 	public void RiavviaApplicazione(String Messaggio) {
-		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+		VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
 				new Object(){}.getClass().getEnclosingMethod().getName(),
 				Messaggio);
 

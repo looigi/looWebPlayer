@@ -94,8 +94,8 @@ public class VariabiliStaticheGlobali {
     private String UltimaCosaPronunciata="";
     private int UltimaCanzoneSuonata=-2;
     private boolean HaScaricatoAutomaticamente=false;
-    private boolean StaScaricandoAutomaticamente =false;
-    private boolean StaScaricandoNormalmente =false;
+    // private boolean StaScaricandoAutomaticamente =false;
+    // private boolean StaScaricandoNormalmente =false;
     // private boolean StaAttendendoConMusichetta=false;
     // private boolean NonFermareDownload;
     private int BranoAutomatico;
@@ -108,8 +108,6 @@ public class VariabiliStaticheGlobali {
     private boolean EsciDaCheckFile=false;
     private boolean StaScaricandoBrano;
     // private EsecuzioneChiamateWEB ecw;
-    private final String messErrorePerDebug = "";
-    private final String messErrorePerDebugMP3 = "";
     // private boolean CaroselloBloccatoDaAutomatico;
     private boolean EseguiHandlerConMainLooper = false;
     private Integer nOperazioneATOW = -1;
@@ -117,7 +115,7 @@ public class VariabiliStaticheGlobali {
     private boolean OrientationPortrait = false;
     private String ImmagineMostrata;
     private NetThreadNuovo ntn;
-    private int NumeroBranoNuovo;
+    private int NumeroBranoNuovo =-1;
     private int NumeroProssimoBrano=-1;
     private AttesaScaricamentoBrano asb;
     private boolean SkippataAttesaFineCaricamento = false;
@@ -135,7 +133,7 @@ public class VariabiliStaticheGlobali {
     private Intent iServizio;
     private ScaricoBranoEAttesa sbea;
     // private Integer BranoImpostatoSenzaRete=-1;
-    private boolean StaScaricandoMP3=false;
+    // private boolean StaScaricandoMP3=false;
     private boolean PremutoAvantiDuranteDLAutomatico = false;
 
     private GestioneWEBServiceSOAPNuovo gWSoap = null;
@@ -176,10 +174,6 @@ public class VariabiliStaticheGlobali {
         refresh_dis = ContextCompat.getDrawable(context, R.drawable.refresh_dis);
     }
 
-    public Context getCtxPassaggio() {
-        return ctxPassaggio;
-    }
-
     public boolean isPremutoAvantiDuranteDLAutomatico() {
         return PremutoAvantiDuranteDLAutomatico;
     }
@@ -204,13 +198,13 @@ public class VariabiliStaticheGlobali {
         this.ctxPassaggio = ctxPassaggio;
     }
 
-    public boolean isStaScaricandoNormalmente() {
+    /* public boolean isStaScaricandoNormalmente() {
         return StaScaricandoNormalmente;
     }
 
     public void setStaScaricandoNormalmente(boolean staScaricandoNormalmente) {
         StaScaricandoNormalmente = staScaricandoNormalmente;
-    }
+    } */
 
     public boolean isStaAttendendoFineDownload() {
         return StaAttendendoFineDownload;
@@ -257,10 +251,6 @@ public class VariabiliStaticheGlobali {
 
     public void setHaControllatoLaVersione(boolean haControllatoLaVersione) {
         HaControllatoLaVersione = haControllatoLaVersione;
-    }
-
-    public boolean isStaAggiornandoLaVersione() {
-        return StaAggiornandoLaVersione;
     }
 
     public void setStaAggiornandoLaVersione(boolean staAggiornandoLaVersione) {
@@ -323,13 +313,13 @@ public class VariabiliStaticheGlobali {
         ScrittaAscoltata = scrittaAscoltata;
     }
 
-    public boolean getStaScaricandoMP3() {
-        return StaScaricandoMP3;
-    }
+    // public boolean getStaScaricandoMP3() {
+    //     return StaScaricandoMP3;
+    // }
 
-    public void setStaScaricandoMP3(boolean staScaricandoMP3) {
-        StaScaricandoMP3 = staScaricandoMP3;
-    }
+    // public void setStaScaricandoMP3(boolean staScaricandoMP3) {
+     //    StaScaricandoMP3 = staScaricandoMP3;
+    // }
 
     /* public Integer getBranoImpostatoSenzaRete() {
         return BranoImpostatoSenzaRete;
@@ -355,14 +345,6 @@ public class VariabiliStaticheGlobali {
         this.ntn = ntn;
     }
 
-    public ScaricoBranoEAttesa getSbea() {
-        return sbea;
-    }
-
-    public void setSbea(ScaricoBranoEAttesa sbea) {
-        this.sbea = sbea;
-    }
-
     public Intent getiServizio() {
         return iServizio;
     }
@@ -377,18 +359,6 @@ public class VariabiliStaticheGlobali {
 
     public void setScreenON(boolean screenON) {
         ScreenON = screenON;
-    }
-
-    public String getLastRitorno() {
-        return lastRitorno;
-    }
-
-    public void setLastRitorno(String lastRitorno) {
-        this.lastRitorno = lastRitorno;
-    }
-
-    public int getAttesaSecondiBranoSuccessivo() {
-        return AttesaSecondiBranoSuccessivo;
     }
 
     /* public String getChiaveCheckURL() {
@@ -437,10 +407,6 @@ public class VariabiliStaticheGlobali {
 
     public void setImmagineMostrata(String immagineMostrata) {
         ImmagineMostrata = immagineMostrata;
-    }
-
-    public boolean isOrientationPortrait() {
-        return OrientationPortrait;
     }
 
     public void setOrientationPortrait(boolean orientationPortrait) {
@@ -502,24 +468,12 @@ public class VariabiliStaticheGlobali {
         this.gText = gText;
     } */
 
-    public boolean isEseguiHandlerConMainLooper() {
-        return EseguiHandlerConMainLooper;
-    }
-
     public Drawable getRefresh() {
         return refresh;
     }
 
-    public void setRefresh(Drawable refresh) {
-        this.refresh = refresh;
-    }
-
     public Drawable getRefresh_dis() {
         return refresh_dis;
-    }
-
-    public void setRefresh_dis(Drawable refresh_dis) {
-        this.refresh_dis = refresh_dis;
     }
 
     public Drawable getPlay() {
@@ -554,14 +508,6 @@ public class VariabiliStaticheGlobali {
         return indietro_dis;
     }
 
-    public String getMessErrorePerDebugMP3() {
-        return messErrorePerDebugMP3;
-    }
-
-    public String getMessErrorePerDebug() {
-        return messErrorePerDebug;
-    }
-
     /* public EsecuzioneChiamateWEB getEcw() {
         return ecw;
     }
@@ -578,14 +524,6 @@ public class VariabiliStaticheGlobali {
         StaScaricandoBrano = staScaricandoBrano;
     }
 
-    public boolean isEsciDaCheckFile() {
-        return EsciDaCheckFile;
-    }
-
-    public void setEsciDaCheckFile(boolean esciDaCheckFile) {
-        EsciDaCheckFile = esciDaCheckFile;
-    }
-
     /* public boolean getStaAttendendoConMusichetta() {
         return StaAttendendoConMusichetta;
     }
@@ -593,10 +531,6 @@ public class VariabiliStaticheGlobali {
     public void setStaAttendendoConMusichetta(boolean staAttendendoConMusichetta) {
         StaAttendendoConMusichetta = staAttendendoConMusichetta;
     } */
-
-    public boolean getMusicaTerminata() {
-        return MusicaTerminata;
-    }
 
     public void setMusicaTerminata(boolean musicaTerminata) {
         MusicaTerminata = musicaTerminata;
@@ -648,7 +582,7 @@ public class VariabiliStaticheGlobali {
 
     public void setStaSuonandoAttesa(boolean staSuonandoAttesa) {
         StaSuonandoAttesa = staSuonandoAttesa;
-    } */
+    }
 
     public boolean getStaScaricandoAutomaticamente() {
         return StaScaricandoAutomaticamente;
@@ -656,7 +590,7 @@ public class VariabiliStaticheGlobali {
 
     public void setStaScaricandoAutomaticamente(boolean staScaricandoAutomaticamente) {
         StaScaricandoAutomaticamente = staScaricandoAutomaticamente;
-    }
+    } */
 
     public String getRitornoCheckFileURL() {
         return RitornoCheckFileURL;
@@ -664,10 +598,6 @@ public class VariabiliStaticheGlobali {
 
     public void setRitornoCheckFileURL(String ritornoCheckFileURL) {
         RitornoCheckFileURL = ritornoCheckFileURL;
-    }
-
-    public String getsUltimaCanzoneSuonata() {
-        return sUltimaCanzoneSuonata;
     }
 
     public void setsUltimaCanzoneSuonata(String sUltimaCanzoneSuonata) {
@@ -698,14 +628,6 @@ public class VariabiliStaticheGlobali {
         UltimaImmagineVisualizzata = ultimaImmagineVisualizzata;
     }
 
-    public int getBranoAutomatico() {
-        return BranoAutomatico;
-    }
-
-    public void setBranoAutomatico(int branoAutomatico) {
-        BranoAutomatico = branoAutomatico;
-    }
-
     // public boolean getNonFermareDownload() {
     //     return NonFermareDownload;
     // }
@@ -722,36 +644,12 @@ public class VariabiliStaticheGlobali {
         HaScaricatoAutomaticamente = haScaricatoAutomaticamente;
     }
 
-    public int getUltimaCanzoneSuonata() {
-        return UltimaCanzoneSuonata;
-    }
-
-    public void setUltimaCanzoneSuonata(int ultimaCanzoneSuonata) {
-        UltimaCanzoneSuonata = ultimaCanzoneSuonata;
-    }
-
     public String getUltimaCosaPronunciata() {
         return UltimaCosaPronunciata;
     }
 
     public void setUltimaCosaPronunciata(String ultimaCosaPronunciata) {
         UltimaCosaPronunciata = ultimaCosaPronunciata;
-    }
-
-    public Date getUltimaDataCaricamento() {
-        return UltimaDataCaricamento;
-    }
-
-    public void setUltimaDataCaricamento(Date ultimaDataCaricamento) {
-        UltimaDataCaricamento = ultimaDataCaricamento;
-    }
-
-    public boolean getHaCaricatoTuttiIDettagliDelBrano() {
-        return HaCaricatoTuttiIDettagliDelBrano;
-    }
-
-    public void setHaCaricatoTuttiIDettagliDelBrano(boolean haCaricatoTuttiIDettagliDelBrano) {
-        HaCaricatoTuttiIDettagliDelBrano = haCaricatoTuttiIDettagliDelBrano;
     }
 
     public TextView getTxtBraniInLista() {
@@ -822,10 +720,6 @@ public class VariabiliStaticheGlobali {
         return log;
     }
 
-    public void setL(Log l) {
-        this.log = l;
-    }
-
     public boolean getStaSuonando() {
         return StaSuonando;
     }
@@ -873,10 +767,6 @@ public class VariabiliStaticheGlobali {
         Utente = utente;
     }
 
-    public Window getWindowBackground() {
-        return windowBackground;
-    }
-
     public void setWindowBackground(Window windowBackground) {
         this.windowBackground = windowBackground;
     }
@@ -901,16 +791,8 @@ public class VariabiliStaticheGlobali {
         return itemNuovo;
     }
 
-    public void setItemNuovo(MenuItem itemNuovo) {
-        this.itemNuovo = itemNuovo;
-    }
-
     public MenuItem getItemMultimedia() {
         return itemMultimedia;
-    }
-
-    public void setItemMultimedia(MenuItem itemMultimedia) {
-        this.itemMultimedia = itemMultimedia;
     }
 
     public AppCompatActivity getContextPrincipale() {
@@ -919,10 +801,6 @@ public class VariabiliStaticheGlobali {
 
     public void setContextPrincipale(AppCompatActivity contextPrincipale) {
         this.contextPrincipale = contextPrincipale;
-    }
-
-    public String getOperazioneInCorso() {
-        return OperazioneInCorso;
     }
 
     public void setOperazioneInCorso(String operazioneInCorso) {

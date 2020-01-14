@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -26,6 +27,7 @@ import looigi.loowebplayer.utilities.Traffico;
 import looigi.loowebplayer.utilities.Utility;
 
 public class DownloadImmagineNuovo {
+    private static boolean effettuaLogQui = false;
     private String Path;
     private int NumBrano;
     private boolean inSfuma=false;
@@ -34,7 +36,7 @@ public class DownloadImmagineNuovo {
     private String Url;
     private long lastTimePressed = 0;
     private int NumOperazione;
-    private static int Tentativo;
+    // private static int Tentativo;
 
     public void setContext(Context context) {
         VariabiliStaticheGlobali.getInstance().setCtxPassaggio(context);
@@ -66,13 +68,13 @@ public class DownloadImmagineNuovo {
             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 //
             // if ((System.currentTimeMillis() - lastTimePressed < 1000 && lastTimePressed >0) || !ceRete) {
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             //     }.getClass().getEnclosingMethod().getName(), "DL immagine troppo veloce");
             //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumOperazione, false);
             //     return;
             // }
             // lastTimePressed = System.currentTimeMillis();
-            this.Tentativo = 0;
+            // this.Tentativo = 0;
 
             this.Url = sUrl;
             // this.TIMEOUT = TO;
@@ -101,7 +103,7 @@ public class DownloadImmagineNuovo {
             if (ceRete) {
                 downloadFile.execute(Url);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "DL Immagine mancanza di rete");
 
@@ -109,7 +111,7 @@ public class DownloadImmagineNuovo {
             }
             // } else {
             //     VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Skippata operazione DL Immagine uguale: "+Chiave);
             // }
 /*        } else {
@@ -142,7 +144,7 @@ public class DownloadImmagineNuovo {
         private Integer TIMEOUT;
         private int NumeroOperazione;
         private int NumeroBrano;
-        private int QuantiTentativi;
+        // private int QuantiTentativi;
         private Handler hAttesaNuovoTentativo;
         private Runnable rAttesaNuovoTentativo;
         private int SecondiAttesa;
@@ -162,7 +164,7 @@ public class DownloadImmagineNuovo {
             this.Url = U;
             this.ImmagineUtente = IU;
 
-            this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
+            // this.QuantiTentativi = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQuantiTentativi();
 
             ApriDialog();
         }
@@ -189,12 +191,12 @@ public class DownloadImmagineNuovo {
 //
             // if (!ceRete) {
             //     messErrore="ERROR: Assenza di rete";
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
             //             "Immagine: Assenza di rete");
             //     return null;
             // }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Inizio lo scarico dell'immagine: "+sUrl[0]+". TIMEOUT: "+Integer.toString(TIMEOUT));
             try {
                 String uu = sUrl[0].replace(" ", "%20");
@@ -202,7 +204,7 @@ public class DownloadImmagineNuovo {
                 uu = uu.replace("&", "%26");
 
                 bitmap = BitmapFactory.decodeStream((InputStream) new URL(uu).getContent());
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Scarico dell'immagine. Effettuato");
             } catch (IOException e) {
                 String PathFile = VariabiliStaticheGlobali.getInstance().getImmagineMostrata();
@@ -211,11 +213,11 @@ public class DownloadImmagineNuovo {
 
                 messErrore = "ERROR: " + Utility.getInstance().PrendeErroreDaException(e);
                 if (messErrore.contains("java.io.FileNotFoundException")) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Scarico dell'immagine. Errore di immagine non trovata");
                 } else {
                     VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Scarico dell'immagine. Errore: " + messErrore);
                 }
             }
@@ -248,14 +250,14 @@ public class DownloadImmagineNuovo {
                 VariabiliStaticheNuove.getInstance().setSc(null);
             }
 
-            if (!VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug().isEmpty()) {
-                messErrore = VariabiliStaticheGlobali.getInstance().getMessErrorePerDebug();
+            if (!VariabiliStaticheDebug.getInstance().getMessErrorePerDebug().isEmpty()) {
+                messErrore = VariabiliStaticheDebug.getInstance().getMessErrorePerDebug();
             }
 
             ChiudeDialog();
 
             if (ImmagineUtente) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                         }.getClass().getEnclosingMethod().getName(),
                         "Scarico dell'immagine utente. Post execute: " + messErrore);
                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, false);
@@ -275,7 +277,7 @@ public class DownloadImmagineNuovo {
 
                     NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                             "DL Immagine: Cambio brano");
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "DL Immagine: Cambio brano");
                 } else {
                     if (messErrore.equals("ESCI")) {
@@ -283,13 +285,13 @@ public class DownloadImmagineNuovo {
                     } else {
                         if (messErrore.contains("ERROR:") && !messErrore.contains("java.io.FileNotFoundException")) {
                             // Errore... Riprovo ad eseguire la funzione
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                     }.getClass().getEnclosingMethod().getName(),
                                     "Scarico dell'immagine. Post execute. Errore: " + messErrore);
 
                             // boolean ceRete = VariabiliStaticheGlobali.getInstance().getNtn().isOk();
 
-                            if (Tentativo < QuantiTentativi &&
+                            /* if (Tentativo < QuantiTentativi &&
                                     VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getReloadAutomatico()) {
                                 Tentativo++;
 
@@ -297,7 +299,7 @@ public class DownloadImmagineNuovo {
 
                                 NumeroOperazione = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                                         "Errore Dl Immagine. Riprovo. Tentativo :" + Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(), "DL Immagine: Errore. Attendo " + Integer.toString(TempoAttesa) + " secondi e riprovo: " +
                                         Integer.toString(Tentativo) + "/" + Integer.toString(QuantiTentativi));
 
@@ -321,7 +323,7 @@ public class DownloadImmagineNuovo {
                                                 downloadFile.execute(Url);
                                             } else {
                                                 VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
-                                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                                 }.getClass().getEnclosingMethod().getName(), "Scarico immagine. Errore di rete");
                                             }
 
@@ -334,8 +336,8 @@ public class DownloadImmagineNuovo {
                                 });
                                 hAttesaNuovoTentativo.postDelayed(rAttesaNuovoTentativo, 1000);
                                 // Errore... Riprovo ad eseguire la funzione
-                            } else {
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                            } else { */
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Tentativi di DL esauriti");
                                 if (VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().isEmpty() ||
                                         VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().equals("***")) {
@@ -344,13 +346,13 @@ public class DownloadImmagineNuovo {
                                     GestioneImmagini.getInstance().ImpostaUltimaImmagine(true);
                                     GestioneImmagini.getInstance().CreaCarosello();
                                 }
-                            }
+                            // }
                         } else {
                             if (messErrore.isEmpty() || messErrore.contains("java.io.FileNotFoundException")) {
                                 if (bitmap != null || messErrore.contains("java.io.FileNotFoundException")) {
                                     if (!inSfuma) {
                                         if (!messErrore.contains("java.io.FileNotFoundException")) {
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                             }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Non inSfuma. Riduco immagine");
                                             DisplayMetrics displaymetrics = new DisplayMetrics();
                                             VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale().
@@ -398,7 +400,7 @@ public class DownloadImmagineNuovo {
 
                                     if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
                                         if (!messErrore.contains("java.io.FileNotFoundException")) {
-                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                             }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. Salvo immagine su disco: " + Path);
                                             Path = Path.replace("#", "_");
 
@@ -451,7 +453,7 @@ public class DownloadImmagineNuovo {
                                     }
 
                                     if (inSfuma) {
-                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                         }.getClass().getEnclosingMethod().getName(), "Scarico dell'immagine. inSfuma. Proseguo carosello");
                         /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isSalvataggioOggetti()) {
                             // if (NumeroBrano==VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando()) {

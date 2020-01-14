@@ -94,7 +94,7 @@ public class VariabiliStaticheHome {
     private TextView txtQuanteAscoltate;
     private TextView txtQuanteScaricate;
     private ImageView imgScaricaTesto;
-    private TextView txtLivelloSegnaled;
+    // private TextView txtLivelloSegnaled;
 
     // private Handler hCambioImmagine;
     // private Runnable rCambioImmagine;
@@ -103,13 +103,13 @@ public class VariabiliStaticheHome {
         return context;
     }
 
-    public TextView getTxtLivelloSegnale() {
+    /* public TextView getTxtLivelloSegnale() {
         return txtLivelloSegnaled;
     }
 
     public void setTxtLivelloSegnale(TextView txtLivelloSegnaled) {
         this.txtLivelloSegnaled = txtLivelloSegnaled;
-    }
+    } */
 
     public ImageView getImgScaricaTesto() {
         return imgScaricaTesto;
@@ -339,7 +339,7 @@ public class VariabiliStaticheHome {
 
             if (layOperazionWEB != null) {
                 if (t2.isEmpty()) {
-                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
+                    if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
                         layOperazionWEB.setVisibility(LinearLayout.GONE);
                     }
                 } else {
@@ -386,7 +386,7 @@ public class VariabiliStaticheHome {
 
             if (OperazioniWeb.size() == 0) {
                 if (this.layOperazionWEB != null) {
-                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoMP3()) {
+                    if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
                         this.layOperazionWEB.setVisibility(LinearLayout.GONE);
                     }
                 }

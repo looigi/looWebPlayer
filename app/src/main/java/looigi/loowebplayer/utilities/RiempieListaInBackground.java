@@ -23,6 +23,7 @@ import looigi.loowebplayer.db_locale.DBLocaleEsclusi;
 import looigi.loowebplayer.db_locale.db_dati;
 
 public class RiempieListaInBackground {
+    private static boolean effettuaLogQui = false;
     private Context context;
     private static ProgressDialog progressDialog;
     private String Operazione;
@@ -69,7 +70,7 @@ public class RiempieListaInBackground {
 
     public void RiempieStrutture(boolean ForzaCaricamento, boolean SoloCar) {
         if (!VariabiliStaticheGlobali.getInstance().getGiaEntrato() || ForzaCaricamento) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Inizio Riempio strutture");
             RiempieListaInBackground r = new RiempieListaInBackground();
             r.setContext(VariabiliStaticheGlobali.getInstance().getContext());
@@ -80,7 +81,7 @@ public class RiempieListaInBackground {
     private static class FillList extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... sUrl) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Riempie lista in background");
             VariabiliStaticheGlobali vg = VariabiliStaticheGlobali.getInstance();
             String path=VariabiliStaticheGlobali.getInstance().PercorsoDIR+"/Lista.dat";
@@ -92,7 +93,7 @@ public class RiempieListaInBackground {
 
             vg.getDatiGenerali().PulisceTutto();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Riempie lista in background. Oggetti: "+Integer.toString(Oggetti.length));
             for (String oggetto : Oggetti) {
                 if (!oggetto.isEmpty()) {
@@ -181,10 +182,10 @@ public class RiempieListaInBackground {
                                 case "MEMBRI":
                                     int idArtistaM=Integer.parseInt(campi[1]);
 
-                                    String r[] = riga.split("\\|",-1);
+                                    String[] r = riga.split("\\|",-1);
 
                                     for (String rr : r) {
-                                        String rrr[] = rr.split(";",-1);
+                                        String[] rrr = rr.split(";",-1);
 
                                         if (rrr.length>4) {
                                             StrutturaMembri Membro = new StrutturaMembri();
@@ -206,7 +207,7 @@ public class RiempieListaInBackground {
             }
 
             // Riempie la struttura con eventuali files dat contenenti testo e stelle
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass()
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
                     .getEnclosingMethod().getName(),
                     "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi alla bellezza e al testo");
             for (StrutturaBrani s : VariabiliStaticheGlobali.getInstance().getDatiGenerali().getBrani()) {
@@ -232,16 +233,16 @@ public class RiempieListaInBackground {
             }
             // Riempie la struttura con eventuali files dat contenenti testo e stelle
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi al multimedia creati in precedenza");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Riempie la struttura con eventuali files di testo relativi al multimedia creati in precedenza");
             // Riempie la struttura con eventuali files di testo relativi al multimedia creati in precedenza
             for (StrutturaArtisti a : vg.getDatiGenerali().RitornaTuttiGliArtisti()) {
                 if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
                     String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
                     String fileMultimediaArtista = "";
                     if (!pathBase.equals(a.getArtista())) {
-                        fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + a.getArtista() + "/ListaImmagini.dat";
+                        fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + a.getArtista() + "/ListaImmagini.dat";
                     } else {
-                        fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/ListaImmagini.dat";
+                        fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/ListaImmagini.dat";
                     }
                     File f = new File(fileMultimediaArtista);
                     if (f.exists()) {
@@ -266,7 +267,7 @@ public class RiempieListaInBackground {
                         }
                     }
 
-                    fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + a.getArtista() + "/ListaVideo.dat";
+                    fileMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Video/" + pathBase + "/" + a.getArtista() + "/ListaVideo.dat";
 
                     f = new File(fileMultimediaArtista);
                     if (f.exists()) {
@@ -288,16 +289,16 @@ public class RiempieListaInBackground {
             }
             // Riempie la struttura con eventuali files di testo relativi al multimedia creati in precedenza
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Copia brani filtrati");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Copia brani filtrati");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().CopiaBraniInFiltrati();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Ordina lista brani");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Ordina lista brani");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().OrdinaListaBrani();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Prende solo brani scaricati");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Prende solo brani scaricati");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().PrendeSoloBraniScaricati();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Prende solo brani filtrati per stelle");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Riempie lista in background. Prende solo brani filtrati per stelle");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().FiltraInBaseAlleStelle();
 
             // Aggiorna i dati caricati da remoto con quelli in locale
@@ -373,7 +374,7 @@ public class RiempieListaInBackground {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Riempie lista in background. Fatto");
             StrutturaConfig vg = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione();
@@ -383,21 +384,21 @@ public class RiempieListaInBackground {
             if (!SoloCaricamento) {
                 if (VariabiliStaticheGlobali.getInstance().getDisegnaMascheraHomeCompleta()) {
                     if (vg.getQualeCanzoneStaSuonando() == -1) {
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                                 }.getClass().getEnclosingMethod().getName(),
                                 "Riempie lista in background. Imposta canzone visto che è nulla");
                         int NumeroBrano;
                         if (vg.getRicordaUltimoBrano() &&
                                 vg.getNumeroBranoInAscolto() > -1) {
                             NumeroBrano = vg.getNumeroBranoInAscolto();
-                            GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
+                            // GestioneListaBrani.getInstance().AggiungeBrano(NumeroBrano);
                         } else {
-                            NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true);
+                            NumeroBrano = GestioneListaBrani.getInstance().RitornaNumeroProssimoBranoNuovo(true, true);
                         }
                         vg.setQualeCanzoneStaSuonando(NumeroBrano);
                     }
 
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                             }.getClass().getEnclosingMethod().getName(),
                             "Riempie lista in background. CaricaBrano in Home");
                     GestioneCaricamentoBraniNuovo.getInstance().CaricaBrano();

@@ -16,9 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 
 public class GestioneFiles {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneFiles");;
     //-------- Singleton ----------//
     private static GestioneFiles instance = null;
     private Runnable runCreaCartelle;
@@ -44,7 +46,7 @@ public class GestioneFiles {
     }
 
     public void CreaCartella(String PercorsoDIR) {
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartella "+PercorsoDIR);
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartella "+PercorsoDIR);
 
         File dDirectory = new File(PercorsoDIR);
         try {
@@ -52,7 +54,7 @@ public class GestioneFiles {
         } catch (Exception e) {
             // VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             // e.printStackTrace();
-            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartella. Errore: "+e.getMessage());
+            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartella. Errore: "+e.getMessage());
         }
     }
 
@@ -61,7 +63,7 @@ public class GestioneFiles {
         // hCreaCartelle.postDelayed(runCreaCartelle = new Runnable() {
         //    @Override
         //     public void run() {
-                // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartelle "+Percorso);
+                // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Creazione cartelle "+Percorso);
                 String Campi[]=(Percorso+"/").split("/",-1);
                 String ss="";
                 int quantiSenza = 3;
@@ -85,7 +87,7 @@ public class GestioneFiles {
     }
 
     public void generateNoteOnSD(String Percorso, String sFileName, String sBody) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Generazione file di testo: "+Percorso+sFileName);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Generazione file di testo: "+Percorso+sFileName);
         try {
             File gpxfile = new File(Percorso, sFileName);
             FileWriter writer = new FileWriter(gpxfile);
@@ -95,7 +97,7 @@ public class GestioneFiles {
         } catch (IOException e) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
             // e.printStackTrace();
-            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Generazione file di testo. Errore: "+e.getMessage());
+            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Generazione file di testo. Errore: "+e.getMessage());
         }
     }
 
@@ -105,7 +107,7 @@ public class GestioneFiles {
     }
 
     public String LeggeFileDiTesto(String path){
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge file di testo: "+path);
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge file di testo: "+path);
         File file = new File(path);
 
         StringBuilder text = new StringBuilder();
@@ -121,14 +123,14 @@ public class GestioneFiles {
         }
         catch (IOException e) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Legge file di testo. Errore: "+ignored.getMessage());
+            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Legge file di testo. Errore: "+ignored.getMessage());
         }
 
         return text.toString();
     }
 
     public void CreaFileDiTesto(String Percorso, String sFileName, String sBody) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Crea file di testo: "+Percorso+"/"+sFileName);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Crea file di testo: "+Percorso+"/"+sFileName);
         try {
             File gpxfile = new File(Percorso, sFileName);
             FileWriter writer = new FileWriter(gpxfile);
@@ -137,12 +139,12 @@ public class GestioneFiles {
             writer.close();
         } catch (IOException e) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-            //VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Crea file di testo. Errore: "+e.getMessage());
+            //VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Crea file di testo. Errore: "+e.getMessage());
         }
     }
 
     public boolean fileExistsInSD(String sFileName, String Percorso){
-        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: "+Percorso+"/"+sFileName);
+        // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Controllo esistenza file: "+Percorso+"/"+sFileName);
         String sFile=Percorso+"/"+sFileName;
         File file = new File(sFile);
 
@@ -160,7 +162,7 @@ public class GestioneFiles {
     }
 
     public List<String> RitornaListaDirectory(String Path) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna lista directory: "+Path);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna lista directory: "+Path);
         List<String> Dirs = new ArrayList<>();
 
         File f = new File(Path);
@@ -175,7 +177,7 @@ public class GestioneFiles {
     }
 
     public List<String> RitornaListaFilesInDirectory(String Path) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorno lista files in directory: "+Path);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorno lista files in directory: "+Path);
         List<String> files = new ArrayList<>();
 
         File f = new File(Path);

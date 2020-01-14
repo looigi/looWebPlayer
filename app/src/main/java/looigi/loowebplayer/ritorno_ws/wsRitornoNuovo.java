@@ -19,6 +19,7 @@ import java.util.List;
 
 import looigi.loowebplayer.MainActivity;
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheNuove;
@@ -45,6 +46,7 @@ import looigi.loowebplayer.utilities.PronunciaFrasi;
 import looigi.loowebplayer.utilities.Utility;
 
 public class wsRitornoNuovo {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("wsRitornoNuovo");;
     private Runnable runRiga;
     private Handler hSelezionaRiga;
 
@@ -55,7 +57,7 @@ public class wsRitornoNuovo {
     public void RitornaSeDeveAggiornare(String Ritorno, int NumeroOperazione) {
         final String Appoggio=ToglieTag(Ritorno);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna se deve aggiornare: " + Appoggio);
 
         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
@@ -83,7 +85,7 @@ public class wsRitornoNuovo {
                         hSelezionaRiga.removeCallbacks(runRiga);
                         runRiga = null;
 
-                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                                 new Object(){}.getClass().getEnclosingMethod().getName(),
                                 "Deve Aggiornare Libreria");
 
@@ -105,7 +107,7 @@ public class wsRitornoNuovo {
     public void RitornaVersioneApplicazione(String Ritorno, int NumeroOperazione) {
         String Appoggio=ToglieTag(Ritorno);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna versione applicazione: " + Appoggio);
 
         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
@@ -120,7 +122,7 @@ public class wsRitornoNuovo {
     public void EliminaCanzone(String Ritorno, int NumeroOperazione) {
         String Appoggio=ToglieTag(Ritorno);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Elimina canzone: " + Appoggio);
 
         VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(NumeroOperazione, true);
@@ -137,7 +139,7 @@ public class wsRitornoNuovo {
     }
 
     public void RitornaListaBrani(final String Ritorno) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna lista brani");
 
         hSelezionaRiga = new Handler(Looper.getMainLooper());
@@ -147,7 +149,7 @@ public class wsRitornoNuovo {
                 hSelezionaRiga.removeCallbacks(runRiga);
                 runRiga = null;
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                         new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna lista brani. OK");
                 GestioneFiles.getInstance().EliminaFile(
@@ -160,7 +162,7 @@ public class wsRitornoNuovo {
                 d.setPathNomeFile("Lista.dat");
                 d.setOperazione("Lettura lista brani");
                 d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                         new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna lista brani. Scarico lista mp3: " + VariabiliStaticheGlobali.getInstance().PercorsoURL + "/" + Ritorno.replace("\\", "/"));
                 d.startDownload(
@@ -177,7 +179,7 @@ public class wsRitornoNuovo {
                     true,
                     VariabiliStaticheGlobali.NomeApplicazione);
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                     new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Ritorna dati utente. OK");
@@ -189,12 +191,12 @@ public class wsRitornoNuovo {
         int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
         StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
         String idArtista = Integer.toString(s.getIdArtista());
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
         String Appoggio = ToglieTag(Ritorno);
 
         String[] Oggetti = Appoggio.split("ç", -1);
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista. Oggetti: " + Integer.toString(Oggetti.length));
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista. Oggetti: " + Integer.toString(Oggetti.length));
         String tipologia = "";
         List<StrutturaImmagini> imm = new ArrayList<>();
         List<StrutturaVideo> vid = new ArrayList<>();
@@ -267,13 +269,13 @@ public class wsRitornoNuovo {
 
     public void RitornaDettaglioBrano(final String Ritorno, final int NumeroOperazione) {
         int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Ritorna dettaglio brano");
         String Appoggio = ToglieTag(Ritorno);
 
         // int NumeroBrano = VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
         if (Appoggio.toUpperCase().contains("ERROR:") || Appoggio.trim().isEmpty()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Ritorna dettaglio brano. Errore: " + Appoggio);
             // if (MostraMessaggio) {
             // DialogMessaggio.getInstance().show(VariabiliStaticheGlobali.getInstance().getFragmentActivityPrincipale(),
@@ -284,19 +286,19 @@ public class wsRitornoNuovo {
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTesto("");
             VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTestoTradotto("");
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Ritorna dettaglio brano. ImpostaStelleAscoltata in Home da Errore");
             GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
             int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, Appoggio);
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                     "Ritorna dettaglio brano. SettaTesto in Home da Errore");
             GestioneTesti gt = new GestioneTesti();
             gt.SettaTesto(true);
         } else {
             if (Appoggio.contains(";;;")) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna dettaglio brano. Ritorno vuoto");
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(0);
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setStelle(0);
@@ -306,17 +308,17 @@ public class wsRitornoNuovo {
                 int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true,
                         "Ritorno vuoto");
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna dettaglio brano. ImpostaStelleAscoltata in Home da Ritorno vuoto");
                 GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna dettaglio brano. SettaTesto in Home da Ritorno vuoto");
                 GestioneTesti gt = new GestioneTesti();
                 gt.SettaTesto(true);
             } else {
                 String[] t = Appoggio.split(";", -1);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "Ritorna dettaglio brano. Oggetti: " + Integer.toString(t.length));
 
                 String Artista = t[0];
@@ -338,10 +340,10 @@ public class wsRitornoNuovo {
 
                 int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, true, "OK");
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dettaglio brano. ImpostaStelleAscoltata in Home");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dettaglio brano. ImpostaStelleAscoltata in Home");
                 GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dettaglio brano. SettaTesto in Home");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna dettaglio brano. SettaTesto in Home");
                 gt.SettaTesto(false);
             }
         }
@@ -349,7 +351,7 @@ public class wsRitornoNuovo {
 
     public void RitornaBranoConAttesa(String Ritorno, int NumeroOperazione, boolean inBackGround) {
         // if (Ritorno.equals(VariabiliStaticheGlobali.getInstance().getLastRitorno())) {
-        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
         //             "Stesso brano. Evito la duplicazione della funzione.");
         //     return;
         // }
@@ -377,7 +379,7 @@ public class wsRitornoNuovo {
                     true,
                     VariabiliStaticheGlobali.NomeApplicazione);
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                     new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Ritorna modifica bellezza. OK");
@@ -395,7 +397,7 @@ public class wsRitornoNuovo {
                     true,
                     VariabiliStaticheGlobali.NomeApplicazione);
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                     new Object() {
                     }.getClass().getEnclosingMethod().getName(),
                     "Ritorna volte ascoltata. OK");

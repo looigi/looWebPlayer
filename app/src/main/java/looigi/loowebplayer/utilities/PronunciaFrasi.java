@@ -6,10 +6,12 @@ import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 
 public class PronunciaFrasi {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("PronunciaFrasi");;
     private Runnable runRiga1;
     private Handler hSelezionaRiga1;
     private TextToSpeech tts=null;
@@ -41,7 +43,7 @@ public class PronunciaFrasi {
                             if (status == TextToSpeech.SUCCESS) {
                                 Legge2(Messaggio, Lingua);
                             } else {
-                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi. Initialization error");
+                                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi. Initialization error");
                             }
                         }
                     });
@@ -68,7 +70,7 @@ public class PronunciaFrasi {
         if (VariabiliStaticheHome.getInstance().getMediaPlayer()!=null) {
             VariabiliStaticheHome.getInstance().getMediaPlayer().setVolume(50F, 50F);
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Legge2 PronunciaFrasi");
         try {
             int result = -1;
@@ -79,14 +81,14 @@ public class PronunciaFrasi {
             }
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                         "ERROR in pronuncia frasi. Linguaggio non installato");
             } else {
                 tts.speak(Messaggio, TextToSpeech.QUEUE_ADD, null);
             }
         } catch (Exception e) {
             VariabiliStaticheGlobali.getInstance().getLog().ScriveMessaggioDiErrore(e);
-            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi.");
+            // VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "ERROR in pronuncia frasi.");
             int a=0;
         }
         if (VariabiliStaticheHome.getInstance().getMediaPlayer()!=null) {

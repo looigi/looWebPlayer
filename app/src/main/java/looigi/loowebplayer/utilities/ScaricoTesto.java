@@ -2,27 +2,29 @@ package looigi.loowebplayer.utilities;
 
 import java.io.File;
 
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.db_remoto.DBRemotoNuovo;
 
 public class ScaricoTesto {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("ScaricoTesto");;
     public String RitornaTestoDaSD(String Artista, String Album, String Brano, int NumeroOperazione) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. "+Artista+" "+Album+" "+Brano);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. "+Artista+" "+Album+" "+Brano);
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
         String pathTesto = "";
         if (!pathBase.equals(Artista) && !Artista.equals(Album)) {
-            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/" + Album + "/";
+            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/" + Artista + "/" + Album + "/";
         } else {
-            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
+            pathTesto = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/Testi/" + pathBase + "/";
         }
         String NomeFile = Utility.getInstance().SistemaTesto(Brano + ".dat");
         String Testo="";
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Path: "+pathTesto+"/"+NomeFile);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Path: "+pathTesto+"/"+NomeFile);
 
         File f = new File(pathTesto, NomeFile);
         if (f.exists()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. File esistente");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. File esistente");
             Testo = GestioneFiles.getInstance().LeggeFileDiTesto(pathTesto+NomeFile);
             String t[] = Testo.split(";",-1);
             int idBrano=VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getQualeCanzoneStaSuonando();
@@ -42,17 +44,17 @@ public class ScaricoTesto {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(idBrano).setStelle(Integer.parseInt(t[3]));
             }
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. ImpostaStelleAscoltata in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. ImpostaStelleAscoltata in Home");
             GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. SettaTesto in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. SettaTesto in Home");
             GestioneTesti gt = new GestioneTesti();
             gt.SettaTesto(false);
 
             if (idBrano>-1) {
                 // if (Refresh && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
                 if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Scarico dettaglio brano");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Scarico dettaglio brano");
                     int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Ritorna testo da SD");
                     DBRemotoNuovo dbr = new DBRemotoNuovo();
                     dbr.RitornaDettaglioBrano(VariabiliStaticheGlobali.getInstance().getContext(), Artista, Album, Brano, nn);
@@ -62,7 +64,7 @@ public class ScaricoTesto {
             }
         } else {
             if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().isScaricoDettagli()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Scarico dettaglio brano");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna testo da SD. Scarico dettaglio brano");
                 int nn = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download dettaglio brano");
                 DBRemotoNuovo dbr = new DBRemotoNuovo();
                 dbr.RitornaDettaglioBrano(VariabiliStaticheGlobali.getInstance().getContext(), Artista, Album, Brano, nn);

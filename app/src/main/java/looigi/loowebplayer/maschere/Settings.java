@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.NomiMaschere;
@@ -42,6 +43,7 @@ import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.R
 import static looigi.loowebplayer.utilities.GestioneListaBrani.ModiAvanzamento.SEQUENZIALE;
 
 public class Settings extends Fragment {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("Settings");;
     private Context context;
     private static String TAG = NomiMaschere.getInstance().getSettings();
 
@@ -269,7 +271,7 @@ public class Settings extends Fragment {
             chkMostraOperazioni.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch mostra operazioni: "+isChecked);
 
                     vg.setMostraOperazioni(isChecked);
@@ -284,7 +286,7 @@ public class Settings extends Fragment {
             chkScaricaTesti.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch scarica testo: "+isChecked);
 
                     vg.setScaricaTestoBrano(isChecked);
@@ -299,7 +301,7 @@ public class Settings extends Fragment {
             chkMostraTitolo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch mostra titolo "+isChecked);
 
                     vg.setMostraSempreTitolo(isChecked);
@@ -314,7 +316,7 @@ public class Settings extends Fragment {
             chkMostraReteAssente.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch mostra rete assente "+isChecked);
 
                     vg.setMostraReteAssente(isChecked);
@@ -329,7 +331,7 @@ public class Settings extends Fragment {
             chkSuonaAttesa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch suona attesa "+isChecked);
 
                     vg.setSuonaAttesa(isChecked);
@@ -344,7 +346,7 @@ public class Settings extends Fragment {
             chkPuliziaPerNumeroFiles.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch pulizia per numero files: "+isChecked);
 
                     vg.setPuliziaPerFiles(isChecked);
@@ -372,7 +374,7 @@ public class Settings extends Fragment {
             cmdPuliziaPerNumeroFiles.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato Salva Numero Files per Pulizia");
 
                     String ee = edtNumeroFiles.getText().toString();
@@ -397,7 +399,7 @@ public class Settings extends Fragment {
             chkPuliziaPerMega.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato switch pulizia per mega: "+isChecked);
 
                     vg.setPuliziaPerMega(isChecked);
@@ -425,7 +427,7 @@ public class Settings extends Fragment {
             cmdPuliziaPerMega.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato Salva Mega per Pulizia");
 
                     String ee = edtMega.getText().toString();
@@ -450,7 +452,7 @@ public class Settings extends Fragment {
             chkBellezza.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch bellezza: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch bellezza: "+isChecked);
 
                     vg.setStelle(isChecked);
 
@@ -482,7 +484,7 @@ public class Settings extends Fragment {
             chkSuperiore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch superiore: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch superiore: "+isChecked);
 
                     vg.setSuperiore(isChecked);
 
@@ -507,7 +509,7 @@ public class Settings extends Fragment {
             chkRandom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch random: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch random: "+isChecked);
 
                     vg.setRandom(isChecked);
 
@@ -529,7 +531,7 @@ public class Settings extends Fragment {
             chkCompressione.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch compressione: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch compressione: "+isChecked);
 
                     vg.setCompressioneMP3(isChecked);
                     if (isChecked) {
@@ -551,7 +553,7 @@ public class Settings extends Fragment {
             chkUsaScaricati.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch usa scaricati: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch usa scaricati: "+isChecked);
 
                     vg.setUsaScaricati(isChecked);
 
@@ -566,7 +568,7 @@ public class Settings extends Fragment {
             chkDownloadImmagini.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - DA PROVARE
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch download immagini: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch download immagini: "+isChecked);
 
                     vg.setDownloadImmagini(isChecked);
                 }
@@ -578,7 +580,7 @@ public class Settings extends Fragment {
             chkMostraTraffico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch visualizza traffico: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch visualizza traffico: "+isChecked);
 
                     vg.setVisualizzaTraffico(isChecked);
                 }
@@ -590,7 +592,7 @@ public class Settings extends Fragment {
             chkSfumaBrano.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch sfuma brano: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch sfuma brano: "+isChecked);
 
                     vg.setSfumaBrano(isChecked);
                 }
@@ -602,7 +604,7 @@ public class Settings extends Fragment {
             chkMostraBellezza.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch visualizza Bellezza: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch visualizza Bellezza: "+isChecked);
 
                     vg.setVisualizzaBellezza(isChecked);
                 }
@@ -623,7 +625,7 @@ public class Settings extends Fragment {
             chkReload.setChecked(bReload);
             chkReload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch reload automatico: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch reload automatico: "+isChecked);
 
                     vg.setReloadAutomatico(isChecked);
 
@@ -664,7 +666,7 @@ public class Settings extends Fragment {
             chkCaricamentoAnticipato.setChecked(bCaricamentoAnticipato);
             chkCaricamentoAnticipato.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch caricamento anticipato: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch caricamento anticipato: "+isChecked);
 
                     vg.setCaricamentoAnticipato(isChecked);
                 }
@@ -675,7 +677,7 @@ public class Settings extends Fragment {
             chkAnnuncio.setChecked(bAnnuncio);
             chkAnnuncio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch annuncio brano: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch annuncio brano: "+isChecked);
 
                     vg.setAnnuncioBrano(isChecked);
                 }
@@ -687,7 +689,7 @@ public class Settings extends Fragment {
             chkSalvataggio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - DA PROVARE
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch salvataggio oggetti: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch salvataggio oggetti: "+isChecked);
 
                     vg.setSalvataggioOggetti(isChecked);
                 }
@@ -699,7 +701,7 @@ public class Settings extends Fragment {
             chkScaricoDettagli.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - DA PROVARE
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch scarico dettagli: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch scarico dettagli: "+isChecked);
 
                     vg.setScaricoDettagli(isChecked);
                 }
@@ -711,7 +713,7 @@ public class Settings extends Fragment {
             chkSchermoAcceso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch schermo sempre acceso: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch schermo sempre acceso: "+isChecked);
 
                     vg.setSchermoSempreAcceso(isChecked);
 
@@ -725,7 +727,7 @@ public class Settings extends Fragment {
             chkRiprendiUltimo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch ricorda ultimo brano: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch ricorda ultimo brano: "+isChecked);
 
                     vg.setRicordaUltimoBrano(isChecked);
                 }
@@ -737,7 +739,7 @@ public class Settings extends Fragment {
             chkTestoInglese.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch testo in inglese: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch testo in inglese: "+isChecked);
 
                     vg.setTestoInInglese(isChecked);
                 }
@@ -749,7 +751,7 @@ public class Settings extends Fragment {
             chkLog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch scrive log: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch scrive log: "+isChecked);
 
                     vg.setScriveLog(isChecked);
                 }
@@ -761,7 +763,7 @@ public class Settings extends Fragment {
             chkMembri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch membri: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch membri: "+isChecked);
 
                     vg.setMembri(isChecked);
 
@@ -781,7 +783,7 @@ public class Settings extends Fragment {
             chkPronuncia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch pronuncia operazioni: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch pronuncia operazioni: "+isChecked);
 
                     vg.setPronunciaOperazioni(isChecked);
                 }
@@ -792,7 +794,7 @@ public class Settings extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                             new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Selezionato refresh brani");
 
@@ -801,7 +803,7 @@ public class Settings extends Fragment {
                     if (f.exists()) {
                         f.delete();
                     }
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
                             new Object(){}.getClass().getEnclosingMethod().getName(),
                             "Interpello il ws per la lista brani");
 
@@ -832,7 +834,7 @@ public class Settings extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato pulisce filtro");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato pulisce filtro");
 
                     vg.setFiltro("");
 
@@ -850,7 +852,7 @@ public class Settings extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato pulisce log");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato pulisce log");
 
                     VariabiliStaticheGlobali.getInstance().getLog().PulisceFileDiLog();
 
@@ -865,7 +867,7 @@ public class Settings extends Fragment {
             chkAscendente.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - DA PROVARE
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch ordinamento crescente: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch ordinamento crescente: "+isChecked);
 
                     vg.setCrescente(isChecked);
 
@@ -900,7 +902,7 @@ public class Settings extends Fragment {
             btnTimeoutDLMP3.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLMP3");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLMP3");
 
                     String ee = edtTimeoutDLMP3.getText().toString();
                     VariabiliStaticheGlobali.getInstance().setTimeOutDownloadMP3(Integer.parseInt(ee));
@@ -914,7 +916,7 @@ public class Settings extends Fragment {
             btnTimeoutDLLB.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLLB");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLLB");
 
                     String ee = edtTimeoutDLLB.getText().toString();
                     VariabiliStaticheGlobali.getInstance().setTimeOutListaBrani(Integer.parseInt(ee));
@@ -928,7 +930,7 @@ public class Settings extends Fragment {
             btnAttesaDLMP3.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnAttesaDLMP3");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnAttesaDLMP3");
 
                     String ee = edtAttesaDLMP3.getText().toString();
                     VariabiliStaticheGlobali.getInstance().setAttesaControlloEsistenzaMP3(Integer.parseInt(ee));
@@ -942,7 +944,7 @@ public class Settings extends Fragment {
             btnTimeoutDLIMM.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLIMM");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato btnTimeoutDLIMM");
 
                     String ee = edtTimeoutDLIMM.getText().toString();
                     VariabiliStaticheGlobali.getInstance().setTimeOutImmagini(Integer.parseInt(ee));
@@ -965,7 +967,7 @@ public class Settings extends Fragment {
             chkControlloRete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     // Gestito - Funzionante
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch controllo rete: "+isChecked);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato switch controllo rete: "+isChecked);
 
                     vg.setControlloRete(isChecked);
 
@@ -997,7 +999,7 @@ public class Settings extends Fragment {
             optNormale.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optNormale");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optNormale");
 
                     optNormale.setChecked(true);
                     optIrregolare.setChecked(false);
@@ -1017,7 +1019,7 @@ public class Settings extends Fragment {
             optIrregolare.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optIrregolare");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optIrregolare");
 
                     optNormale.setChecked(false);
                     optIrregolare.setChecked(true);
@@ -1037,7 +1039,7 @@ public class Settings extends Fragment {
             optAssente.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optAssente");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optAssente");
 
                     optNormale.setChecked(false);
                     optIrregolare.setChecked(false);
@@ -1057,7 +1059,7 @@ public class Settings extends Fragment {
             optPresente.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optPresente");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato optPresente");
 
                     optNormale.setChecked(false);
                     optIrregolare.setChecked(false);
@@ -1106,7 +1108,7 @@ public class Settings extends Fragment {
 
     View.OnClickListener clickNessuno = new View.OnClickListener(){
         public void onClick(View v) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato nessun ordinamento");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato nessun ordinamento");
 
             vg.setOrdinamento(0);
 
@@ -1122,7 +1124,7 @@ public class Settings extends Fragment {
 
     View.OnClickListener clickData = new View.OnClickListener(){
         public void onClick(View v) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato ordinamento per data");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato ordinamento per data");
 
             vg.setOrdinamento(1);
 
@@ -1138,7 +1140,7 @@ public class Settings extends Fragment {
 
     View.OnClickListener clickAlfabetico = new View.OnClickListener(){
         public void onClick(View v) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato ordinamento alfabetico");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Selezionato ordinamento alfabetico");
 
             vg.setOrdinamento(2);
 

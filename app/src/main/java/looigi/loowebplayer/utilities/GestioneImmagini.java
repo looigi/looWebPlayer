@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.Random;
 
 import looigi.loowebplayer.R;
+import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheDebug;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali;
 import looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheHome;
 import looigi.loowebplayer.dati.dettaglio_dati.StrutturaArtisti;
@@ -43,6 +44,7 @@ import static looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali.Tem
 import static looigi.loowebplayer.VariabiliStatiche.VariabiliStaticheGlobali.TempoSfumatura;
 
 public class GestioneImmagini {
+    private boolean effettuaLogQui = VariabiliStaticheDebug.getInstance().DiceSeCreaLog("GestioneImmagini");;
     private static GestioneImmagini instance = null;
 
     private GestioneImmagini() {
@@ -100,7 +102,7 @@ public class GestioneImmagini {
     }
 
     /* public void RitornaImmagineBrano(Context context, String Artista, String Album, String Brano) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Artista: "+Artista+ " Album: "+Album+" Brano: "+Brano);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Artista: "+Artista+ " Album: "+Album+" Brano: "+Brano);
         String NomeBrano = Brano;
         if (NomeBrano.contains(".")) {
             NomeBrano=NomeBrano.substring(0,NomeBrano.indexOf("."));
@@ -113,11 +115,11 @@ public class GestioneImmagini {
         } else {
             PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/"+NomeBrano+".jpg";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. PathFile: "+PathFile);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. PathFile: "+PathFile);
         PathFile = PathFile.replace("#","_");
         File f = new File(PathFile);
         if (f.exists()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Già esiste. La imposto");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. Già esiste. La imposto");
             // i.setImageBitmap(BitmapFactory.decodeFile(PathFile));
             VariabiliStaticheHome.getInstance().ImpostaImmagineDiSfondo(PathFile, "IMMAGINE", -1, null);
             // i.setScaleType(ImageView.ScaleType.MATRIX);
@@ -128,7 +130,7 @@ public class GestioneImmagini {
             Notifica.getInstance().AggiornaNotifica();
 
             int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Load cover");
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. ProesgueCaricaBrano1 in Home");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagine brano. ProesgueCaricaBrano1 in Home");
             GestioneCaricamentoBrani.getInstance().ProsegueCaricaBrano1(n);
             VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(n, true);
         } else {
@@ -148,16 +150,16 @@ public class GestioneImmagini {
         StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
         StrutturaArtisti Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista());
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Artista: "+Artista.getArtista());
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Artista: "+Artista.getArtista());
 
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
         String pathMultimediaArtista = "";
         if (!pathBase.equals(Artista.getArtista())) {
-            pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista.getArtista() + "/";
+            pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista.getArtista() + "/";
         } else {
-            pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
+            pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Path: "+pathMultimediaArtista);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Path: "+pathMultimediaArtista);
         String NomeFile = "ListaImmagini.dat";
 
         File f = new File(pathMultimediaArtista, NomeFile);
@@ -168,12 +170,12 @@ public class GestioneImmagini {
             f.mkdirs();
         }
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Crea file di testo");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Crea file di testo");
         GestioneFiles.getInstance().CreaFileDiTesto(pathMultimediaArtista, NomeFile, Cosa);
     }
 
     /* public void SalvaImmaginiSuSD(String Artista, List<StrutturaImmagini> i) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Artista: "+Artista);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Artista: "+Artista);
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
         String pathMultimediaArtista = "";
         if (!pathBase.equals(Artista)) {
@@ -181,7 +183,7 @@ public class GestioneImmagini {
         } else {
             pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Path: "+pathMultimediaArtista);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Path: "+pathMultimediaArtista);
         String NomeFile = "ListaImmagini.dat";
 
         File f = new File(pathMultimediaArtista, NomeFile);
@@ -198,12 +200,12 @@ public class GestioneImmagini {
             contenuto+=Integer.toString(s.getIdCartella()) + ";" + s.getNomeImmagine() + ";" + Long.toString(s.getLunghezza()) + "§";
         }
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Crea file di testo");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Salva immagine brano. Crea file di testo");
         GestioneFiles.getInstance().CreaFileDiTesto(pathMultimediaArtista, NomeFile, contenuto);
     }
 
     public List<StrutturaImmagini> RitornaImmaginiArtista(String idArtista, String Artista, int NumeroOperazione, boolean RitornaSenzaProseguire) {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista in gestione immagini");
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista in gestione immagini");
         List<StrutturaImmagini> immagini = new ArrayList<>();
 
         String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
@@ -213,7 +215,7 @@ public class GestioneImmagini {
         } else {
             pathMultimediaArtista = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/";
         }
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista. Path: "+pathMultimediaArtista);
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista. Path: "+pathMultimediaArtista);
         String NomeFile = "ListaImmagini.dat";
 
         File f = new File(pathMultimediaArtista, NomeFile);
@@ -244,19 +246,19 @@ public class GestioneImmagini {
             // VariabiliStaticheHome.getInstance().setImms(immagini);
 
             // if (!RitornaSenzaProseguire) {
-            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            //     VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             //     }.getClass().getEnclosingMethod().getName(), "Ritorna immagini artista. ProseguCaricaBrano2 in Home");
             //     GestioneCaricamentoBrani.getInstance().ProsegueCaricaBrano2(NumeroOperazione);
             // }
         // } else {
             /* if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getDownloadImmagini()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
                 int n = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(NumeroOperazione, false, "Download multimedia artista");
                 DBRemoto dbr = new DBRemoto();
                 dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
                         Artista, n);
             } else {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista. Download immagini impedito, ProsegueCaricaBrano2 in Home");
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista. Download immagini impedito, ProsegueCaricaBrano2 in Home");
                 GestioneCaricamentoBrani.getInstance().ProsegueCaricaBrano2(NumeroOperazione);
             }
         }
@@ -267,14 +269,13 @@ public class GestioneImmagini {
     public void CreaCarosello() {
         // if (Imms.size() > 0 && VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getDownloadImmagini()) {
         if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getDownloadImmagini()) {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Inizia carosello");
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Inizia carosello");
             hCambioImmagine = new Handler(Looper.getMainLooper());
             hCambioImmagine.postDelayed(rCambioImmagine = new Runnable() {
                 @Override
                 public void run() {
                 if (VariabiliStaticheHome.getInstance().getImms().size()>1) {
-                    if (!VariabiliStaticheGlobali.getInstance().getStaScaricandoAutomaticamente() &&
-                            !VariabiliStaticheGlobali.getInstance().isStaScaricandoNormalmente()) {
+                    if (!VariabiliStaticheGlobali.getInstance().isStaAttendendoFineDownload()) {
                         Random r = new Random();
                         int s = VariabiliStaticheHome.getInstance().getImms().size() - 1;
                         immNumber = r.nextInt((s) + 1) + 0;
@@ -308,7 +309,7 @@ public class GestioneImmagini {
         if (immNumber==-1) {
             CreaCarosello();
         } else {
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Carosello: inizio animazione");
             final Animation a = new AlphaAnimation(1.00f, 0.00f);
 
@@ -320,7 +321,7 @@ public class GestioneImmagini {
                 }
 
                 public void onAnimationRepeat(Animation animation) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                     }.getClass().getEnclosingMethod().getName(), "Carosello: animazione fade out bloccata per cambio brano");
                     a.cancel();
 
@@ -380,7 +381,7 @@ public class GestioneImmagini {
 
             public void onAnimationRepeat(Animation animation) {
                 // if (VariabiliStaticheGlobali.getInstance().getBloccaCarosello()) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Carosello: animazione fade in bloccata per cambio brano");
                 a.cancel();
                 ImpostaImmagineVuota();
@@ -404,23 +405,23 @@ public class GestioneImmagini {
             String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getArtista();
             String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
 
-            StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
+            // StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
             // String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
 
             String NomeImm = Immagine.replace("\\ZZZ-ImmaginiArtista\\", "");
-            // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Mp3/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
+            // http://looigi.no-ip.biz:12345/looWebPlayer/Dati/Nightwish/ZZZ-ImmaginiArtista/nightwish_band_members_look_suits_2392_3840x1200.jpg.dat
             String sUrl = VariabiliStaticheGlobali.getInstance().PercorsoURL + "/Dati/" + pathBase + "/" + Artista + "/ZZZ-ImmaginiArtista/" +
                     NomeImm.replace(".dat", "");
-            String PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ImmaginiArtista/" +
+            String PathFile = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Dati/" + pathBase + "/" + Artista + "/ImmaginiArtista/" +
                     NomeImm.replace(".dat", "");
 
             File f = new File(PathFile.replace(".dat", ""));
-            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
             }.getClass().getEnclosingMethod().getName(), "Carosello: cambio immagine: " + Immagine);
             if (f.exists()) {
                 ImmagineDaCambiare = PathFile;
 
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object() {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
                 }.getClass().getEnclosingMethod().getName(), "Carosello: inizio sfuma immagine. Immagine: " + VariabiliStaticheHome.getInstance().getImms().get(immNumber).getNomeImmagine());
                 SfumaImmagine(true);
             } else {
@@ -478,7 +479,7 @@ public class GestioneImmagini {
 
             public void onAnimationRepeat(Animation animation) {
                 // if (VariabiliStaticheGlobali.getInstance().getBloccaCarosello()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Blocco animazione per cambio canzone.");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Blocco animazione per cambio canzone.");
                     a.cancel();
                     GestioneImmagini.getInstance().ImpostaImmagineVuota();
                     imgBrano.setVisibility(LinearLayout.VISIBLE);
@@ -487,7 +488,7 @@ public class GestioneImmagini {
 
             public void onAnimationEnd(Animation animation) {
                 // if (!VariabiliStaticheGlobali.getInstance().getBloccaCarosello()) {
-                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(), "Ricomincio carosello");
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(), "Ricomincio carosello");
                     // VariabiliStaticheHome.getInstance().gethCambioImmagine()
                     //         .postDelayed(VariabiliStaticheHome.getInstance().getrCambioImmagine(),
                     //                 TempoImmagineVisibile);
@@ -503,7 +504,7 @@ public class GestioneImmagini {
     } */
 
     public void ImpostaImmagineVuota() {
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                 "Pulisco Immagine");
 
         // String t[] = VariabiliStaticheGlobali.getInstance().getUltimaImmagineVisualizzata().split(";", -1);
@@ -610,7 +611,7 @@ public class GestioneImmagini {
                             VariabiliStaticheHome.getInstance().getLayIntestazione().setBackground(d);
                         } catch (Exception ignored) {
                             String error = Utility.getInstance().PrendeErroreDaException(ignored);
-                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(new Object(){}.getClass().getEnclosingMethod().getName(),
+                            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
                                     "Errore su SettaImmagineSuIntestazione: " + error);
                         }
                     }
