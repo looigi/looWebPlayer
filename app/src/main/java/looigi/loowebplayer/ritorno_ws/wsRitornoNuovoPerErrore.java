@@ -91,19 +91,23 @@ public class wsRitornoNuovoPerErrore {
     public void RitornaDettaglioBrano(final String Ritorno, final int NumeroOperazione) {
         int NumeroBrano = Utility.getInstance().ControllaNumeroBrano();
 
-        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(-1);
-        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setStelle(-1);
-        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTesto("");
-        VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTestoTradotto("");
+        if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano) != null) {
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setQuanteVolteAscoltato(-1);
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setStelle(-1);
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTesto("");
+            VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).setTestoTradotto("");
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
-                "ERRORE Ritorna dettaglio brano. ImpostaStelleAscoltata in Home");
-        GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "ERRORE Ritorna dettaglio brano. ImpostaStelleAscoltata in Home");
+            GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
 
-        VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass().getEnclosingMethod().getName(),
-                "ERRORE Ritorna dettaglio brano. SettaTesto in Home");
-        GestioneTesti gt = new GestioneTesti();
-        gt.SettaTesto(false);
+            VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(),
+                    "ERRORE Ritorna dettaglio brano. SettaTesto in Home");
+            GestioneTesti gt = new GestioneTesti();
+            gt.SettaTesto(false);
+        }
     }
 
     public void EliminaCanzone(String Ritorno, int NumeroOperazione) {

@@ -79,7 +79,9 @@ public class DatiGenerali {
     }
 
     public void ImpostaBrano(int indice, StrutturaBrani sb) {
-        BraniFiltrati.set(indice, sb);
+        if (indice < BraniFiltrati.size()) {
+            BraniFiltrati.set(indice, sb);
+        }
     }
 
     public StrutturaAlbum RitornaAlbum(int Indice) {

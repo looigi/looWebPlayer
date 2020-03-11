@@ -476,150 +476,152 @@ public class GestioneCaricamentoBraniNuovo {
                 VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().setNumeroBranoInAscolto(NumeroBrano);
 
                 StrutturaBrani s = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano);
-                String NomeBrano = s.getNomeBrano();
+                if (s != null) {
+                    String NomeBrano = s.getNomeBrano();
 
-                String sNomeBrano = NomeBrano;
-                String Traccia = "";
-                if (sNomeBrano.contains("-")) {
-                    String[] A = sNomeBrano.split("-");
-                    if (!A[0].isEmpty() && !A[0].equals("00")) {
-                        Traccia = "\nTraccia " + A[0].trim();
-                    }
-                    sNomeBrano = A[1].trim();
-                }
-                if (sNomeBrano.contains(".")) {
-                    sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
-                }
-                String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
-                String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
-                String sAlbum = Album;
-                if (sAlbum.contains("-")) {
-                    String[] A = sAlbum.split("-");
-                    if (A.length > 1) {
-                        if (!A[0].isEmpty() && !A[0].equals("0000")) {
-                            sAlbum = A[1] + " (Anno " + A[0] + ")";
-                        } else {
-                            sAlbum = A[1];
+                    String sNomeBrano = NomeBrano;
+                    String Traccia = "";
+                    if (sNomeBrano.contains("-")) {
+                        String[] A = sNomeBrano.split("-");
+                        if (!A[0].isEmpty() && !A[0].equals("00")) {
+                            Traccia = "\nTraccia " + A[0].trim();
                         }
-                    } else {
-                        sAlbum = "";
+                        sNomeBrano = A[1].trim();
                     }
-                }
-                sAlbum = Traccia + "\nAlbum: " + sAlbum;
+                    if (sNomeBrano.contains(".")) {
+                        sNomeBrano = sNomeBrano.substring(0, sNomeBrano.indexOf("."));
+                    }
+                    String Artista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(s.getIdArtista()).getArtista();
+                    String Album = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaAlbum(s.getIdAlbum()).getNomeAlbum();
+                    String sAlbum = Album;
+                    if (sAlbum.contains("-")) {
+                        String[] A = sAlbum.split("-");
+                        if (A.length > 1) {
+                            if (!A[0].isEmpty() && !A[0].equals("0000")) {
+                                sAlbum = A[1] + " (Anno " + A[0] + ")";
+                            } else {
+                                sAlbum = A[1];
+                            }
+                        } else {
+                            sAlbum = "";
+                        }
+                    }
+                    sAlbum = Traccia + "\nAlbum: " + sAlbum;
 
-                String nb = NomeBrano;
-                if (nb.contains("-")) {
-                    nb = nb.substring(nb.indexOf("-") + 1, nb.length());
-                }
-                if (nb.contains(".")) {
-                    nb = nb.substring(0, nb.indexOf("."));
-                }
+                    String nb = NomeBrano;
+                    if (nb.contains("-")) {
+                        nb = nb.substring(nb.indexOf("-") + 1, nb.length());
+                    }
+                    if (nb.contains(".")) {
+                        nb = nb.substring(0, nb.indexOf("."));
+                    }
 
-                vh.getTxtBrano().setText(sNomeBrano);
-                vh.getTxtArtista().setText(Artista);
-                vh.getTxtAlbum().setText(sAlbum);
-                vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
-                vh.getTxtMembri().setText("");
+                    vh.getTxtBrano().setText(sNomeBrano);
+                    vh.getTxtArtista().setText(Artista);
+                    vh.getTxtAlbum().setText(sAlbum);
+                    vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
+                    vh.getTxtMembri().setText("");
 
-                // Gestione Membri
-                if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMembri()) {
-                    if (NumeroBrano > -1) {
-                        vh.setGm(new GestioneMembri());
-                        int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getIdArtista();
-                        int quantiMembri = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().size();
-                        boolean Ok = true;
-                        if (quantiMembri == 1) {
-                            String membro = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().get(0).getMembro().trim();
-                            if (membro.isEmpty() || membro.toUpperCase().contains("NESSUN MEMBRO")) {
-                                Ok = false;
-                                vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
-                                vh.getTxtMembri().setVisibility(LinearLayout.GONE);
+                    // Gestione Membri
+                    if (VariabiliStaticheGlobali.getInstance().getDatiGenerali().getConfigurazione().getMembri()) {
+                        if (NumeroBrano > -1) {
+                            vh.setGm(new GestioneMembri());
+                            int idArtista = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaBrano(NumeroBrano).getIdArtista();
+                            int quantiMembri = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().size();
+                            boolean Ok = true;
+                            if (quantiMembri == 1) {
+                                String membro = VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri().get(0).getMembro().trim();
+                                if (membro.isEmpty() || membro.toUpperCase().contains("NESSUN MEMBRO")) {
+                                    Ok = false;
+                                    vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
+                                    vh.getTxtMembri().setVisibility(LinearLayout.GONE);
+                                }
+                            }
+                            if (Ok) {
+                                vh.getTxtMembriTitolo().setVisibility(LinearLayout.VISIBLE);
+                                vh.getTxtMembri().setVisibility(LinearLayout.VISIBLE);
+
+                                vh.getGm().setMembri(VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri());
+                                vh.getGm().setTxtCasellaTesto(vh.getTxtMembri());
+                                vh.getGm().CominciaAGirare();
                             }
                         }
-                        if (Ok) {
-                            vh.getTxtMembriTitolo().setVisibility(LinearLayout.VISIBLE);
-                            vh.getTxtMembri().setVisibility(LinearLayout.VISIBLE);
-
-                            vh.getGm().setMembri(VariabiliStaticheGlobali.getInstance().getDatiGenerali().RitornaArtista(idArtista).getMembri());
-                            vh.getGm().setTxtCasellaTesto(vh.getTxtMembri());
-                            vh.getGm().CominciaAGirare();
-                        }
-                    }
-                } else {
-                    vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
-                    vh.getTxtMembri().setVisibility(LinearLayout.GONE);
-                }
-                // Gestione Membri
-
-                nb2 = nb;
-                if (nb2.contains("-")) {
-                    nb2 = nb2.substring(nb2.indexOf("-") + 1, nb.length());
-                }
-                if (nb2.contains(".")) {
-                    nb2 = nb2.substring(0, nb2.indexOf("."));
-                }
-
-                // Lancio scarico cover
-                int nScarico = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download cover");
-                VariabiliStaticheNuove.getInstance().setSc(new ScaricoCover());
-                int r = VariabiliStaticheNuove.getInstance().getSc().RitornaImmagineBrano(Artista, Album, NomeBrano, nScarico);
-                if (r == -1) {
-                    VariabiliStaticheNuove.getInstance().setSc(null);
-                }
-                // Lancio scarico cover
-
-                // Testo brano
-                GestioneTesti g = new GestioneTesti();
-                g.SettaTesto(true);
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
-                int nTesto = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Lettura testo");
-                VariabiliStaticheNuove.getInstance().setGt(new GestioneTesti());
-                String Testo = VariabiliStaticheNuove.getInstance().getGt().RitornaTestoDaSD(Artista, Album, NomeBrano, nTesto);
-                if (!Testo.isEmpty()) {
-                    GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
-                } else {
-                    VariabiliStaticheHome.getInstance().getTxtAscoltata().setText("");
-                    VariabiliStaticheNuove.getInstance().setGt(new GestioneTesti());
-                }
-                // Testo brano
-
-                // Multimedia artista
-                // if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
-                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
-                }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
-                int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
-                if (VariabiliStaticheGlobali.getInstance().getUtente() != null) {
-                    String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
-                    String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
-                    File f = new File(PathListaImm);
-                    if (!f.exists()) {
-                        DBRemotoNuovo dbr = new DBRemotoNuovo();
-                        VariabiliStaticheNuove.getInstance().setGm(dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
-                                Artista, nMultimedia));
                     } else {
-                        String Ritorno = GestioneFiles.getInstance().LeggeFileDiTesto(PathListaImm);
-                        wsRitornoNuovo w = new wsRitornoNuovo();
-                        w.RitornaMultimediaArtista(Ritorno);
-                        VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nMultimedia, false);
-                        VariabiliStaticheNuove.getInstance().setGm(null);
+                        vh.getTxtMembriTitolo().setVisibility(LinearLayout.GONE);
+                        vh.getTxtMembri().setVisibility(LinearLayout.GONE);
                     }
-                    // }
+                    // Gestione Membri
+
+                    nb2 = nb;
+                    if (nb2.contains("-")) {
+                        nb2 = nb2.substring(nb2.indexOf("-") + 1, nb.length());
+                    }
+                    if (nb2.contains(".")) {
+                        nb2 = nb2.substring(0, nb2.indexOf("."));
+                    }
+
+                    // Lancio scarico cover
+                    int nScarico = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download cover");
+                    VariabiliStaticheNuove.getInstance().setSc(new ScaricoCover());
+                    int r = VariabiliStaticheNuove.getInstance().getSc().RitornaImmagineBrano(Artista, Album, NomeBrano, nScarico);
+                    if (r == -1) {
+                        VariabiliStaticheNuove.getInstance().setSc(null);
+                    }
+                    // Lancio scarico cover
+
+                    // Testo brano
+                    GestioneTesti g = new GestioneTesti();
+                    g.SettaTesto(true);
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Ritorna testo brano");
+                    int nTesto = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Lettura testo");
+                    VariabiliStaticheNuove.getInstance().setGt(new GestioneTesti());
+                    String Testo = VariabiliStaticheNuove.getInstance().getGt().RitornaTestoDaSD(Artista, Album, NomeBrano, nTesto);
+                    if (!Testo.isEmpty()) {
+                        GestioneOggettiVideo.getInstance().ImpostaStelleAscoltata();
+                    } else {
+                        VariabiliStaticheHome.getInstance().getTxtAscoltata().setText("");
+                        VariabiliStaticheNuove.getInstance().setGt(new GestioneTesti());
+                    }
+                    // Testo brano
+
                     // Multimedia artista
+                    // if (VariabiliStaticheGlobali.getInstance().getUtente()!=null) {
+                    VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object() {
+                    }.getClass().getEnclosingMethod().getName(), "Ritorna multimedia artista");
+                    int nMultimedia = VariabiliStaticheHome.getInstance().AggiungeOperazioneWEB(-1, false, "Download multimedia artista");
+                    if (VariabiliStaticheGlobali.getInstance().getUtente() != null) {
+                        String pathBase = VariabiliStaticheGlobali.getInstance().getUtente().getCartellaBase();
+                        String PathListaImm = VariabiliStaticheGlobali.getInstance().PercorsoDIR + "/Immagini/" + pathBase + "/" + Artista + "/ListaImmagini.dat";
+                        File f = new File(PathListaImm);
+                        if (!f.exists()) {
+                            DBRemotoNuovo dbr = new DBRemotoNuovo();
+                            VariabiliStaticheNuove.getInstance().setGm(dbr.RitornaMultimediaArtista(VariabiliStaticheGlobali.getInstance().getContext(),
+                                    Artista, nMultimedia));
+                        } else {
+                            String Ritorno = GestioneFiles.getInstance().LeggeFileDiTesto(PathListaImm);
+                            wsRitornoNuovo w = new wsRitornoNuovo();
+                            w.RitornaMultimediaArtista(Ritorno);
+                            VariabiliStaticheHome.getInstance().EliminaOperazioneWEB(nMultimedia, false);
+                            VariabiliStaticheNuove.getInstance().setGm(null);
+                        }
+                        // }
+                        // Multimedia artista
 
-                    this.pathBase = pathBase;
-                    this.Artista = Artista;
-                    this.Album = Album;
-                    this.NomeBrano = NomeBrano;
+                        this.pathBase = pathBase;
+                        this.Artista = Artista;
+                        this.Album = Album;
+                        this.NomeBrano = NomeBrano;
 
-                    Notifica.getInstance().setTitolo(NomeBrano);
-                    Notifica.getInstance().setArtista(Artista);
-                    Notifica.getInstance().setAlbum(Album);
-                    Notifica.getInstance().AggiornaNotifica();
+                        Notifica.getInstance().setTitolo(NomeBrano);
+                        Notifica.getInstance().setArtista(Artista);
+                        Notifica.getInstance().setAlbum(Album);
+                        Notifica.getInstance().AggiornaNotifica();
 
-                    VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
-                } else {
-                    Utility.getInstance().RiavviaApplicazione("Riavvio per utenza nulla");
+                        VariabiliStaticheGlobali.getInstance().setStaSuonando(true);
+                    } else {
+                        Utility.getInstance().RiavviaApplicazione("Riavvio per utenza nulla");
+                    }
                 }
             }
         }
