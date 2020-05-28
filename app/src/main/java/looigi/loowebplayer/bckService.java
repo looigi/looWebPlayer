@@ -1,7 +1,10 @@
 package looigi.loowebplayer;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -46,7 +49,21 @@ public class bckService extends Service {
                 "Entro in bckService");
         boolean CeUtente=false;
 
-        if (VariabiliStaticheGlobali.getInstance().getContext()!=null) {
+        if (VariabiliStaticheGlobali.getInstance().getContext()==null) {
+            if (VariabiliStaticheGlobali.getInstance().getLog()!=null) {
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui, new Object(){}.getClass()
+                                .getEnclosingMethod().getName(),
+                        "Context vuoto. Esco dall'applicazione");
+            }
+            // VariabiliStaticheGlobali.getInstance().setContext(this);
+            /* Context context = this;
+            Intent mStartActivity = new Intent(context, MainActivity.class);
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent); */
+            System.exit(0);
+        } else {
             VariabiliStaticheGlobali.getInstance().setContext(this);
         }
 
