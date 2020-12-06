@@ -103,6 +103,9 @@ public class ScaricoBranoEAttesa {
                 d.setNumeroBrano(NumeroBrano);
                 d.setContext(VariabiliStaticheGlobali.getInstance().getContext());
                 d.startDownload(url, NumeroOperazione);
+                VariabiliStaticheGlobali.getInstance().getLog().ScriveLog(effettuaLogQui,
+                        new Object(){}.getClass().getEnclosingMethod().getName(),
+                        "Indirizzo MP3: " + url);
             } else {
                 VariabiliStaticheGlobali.getInstance().setStaAttendendoFineDownload(false);
                 GestioneOggettiVideo.getInstance().ImpostaIconaBackground(R.drawable.error);
